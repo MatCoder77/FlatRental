@@ -17,6 +17,7 @@ import com.flatrental.domain.locations.street.Street;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
+import com.google.common.collect.Lists;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
@@ -274,7 +275,10 @@ public class LocationService {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        indexObjects(locationSearchDTOS, Function.identity());
+        var partitionedLocationSearchDTOs = Lists.partition(locationSearchDTOS, 25000);
+        for (var list : partitionedLocationSearchDTOs) {
+            indexObjects(list, Function.identity());
+        }
     }
 
     private List<LocationSearchDTO> getLocationSearchDTOsWithStreetForLocality(Locality locality,
