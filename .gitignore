@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+## generated resources in org and microsoft ##
+/org/*
+/microsoft/*
