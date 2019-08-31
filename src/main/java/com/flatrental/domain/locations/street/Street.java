@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.street;
 
-import com.flatrental.teryt_api.payloads.ulic.StreetType;
+import com.flatrental.domain.locations.teryt.ulic.StreetType;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;

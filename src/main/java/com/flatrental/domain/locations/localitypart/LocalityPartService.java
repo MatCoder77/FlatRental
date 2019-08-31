@@ -9,9 +9,9 @@ import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrictService;
 import com.flatrental.domain.locations.localitytype.LocalityType;
 import com.flatrental.domain.locations.localitytype.LocalityTypeService;
-import com.flatrental.teryt_api.payloads.simc.LocalityDTO;
-import com.flatrental.teryt_api.payloads.simc.LocalityDTOService;
-import com.flatrental.teryt_api.payloads.ulic.Update;
+import com.flatrental.domain.locations.teryt.simc.LocalityDTO;
+import com.flatrental.domain.locations.teryt.simc.LocalityDTOService;
+import com.flatrental.domain.locations.teryt.ulic.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.localitytype;
 
-import com.flatrental.teryt_api.payloads.simc.LocalityTypeDTO;
+import com.flatrental.domain.locations.teryt.simc.LocalityTypeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

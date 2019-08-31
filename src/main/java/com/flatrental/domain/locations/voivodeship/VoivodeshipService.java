@@ -1,8 +1,8 @@
 package com.flatrental.domain.locations.voivodeship;
 
-import com.flatrental.teryt_api.payloads.terc.AdministrationUnitDTO;
-import com.flatrental.teryt_api.payloads.terc.AdministrationUnitService;
-import com.flatrental.teryt_api.payloads.ulic.Update;
+import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
+import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
+import com.flatrental.domain.locations.teryt.ulic.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.commune;
 
-import com.flatrental.teryt_api.payloads.terc.AdministrationUnitTypeDTO;
+import com.flatrental.domain.locations.teryt.terc.AdministrationUnitTypeDTO;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
