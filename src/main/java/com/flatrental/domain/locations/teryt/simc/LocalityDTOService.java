@@ -1,6 +1,5 @@
 package com.flatrental.domain.locations.teryt.simc;
 
-import com.flatrental.domain.settings.SettingsService;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitTypeCode;
 import org.datacontract.schemas._2004._07.terytuslugaws1.PlikKatalog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +31,6 @@ import java.util.zip.ZipInputStream;
 
 @Service
 public class LocalityDTOService {
-
-    @Autowired
-    private SettingsService settingsService;
 
     @Autowired
     private ApplicationContext context;
@@ -59,14 +53,7 @@ public class LocalityDTOService {
 
     private InputStream getLocalitiesXMLFile() throws IOException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = null;//terytClient.pobierzDateAktualnegoKatTerc();
-        try {
-            dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
-        }
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatSimc();
         PlikKatalog localitiesCatalog = terytClient.pobierzKatalogSIMC(dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = localitiesCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());
@@ -92,14 +79,7 @@ public class LocalityDTOService {
 
     private InputStream getLocalityTypesXMLFile() throws IOException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = null;//terytClient.pobierzDateAktualnegoKatTerc();
-        try {
-            dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
-        }
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatSimc();
         PlikKatalog localityTypesCatalog = terytClient.pobierzKatalogWMRODZ(dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = localityTypesCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());

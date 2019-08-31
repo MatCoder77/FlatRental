@@ -14,7 +14,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -58,14 +56,7 @@ public class AdministrationUnitService {
 
     private InputStream getAdministrationUnitsXMLFile() throws IOException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = null;//terytClient.pobierzDateAktualnegoKatTerc();
-        try {
-            dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
-        }
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatTerc();
         PlikKatalog administrationUnitsCatalog = terytClient.pobierzKatalogTERC(dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = administrationUnitsCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());

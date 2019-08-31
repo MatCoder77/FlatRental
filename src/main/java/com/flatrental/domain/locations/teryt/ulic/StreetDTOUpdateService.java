@@ -69,8 +69,8 @@ public class StreetDTOUpdateService {
 
     private InputStream getStreetChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2008-01-01");//terytClient.pobierzDateAktualnegoKatTerc();
-        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");//settingsService.getTercLastUpdateDate();
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatUlic();
+        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getUlicLastUpdateDate();
         PlikZmiany streetChangesCatalog = terytClient.pobierzZmianyUlicUrzedowy(dateOfLocalCatalogState, dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = streetChangesCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());

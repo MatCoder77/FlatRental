@@ -80,8 +80,8 @@ public class LocalityUpdateService {
 
     private InputStream getLocalityChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2008-01-01");//terytClient.pobierzDateAktualnegoKatTerc();
-        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");//settingsService.getTercLastUpdateDate();
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatSimc();
+        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getSimcCatalogDate();
         PlikZmiany localityChangesCatalog = terytClient.pobierzZmianySimcUrzedowy(dateOfLocalCatalogState, dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = localityChangesCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());

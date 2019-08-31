@@ -78,8 +78,8 @@ public class AdministrationUnitUpdateService {
 
     private InputStream getAdministrationUnitChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {
         ITerytWs1 terytClient = getTerytClient();
-        XMLGregorianCalendar dateOfCurrentCatalogState = settingsService.getXMLGregorianCalendar("2008-01-01");//terytClient.pobierzDateAktualnegoKatTerc();
-        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getXMLGregorianCalendar("2007-12-29");//settingsService.getTercLastUpdateDate();
+        XMLGregorianCalendar dateOfCurrentCatalogState = terytClient.pobierzDateAktualnegoKatTerc();
+        XMLGregorianCalendar dateOfLocalCatalogState = settingsService.getTercCatalogDate();
         PlikZmiany administrationUnitsChangesCatalog = terytClient.pobierzZmianyTercUrzedowy(dateOfLocalCatalogState, dateOfCurrentCatalogState);
         JAXBElement<String> encodedCatalog = administrationUnitsChangesCatalog.getPlikZawartosc();
         byte[] rawData = Base64.getDecoder().decode(encodedCatalog.getValue());
