@@ -1,4 +1,4 @@
-package com.flatrental.domain.accounttype;
+package com.flatrental.domain.userrole;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "account_types")
-public class AccountType {
+public class UserRole {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -21,14 +21,14 @@ public class AccountType {
     @Enumerated(EnumType.STRING)
     @NaturalId
     @Column(length = 60)
-    private AccountTypeName name;
+    private UserRoleName name;
 
 
-    public AccountType() {
+    public UserRole() {
 
     }
 
-    public AccountType(AccountTypeName name) {
+    public UserRole(UserRoleName name) {
         this.name = name;
     }
 
@@ -40,11 +40,11 @@ public class AccountType {
         this.id = id;
     }
 
-    public AccountTypeName getName() {
+    public UserRoleName getName() {
         return name;
     }
 
-    public void setName(AccountTypeName name) {
+    public void setName(UserRoleName name) {
         this.name = name;
     }
 
