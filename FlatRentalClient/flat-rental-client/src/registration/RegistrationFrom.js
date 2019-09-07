@@ -155,7 +155,7 @@ class RegistrationFrom extends Component {
                                 name="password"
                                 type="password"
                                 autoComplete="off"
-                                placeholder="A password between 6 to 20 characters"
+                                placeholder={"A password between " + CONS.PASSWORD_MIN_LENGTH + " to " + CONS.PASSWORD_MAX_LENGTH + " characters"}
                                 value={this.state.password.value}
                                 onChange={(event) => this.handleInputChange(event, this.validatePassword)} />
                         </FormItem>
