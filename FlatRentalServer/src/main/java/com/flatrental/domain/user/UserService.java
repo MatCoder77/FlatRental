@@ -1,7 +1,5 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.api.UserDTO;
-import com.flatrental.domain.userrole.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

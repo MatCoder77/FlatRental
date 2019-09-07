@@ -1,13 +1,11 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.furnishings.Furnishings;
-import com.flatrental.domain.images.Image;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
