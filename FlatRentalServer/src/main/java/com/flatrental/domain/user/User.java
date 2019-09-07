@@ -37,7 +37,7 @@ public class User extends EntityInfo {
     private String surname;
 
     @NotBlank
-    @Size(max = 15)
+    @Size(max = 40)
     private String username;
 
     @NotBlank
