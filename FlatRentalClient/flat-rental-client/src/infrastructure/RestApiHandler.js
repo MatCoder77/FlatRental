@@ -42,3 +42,10 @@ export function getCurrentUser() {
         method: 'GET'
     });
 }
+
+export function getBuildingTypes() {
+    return request({
+        url: API_BASE_URL + "/buildingtype",
+        method: 'GET'
+    });
+}

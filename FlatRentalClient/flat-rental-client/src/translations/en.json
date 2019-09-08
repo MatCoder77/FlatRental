@@ -1,0 +1,30 @@
+{
+    "browser": "BROWSER",
+
+    "labels.signup": "Sign Up",
+    "labels.name": "Name",
+    "labels.surname": "Surname",
+    "labels.username": "Username",
+    "labels.password": "Password",
+    "labels.email": "Email",
+    "labels.phoneNumber": "Phone Number",
+
+    "placeholders.name": "Type in your name",
+    "placeholders.surname": "Type in your surname",
+    "placeholders.username": "Type in your username",
+    "placeholders.email": "Type in your email",
+    "placeholders.password": "A password between {min} to {max} characters",
+    "placeholders.phoneNumber": "Type in phone number",
+
+    "buttons.signup": "Sign Up",
+
+    "text.already_registered": "Already registered?",
+    "text.login_now": "Login now!",
+
+    "BUILDING_TYPE_FLAT": "Flat",
+    "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
+    "BUILDING_TYPE_TENEMENT": "Tenement",
+    "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Multi-family house",
+    "BUILDING_TYPE_OTHER": "Other"
+
+}

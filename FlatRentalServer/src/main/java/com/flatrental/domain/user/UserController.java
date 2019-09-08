@@ -2,6 +2,7 @@ package com.flatrental.domain.user;
 
 import com.flatrental.api.AvailableDTO;
 import com.flatrental.api.UserDTO;
+import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/current")
-    @PreAuthorize("hasRole('USER')")
+    @HasAnyRole
     public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
         User user = userService.getUserFormDatabase(currentUserInfo.getId());
         return UserDTO.builder()

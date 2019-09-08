@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {FormattedMessage} from "react-intl";
 
 class MainPage extends Component {
     constructor(props) {
@@ -7,7 +8,7 @@ class MainPage extends Component {
 
     render() {
         return (
-          <h1>SZUKAJKA</h1>
+          <h1><FormattedMessage id="browser"/></h1>
         );
     }
 }

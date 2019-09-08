@@ -3,6 +3,7 @@ import { signup, checkUsernameAvailability, checkEmailAvailability } from "../in
 import './RegistrationForm.css';
 import { Link } from 'react-router-dom';
 import * as CONS from "../Constants"
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 import { Form, Input, Button, notification } from 'antd';
 const FormItem = Form.Item;
@@ -87,12 +88,13 @@ class RegistrationFrom extends Component {
     }
 
     render() {
+        const { intl } = this.props;
         return (
             <div className="signup-container">
-                <h1 className="page-title">Sign Up</h1>
+                <h1 className="page-title"><FormattedMessage id="labels.signup"/></h1>
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form" layout="horizontal">
-                        <FormItem label="Name"
+                        <FormItem label={intl.formatMessage({ id: 'labels.name' })}
                             hasFeedback
                             validateStatus={this.state.name.validateStatus}
                             help={this.state.name.errorMsg}>
@@ -100,12 +102,12 @@ class RegistrationFrom extends Component {
                                 size="large"
                                 name="name"
                                 autoComplete="off"
-                                placeholder="Your name"
+                                placeholder={intl.formatMessage({id: 'placeholders.name'})}
                                 value={this.state.name.value}
                                 onChange={(event) => this.handleInputChange(event, this.validateName)} />
                         </FormItem>
                         <FormItem
-                            label="Surname"
+                            label={intl.formatMessage({id: 'labels.surname'})}
                             hasFeedback
                             validateStatus={this.state.surname.validateStatus}
                             help={this.state.surname.errorMsg}>
@@ -113,11 +115,11 @@ class RegistrationFrom extends Component {
                                 size="large"
                                 name="surname"
                                 autoComplete="off"
-                                placeholder="Your surname"
+                                placeholder={intl.formatMessage({ id: 'placeholders.surname' })}
                                 value={this.state.surname.value}
                                 onChange={(event) => this.handleInputChange(event, this.validateSurname)} />
                         </FormItem>
-                        <FormItem label="Username"
+                        <FormItem label={intl.formatMessage({ id: 'labels.username' })}
                                   hasFeedback
                                   validateStatus={this.state.username.validateStatus}
                                   help={this.state.username.errorMsg}>
@@ -125,13 +127,13 @@ class RegistrationFrom extends Component {
                                 size="large"
                                 name="username"
                                 autoComplete="off"
-                                placeholder="A unique username"
+                                placeholder={intl.formatMessage({ id: 'placeholders.username' })}
                                 value={this.state.username.value}
                                 onBlur={this.validateUsernameAvailability}
                                 onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
                         </FormItem>
                         <FormItem
-                            label="Email"
+                            label={intl.formatMessage({ id: 'labels.email' })}
                             hasFeedback
                             validateStatus={this.state.email.validateStatus}
                             help={this.state.email.errorMsg}>
@@ -140,13 +142,13 @@ class RegistrationFrom extends Component {
                                 name="email"
                                 type="email"
                                 autoComplete="off"
-                                placeholder="Your email"
+                                placeholder={intl.formatMessage({ id: 'placeholders.email' })}
                                 value={this.state.email.value}
                                 onBlur={this.validateEmailAvailability}
                                 onChange={(event) => this.handleInputChange(event, this.validateEmail)} />
                         </FormItem>
                         <FormItem
-                            label="Password"
+                            label={intl.formatMessage({ id: 'labels.password' })}
                             hasFeedback
                             validateStatus={this.state.password.validateStatus}
                             help={this.state.password.errorMsg}>
@@ -155,12 +157,12 @@ class RegistrationFrom extends Component {
                                 name="password"
                                 type="password"
                                 autoComplete="off"
-                                placeholder={"A password between " + CONS.PASSWORD_MIN_LENGTH + " to " + CONS.PASSWORD_MAX_LENGTH + " characters"}
+                                placeholder={intl.formatMessage({ id: 'placeholders.password'}, {min: CONS.PASSWORD_MIN_LENGTH, max: CONS.PASSWORD_MAX_LENGTH})}
                                 value={this.state.password.value}
                                 onChange={(event) => this.handleInputChange(event, this.validatePassword)} />
                         </FormItem>
                         <FormItem
-                            label="Phone Number"
+                            label={intl.formatMessage({ id: 'labels.phoneNumber' })}
                             hasFeedback
                             validateStatus={this.state.phoneNumber.validateStatus}
                             help={this.state.phoneNumber.errorMsg}>
@@ -168,7 +170,7 @@ class RegistrationFrom extends Component {
                                 size="large"
                                 name="phoneNumber"
                                 autoComplete="off"
-                                placeholder="A phone number"
+                                placeholder={intl.formatMessage({ id: 'placeholders.phoneNumber' })}
                                 value={this.state.phoneNumber.value}
                                 onChange={(event) => this.handleInputChange(event, this.validatePhoneNumber)} />
                         </FormItem>
@@ -177,8 +179,8 @@ class RegistrationFrom extends Component {
                                     htmlType="submit"
                                     size="large"
                                     className="signup-form-button"
-                                    disabled={this.isFormInvalid()}>Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
+                                    disabled={this.isFormInvalid()}><FormattedMessage id="buttons.signup"/></Button>
+                            <FormattedMessage id="text.already_registered"/> <Link to="/login"><FormattedMessage id="text.login_now"/></Link>
                         </FormItem>
                     </Form>
                 </div>
@@ -417,5 +419,5 @@ class RegistrationFrom extends Component {
 
 }
 
-export default RegistrationFrom;
+export default injectIntl(RegistrationFrom);
 

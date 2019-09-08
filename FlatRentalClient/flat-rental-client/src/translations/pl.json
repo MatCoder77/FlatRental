@@ -1,0 +1,30 @@
+{
+    "browser": "WYSZUKIWARKA_PL",
+    "labels.signup": "Rejestracja",
+    "labels.name": "Imię",
+    "labels.surname": "Nazwisko",
+    "labels.username": "Nick",
+    "labels.password": "Hasło",
+    "labels.email": "Email",
+    "labels.phoneNumber": "Numer Telefonu",
+
+
+    "placeholders.name": "Podaj swoje imię",
+    "placeholders.surname": "Podaj swoje nazwisko",
+    "placeholders.username": "Podaj swój nick",
+    "placeholders.email": "Podaj swój email",
+    "placeholders.password": "Hasło składające się z {min} do {max} znaków",
+    "placeholders.phoneNumber": "Podaj swój numer telefonu",
+
+    "buttons.signup": "Zarejestuj się",
+
+    "text.already_registered": "Masz już konto?",
+    "text.login_now": "Zaloguj się teraz!",
+
+
+    "BUILDING_TYPE_FLAT": "Blok",
+    "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
+    "BUILDING_TYPE_TENEMENT": "Kamienica",
+    "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Dom wielorodzinny",
+    "BUILDING_TYPE_OTHER": "Inny"
+}
