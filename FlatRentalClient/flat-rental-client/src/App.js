@@ -7,6 +7,9 @@ import './App.css';
 import LoadingIcon from "./commons/LoadingIcon";
 import RegistrationFrom from "./registration/RegistrationFrom";
 import LoginFrom from "./login/LoginFrom";
+import AnnouncementCreateForm from "./announcement/AnnouncementCreateForm";
+import PageHeader from "./pageheader/PageHeader";
+import MainPage from "./mainpage/MainPage";
 
 const { Content } = Layout;
 
@@ -83,19 +86,20 @@ class App extends Component {
         }
         return (
             <Layout className="app-container">
-                {/*<AppHeader isAuthenticated={this.state.isAuthenticated}*/}
-                {/*           currentUser={this.state.currentUser}*/}
-                {/*           onLogout={this.handleLogout} />*/}
+                <PageHeader isAuthenticated={this.state.isAuthenticated}
+                            currentUser={this.state.currentUser}
+                            onLogout={this.handleLogout} />
 
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            {/*<Route exact path="/"*/}
-                            {/*       render={(props) => <PollList isAuthenticated={this.state.isAuthenticated}*/}
-                            {/*                                    currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>*/}
-                            {/*</Route>*/}
+                            <Route exact path="/"
+                                   render={(props) => <MainPage isAuthenticated={this.state.isAuthenticated}
+                                                             currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+                            </Route>
                             <Route path="/login" render={(props) => <LoginFrom onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/signup" component={RegistrationFrom}/>
+                            <Route exact path="/announcement/new" render={(props) => <AnnouncementCreateForm/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

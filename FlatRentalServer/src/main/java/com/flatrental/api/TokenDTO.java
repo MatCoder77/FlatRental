@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class TokenDTO {
 
-    private String token;
+    private String accessToken;
     private String tokenType = "Barer";
 
-    public TokenDTO(String token) {
-        this.token = token;
+    public TokenDTO(String accessToken) {
+        this.accessToken = accessToken;
     }
 
 }

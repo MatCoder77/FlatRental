@@ -1,5 +1,6 @@
 package com.flatrental.api;
 
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 public class UserDTO {
 
     @Id

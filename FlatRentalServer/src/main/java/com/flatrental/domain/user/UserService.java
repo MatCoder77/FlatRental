@@ -1,5 +1,6 @@
 package com.flatrental.domain.user;
 
+import com.flatrental.api.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,5 +59,6 @@ public class UserService {
     public boolean userExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
 
 }

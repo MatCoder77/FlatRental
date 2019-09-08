@@ -50,11 +50,11 @@ public class TokenHandler {
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            logger.error("Invalid JWT accessToken");
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            logger.error("Expired JWT accessToken");
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            logger.error("Unsupported JWT accessToken");
         } catch (IllegalArgumentException ex) {
             logger.error("JWT claims string is empty.");
         }
