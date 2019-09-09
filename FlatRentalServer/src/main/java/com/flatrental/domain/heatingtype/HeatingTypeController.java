@@ -1,4 +1,4 @@
-package com.flatrental.domain.cookertype;
+package com.flatrental.domain.heatingtype;
 
 import com.flatrental.api.SimpleResourceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/cookertype")
-public class CookerTypeController {
+@RequestMapping("/api/heatingtype")
+public class HeatingTypeController {
 
     @Autowired
-    private CookerTypeService cookerTypeService;
+    private HeatingTypeService heatingTypeService;
 
     @GetMapping
-    public List<SimpleResourceDTO> getCookerTypes() {
-        return cookerTypeService.getAllCookerTypes().stream()
+    public List<SimpleResourceDTO> getHeatingTypes() {
+        return heatingTypeService.getAllHeatingTypes().stream()
                 .map(this::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
     }
 
-    private SimpleResourceDTO mapToSimpleResourceDTO(CookerType cookerType) {
-        return new SimpleResourceDTO(cookerType.getId(), cookerType.getName());
+    private SimpleResourceDTO mapToSimpleResourceDTO(HeatingType heatingType) {
+        return new SimpleResourceDTO(heatingType.getId(), heatingType.getName());
     }
 
 }

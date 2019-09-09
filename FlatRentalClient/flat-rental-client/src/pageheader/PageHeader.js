@@ -6,6 +6,8 @@ import {
 import './PageHeader.css';
 import pollIcon from '../real-estate.png';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
+import {FormattedMessage, injectIntl} from 'react-intl';
+
 const Header = Layout.Header;
 
 class AppHeader extends Component {
@@ -43,10 +45,10 @@ class AppHeader extends Component {
         } else {
             menuItems = [
                 <Menu.Item key="/login">
-                    <Link to="/login">Login</Link>
+                    <Link to="/login"><FormattedMessage id="labels.login_button"/></Link>
                 </Menu.Item>,
                 <Menu.Item key="/signup">
-                    <Link to="/signup">Signup</Link>
+                    <Link to="/signup"><FormattedMessage id="buttons.signup"/></Link>
                 </Menu.Item>
             ];
         }
@@ -83,10 +85,10 @@ function ProfileDropdownMenu(props) {
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="profile" className="dropdown-item">
-                <Link to={`/users/${props.currentUser.username}`}>Profile</Link>
+                <Link to={`/users/${props.currentUser.username}`}><FormattedMessage id="labels.profile"/></Link>
             </Menu.Item>
             <Menu.Item key="logout" className="dropdown-item">
-                Logout
+                <FormattedMessage id="labels.logout"/>
             </Menu.Item>
         </Menu>
     );

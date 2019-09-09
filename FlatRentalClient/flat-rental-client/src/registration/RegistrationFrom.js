@@ -4,7 +4,6 @@ import './RegistrationForm.css';
 import { Link } from 'react-router-dom';
 import * as CONS from "../Constants"
 import {FormattedMessage, injectIntl} from 'react-intl';
-
 import { Form, Input, Button, notification } from 'antd';
 const FormItem = Form.Item;
 
@@ -36,6 +35,23 @@ class RegistrationFrom extends Component {
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
+
+        this.succesfullyRegisteredMessage = this.props.intl.formatMessage({ id: 'text.successfully_registered_msg' });
+        this.somethingWentWrongMessage = this.props.intl.formatMessage({ id: 'text.something_went_wrong_msg' });
+        this.nameIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.name_too_short_msg' }, { min: CONS.NAME_MIN_LENGTH });
+        this.nameIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.name_too_long_msg' }, { max: CONS.NAME_MAX_LENGTH });
+        this.surnameIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.surname_too_short_msg' }, { min: CONS.SURNAME_MIN_LENGTH });
+        this.surnameIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.surname_too_long_msg' }, { max: CONS.SURNAME_MAX_LENGTH });
+        this.usernameIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.username_too_short_msg' }, { min: CONS.USERNAME_MIN_LENGTH });
+        this.usernameIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.username_too_long_msg' }, { max: CONS.USERNAME_MAX_LENGTH });
+        this.usernameIsNotUniqueMessage = this.props.intl.formatMessage({ id: 'text.username_not_unique_msg' });
+        this.emailIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.email_too_short_msg' }, { min: CONS.EMAIL_MIN_LENGTH });
+        this.emailIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.email_too_long_msg' }, { max: CONS.EMAIL_MAX_LENGTH });
+        this.emailIsNotUniqueMessage = this.props.intl.formatMessage({ id: 'text.email_not_unique_msg' });
+        this.incorrectEmail = this.props.intl.formatMessage({ id: 'text.email_not_correct_msg' });
+        this.passwordIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.password_too_short_msg' }, { min: CONS.PASSWORD_MIN_LENGTH });
+        this.passwordIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.password_too_long_msg' }, { max: CONS.PASSWORD_MAX_LENGTH });
+        this.phoneNumberIsIncorrect = this.props.intl.formatMessage({ id: 'text.phone_number_incorrect_msg' });
     }
 
     handleInputChange(event, validationFun) {
@@ -66,13 +82,13 @@ class RegistrationFrom extends Component {
             .then(response => {
                 notification.success({
                     message: 'Flat Rental',
-                    description: "Thank you! You're successfully registered. Please Login to continue!",
+                    description: this.succesfullyRegisteredMessage,
                 });
                 this.props.history.push("/login");
             }).catch(error => {
             notification.error({
                 message: 'Flat Rental',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+                description: error.message || this.somethingWentWrongMessage
             });
         });
     }
@@ -194,12 +210,12 @@ class RegistrationFrom extends Component {
         if(name.length < CONS.NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Name is too short (Minimum ${CONS.NAME_MIN_LENGTH} characters needed.)`
+                errorMsg: this.nameIsTooShortMessage
             }
         } else if (name.length > CONS.NAME_MAX_LENGTH) {
             return {
-                validationStatus: 'error',
-                errorMsg: `Name is too long (Maximum ${CONS.NAME_MAX_LENGTH} characters allowed.)`
+                validateStatus: 'error',
+                errorMsg: this.nameIsTooLongMessage
             }
         } else {
             return {
@@ -213,12 +229,12 @@ class RegistrationFrom extends Component {
         if(surname.length < CONS.SURNAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Surname is too short (Minimum ${CONS.SURNAME_MIN_LENGTH} characters needed.)`
+                errorMsg: this.surnameIsTooShortMessage
             }
         } else if (surname.length > CONS.NAME_MAX_LENGTH) {
             return {
-                validationStatus: 'error',
-                errorMsg: `Surname is too long (Maximum ${CONS.SURNAME_MAX_LENGTH} characters allowed.)`
+                validateStatus: 'error',
+                errorMsg: this.surnameIsTooLongMessage
             }
         } else {
             return {
@@ -232,7 +248,7 @@ class RegistrationFrom extends Component {
         if(!email) {
             return {
                 validateStatus: 'error',
-                errorMsg: 'Email may not be empty'
+                errorMsg: this.emailIsTooShortMessage
             }
         }
 
@@ -240,14 +256,14 @@ class RegistrationFrom extends Component {
         if(!EMAIL_REGEX.test(email)) {
             return {
                 validateStatus: 'error',
-                errorMsg: 'Email not valid'
+                errorMsg: this.incorrectEmail
             }
         }
 
         if(email.length > CONS.EMAIL_MAX_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Email is too long (Maximum ${CONS.EMAIL_MAX_LENGTH} characters allowed)`
+                errorMsg: this.emailIsTooLongMessage
             }
         }
 
@@ -261,12 +277,12 @@ class RegistrationFrom extends Component {
         if(username.length < CONS.USERNAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Username is too short (Minimum ${CONS.USERNAME_MIN_LENGTH} characters needed.)`
+                errorMsg: this.usernameIsTooShortMessage
             }
         } else if (username.length > CONS.USERNAME_MAX_LENGTH) {
             return {
-                validationStatus: 'error',
-                errorMsg: `Username is too long (Maximum ${CONS.USERNAME_MAX_LENGTH} characters allowed.)`
+                validateStatus: 'error',
+                errorMsg: this.usernameIsTooLongMessage
             }
         } else {
             return {
@@ -314,7 +330,7 @@ class RegistrationFrom extends Component {
                         username: {
                             value: usernameValue,
                             validateStatus: 'error',
-                            errorMsg: 'This username is already taken'
+                            errorMsg: this.usernameIsNotUniqueMessage
                         }
                     });
                 }
@@ -368,7 +384,7 @@ class RegistrationFrom extends Component {
                         email: {
                             value: emailValue,
                             validateStatus: 'error',
-                            errorMsg: 'This Email is already registered'
+                            errorMsg: this.emailIsNotUniqueMessage
                         }
                     });
                 }
@@ -388,12 +404,12 @@ class RegistrationFrom extends Component {
         if(password.length < CONS.PASSWORD_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Password is too short (Minimum ${CONS.PASSWORD_MIN_LENGTH} characters needed.)`
+                errorMsg: this.passwordIsTooShortMessage
             }
         } else if (password.length > CONS.PASSWORD_MAX_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Password is too long (Maximum ${CONS.PASSWORD_MAX_LENGTH} characters allowed.)`
+                errorMsg: this.passwordIsTooLongMessage
             }
         } else {
             return {
@@ -412,7 +428,7 @@ class RegistrationFrom extends Component {
         } else {
             return {
                 validateStatus: 'error',
-                errorMsg: `Only digits are allowed.`
+                errorMsg: this.phoneNumberIsIncorrect
             }
         }
     }

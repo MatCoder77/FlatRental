@@ -20,6 +20,36 @@
 
     "text.already_registered": "Already registered?",
     "text.login_now": "Login now!",
+    "text.successfully_registered_msg": "Successfully registered. You can now login to your account.",
+    "text.something_went_wrong_msg": "Unknown error occurred!",
+    "text.name_too_short_msg": "Name is too short. Minimum {min} characters required",
+    "text.name_too_long_msg": "Name is too long. Maximum {max} characters allowed",
+    "text.surname_too_short_msg": "Surname is too short. Minimum {min} characters required",
+    "text.surname_too_long_msg": "Surname is too long. Maximum {max} characters allowed",
+    "text.username_too_short_msg": "Username is too short. Minimum {min} characters required",
+    "text.username_too_long_msg": "Username is too long. Maximum {max} characters allowed",
+    "text.username_not_unique_msg": "Username already taken",
+    "text.email_too_short_msg": "Email is too short. Minimum {min} characters required",
+    "text.email_too_long_msg": "Email is too long. Maximum {max} characters allowed",
+    "text.email_not_unique_msg": "There is already account connected with this email",
+    "text.email_not_correct_msg": "Email is incorrect",
+    "text.password_too_short_msg": "Password is too short. Minimum {min} characters required",
+    "text.password_too_long_msg": "Password is too long. Maximum {max} characters required",
+    "text.phone_number_incorrect_msg": "Phone number is incorrect",
+
+
+    "labels.login": "Login",
+    "text.login_failed": "Incorrect login or password! Try again.",
+    "text.input_username_or_email": "Input username or email",
+    "text.input_password_msg": "Input your password",
+    "labels.username_or_email": "Username or Email",
+    "labels.login_button": "Login",
+    "labels.or": "Or",
+    "labels.register_now": "register now!",
+
+
+    "labels.profile": "Profile",
+    "labels.logout": "Logout",
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",

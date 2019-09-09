@@ -6,7 +6,7 @@ import { Layout, notification } from 'antd';
 import './App.css';
 import LoadingIcon from "./commons/LoadingIcon";
 import RegistrationFrom from "./registration/RegistrationFrom";
-import LoginFrom from "./login/LoginFrom";
+import Login from "./login/Login";
 import CreateAnnouncementStepWizard from "./announcement/CreateAnnouncementStepWizard";
 import PageHeader from "./pageheader/PageHeader";
 import MainPage from "./mainpage/MainPage";
@@ -97,7 +97,7 @@ class App extends Component {
                                    render={(props) => <MainPage isAuthenticated={this.state.isAuthenticated}
                                                              currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
                             </Route>
-                            <Route path="/login" render={(props) => <LoginFrom onLogin={this.handleLogin} {...props} />}/>
+                            <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/signup" component={RegistrationFrom}/>
                             <Route exact path="/announcement/new" render={(props) => <CreateAnnouncementStepWizard/>}/>
                             {/*<Route path="/users/:username"*/}

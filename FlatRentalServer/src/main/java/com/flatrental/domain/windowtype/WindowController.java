@@ -1,4 +1,4 @@
-package com.flatrental.domain.cookertype;
+package com.flatrental.domain.windowtype;
 
 import com.flatrental.api.SimpleResourceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/cookertype")
-public class CookerTypeController {
+@RequestMapping("/api/windowtype")
+public class WindowController {
 
     @Autowired
-    private CookerTypeService cookerTypeService;
+    private WindowTypeService windowTypeService;
 
     @GetMapping
-    public List<SimpleResourceDTO> getCookerTypes() {
-        return cookerTypeService.getAllCookerTypes().stream()
+    public List<SimpleResourceDTO> getWindowTypes() {
+        return windowTypeService.getAllWindowTypes().stream()
                 .map(this::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
     }
 
-    private SimpleResourceDTO mapToSimpleResourceDTO(CookerType cookerType) {
-        return new SimpleResourceDTO(cookerType.getId(), cookerType.getName());
+    private SimpleResourceDTO mapToSimpleResourceDTO(WindowType windowType) {
+        return new SimpleResourceDTO(windowType.getId(), windowType.getName());
     }
 
 }

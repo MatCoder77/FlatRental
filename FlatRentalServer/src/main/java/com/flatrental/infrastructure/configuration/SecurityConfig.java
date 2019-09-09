@@ -88,7 +88,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/check/email/**",
                         "/api/locations/search",
                         "/api/buildingtype",
-                        "/api/buildingmaterial")
+                        "/api/buildingmaterial",
+                        "/api/cookertype",
+                        "/api/kitchentype",
+                        "/api/windowtype",
+                        "/api/parkingtype",
+                        "/api/heatingtype")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**")
                 .permitAll()

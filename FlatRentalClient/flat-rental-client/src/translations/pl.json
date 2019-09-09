@@ -20,7 +20,36 @@
 
     "text.already_registered": "Masz już konto?",
     "text.login_now": "Zaloguj się teraz!",
+    "text.successfully_registered_msg": "Zostałeś poprawnie zarejestrowany. Teraz możesz się zalogować.",
+    "text.something_went_wrong_msg": "Wystąpił nieznany błąd!",
+    "text.name_too_short_msg": "Podane imię jest za krótkie. Wymagane co najmniej {min} znaków",
+    "text.name_too_long_msg": "Podane imię jest za długie. Maksymalna długość to {max} znaków",
+    "text.surname_too_short_msg": "Podane nazwisko jest za krótkie. Wymagane co najmniej {min} znaków",
+    "text.surname_too_long_msg": "Podane nazwisko jest za długie. Maksymalna długość to {max} znaków",
+    "text.username_too_short_msg": "Podany nick jest za krótki. Wymagane co najmniej {min} znaków",
+    "text.username_too_long_msg": "Podany nick jest za długi. Maksymalna długość to {max} znaków",
+    "text.username_not_unique_msg": "Podany nick jest już zajęty",
+    "text.email_too_short_msg": "Podany email jest za krótki. Wymagane co najmniej {min} znaków",
+    "text.email_too_long_msg": "Podany email jest za długi. Maksymalna długość to {max} znaków",
+    "text.email_not_unique_msg": "Istnieje już konto powiązane z tym emailem",
+    "text.email_not_correct_msg": "Podany email jest niepoprawny",
+    "text.password_too_short_msg": "Podane hasło jest za krótkie. Wymagane co najmniej {min} znaków",
+    "text.password_too_long_msg": "Podane hasło jest za długie. Maksymalna długość to {max} znaków",
+    "text.phone_number_incorrect_msg": "Podany numer telefonu jest niepoprawny",
 
+
+    "labels.login": "Logowanie",
+    "text.login_failed": "Niepoprawny login lub hasło! Spróbuj ponownie.",
+    "text.input_username_or_email": "Wpisz nick lub email",
+    "text.input_password_msg": "Wpisz swoje hasło",
+    "labels.username_or_email": "Nick lub Email",
+    "labels.login_button": "Zaloguj się",
+    "labels.or": "Lub",
+    "labels.register_now": "zarejestruj się teraz!",
+
+
+    "labels.profile": "Profil",
+    "labels.logout": "Wyloguj się",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
