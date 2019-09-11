@@ -49,3 +49,53 @@ export function getBuildingTypes() {
         method: 'GET'
     });
 }
+
+export function getBuildingMaterialTypes() {
+    return request({
+        url: API_BASE_URL + "/buildingmaterial",
+        method: 'GET'
+    });
+}
+
+export function getCookerTypes() {
+    return request({
+        url: API_BASE_URL + "/cookertype",
+        method: 'GET'
+    });
+}
+
+export function getKitchenTypes() {
+    return request({
+        url: API_BASE_URL + "/kitchentype",
+        method: 'GET'
+    });
+}
+
+export function getWindowTypes() {
+    return request({
+        url: API_BASE_URL + "/windowtype",
+        method: 'GET'
+    });
+}
+
+export function getParkingTypes() {
+    return request({
+        url: API_BASE_URL + "/parkingtype",
+        method: 'GET'
+    });
+}
+
+export function getHeatingTypes() {
+    return request({
+        url: API_BASE_URL + "/heatingtype",
+        method: 'GET'
+    });
+}
+
+export function getApartmentStateTypes() {
+    return request({
+        url: API_BASE_URL + "/apartmentstate",
+        method: 'GET'
+    });
+
+}

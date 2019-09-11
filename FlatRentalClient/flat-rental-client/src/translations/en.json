@@ -44,7 +44,7 @@
     "text.input_password_msg": "Input your password",
     "labels.username_or_email": "Username or Email",
     "labels.login_button": "Login",
-    "labels.or": "Or",
+    "labels.dont_have_account": "Don't have account yet?",
     "labels.register_now": "register now!",
 
 
@@ -55,6 +55,55 @@
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",
     "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Multi-family house",
-    "BUILDING_TYPE_OTHER": "Other"
+    "BUILDING_TYPE_OTHER": "Other",
+
+    "BUILDING_MATERIAL_BRICK": "Brick",
+    "BUILDING_MATERIAL_CONCRETE": "Concrete",
+    "BUILDING_MATERIAL_WOOD": "Wood",
+    "BUILDING_MATERIAL_BREEZE_BLOCK": "Breeze-block",
+    "BUILDING_MATERIAL_MIXED": "Mixed",
+    "BUILDING_MATERIAL_STONE": "Stone",
+    "BUILDING_MATERIAL_GRAVELITE": "Gravelite",
+    "BUILDING_MATERIAL_PREFABRICATED": "Prefabricated blocks",
+    "BUILDING_MATERIAL_REINFORCED_CONCRETE": "Reinforced concrete",
+    "BUILDING_MATERIAL_OTHER": "Other",
+
+    "KITCHEN_TYPE_KITCHENETTE": "Kitchenette",
+    "KITCHEN_TYPE_ALCOVE": "Alcove",
+    "KITCHEN_TYPE_HALF_OPEN": "Half open",
+    "KITCHEN_TYPE_OPEN": "Open",
+    "KITCHEN_TYPE_SEPARATE": "Separate",
+    "KITCHEN_TYPE_NO_KITCHEN": "No kitchen",
+
+    "COOKER_TYPE_HOB_BURNER": "Hob burner",
+    "COOKER_TYPE_INDUCTION_HOB": "Induction hob",
+    "COOKER_TYPE_ELECTRIC_HOB": "Electric hob",
+    "COOKER_TYPE_MIXED": "Mixed",
+
+    "HEATING_TYPE_URBAN": "Urban",
+    "HEATING_TYPE_BIOMASS": "Biomass",
+    "HEATING_TYPE_FLOOR_HEATING": "Floor",
+    "HEATING_TYPE_FIREPLACE": "Fireplace",
+    "HEATING_TYPE_SOLAR": "Solar",
+    "HEATING_TYPE_COAL": "Coal",
+    "HEATING_TYPE_GAS": "Gas",
+    "HEATING_TYPE_ELECTRIC": "Electric",
+    "HEATING_TYPE_MIXED": "Mixed",
+    "HEATING_TYPE_OTHER": "Other",
+
+    "PARKING_TYPE_GARAGE": "Garage",
+    "PARKING_TYPE_STREET": "Street",
+    "PARKING_TYPE_UNDERGROUND": "Underground",
+    "PARKING_TYPE_GROUND_LEVEL_PARKING": "Ground level based",
+    "PARKING_TYPE_NO_PARKING": "No parking",
+
+    "WINDOW_TYPE_PLASTIC": "Plastic",
+    "WINDOW_TYPE_WOOD": "Wood",
+    "WINDOW_TYPE_ALUMINIUM": "Aluminium",
+
+    "APARTMENT_STATE_READY_TO_LIVE": "Ready to live",
+    "APARTMENT_STATE_TO_RENOVATION": "To renovation",
+    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Needs interior finish"
+
 
 }

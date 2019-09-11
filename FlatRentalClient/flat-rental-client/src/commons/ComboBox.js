@@ -16,6 +16,7 @@ class ComboBox extends Component {
 
 
     render() {
+        let items = this.props.itemList;
         return (
             <Select
                 //showSearch
@@ -24,12 +25,12 @@ class ComboBox extends Component {
                 // onChange={onChange}
                 // onFocus={onFocus}
                 // onBlur={onBlur}
-                // onSearch={onSearch}
+                // onSearch={onSearch}8888888
                 // filterOption={(input, option) =>
                 //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 // }
             >
-                {this.props.itemList.map(item => (
+                {items.map(item => (
                     <Option key={item.id} value={item.value}><FormattedMessage id={item.value}/></Option>
                 ))}
             </Select>

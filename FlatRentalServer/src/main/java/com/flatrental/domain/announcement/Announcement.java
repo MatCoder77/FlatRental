@@ -2,6 +2,7 @@ package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.EntityInfo;
 import com.flatrental.domain.antiburglaryprotecions.AntiBurglaryProtecions;
+import com.flatrental.domain.apartmentstate.ApartmentState;
 import com.flatrental.domain.buildingmaterial.BuildingMaterial;
 import com.flatrental.domain.buildingtype.BuildingType;
 import com.flatrental.domain.facilitiesinarea.FacilitiesInArea;
@@ -98,8 +99,8 @@ public class Announcement extends EntityInfo {
     @ManyToOne
     private ParkingType parkingType;
 
-    @Enumerated(EnumType.STRING)
-    private AppartmentState appartmentState;
+    @ManyToOne
+    private ApartmentState apartmentState;
 
     @Column(length = 1000)
     private String description;

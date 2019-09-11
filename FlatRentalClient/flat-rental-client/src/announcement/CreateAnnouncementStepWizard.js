@@ -8,6 +8,7 @@ import Text from "antd/lib/typography/Text";
 import moment from "moment";
 import {getBuildingTypes} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./FirstStepContainer";
+import ThirdStepContainer from "./ThirdStepContainer";
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -38,86 +39,8 @@ const steps = [{
 }, {
     title: 'Detail Information',
     content: (
-        <div className="step-container">
-            <h1 className="page-title">Detail Information</h1>
-            <div className="step-container-content">
-                <Form className="step-form" {...formItemLayout} layout="horizontal">
-                    <FormItem label="Built year">
-                        <InputNumber min={1800} max={today.year()}/>
-                    </FormItem>
-                    <FormItem
-                        label="Building type"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem
-                        label="Building material"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem
-                        label="Windows type"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem
-                        label="Heating type"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem
-                        label="Parking type"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem
-                        label="Apartment State"
-                        help="">
-                        <ComboBox/>
-                    </FormItem>
-                    <FormItem label="Amenities" layout="horizontal" hasFeedback required={true} help="">
-                        <Checkbox.Group style={{ width: '100%' }} >
-                            <Row>
-                                <Col span={8}>
-                                    <Checkbox value="Balkon">Balkon</Checkbox>
-                                </Col>
-                                <Col span={8}>
-                                    <Checkbox value="Klimatyzacja">Klimatyzacja</Checkbox>
-                                </Col>
-                                <Col span={8}>
-                                    <Checkbox value="Ogrzewane podłogi">Ogrzewane podłogi</Checkbox>
-                                </Col>
-                                <Col span={8}>
-                                    <Checkbox value="Taras">Taras</Checkbox>
-                                </Col>
-                                <Col span={8}>
-                                    <Checkbox value="Blblblr">Blblblr</Checkbox>
-                                </Col>
-                            </Row>
-                        </Checkbox.Group>
-                    </FormItem>
-
-                    <FormItem label="Total Area">
-                        <Input addonAfter="m2" size="large" name="large" autoComplete="off" placeholder="Total area in m2"/>
-                    </FormItem>
-                    <FormItem label="Number of rooms" required={true}>
-                        <InputNumber min={1} max={10}/>
-                    </FormItem>
-                    <FormItem label="Price per month" required={true}>
-                        <Input  addonAfter="PLN"/>
-                    </FormItem>
-                    <FormItem label="Deposit" required={true}>
-                        <Input addonAfter="PLN"/>
-                    </FormItem>
-                    <FormItem label="Floor / Max Floor" required={true}>
-                        <Row gutter={1}><Col span={3}><Input/></Col><Col span={1}> <center>/</center> </Col><Col span={3}><Input/></Col></Row>
-                    </FormItem>
-                    <FormItem label="Available from" required={true}>
-                        <DatePicker defaultValue={today}/>
-                    </FormItem>
-                </Form>
-            </div>
-        </div>),
+        <ThirdStepContainer/>
+        ),
 },{
     title: 'Summary',
     content: 'Last-content',

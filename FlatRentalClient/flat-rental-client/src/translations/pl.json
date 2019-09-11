@@ -44,8 +44,8 @@
     "text.input_password_msg": "Wpisz swoje hasło",
     "labels.username_or_email": "Nick lub Email",
     "labels.login_button": "Zaloguj się",
-    "labels.or": "Lub",
-    "labels.register_now": "zarejestruj się teraz!",
+    "labels.dont_have_account": "Nie masz jeszcze konta?",
+    "labels.register_now": "Zarejestruj się teraz!",
 
 
     "labels.profile": "Profil",
@@ -55,5 +55,54 @@
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
     "BUILDING_TYPE_TENEMENT": "Kamienica",
     "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Dom wielorodzinny",
-    "BUILDING_TYPE_OTHER": "Inny"
+    "BUILDING_TYPE_OTHER": "Inny",
+
+    "BUILDING_MATERIAL_BRICK": "Cegła",
+    "BUILDING_MATERIAL_CONCRETE": "Beton",
+    "BUILDING_MATERIAL_WOOD": "Drewno",
+    "BUILDING_MATERIAL_BREEZE_BLOCK": "Pustak",
+    "BUILDING_MATERIAL_MIXED": "Zróżnicowany",
+    "BUILDING_MATERIAL_STONE": "Kamień",
+    "BUILDING_MATERIAL_GRAVELITE": "Keramzyt",
+    "BUILDING_MATERIAL_PREFABRICATED": "Wielka płyta",
+    "BUILDING_MATERIAL_REINFORCED_CONCRETE": "Żelbeton",
+    "BUILDING_MATERIAL_OTHER": "Inny",
+
+    "KITCHEN_TYPE_KITCHENETTE": "Aneks kuchenny",
+    "KITCHEN_TYPE_ALCOVE": "Wnęka",
+    "KITCHEN_TYPE_HALF_OPEN": "Półotwarta",
+    "KITCHEN_TYPE_OPEN": "Otwarta",
+    "KITCHEN_TYPE_SEPARATE": "Oddzielna",
+    "KITCHEN_TYPE_NO_KITCHEN": "Brak",
+
+    "COOKER_TYPE_HOB_BURNER": "Gazowa",
+    "COOKER_TYPE_INDUCTION_HOB": "Indukcyjna",
+    "COOKER_TYPE_ELECTRIC_HOB": "Ceramiczna",
+    "COOKER_TYPE_MIXED": "Mieszana",
+
+    "HEATING_TYPE_URBAN": "Miejskie",
+    "HEATING_TYPE_BIOMASS": "Biomasa",
+    "HEATING_TYPE_FLOOR_HEATING": "Podłogowe",
+    "HEATING_TYPE_FIREPLACE": "Kominkowe",
+    "HEATING_TYPE_SOLAR": "Słoneczne",
+    "HEATING_TYPE_COAL": "Węglowe",
+    "HEATING_TYPE_GAS": "Gazowe",
+    "HEATING_TYPE_ELECTRIC": "Elektryczne",
+    "HEATING_TYPE_MIXED": "Zróżnicowane",
+    "HEATING_TYPE_OTHER": "Inne",
+
+    "PARKING_TYPE_GARAGE": "Garaż",
+    "PARKING_TYPE_STREET": "Na ulicay",
+    "PARKING_TYPE_UNDERGROUND": "Podziemny",
+    "PARKING_TYPE_GROUND_LEVEL_PARKING": "Naziemny",
+    "PARKING_TYPE_NO_PARKING": "Brak",
+
+    "WINDOW_TYPE_PLASTIC": "Plastikowe",
+    "WINDOW_TYPE_WOOD": "Drewniane",
+    "WINDOW_TYPE_ALUMINIUM": "Aluminiowe",
+
+    "APARTMENT_STATE_READY_TO_LIVE": "Do zamieszkania",
+    "APARTMENT_STATE_TO_RENOVATION": "Do remontu",
+    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Do wykończenia"
+
 }

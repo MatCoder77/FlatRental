@@ -75,7 +75,7 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                     <Button type="primary" htmlType="submit" size="large" className="login-form-button"><FormattedMessage id="labels.login_button"/></Button>
-                    <FormattedMessage id="labels.or"/> <Link to="/signup"><FormattedMessage id="labels.register_now"/></Link>
+                    <FormattedMessage id="labels.dont_have_account"/> <Link to="/signup"><FormattedMessage id="labels.register_now"/></Link>
                 </FormItem>
             </Form>
         );

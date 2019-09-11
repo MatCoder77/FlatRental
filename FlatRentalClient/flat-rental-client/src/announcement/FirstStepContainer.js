@@ -16,36 +16,13 @@ class FirstStepContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            buildingTypes: []
         }
     }
 
-    loadBuildingTypes() {
-        let promise = getBuildingTypes();
 
-        if(!promise) {
-            return;
-        }
-
-        // this.setState({
-        //     isLoading: true
-        // });
-
-        promise
-            .then(response => {
-                this.setState({
-                    buildingTypes: response
-                    // isLoading: false
-                })
-            }).catch(error => {
-            // this.setState({
-            //     isLoading: false
-            // })
-        });
-    }
 
     componentDidMount() {
-        this.loadBuildingTypes();
+
     }
 
     render() {
@@ -56,11 +33,6 @@ class FirstStepContainer extends Component {
                     <Form className="step-form" layout="horizontal">
                         <FormItem label="Title" layout="horizontal" hasFeedback required={true} help="">
                             <Input size="large" name="title" autoComplete="off" placeholder="Title of announcement"/>
-                        </FormItem>
-                        <FormItem
-                            label="Building type"
-                            help="">
-                            <ComboBox itemList={this.state.buildingTypes} placeholder="Select building type"/>
                         </FormItem>
                         <FormItem label="Total Area">
                             <Input addonAfter="m2" size="large" name="large" autoComplete="off" placeholder="Total area in m2"/>
