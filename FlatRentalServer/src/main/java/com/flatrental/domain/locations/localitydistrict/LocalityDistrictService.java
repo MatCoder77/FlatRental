@@ -146,4 +146,12 @@ public class LocalityDistrictService {
         return localityDistrictRepository.getAllLocalityDistricts();
     }
 
+    public List<LocalityDistrict> getAllLocalityDistrictsForLocality(Locality locality) {
+        return localityDistrictRepository.getAllLocalityDistrictsForLocality(locality);
+    }
+
+    public LocalityDistrict getExistingLocalityDistrict(Long id) {
+        return localityDistrictRepository.getExistingLocalityDistrict(id);
+    }
+
 }

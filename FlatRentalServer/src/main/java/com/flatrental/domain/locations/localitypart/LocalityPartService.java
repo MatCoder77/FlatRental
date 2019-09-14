@@ -160,4 +160,12 @@ public class LocalityPartService {
         return localityPartRepository.getAllLocalityParts();
     }
 
+    public List<LocalityPart> getLocalityPartsForParentLocality(Locality parentLocality) {
+        return localityPartRepository.getLocalityPartsForParentLocality(parentLocality);
+    }
+
+    public List<LocalityPart> getLocalityPartsForParentLocalityDistrict(LocalityDistrict parentLocalityDistrict) {
+        return localityPartRepository.getLocalityPartsForParentLocalityDistrict(parentLocalityDistrict);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.abstractlocality;
 
+import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.street.Street;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,5 +22,11 @@ public interface AbstractLocalityRepository extends JpaRepository<AbstractLocali
     List<AbstractLocality> findAllByGenericLocalityType(GenericLocalityType genericLocalityType);
 
     List<AbstractLocality> findAbstractLocalityByParentLocalityAndGenericLocalityType(AbstractLocality parentLocality, GenericLocalityType genericLocalityType);
+
+    List<AbstractLocality> findAbstractLocalityByCommuneAndGenericLocalityType(Commune commune, GenericLocalityType genericLocalityType);
+
+    Optional<AbstractLocality> findAbstractLocalityByIdAndGenericLocalityType(Long id, GenericLocalityType genericLocalityType);
+
+    List<AbstractLocality> findAbstractLocalitiesByLocalityDistrictAndGenericLocalityType(AbstractLocality localityDistrict, GenericLocalityType genericLocalityType);
 
 }

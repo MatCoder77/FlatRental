@@ -48,6 +48,7 @@ public class LocalityService {
     private static final int MAX_SAVED_AT_ONCE_SIZE = 1000;
     private static final String SUPPLIED_LOCALITY_IS_NOT_AUTONOMOUS = "Supplied locality {0} is not autonomous";
     private static final String THERE_IS_NO_LOCALITY_WITH_SUPPLIED_CODE = "There is no locality with code {0}";
+    private static final String THERE_IS_NO_LOCALITY_WITH_ID = "There is no locality with id {0}";
 
 
     public List<Locality> createLocalities(List<LocalityDTO> localityDTOs,
@@ -148,6 +149,15 @@ public class LocalityService {
 
     public List<Locality> getAllLocalities() {
         return localityRepository.getAllLocalities();
+    }
+
+    public List<Locality> getLocalitiesForCommune(Commune commune) {
+        return localityRepository.getLocalitiesForCommune(commune);
+    }
+
+    public Locality getExistingLocality(Long id) {
+        return localityRepository.findLocalityById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_LOCALITY_WITH_ID, id)));
     }
 
 }

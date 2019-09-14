@@ -3,6 +3,8 @@ package com.flatrental.domain.locations.locality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityRepository;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
+import com.flatrental.domain.locations.commune.Commune;
+import com.flatrental.domain.locations.district.District;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitypart.LocalityPart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +74,18 @@ public class LocalityRepository {
                 .stream()
                 .map(LocalityPart::fromAbstractLocality)
                 .collect(Collectors.toList());
+    }
+
+    List<Locality> getLocalitiesForCommune(Commune commune) {
+        return abstractLocalityRepository.findAbstractLocalityByCommuneAndGenericLocalityType(commune, GenericLocalityType.AUTONOMOUS_LOCALITY)
+                .stream()
+                .map(Locality::fromAbstractLocality)
+                .collect(Collectors.toList());
+    }
+
+    Optional<Locality> findLocalityById(Long id) {
+        return abstractLocalityRepository.findAbstractLocalityByIdAndGenericLocalityType(id, GenericLocalityType.AUTONOMOUS_LOCALITY)
+                .map(Locality::fromAbstractLocality);
     }
 
 }

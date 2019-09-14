@@ -21,7 +21,8 @@ public class VoivodeshipService {
 
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_VOIVODESHIP = "Supplied administration unit {0} is not of voivodeship type!";
-    private static final String VOIVODESHIP_WITH_SUPPLIED_ID_DOES_NOT_EXIST = "Voivodeship with supplied code {0} does not exist!";
+    private static final String VOIVODESHIP_WITH_SUPPLIED_CODE_DOES_NOT_EXIST = "Voivodeship with supplied code {0} does not exist!";
+    private static final String VOIVODESHIP_WITH_SUPPLIED_ID_DOES_NOT_EXIST = "Voivodeship with supplied id {0} does not exist!";
 
     public List<Voivodeship> createVoivodeships(List<AdministrationUnitDTO> voivodeshipDTOs) {
         List<Voivodeship> voivodeships = voivodeshipDTOs.stream()
@@ -46,9 +47,14 @@ public class VoivodeshipService {
         return voivodeshipRepository.save(voivodeship);
     }
 
+    public Voivodeship getExistingVoivodeship(Long id) {
+        return voivodeshipRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(VOIVODESHIP_WITH_SUPPLIED_ID_DOES_NOT_EXIST, id)));
+    }
+
     public Voivodeship getExistingVoivodeship(String code) {
         return voivodeshipRepository.getVoivodeshipByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(VOIVODESHIP_WITH_SUPPLIED_ID_DOES_NOT_EXIST, code)));
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(VOIVODESHIP_WITH_SUPPLIED_CODE_DOES_NOT_EXIST, code)));
     }
 
     public void updateVoivodeship(Update<Voivodeship, AdministrationUnitDTO> update) {

@@ -28,6 +28,7 @@ public class CommuneService {
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_COMMUNE = "Supplied unit {0} is not of commune type.";
     private static final String THERE_IS_NO_COMMUNE_WITH_SUPPLIED_CODES = "Commune with voivodeship code {0} and district code {1} and commune code {2} does not exist";
+    private static final String THERE_IS_NO_COMMUNE_WITH_ID = "There is no commune with id {0}";
 
 
     public List<Commune> createCommunes(List<AdministrationUnitDTO> communesDTOs, Map<String, Map<String, District>> districtByCodeGroupedByVoivodeshipCode) {
@@ -85,6 +86,15 @@ public class CommuneService {
 
     public List<Commune> getAllCommunes() {
         return communeRepository.findAll();
+    }
+
+    public Commune getExistingCommune(Long id) {
+        return communeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_COMMUNE_WITH_ID, id)));
+    }
+
+    public List<Commune> getCommunesForDistrict(District district) {
+        return communeRepository.getCommunesByDistrict(district);
     }
 
 }

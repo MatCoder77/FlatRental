@@ -7,12 +7,14 @@ import ComboBox from "../commons/ComboBox";
 import Text from "antd/lib/typography/Text";
 import moment from "moment";
 import {
+    getApartmentAmenitiesTypes,
     getApartmentStateTypes,
     getBuildingMaterialTypes,
     getBuildingTypes,
     getHeatingTypes, getParkingTypes,
     getWindowTypes
 } from "../infrastructure/RestApiHandler";
+import CheckBoxGrid from "../commons/CheckBoxGrid";
 
 const FormItem = Form.Item;
 
@@ -27,7 +29,8 @@ class ThirdStepContainer extends Component {
             heatingTypes: [],
             parkingTypes: [],
             windowTypes: [],
-            apartmentStateTypes: []
+            apartmentStateTypes: [],
+            apartmentAmenitiesTypes: []
         }
         this.loadTypes = this.loadTypes.bind(this);
         this.loadBuildingTypes = this.loadBuildingTypes.bind(this);
@@ -35,6 +38,7 @@ class ThirdStepContainer extends Component {
         this.loadHeatingTypes = this.loadHeatingTypes.bind(this);
         this.loadWindowTypes = this.loadWindowTypes.bind(this);
         this.loadApartmentStateTypes = this.loadApartmentStateTypes.bind(this);
+        this.loadApartmentAmenitiesTypes = this.loadApartmentAmenitiesTypes.bind(this);
     }
 
     loadTypes(supplierFunction, filedName) {
@@ -85,6 +89,10 @@ class ThirdStepContainer extends Component {
         this.loadTypes(getApartmentStateTypes, 'apartmentStateTypes')
     }
 
+    loadApartmentAmenitiesTypes() {
+        this.loadTypes(getApartmentAmenitiesTypes, 'apartmentAmenitiesTypes');
+    }
+
     componentDidMount() {
         this.loadBuildingTypes();
         this.loadBuildingMaterialTypes();
@@ -92,6 +100,7 @@ class ThirdStepContainer extends Component {
         this.loadWindowTypes();
         this.loadParkingTypes();
         this.loadApartmentStateTypes();
+        this.loadApartmentAmenitiesTypes();
     }
 
     render() {
@@ -99,7 +108,7 @@ class ThirdStepContainer extends Component {
             <div className="step-container">
                 <h1 className="page-title">Detail Information</h1>
                 <div className="step-container-content">
-                    <Form className="step-form" layout="horizontal">
+                    <Form className="step-form" layout="horizontal" {...this.props}>
                         <FormItem label="Built year">
                             <InputNumber min={1800} max={today.year()}/>
                         </FormItem>
@@ -134,25 +143,7 @@ class ThirdStepContainer extends Component {
                             <ComboBox itemList={this.state.apartmentStateTypes} placeholder="Select building material"/>
                         </FormItem>
                         <FormItem label="Amenities" layout="horizontal" hasFeedback required={true} help="">
-                            <Checkbox.Group style={{ width: '100%' }} >
-                                <Row>
-                                    <Col span={8}>
-                                        <Checkbox value="Balkon">Balkon</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="Klimatyzacja">Klimatyzacja</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="Ogrzewane podłogi">Ogrzewane podłogi</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="Taras">Taras</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="Blblblr">Blblblr</Checkbox>
-                                    </Col>
-                                </Row>
-                            </Checkbox.Group>
+                            <CheckBoxGrid itemList={this.state.apartmentAmenitiesTypes} span={8}/>
                         </FormItem>
                     </Form>
                 </div>

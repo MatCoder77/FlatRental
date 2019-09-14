@@ -9,6 +9,7 @@ import moment from "moment";
 import {getBuildingTypes} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./FirstStepContainer";
 import ThirdStepContainer from "./ThirdStepContainer";
+import SecondStepContainer from "./SecondStepContainer";
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -31,15 +32,17 @@ const today = moment(new Date())
 const steps = [{
     title: 'General Information',
     content: (
-        <FirstStepContainer/>
+        <FirstStepContainer {...formItemLayout}/>
         ),
 }, {
     title: 'Localization',
-    content: 'Second-content',
+    content: (
+        <SecondStepContainer {...formItemLayout}/>
+    ),
 }, {
     title: 'Detail Information',
     content: (
-        <ThirdStepContainer/>
+        <ThirdStepContainer {...formItemLayout}/>
         ),
 },{
     title: 'Summary',

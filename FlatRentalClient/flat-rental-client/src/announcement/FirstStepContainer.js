@@ -7,6 +7,7 @@ import ComboBox from "../commons/ComboBox";
 import Text from "antd/lib/typography/Text";
 import moment from "moment";
 import {getBuildingTypes} from "../infrastructure/RestApiHandler";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -26,30 +27,31 @@ class FirstStepContainer extends Component {
     }
 
     render() {
+        const { intl } = this.props;
         return (
             <div className="step-container">
-                <h1 className="page-title">General Information</h1>
+                <h1 className="page-title"><FormattedMessage id="labels.general_info"/></h1>
                 <div className="step-container-content">
-                    <Form className="step-form" layout="horizontal">
-                        <FormItem label="Title" layout="horizontal" hasFeedback required={true} help="">
-                            <Input size="large" name="title" autoComplete="off" placeholder="Title of announcement"/>
+                    <Form className="step-form" layout="horizontal" {...this.props}>
+                        <FormItem label={intl.formatMessage({ id: 'labels.title' })} layout="horizontal" hasFeedback required={true} help="">
+                            <Input size="large" name="title" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.title' })}/>
                         </FormItem>
-                        <FormItem label="Total Area">
-                            <Input addonAfter="m2" size="large" name="large" autoComplete="off" placeholder="Total area in m2"/>
+                        <FormItem label={intl.formatMessage({ id: 'labels.total_area' })}>
+                            <Input addonAfter="m2" size="large" name="large" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.total_area' })}/>
                         </FormItem>
-                        <FormItem label="Number of rooms" required={true}>
+                        <FormItem label={intl.formatMessage({ id: 'labels.number_of_rooms' })} required={true}>
                             <InputNumber min={1} max={10}/>
                         </FormItem>
-                        <FormItem label="Price per month" required={true}>
-                            <Input  addonAfter="PLN"/>
+                        <FormItem label={intl.formatMessage({ id: 'labels.price_per_month' })} required={true}>
+                            <Input  addonAfter="PLN" placeholder={intl.formatMessage({ id: 'placeholders.price_per_month' })}/>
                         </FormItem>
-                        <FormItem label="Deposit" required={true}>
-                            <Input addonAfter="PLN"/>
+                        <FormItem label={intl.formatMessage({ id: 'labels.deposit' })} required={true}>
+                            <Input addonAfter="PLN" placeholder={intl.formatMessage({ id: 'placeholders.deposit' })}/>
                         </FormItem>
-                        <FormItem label="Floor / Max Floor" required={true}>
+                        <FormItem label={intl.formatMessage({ id: 'labels.floor_max_floor' })} required={true}>
                             <Row gutter={1}><Col span={3}><Input/></Col><Col span={1}> <center>/</center> </Col><Col span={3}><Input/></Col></Row>
                         </FormItem>
-                        <FormItem label="Available from" required={true}>
+                        <FormItem label={intl.formatMessage({ id: 'labels.available_from' })} required={true}>
                             <DatePicker defaultValue={today}/>
                         </FormItem>
                     </Form>
@@ -60,4 +62,4 @@ class FirstStepContainer extends Component {
 
 }
 
-export default FirstStepContainer;
+export default injectIntl(FirstStepContainer);

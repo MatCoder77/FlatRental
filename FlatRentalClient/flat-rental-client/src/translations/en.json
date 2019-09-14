@@ -51,6 +51,41 @@
     "labels.profile": "Profile",
     "labels.logout": "Logout",
 
+
+
+    "labels.general_info": "General Information",
+    "labels.title": "Title",
+    "labels.total_area": "Area",
+    "labels.number_of_rooms": "Number of rooms",
+    "labels.price_per_month": "Price per month",
+    "labels.deposit": "Deposit",
+    "labels.floor_max_floor": "Floor / Max Floor",
+    "labels.floor": "Floor",
+    "labels.max_floor": "Max Floor",
+    "labels.available_from": "Available from",
+    "placeholders.title": "Title of announcement",
+    "placeholders.total_area": "Total area of flat",
+    "placeholders.number_of_rooms": "Number of rooms in flat",
+    "placeholders.price_per_month": "Cost of monthly cost of flat rental",
+    "placeholders.deposit": "Deposit",
+
+
+    "labels.localization": "Localization",
+    "labels.voivodeship": "Voivodeship",
+    "placeholders.voivodeship": "Select voivodeship",
+    "labels.district": "District",
+    "placeholders.district": "Select district",
+    "labels.commune": "Commune",
+    "placeholders.commune": "Select commune",
+    "labels.locality": "Locality",
+    "placeholders.locality": "Select locality",
+    "labels.localityDistrict": "City District",
+    "placeholders.localityDistrict": "Select city district",
+    "labels.localityPart": "Part",
+    "placeholders.localityPart": "Select part",
+    "labels.street": "Street",
+    "placeholders.street": "Select street",
+
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",
@@ -103,7 +138,14 @@
 
     "APARTMENT_STATE_READY_TO_LIVE": "Ready to live",
     "APARTMENT_STATE_TO_RENOVATION": "To renovation",
-    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Needs interior finish"
+    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Needs interior finish",
+
+    "APARTMENT_AMENITY_BALCONY": "Balcony",
+    "APARTMENT_AMENITY_ELEVATOR": "Elevator",
+    "APARTMENT_AMENITY_GARDEN": "Garden",
+    "APARTMENT_AMENITY_TERRACE": "Terrace",
+    "APARTMENT_AMENITY_BASEMENT": "Basement",
+    "APARTMENT_AMENITY_AIR_CONDITIONING": "Air conditioning"
 
 
 }

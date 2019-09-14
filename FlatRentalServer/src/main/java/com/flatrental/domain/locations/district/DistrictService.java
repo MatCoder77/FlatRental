@@ -28,6 +28,7 @@ public class DistrictService {
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_DISTRICT = "Supplied unit {0} is not of district type.";
     private static final String THERE_IS_NO_DISTRICT_WITH_SUPPLIED_CODES = "District with voivodeship code {0} and district code {1} does not exist";
+    private static final String THERE_IS_NO_DISTRICT_WITH_ID = "There is no district with id {0}";
 
 
     public List<District> createDistricts(List<AdministrationUnitDTO> districtDTOs, Map<String, Voivodeship> voivodeshipByCode) {
@@ -80,6 +81,15 @@ public class DistrictService {
 
     public List<District> getAllDistricts() {
         return districtRepository.findAll();
+    }
+
+    public List<District> getDistrictsForVoivodeship(Voivodeship voivodeship) {
+        return districtRepository.getAllByVoivodeship(voivodeship);
+    }
+
+    public District getExistingDistrict(Long id) {
+        return districtRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_DISTRICT_WITH_ID, id)));
     }
 
 }

@@ -51,6 +51,41 @@
     "labels.profile": "Profil",
     "labels.logout": "Wyloguj się",
 
+
+    "labels.general_info": "Informacje Ogólne",
+    "labels.title": "Tytuł",
+    "labels.total_area": "Powierzchnia",
+    "labels.number_of_rooms": "Liczba pokojów",
+    "labels.price_per_month": "Cena za miesiąc",
+    "labels.deposit": "Kaucja",
+    "labels.floor_max_floor": "Piętro / Liczba pięter",
+    "labels.floor": "Piętro",
+    "labels.max_floor": "Ostatnie piętro",
+    "labels.available_from": "Dostępne od",
+    "placeholders.title": "Podaj tytuł ogłoszenia",
+    "placeholders.total_area": "Podaj całkowitą powierzchnię mieszkania w m2",
+    "placeholders.number_of_rooms": "Podaj liczbę pokojów w mieszkaniu",
+    "placeholders.price_per_month": "Podaj miesięczny koszt wynajmu mieszkania",
+    "placeholders.deposit": "Podaj wysokość kaucji",
+
+
+    "labels.localization": "Lokalizacja",
+    "labels.voivodeship": "Województwo",
+    "placeholders.voivodeship": "Wybierz województwo",
+    "labels.district": "Powiat",
+    "placeholders.district": "Wybierz powiat",
+    "labels.commune": "Gmina",
+    "placeholders.commune": "Wybierz gminę",
+    "labels.locality": "Miejscowość",
+    "placeholders.locality": "Wybierz miejscowość",
+    "labels.localityDistrict": "Dzielnica",
+    "placeholders.localityDistrict": "Wybierz dzielnicę",
+    "labels.localityPart": "Część",
+    "placeholders.localityPart": "Wybierz część",
+    "labels.street": "Ulica",
+    "placeholders.street": "Wybierz ulicę",
+
+
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
     "BUILDING_TYPE_TENEMENT": "Kamienica",
@@ -103,6 +138,13 @@
 
     "APARTMENT_STATE_READY_TO_LIVE": "Do zamieszkania",
     "APARTMENT_STATE_TO_RENOVATION": "Do remontu",
-    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Do wykończenia"
+    "APARTMENT_STATE_TO_INTERIOR_FINISH": "Do wykończenia",
+
+    "APARTMENT_AMENITY_BALCONY": "Balkon",
+    "APARTMENT_AMENITY_ELEVATOR": "Winda",
+    "APARTMENT_AMENITY_GARDEN": "Ogródek",
+    "APARTMENT_AMENITY_TERRACE": "Taras",
+    "APARTMENT_AMENITY_BASEMENT": "Piwnica",
+    "APARTMENT_AMENITY_AIR_CONDITIONING": "Klimatyzacja"
 
 }

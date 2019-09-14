@@ -97,5 +97,67 @@ export function getApartmentStateTypes() {
         url: API_BASE_URL + "/apartmentstate",
         method: 'GET'
     });
+}
 
+export function getApartmentAmenitiesTypes() {
+    return request({
+        url: API_BASE_URL + "/apartmentamenity",
+        method: 'GET'
+    });
+}
+
+export function getVoivodeships() {
+    return request({
+        url: API_BASE_URL + "/voivodeship",
+        method: 'GET'
+    });
+}
+
+export function getDistricts(voivodeshipId) {
+    return request({
+        url: API_BASE_URL + "/district/" + voivodeshipId,
+        method: 'GET'
+    });
+}
+
+export function getCommunes(districtId) {
+    return request({
+        url: API_BASE_URL + "/commune/" + districtId,
+        method: 'GET'
+    });
+}
+
+export function getLocalities(communeId) {
+    return request({
+        url: API_BASE_URL + "/locality/" + communeId,
+        method: 'GET'
+    });
+}
+
+export function getLocalityDistricts(localityId) {
+    return request({
+        url: API_BASE_URL + "/localitydistrict/" + localityId,
+        method: 'GET'
+    });
+}
+
+export function getLocalityPartsForParentLocality(parentLocalityId) {
+    return request({
+        url: API_BASE_URL + "/locality-part/for-parent-locality/" + parentLocalityId,
+        method: 'GET'
+    });
+}
+
+export function getLocalityPartsForParentLocalityDistrict(parentLocalityDistrictId) {
+    return request({
+        url: API_BASE_URL + "/locality-part/for-parent-locality-district/" + parentLocalityDistrictId,
+        method: 'GET'
+    });
+}
+
+export function getStreets(parentLocalityId) {
+    return request({
+        url: API_BASE_URL + "/street/for-parent-locality/" + parentLocalityId,
+        method: 'GET'
+    });
 }

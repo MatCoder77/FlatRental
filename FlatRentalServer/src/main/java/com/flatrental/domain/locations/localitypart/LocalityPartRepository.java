@@ -4,6 +4,8 @@ package com.flatrental.domain.locations.localitypart;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityRepository;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
+import com.flatrental.domain.locations.locality.Locality;
+import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -49,6 +51,22 @@ public class LocalityPartRepository {
 
     public List<LocalityPart> getAllLocalityParts() {
         return abstractLocalityRepository.findAllByGenericLocalityType(GenericLocalityType.LOCALITY_PART).stream()
+                .map(LocalityPart::fromAbstractLocality)
+                .collect(Collectors.toList());
+    }
+
+    public List<LocalityPart> getLocalityPartsForParentLocality(Locality parentLocality) {
+        AbstractLocality abstractLocality = AbstractLocality.fromLocality(parentLocality);
+        return abstractLocalityRepository.findAbstractLocalityByParentLocalityAndGenericLocalityType(abstractLocality, GenericLocalityType.LOCALITY_PART)
+                .stream()
+                .map(LocalityPart::fromAbstractLocality)
+                .collect(Collectors.toList());
+    }
+
+    public List<LocalityPart> getLocalityPartsForParentLocalityDistrict(LocalityDistrict parentLocalityDistrict) {
+        AbstractLocality abstractLocality = AbstractLocality.fromLocalityDistrict(parentLocalityDistrict);
+        return abstractLocalityRepository.findAbstractLocalitiesByLocalityDistrictAndGenericLocalityType(abstractLocality, GenericLocalityType.LOCALITY_PART)
+                .stream()
                 .map(LocalityPart::fromAbstractLocality)
                 .collect(Collectors.toList());
     }
