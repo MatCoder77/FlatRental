@@ -54,7 +54,7 @@
 
     "labels.general_info": "Informacje Ogólne",
     "labels.title": "Tytuł",
-    "labels.total_area": "Powierzchnia",
+    "labels.area": "Powierzchnia",
     "labels.number_of_rooms": "Liczba pokojów",
     "labels.price_per_month": "Cena za miesiąc",
     "labels.deposit": "Kaucja",
@@ -85,6 +85,58 @@
     "labels.street": "Ulica",
     "placeholders.street": "Wybierz ulicę",
 
+
+    "labels.detail_info": "Informacje szczegółowe",
+
+    "labels.apartment": "Mieszkanie",
+    "labels.year_built": "Rok budowy",
+    "labels.building_type": "Typ budynku",
+    "labels.building_material": "Materiał budowlany",
+    "labels.heating_type": "Rodzaj ogrzewania",
+    "labels.windows_type": "Rodzaj okien",
+    "labels.parking_type": "Parking",
+    "labels.apartment_state": "Stan mieszkania",
+    "labels.amenities": "Udogodnienia",
+    "placeholders.year_built": "Rok budowy budynku",
+    "placeholders.building_type": "Podaj typ budynku",
+    "placeholders.building_material": "Podaj materiał budowlany budynku",
+    "placeholders.heating_type": "Podaj rodzaj ogrzewania w mieszkaniu",
+    "placeholders.windows_type": "Podaj rodzaj okien w mieszkaniu",
+    "placeholders.parking_type": "Podaj rodzaj dostępnego miejsca parkingowego",
+    "placeholders.apartment_state": "Podaj aktualny stan mieszkania",
+
+    "labels.rooms": "Pokoje",
+
+
+    "labels.kitchen": "Kuchnia",
+    "labels.kitchen_type": "Typ kuchni",
+    "labels.cooker_type": "Płyta grzewcza",
+    "labels.accessories": "Wyposażenie",
+    "placeholders.kitchen_area": "Podaj powierzchnię kuchni",
+    "placeholders.kitchen_type": "Podaj typ kuchni",
+    "placeholders.cooker_type": "Podaj rodzaj płyty grzewczej",
+
+
+    "labels.bathroom": "Łazienka",
+    "labels.number_of_bathrooms": "Liczba łazienek",
+    "labels.separate_wc": "Osobne WC",
+    "labels.yes": "Tak",
+    "labels.no": "Nie",
+
+
+    "labels.media": "Media",
+
+
+    "labels.preferences": "Preferencje",
+
+
+    "labels.neighbourhood": "Okolica",
+
+
+    "labels.flat_description": "Opis",
+    "placeholders.flat_description": "Podaj opis ogłoszenia",
+
+    "labels.photos": "Zdjęcia",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
@@ -145,6 +197,34 @@
     "APARTMENT_AMENITY_GARDEN": "Ogródek",
     "APARTMENT_AMENITY_TERRACE": "Taras",
     "APARTMENT_AMENITY_BASEMENT": "Piwnica",
-    "APARTMENT_AMENITY_AIR_CONDITIONING": "Klimatyzacja"
+    "APARTMENT_AMENITY_AIR_CONDITIONING": "Klimatyzacja",
+
+    "FURNISHING_ITEM_FRIDGE": "Lodówka",
+    "FURNISHING_ITEM_DISH_WASHER": "Zmywarka",
+    "FURNISHING_ITEM_MICROWAVE": "Mikrofalówka",
+    "FURNISHING_ITEM_OVEN": "Piekarnik",
+    "FURNISHING_ITEM_DINNERWARE": "Zastawa kuchenna",
+    "FURNISHING_ITEM_HOOD": "Okap",
+
+    "FURNISHING_ITEM_SHOWER": "Prysznic",
+    "FURNISHING_ITEM_BATH": "Wanna",
+    "FURNISHING_ITEM_WASHER": "Pralka",
+    "FURNISHING_ITEM_EXTRACTOR_FAN": "Wentylator",
+
+    "NEIGHBOURHOOD_ITEM_PHARMACY": "Apteka",
+    "NEIGHBOURHOOD_ITEM_BUS": "Autobus",
+    "NEIGHBOURHOOD_ITEM_TRAM": "Tramwaj",
+    "NEIGHBOURHOOD_ITEM_CLINIC": "Przychodnia",
+    "NEIGHBOURHOOD_ITEM_BANK": "Bank",
+    "NEIGHBOURHOOD_ITEM_PARK": "Park",
+    "NEIGHBOURHOOD_ITEM_POST": "Poczta",
+    "NEIGHBOURHOOD_ITEM_KINDERGARTEN": "Przedszkole",
+    "NEIGHBOURHOOD_ITEM_SUPERMARKET": "Supermarket",
+    "NEIGHBOURHOOD_ITEM_POLICE": "Policja",
+    "NEIGHBOURHOOD_ITEM_MALL": "Galeria handlowa",
+    "NEIGHBOURHOOD_ITEM_PLAYGROUND": "Plac zabaw",
+    "NEIGHBOURHOOD_ITEM_NURSERY": "Żłobek",
+    "NEIGHBOURHOOD_ITEM_PETROL_STATION": "Stacja benzynowa",
+    "NEIGHBOURHOOD_ITEM_SCHOOL": "Szkoła"
 
 }

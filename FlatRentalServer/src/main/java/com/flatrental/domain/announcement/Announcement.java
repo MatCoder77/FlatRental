@@ -1,16 +1,16 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.EntityInfo;
-import com.flatrental.domain.antiburglaryprotecions.AntiBurglaryProtecions;
-import com.flatrental.domain.apartmentstate.ApartmentState;
-import com.flatrental.domain.buildingmaterial.BuildingMaterial;
-import com.flatrental.domain.buildingtype.BuildingType;
-import com.flatrental.domain.facilitiesinarea.FacilitiesInArea;
-import com.flatrental.domain.heatingtype.HeatingType;
-import com.flatrental.domain.images.Image;
-import com.flatrental.domain.parkingtype.ParkingType;
+import com.flatrental.domain.announcement.attributes.antiburglaryprotecions.AntiBurglaryProtecions;
+import com.flatrental.domain.announcement.attributes.apartmentstate.ApartmentState;
+import com.flatrental.domain.announcement.attributes.buildingmaterial.BuildingMaterial;
+import com.flatrental.domain.announcement.attributes.buildingtype.BuildingType;
+import com.flatrental.domain.announcement.attributes.heatingtype.HeatingType;
+import com.flatrental.domain.announcement.attributes.neighbourhood.NeighbourhoodItem;
+import com.flatrental.domain.images.File;
+import com.flatrental.domain.announcement.attributes.parkingtype.ParkingType;
 import com.flatrental.domain.user.User;
-import com.flatrental.domain.windowtype.WindowType;
+import com.flatrental.domain.announcement.attributes.windowtype.WindowType;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -81,7 +81,7 @@ public class Announcement extends EntityInfo {
     @Temporal(TemporalType.DATE)
     private Date availableFrom;
 
-    private Image mainPhoto;
+    private File mainPhoto;
 
     private Address address;
 
@@ -115,13 +115,13 @@ public class Announcement extends EntityInfo {
     @ElementCollection
     @CollectionTable(name = "ANNOUNCEMENT_IMAGES")
     @MapKeyColumn(name = "IMAGE_NUMBER")
-    private Map<Integer, Image> announcementImages = new HashMap<>();
+    private Map<Integer, File> announcementImages = new HashMap<>();
 
     @OneToMany
     private Set<AntiBurglaryProtecions> antiBurglaryProtecions;
 
     @OneToMany
-    private Set<FacilitiesInArea> facilitiesInArea;
+    private Set<NeighbourhoodItem> facilitiesInArea;
 
     @NotNull
     @Enumerated(EnumType.STRING)

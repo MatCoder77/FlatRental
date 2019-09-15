@@ -1,6 +1,6 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.domain.furnishings.Furnishings;
+import com.flatrental.domain.announcement.attributes.furnishings.FurnishingItem;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,10 +29,10 @@ public class Room {
     private Integer pricePerMounth;
 
 //    @ManyToOne
-//    private Image mainPhoto;
+//    private File mainPhoto;
 
     @ManyToMany
-    private Set<Furnishings> furnishings;
+    private Set<FurnishingItem> furnishings;
 
     private Integer roomNumber;
 

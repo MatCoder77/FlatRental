@@ -1,7 +1,7 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.domain.cookertype.CookerType;
-import com.flatrental.domain.kitchentype.KitchenType;
+import com.flatrental.domain.announcement.attributes.cookertype.CookerType;
+import com.flatrental.domain.announcement.attributes.kitchentype.KitchenType;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

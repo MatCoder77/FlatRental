@@ -12,7 +12,7 @@ class CheckBoxGrid extends Component {
         let items = this.props.itemList;
         return (
             <Checkbox.Group style={{ width: '100%' }}>
-                <Row type="flex" justify="space-around">
+                <Row type="flex">
                     {items.map(item => (
                         <Col span={this.props.span}> <Checkbox key={item.id} value={item.value}><FormattedMessage id={item.value}/></Checkbox></Col>
                     ))}

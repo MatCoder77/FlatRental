@@ -95,7 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/parkingtype",
                         "/api/heatingtype",
                         "/api/apartmentstate",
-                        "/api/apartmentamenity")
+                        "/api/apartmentamenity",
+                        "/api//neighbourhood",
+                        "/api/furnishing")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**")
                 .permitAll()

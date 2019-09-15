@@ -55,7 +55,7 @@
 
     "labels.general_info": "General Information",
     "labels.title": "Title",
-    "labels.total_area": "Area",
+    "labels.area": "Area",
     "labels.number_of_rooms": "Number of rooms",
     "labels.price_per_month": "Price per month",
     "labels.deposit": "Deposit",
@@ -85,6 +85,59 @@
     "placeholders.localityPart": "Select part",
     "labels.street": "Street",
     "placeholders.street": "Select street",
+
+
+    "labels.detail_info": "Detail Information",
+
+    "labels.apartment": "Apartment",
+    "labels.year_built": "Year built",
+    "labels.building_type": "Building type",
+    "labels.building_material": "Building material",
+    "labels.heating_type": "Heating type",
+    "labels.windows_type": "Windows type",
+    "labels.parking_type": "Parking",
+    "labels.apartment_state": "Apartment state",
+    "labels.amenities": "Amenities",
+    "placeholders.year_built": "Year built of apartment",
+    "placeholders.building_type": "Type of building",
+    "placeholders.building_material": "Type of building material",
+    "placeholders.heating_type": "Type of heating in apartment",
+    "placeholders.windows_type": "Type of windows in apartment",
+    "placeholders.parking_type": "Type of available parking",
+    "placeholders.apartment_state": "State of apartment",
+
+    "labels.rooms": "Rooms",
+
+
+    "labels.kitchen": "Kitchen",
+    "labels.kitchen_type": "Kitchen type",
+    "labels.cooker_type": "Hotplate type",
+    "labels.accessories": "Accessories",
+    "placeholders.kitchen_area": "Area of kitchen",
+    "placeholders.kitchen_type": "Type of kitchen",
+    "placeholders.cooker_type": "Type of hotplate",
+
+
+    "labels.bathroom": "Bathroom",
+    "labels.number_of_bathrooms": "Number of bathrooms",
+    "labels.separate_wc": "Separate WC",
+    "labels.yes": "Yes",
+    "labels.no": "No",
+
+
+    "labels.media": "Media",
+
+
+    "labels.preferences": "Preferences",
+
+
+    "labels.neighbourhood": "Neighbourhood",
+
+    "labels.flat_description": "Description",
+    "placeholders.flat_description": "Description of announcement",
+
+    "labels.photos": "Photos",
+
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
@@ -145,7 +198,33 @@
     "APARTMENT_AMENITY_GARDEN": "Garden",
     "APARTMENT_AMENITY_TERRACE": "Terrace",
     "APARTMENT_AMENITY_BASEMENT": "Basement",
-    "APARTMENT_AMENITY_AIR_CONDITIONING": "Air conditioning"
+    "APARTMENT_AMENITY_AIR_CONDITIONING": "Air conditioning",
 
+    "FURNISHING_ITEM_FRIDGE": "Fridge",
+    "FURNISHING_ITEM_DISH_WASHER": "Dish washer",
+    "FURNISHING_ITEM_MICROWAVE": "Microwave",
+    "FURNISHING_ITEM_OVEN": "Oven",
+    "FURNISHING_ITEM_DINNERWARE": "Dinnerware",
+    "FURNISHING_ITEM_HOOD": "Hood",
 
+    "FURNISHING_ITEM_SHOWER": "Shower",
+    "FURNISHING_ITEM_BATH": "Bath",
+    "FURNISHING_ITEM_WASHER": "Washer",
+    "FURNISHING_ITEM_EXTRACTOR_FAN": "Extractor fan",
+
+    "NEIGHBOURHOOD_ITEM_PHARMACY": "Pharmacy",
+    "NEIGHBOURHOOD_ITEM_BUS": "Bus",
+    "NEIGHBOURHOOD_ITEM_TRAM": "Tram",
+    "NEIGHBOURHOOD_ITEM_CLINIC": "Clinic",
+    "NEIGHBOURHOOD_ITEM_BANK": "Bank",
+    "NEIGHBOURHOOD_ITEM_PARK": "Park",
+    "NEIGHBOURHOOD_ITEM_POST": "Post",
+    "NEIGHBOURHOOD_ITEM_KINDERGARTEN": "Kindergarten",
+    "NEIGHBOURHOOD_ITEM_SUPERMARKET": "Supermarket",
+    "NEIGHBOURHOOD_ITEM_POLICE": "Police",
+    "NEIGHBOURHOOD_ITEM_MALL": "Mall",
+    "NEIGHBOURHOOD_ITEM_PLAYGROUND": "Playground",
+    "NEIGHBOURHOOD_ITEM_NURSERY": "Nursery",
+    "NEIGHBOURHOOD_ITEM_PETROL_STATION": "Petrol station",
+    "NEIGHBOURHOOD_ITEM_SCHOOL": "School"
 }

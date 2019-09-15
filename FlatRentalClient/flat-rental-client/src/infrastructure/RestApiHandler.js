@@ -1,5 +1,5 @@
 import {ACCESS_TOKEN, API_BASE_URL} from "../Constants";
-import {request} from "./Request";
+import {request, uploadFilePromise, uploadFileRequest} from "./Request";
 
 export function login(loginRequest) {
     return request({
@@ -159,5 +159,39 @@ export function getStreets(parentLocalityId) {
     return request({
         url: API_BASE_URL + "/street/for-parent-locality/" + parentLocalityId,
         method: 'GET'
+    });
+}
+
+export function getFurnishing(furnishingType) {
+    return request({
+        url: API_BASE_URL + "/furnishing" + (furnishingType ? "?type=" + furnishingType : ""),
+        method: 'GET'
+    });
+}
+
+export function getNeighborhoodItems() {
+    return request({
+        url: API_BASE_URL + "/neighbourhood",
+        method: 'GET'
+    });
+}
+
+export function uploadFile(uploadedFile) {
+    let formData = new FormData();
+    formData.append("file", uploadedFile);
+    return uploadFileRequest({
+        url: API_BASE_URL + "/file/upload",
+        method: 'POST',
+        body: formData
+    });
+}
+
+export function getUploadFilePromise(uploadedFile) {
+    let formData = new FormData();
+    formData.append("file", uploadedFile);
+    return uploadFilePromise({
+        url: API_BASE_URL + "/file/upload",
+        method: 'POST',
+        body: formData
     });
 }

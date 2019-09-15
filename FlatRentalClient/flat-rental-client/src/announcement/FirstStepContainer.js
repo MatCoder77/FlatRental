@@ -36,8 +36,8 @@ class FirstStepContainer extends Component {
                         <FormItem label={intl.formatMessage({ id: 'labels.title' })} layout="horizontal" hasFeedback required={true} help="">
                             <Input size="large" name="title" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.title' })}/>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.total_area' })}>
-                            <Input addonAfter="m2" size="large" name="large" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.total_area' })}/>
+                        <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
+                            <Input addonAfter="m2" name="total_area" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.total_area' })}/>
                         </FormItem>
                         <FormItem label={intl.formatMessage({ id: 'labels.number_of_rooms' })} required={true}>
                             <InputNumber min={1} max={10}/>

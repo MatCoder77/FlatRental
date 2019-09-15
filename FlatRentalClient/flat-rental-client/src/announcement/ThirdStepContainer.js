@@ -1,22 +1,38 @@
 import React, { Component } from 'react';
-import {Steps, Form, Input, Button, notification, InputNumber, Row, Col, DatePicker, Checkbox } from 'antd';
+import {
+    Steps,
+    Form,
+    Input,
+    Button,
+    notification,
+    InputNumber,
+    Row,
+    Col,
+    DatePicker,
+    Checkbox,
+    Card,
+    Switch,
+} from 'antd';
 import * as CONS from "../Constants";
 import {Link} from "react-router-dom";
 import './Step.css';
 import ComboBox from "../commons/ComboBox";
 import Text from "antd/lib/typography/Text";
+import {FormattedMessage, injectIntl} from 'react-intl';
 import moment from "moment";
 import {
     getApartmentAmenitiesTypes,
     getApartmentStateTypes,
     getBuildingMaterialTypes,
-    getBuildingTypes,
-    getHeatingTypes, getParkingTypes,
+    getBuildingTypes, getCookerTypes, getFurnishing,
+    getHeatingTypes, getKitchenTypes, getNeighborhoodItems, getParkingTypes,
     getWindowTypes
 } from "../infrastructure/RestApiHandler";
 import CheckBoxGrid from "../commons/CheckBoxGrid";
+import ImageGalleryUploader from "./ImageGalleryUploader";
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 const today = moment(new Date())
 
@@ -30,19 +46,33 @@ class ThirdStepContainer extends Component {
             parkingTypes: [],
             windowTypes: [],
             apartmentStateTypes: [],
-            apartmentAmenitiesTypes: []
+            apartmentAmenitiesTypes: [],
+
+            kitchenTypes: [],
+            cookerTypes: [],
+            kitchenFurnishing: [],
+
+            bathroomFurnishing: [],
+            media: [],
+            neighbourhoodItems: [],
         }
-        this.loadTypes = this.loadTypes.bind(this);
+        this.loadData = this.loadData.bind(this);
         this.loadBuildingTypes = this.loadBuildingTypes.bind(this);
         this.loadBuildingMaterialTypes = this.loadBuildingMaterialTypes.bind(this);
         this.loadHeatingTypes = this.loadHeatingTypes.bind(this);
         this.loadWindowTypes = this.loadWindowTypes.bind(this);
         this.loadApartmentStateTypes = this.loadApartmentStateTypes.bind(this);
         this.loadApartmentAmenitiesTypes = this.loadApartmentAmenitiesTypes.bind(this);
+        this.loadKitchenTypes = this.loadKitchenTypes.bind(this);
+        this.loadCookerTypes = this.loadCookerTypes.bind(this);
+        this.loadKitchenFurnishing = this.loadKitchenFurnishing.bind(this);
+        this.loadBathroomFurnishing = this.loadBathroomFurnishing.bind(this);
+        //this.loadMedia = this.loadMedia.bind(this);
+        this.loadNeighbourhoodItems = this.loadNeighbourhoodItems.bind(this);
     }
 
-    loadTypes(supplierFunction, filedName) {
-        let promise = supplierFunction();
+    loadData(supplierFunction, filedName, arg) {
+        let promise = supplierFunction(arg);
 
         if(!promise) {
             return;
@@ -66,31 +96,55 @@ class ThirdStepContainer extends Component {
     }
 
     loadBuildingTypes() {
-        this.loadTypes(getBuildingTypes, 'buildingTypes');
+        this.loadData(getBuildingTypes, 'buildingTypes');
     }
 
     loadBuildingMaterialTypes() {
-        this.loadTypes(getBuildingMaterialTypes, 'buildingMaterialTypes');
+        this.loadData(getBuildingMaterialTypes, 'buildingMaterialTypes');
     }
 
     loadHeatingTypes() {
-        this.loadTypes(getHeatingTypes, 'heatingTypes');
+        this.loadData(getHeatingTypes, 'heatingTypes');
     }
 
     loadWindowTypes() {
-        this.loadTypes(getWindowTypes, 'windowTypes')
+        this.loadData(getWindowTypes, 'windowTypes')
     }
 
     loadParkingTypes() {
-        this.loadTypes(getParkingTypes, 'parkingTypes')
+        this.loadData(getParkingTypes, 'parkingTypes')
     }
 
     loadApartmentStateTypes() {
-        this.loadTypes(getApartmentStateTypes, 'apartmentStateTypes')
+        this.loadData(getApartmentStateTypes, 'apartmentStateTypes')
     }
 
     loadApartmentAmenitiesTypes() {
-        this.loadTypes(getApartmentAmenitiesTypes, 'apartmentAmenitiesTypes');
+        this.loadData(getApartmentAmenitiesTypes, 'apartmentAmenitiesTypes');
+    }
+
+    loadKitchenTypes() {
+        this.loadData(getKitchenTypes, 'kitchenTypes');
+    }
+
+    loadCookerTypes() {
+        this.loadData(getCookerTypes, 'cookerTypes')
+    }
+
+    loadKitchenFurnishing() {
+        this.loadData(getFurnishing, 'kitchenFurnishing', 'KITCHEN');
+    }
+
+    loadBathroomFurnishing() {
+        this.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
+    }
+
+    // loadMedia() {
+    //     this.loadData(get)
+    // }
+
+    loadNeighbourhoodItems() {
+        this.loadData(getNeighborhoodItems, 'neighbourhoodItems');
     }
 
     componentDidMount() {
@@ -101,50 +155,111 @@ class ThirdStepContainer extends Component {
         this.loadParkingTypes();
         this.loadApartmentStateTypes();
         this.loadApartmentAmenitiesTypes();
+        this.loadKitchenTypes();
+        this.loadCookerTypes();
+        this.loadKitchenFurnishing();
+        this.loadBathroomFurnishing();
+        this.loadNeighbourhoodItems();
     }
 
     render() {
+        const { intl } = this.props;
         return (
             <div className="step-container">
-                <h1 className="page-title">Detail Information</h1>
+                <h1 className="page-title"><FormattedMessage id="labels.detail_info"/></h1>
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
-                        <FormItem label="Built year">
+                        <Card title={intl.formatMessage({ id: 'labels.apartment' })} bordered={false}>
+                        <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
                             <InputNumber min={1800} max={today.year()}/>
                         </FormItem>
                         <FormItem
-                            label="Building type"
+                            label={intl.formatMessage({ id: 'labels.building_type' })}
                             help="">
-                            <ComboBox itemList={this.state.buildingTypes} placeholder="Select building type"/>
+                            <ComboBox itemList={this.state.buildingTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}/>
                         </FormItem>
                         <FormItem
-                            label="Building material"
+                            label={intl.formatMessage({ id: 'labels.building_material' })}
                             help="">
-                            <ComboBox itemList={this.state.buildingMaterialTypes} placeholder="Select building material"/>
+                            <ComboBox itemList={this.state.buildingMaterialTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}/>
                         </FormItem>
                         <FormItem
-                            label="Heating type"
+                            label={intl.formatMessage({ id: 'labels.heating_type' })}
                             help="">
-                            <ComboBox itemList={this.state.heatingTypes} placeholder="Select building material"/>
+                            <ComboBox itemList={this.state.heatingTypes} placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}/>
                         </FormItem>
                         <FormItem
-                            label="Windows type"
+                            label={intl.formatMessage({ id: 'labels.windows_type' })}
                             help="">
-                            <ComboBox itemList={this.state.windowTypes} placeholder="Select building material"/>
+                            <ComboBox itemList={this.state.windowTypes} placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}/>
                         </FormItem>
                         <FormItem
-                            label="Parking type"
+                            label={intl.formatMessage({ id: 'labels.parking_type' })}
                             help="">
-                            <ComboBox itemList={this.state.parkingTypes} placeholder="Select building material"/>
+                            <ComboBox itemList={this.state.parkingTypes} placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
                         </FormItem>
                         <FormItem
-                            label="Apartment State"
+                            label={intl.formatMessage({ id: 'labels.apartment_state' })}
                             help="">
-                            <ComboBox itemList={this.state.apartmentStateTypes} placeholder="Select building material"/>
+                            <ComboBox itemList={this.state.apartmentStateTypes} placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
                         </FormItem>
-                        <FormItem label="Amenities" layout="horizontal" hasFeedback required={true} help="">
+                        <FormItem label={intl.formatMessage({ id: 'labels.amenities' })} layout="horizontal" help="">
                             <CheckBoxGrid itemList={this.state.apartmentAmenitiesTypes} span={8}/>
                         </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}></Card>
+                        <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.kitchen_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.kitchenTypes} placeholder={intl.formatMessage({ id: 'placeholders.kitchen_type' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
+                                <Input addonAfter="m2" name="large" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.cooker_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.cookerTypes} placeholder={intl.formatMessage({ id: 'placeholders.cooker_type' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.accessories' })} layout="horizontal" help="">
+                                <CheckBoxGrid itemList={this.state.kitchenFurnishing} span={8}/>
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.bathroom' })} bordered={false}>
+                            <FormItem label={intl.formatMessage({ id: 'labels.number_of_bathrooms' })}>
+                                <InputNumber min={1} max={10} defaultValue={1}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.separate_wc' })}>
+                                <Switch checkedChildren={intl.formatMessage({ id: 'labels.yes' })} unCheckedChildren={intl.formatMessage({ id: 'labels.no' })} title={intl.formatMessage({ id: 'labels.separate_wc' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.accessories' })} layout="horizontal" help="">
+                                <CheckBoxGrid itemList={this.state.bathroomFurnishing} span={8}/>
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.media' })} bordered={false}>
+                            <FormItem layout="horizontal" help="">
+                                <CheckBoxGrid itemList={this.state.media} span={8}/>
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.preferences' })} bordered={false}>
+                            <FormItem layout="horizontal" help="">
+                                <CheckBoxGrid itemList={this.state.media} span={8}/>
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.neighbourhood' })} bordered={false}>
+                            <FormItem layout="horizontal" labelCol={0} wrapperCol={24} help="">
+                                <CheckBoxGrid itemList={this.state.neighbourhoodItems} span={8}/>
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.flat_description' })} bordered={false}>
+                            <TextArea rows={15}
+                                placeholder={intl.formatMessage({ id: 'placeholders.flat_description' })}
+                            />
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.photos' })} bordered={false}>
+                            <ImageGalleryUploader/>
+                        </Card>
                     </Form>
                 </div>
             </div>
@@ -153,4 +268,4 @@ class ThirdStepContainer extends Component {
 
 }
 
-export default ThirdStepContainer;
+export default injectIntl(ThirdStepContainer);
