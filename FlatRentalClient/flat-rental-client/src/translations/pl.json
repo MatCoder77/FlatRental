@@ -57,12 +57,14 @@
     "labels.area": "Powierzchnia",
     "labels.number_of_rooms": "Liczba pokojów",
     "labels.price_per_month": "Cena za miesiąc",
+    "labels.estimated_additional_costs": "Koszty dodatkowe:",
     "labels.deposit": "Kaucja",
     "labels.floor_max_floor": "Piętro / Liczba pięter",
     "labels.floor": "Piętro",
     "labels.max_floor": "Ostatnie piętro",
     "labels.available_from": "Dostępne od",
     "placeholders.title": "Podaj tytuł ogłoszenia",
+    "placeholders.estimated_additional_costs": "Szacowane miesięczne koszty dodatkowe (woda, gaz, prad, internet, śmieci itd.)",
     "placeholders.total_area": "Podaj całkowitą powierzchnię mieszkania w m2",
     "placeholders.number_of_rooms": "Podaj liczbę pokojów w mieszkaniu",
     "placeholders.price_per_month": "Podaj miesięczny koszt wynajmu mieszkania",
@@ -89,7 +91,6 @@
     "labels.detail_info": "Informacje szczegółowe",
 
     "labels.apartment": "Mieszkanie",
-    "labels.year_built": "Rok budowy",
     "labels.building_type": "Typ budynku",
     "labels.building_material": "Materiał budowlany",
     "labels.heating_type": "Rodzaj ogrzewania",
@@ -104,8 +105,13 @@
     "placeholders.windows_type": "Podaj rodzaj okien w mieszkaniu",
     "placeholders.parking_type": "Podaj rodzaj dostępnego miejsca parkingowego",
     "placeholders.apartment_state": "Podaj aktualny stan mieszkania",
+    "labels.year_built": "Rok budowy",
+    "labels.well_planned": "Rozkładowe",
 
     "labels.rooms": "Pokoje",
+    "labels.room_name": "Pokój {num}",
+    "placeholders.room_area": "Podaj powierzchnię pokoju",
+    "labels.number_of_persons": "Osób w pokoju",
 
 
     "labels.kitchen": "Kuchnia",
@@ -211,6 +217,19 @@
     "FURNISHING_ITEM_WASHER": "Pralka",
     "FURNISHING_ITEM_EXTRACTOR_FAN": "Wentylator",
 
+    "FURNISHING_ITEM_BED": "Łóżko",
+    "FURNISHING_ITEM_DESK": "Biurko",
+    "FURNISHING_ITEM_ARMCHAIR": "Fotel",
+    "FURNISHING_ITEM_WARDROBE": "Szafa",
+    "FURNISHING_ITEM_BEDSIDE_TABLE": "Stolik nocny",
+    "FURNISHING_ITEM_TABLE": "Stół",
+    "FURNISHING_ITEM_CHEST_OF_DRAWERS": "Komoda",
+    "FURNISHING_ITEM_BLINDS": "Rolety",
+    "FURNISHING_ITEM_BOOKCASE": "Półka na książki",
+    "FURNISHING_ITEM_COFFEE_TABLE": "Stolik",
+    "FURNISHING_ITEM_DESK_CHAIR": "Krzesło biurkowe",
+    "FURNISHING_ITEM_LAMP": "Lampka",
+
     "NEIGHBOURHOOD_ITEM_PHARMACY": "Apteka",
     "NEIGHBOURHOOD_ITEM_BUS": "Autobus",
     "NEIGHBOURHOOD_ITEM_TRAM": "Tramwaj",
@@ -225,6 +244,16 @@
     "NEIGHBOURHOOD_ITEM_PLAYGROUND": "Plac zabaw",
     "NEIGHBOURHOOD_ITEM_NURSERY": "Żłobek",
     "NEIGHBOURHOOD_ITEM_PETROL_STATION": "Stacja benzynowa",
-    "NEIGHBOURHOOD_ITEM_SCHOOL": "Szkoła"
+    "NEIGHBOURHOOD_ITEM_SCHOOL": "Szkoła",
+
+    "PREFERENCE_FOR_STUDENTS": "Dla studentów",
+    "PREFERENCE_NOT_FOR_STUDENTS": "Nie dla studentów",
+    "PREFERENCE_FOR_WORKING_PERSON": "Dla osób pracujących",
+    "PREFERENCE_FOR_COUPLE": "Dla pary",
+    "PREFERENCE_FOR_MALE": "Dla kobiet",
+    "PREFERENCE_FOR_FEMALE": "Dla mężczyzn",
+    "PREFERENCE_ANIMALS_NOT_ALLOWED": "Bez zwierząt",
+    "PREFERENCE_ANIMALS_ALLOWED": "Zwierzęta mile widziane",
+    "PREFERENCE_PARTIES_NOT_AT_HOME": "Imprezy poza domem"
 
 }

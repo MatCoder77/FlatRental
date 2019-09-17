@@ -25,16 +25,22 @@ import {
     getApartmentStateTypes,
     getBuildingMaterialTypes,
     getBuildingTypes, getCookerTypes, getFurnishing,
-    getHeatingTypes, getKitchenTypes, getNeighborhoodItems, getParkingTypes,
+    getHeatingTypes, getKitchenTypes, getNeighborhoodItems, getParkingTypes, getPreferences,
     getWindowTypes
 } from "../infrastructure/RestApiHandler";
 import CheckBoxGrid from "../commons/CheckBoxGrid";
 import ImageGalleryUploader from "./ImageGalleryUploader";
+import { Typography } from 'antd';
+import RoomFrom from "./RoomFrom";
+
+const { Paragraph } = Typography;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-const today = moment(new Date())
+const today = moment(new Date());
+
+const rooms = [1, 2, 3];
 
 class ThirdStepContainer extends Component {
     constructor(props) {
@@ -47,7 +53,7 @@ class ThirdStepContainer extends Component {
             windowTypes: [],
             apartmentStateTypes: [],
             apartmentAmenitiesTypes: [],
-
+            roomFurnishing: [],
             kitchenTypes: [],
             cookerTypes: [],
             kitchenFurnishing: [],
@@ -55,6 +61,7 @@ class ThirdStepContainer extends Component {
             bathroomFurnishing: [],
             media: [],
             neighbourhoodItems: [],
+            preferences: [],
         }
         this.loadData = this.loadData.bind(this);
         this.loadBuildingTypes = this.loadBuildingTypes.bind(this);
@@ -69,6 +76,8 @@ class ThirdStepContainer extends Component {
         this.loadBathroomFurnishing = this.loadBathroomFurnishing.bind(this);
         //this.loadMedia = this.loadMedia.bind(this);
         this.loadNeighbourhoodItems = this.loadNeighbourhoodItems.bind(this);
+        this.loadPreferences = this.loadPreferences.bind(this);
+        this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
     }
 
     loadData(supplierFunction, filedName, arg) {
@@ -147,6 +156,14 @@ class ThirdStepContainer extends Component {
         this.loadData(getNeighborhoodItems, 'neighbourhoodItems');
     }
 
+    loadPreferences() {
+        this.loadData(getPreferences, 'preferences')
+    }
+
+    loadRoomFurnishing() {
+        this.loadData(getFurnishing, 'roomFurnishing', 'ROOM')
+    }
+
     componentDidMount() {
         this.loadBuildingTypes();
         this.loadBuildingMaterialTypes();
@@ -160,6 +177,8 @@ class ThirdStepContainer extends Component {
         this.loadKitchenFurnishing();
         this.loadBathroomFurnishing();
         this.loadNeighbourhoodItems();
+        this.loadPreferences();
+        this.loadRoomFurnishing();
     }
 
     render() {
@@ -170,44 +189,51 @@ class ThirdStepContainer extends Component {
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
                         <Card title={intl.formatMessage({ id: 'labels.apartment' })} bordered={false}>
-                        <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
-                            <InputNumber min={1800} max={today.year()}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.building_type' })}
-                            help="">
-                            <ComboBox itemList={this.state.buildingTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.building_material' })}
-                            help="">
-                            <ComboBox itemList={this.state.buildingMaterialTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.heating_type' })}
-                            help="">
-                            <ComboBox itemList={this.state.heatingTypes} placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.windows_type' })}
-                            help="">
-                            <ComboBox itemList={this.state.windowTypes} placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.parking_type' })}
-                            help="">
-                            <ComboBox itemList={this.state.parkingTypes} placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
-                        </FormItem>
-                        <FormItem
-                            label={intl.formatMessage({ id: 'labels.apartment_state' })}
-                            help="">
-                            <ComboBox itemList={this.state.apartmentStateTypes} placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
-                        </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.amenities' })} layout="horizontal" help="">
-                            <CheckBoxGrid itemList={this.state.apartmentAmenitiesTypes} span={8}/>
-                        </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.building_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.buildingTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.building_material' })}
+                                help="">
+                                <ComboBox itemList={this.state.buildingMaterialTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.heating_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.heatingTypes} placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.windows_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.windowTypes} placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.parking_type' })}
+                                help="">
+                                <ComboBox itemList={this.state.parkingTypes} placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
+                            </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({ id: 'labels.apartment_state' })}
+                                help="">
+                                <ComboBox itemList={this.state.apartmentStateTypes} placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
+                                <InputNumber min={1800} max={today.year()}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.well_planned' })}>
+                                <Switch checkedChildren={intl.formatMessage({ id: 'labels.yes' })} unCheckedChildren={intl.formatMessage({ id: 'labels.no' })} title={intl.formatMessage({ id: 'labels.separate_wc' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.amenities' })} layout="horizontal" help="">
+                                <CheckBoxGrid itemList={this.state.apartmentAmenitiesTypes} span={8}/>
+                            </FormItem>
                         </Card>
-                        <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}></Card>
+                        <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
+                            {rooms.map(room => (
+                                <RoomFrom roomFurnishing={this.state.roomFurnishing} num={room} {...this.props}/>
+                            ))}
+                        </Card>
                         <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.kitchen_type' })}
@@ -243,8 +269,8 @@ class ThirdStepContainer extends Component {
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.preferences' })} bordered={false}>
-                            <FormItem layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.state.media} span={8}/>
+                            <FormItem layout="horizontal" labelCol={0} wrapperCol={24} help="">
+                                <CheckBoxGrid itemList={this.state.preferences} span={8}/>
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.neighbourhood' })} bordered={false}>
@@ -258,6 +284,7 @@ class ThirdStepContainer extends Component {
                             />
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.photos' })} bordered={false}>
+                            <Paragraph>Załącz zdjęcia mieszkania. Pierwsza fotografia będzie wyświetlana jako zdjęcie główne ogłosznia. Możesz załączyć do 20 zdjęć. Pamiętaj, że dobrze wykonane zjęcia znacząco zwiększają atrakcyjność oferty</Paragraph>
                             <ImageGalleryUploader/>
                         </Card>
                     </Form>

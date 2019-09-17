@@ -7,3 +7,8 @@
     margin-top: 8px;
     color: #666;
 }
+
+.ant-upload-list-item:first-of-type {
+    border-width: 5px;
+    border-style: solid;
+}

@@ -45,6 +45,9 @@ class FirstStepContainer extends Component {
                         <FormItem label={intl.formatMessage({ id: 'labels.price_per_month' })} required={true}>
                             <Input  addonAfter="PLN" placeholder={intl.formatMessage({ id: 'placeholders.price_per_month' })}/>
                         </FormItem>
+                        <FormItem label={intl.formatMessage({ id: 'labels.estimated_additional_costs' })} required={true}>
+                            <Input  addonAfter="PLN" placeholder={intl.formatMessage({ id: 'placeholders.estimated_additional_costs' })}/>
+                        </FormItem>
                         <FormItem label={intl.formatMessage({ id: 'labels.deposit' })} required={true}>
                             <Input addonAfter="PLN" placeholder={intl.formatMessage({ id: 'placeholders.deposit' })}/>
                         </FormItem>

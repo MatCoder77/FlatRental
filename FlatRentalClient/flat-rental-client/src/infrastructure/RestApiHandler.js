@@ -106,6 +106,13 @@ export function getApartmentAmenitiesTypes() {
     });
 }
 
+export function getPreferences() {
+    return request({
+        url: API_BASE_URL + "/preferences",
+        method: 'GET'
+    });
+}
+
 export function getVoivodeships() {
     return request({
         url: API_BASE_URL + "/voivodeship",
