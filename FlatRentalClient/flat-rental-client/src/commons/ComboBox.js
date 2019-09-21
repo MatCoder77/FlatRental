@@ -13,6 +13,9 @@ class ComboBox extends Component {
         }
     }
 
+    updateOnSelect = name => (value, option) => {
+        this.props.onUpdate(name, value);
+    }
 
 
     render() {
@@ -21,6 +24,8 @@ class ComboBox extends Component {
             <Select
                 //showSearch
                 placeholder={this.props.placeholder}
+                onSelect={this.updateOnSelect(this.props.name)}
+                value={this.props.value}
                 //optionFilterProp="children"
                 // onChange={onChange}
                 // onFocus={onFocus}
@@ -30,9 +35,7 @@ class ComboBox extends Component {
                 //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 // }
             >
-                {items.map(item => (
-                    <Option key={item.id} value={item.value}><FormattedMessage id={item.value}/></Option>
-                ))}
+                { items ? items.map(item => (<Option key={item.id} value={item.value}><FormattedMessage id={item.value}/></Option>)) : ""}
             </Select>
         );
     }

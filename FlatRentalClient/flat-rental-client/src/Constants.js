@@ -16,4 +16,5 @@ export const PASSWORD_MAX_LENGTH = 100;
 export const EMAIL_MIN_LENGTH = 1;
 export const EMAIL_MAX_LENGTH = 40;
 
+export const MAX_IMAGES = 20;
 

@@ -40,30 +40,27 @@ const { TextArea } = Input;
 
 const today = moment(new Date());
 
-const rooms = [1, 2, 3];
-
 class ThirdStepContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            buildingTypes: [],
-            buildingMaterialTypes: [],
-            heatingTypes: [],
-            parkingTypes: [],
-            windowTypes: [],
-            apartmentStateTypes: [],
-            apartmentAmenitiesTypes: [],
-            roomFurnishing: [],
-            kitchenTypes: [],
-            cookerTypes: [],
-            kitchenFurnishing: [],
-
-            bathroomFurnishing: [],
-            media: [],
-            neighbourhoodItems: [],
-            preferences: [],
+            // buildingTypes: [],
+            // buildingMaterialTypes: [],
+            // heatingTypes: [],
+            // parkingTypes: [],
+            // windowTypes: [],
+            // apartmentStateTypes: [],
+            // apartmentAmenitiesTypes: [],
+            // roomFurnishing: [],
+            // kitchenTypes: [],
+            // cookerTypes: [],
+            // kitchenFurnishing: [],
+            //
+            // bathroomFurnishing: [],
+            // media: [],
+            // neighbourhoodItems: [],
+            // preferences: [],
         }
-        this.loadData = this.loadData.bind(this);
         this.loadBuildingTypes = this.loadBuildingTypes.bind(this);
         this.loadBuildingMaterialTypes = this.loadBuildingMaterialTypes.bind(this);
         this.loadHeatingTypes = this.loadHeatingTypes.bind(this);
@@ -78,74 +75,52 @@ class ThirdStepContainer extends Component {
         this.loadNeighbourhoodItems = this.loadNeighbourhoodItems.bind(this);
         this.loadPreferences = this.loadPreferences.bind(this);
         this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
-    }
-
-    loadData(supplierFunction, filedName, arg) {
-        let promise = supplierFunction(arg);
-
-        if(!promise) {
-            return;
-        }
-
-        // this.setState({
-        //     isLoading: true
-        // });
-
-        promise
-            .then(response => {
-                this.setState({
-                    [filedName]: response
-                    // isLoading: false
-                })
-            }).catch(error => {
-            // this.setState({
-            //     isLoading: false
-            // })
-        });
+        this.updateOnChange = this.updateOnChange.bind(this);
+        this.updateOnChangeWithName = this.updateOnChangeWithName.bind(this);
     }
 
     loadBuildingTypes() {
-        this.loadData(getBuildingTypes, 'buildingTypes');
+        this.props.loadData(getBuildingTypes, 'buildingTypes');
     }
 
     loadBuildingMaterialTypes() {
-        this.loadData(getBuildingMaterialTypes, 'buildingMaterialTypes');
+        this.props.loadData(getBuildingMaterialTypes, 'buildingMaterialTypes');
     }
 
     loadHeatingTypes() {
-        this.loadData(getHeatingTypes, 'heatingTypes');
+        this.props.loadData(getHeatingTypes, 'heatingTypes');
     }
 
     loadWindowTypes() {
-        this.loadData(getWindowTypes, 'windowTypes')
+        this.props.loadData(getWindowTypes, 'windowTypes')
     }
 
     loadParkingTypes() {
-        this.loadData(getParkingTypes, 'parkingTypes')
+        this.props.loadData(getParkingTypes, 'parkingTypes')
     }
 
     loadApartmentStateTypes() {
-        this.loadData(getApartmentStateTypes, 'apartmentStateTypes')
+        this.props.loadData(getApartmentStateTypes, 'apartmentStateTypes')
     }
 
     loadApartmentAmenitiesTypes() {
-        this.loadData(getApartmentAmenitiesTypes, 'apartmentAmenitiesTypes');
+        this.props.loadData(getApartmentAmenitiesTypes, 'apartmentAmenitiesTypes');
     }
 
     loadKitchenTypes() {
-        this.loadData(getKitchenTypes, 'kitchenTypes');
+        this.props.loadData(getKitchenTypes, 'kitchenTypes');
     }
 
     loadCookerTypes() {
-        this.loadData(getCookerTypes, 'cookerTypes')
+        this.props.loadData(getCookerTypes, 'cookerTypes')
     }
 
     loadKitchenFurnishing() {
-        this.loadData(getFurnishing, 'kitchenFurnishing', 'KITCHEN');
+        this.props.loadData(getFurnishing, 'kitchenFurnishing', 'KITCHEN');
     }
 
     loadBathroomFurnishing() {
-        this.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
+        this.props.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
     }
 
     // loadMedia() {
@@ -153,16 +128,24 @@ class ThirdStepContainer extends Component {
     // }
 
     loadNeighbourhoodItems() {
-        this.loadData(getNeighborhoodItems, 'neighbourhoodItems');
+        this.props.loadData(getNeighborhoodItems, 'neighbourhoodItems');
     }
 
     loadPreferences() {
-        this.loadData(getPreferences, 'preferences')
+        this.props.loadData(getPreferences, 'preferences')
     }
 
     loadRoomFurnishing() {
-        this.loadData(getFurnishing, 'roomFurnishing', 'ROOM')
+        this.props.loadData(getFurnishing, 'roomFurnishing', 'ROOM')
     }
+
+    updateOnChange(event) {
+        this.props.onUpdate(event.target.name, event.target.value);
+    }
+
+    updateOnChangeWithName = name => value => {
+        this.props.onUpdate(name, value);
+    };
 
     componentDidMount() {
         this.loadBuildingTypes();
@@ -183,6 +166,8 @@ class ThirdStepContainer extends Component {
 
     render() {
         const { intl } = this.props;
+        let numberOfRooms = this.props.formData.numberOfRooms;
+        let rooms = Array.from({length: numberOfRooms}, (v, k) => k+1);
         return (
             <div className="step-container">
                 <h1 className="page-title"><FormattedMessage id="labels.detail_info"/></h1>
@@ -192,100 +177,209 @@ class ThirdStepContainer extends Component {
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.building_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.buildingTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}/>
+                                <ComboBox name="buildingType"
+                                          itemList={this.props.appData.buildingTypes}
+                                          onUpdate={this.props.onUpdate}
+                                          value={this.props.formData.buildingType}
+                                          placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}
+                                />
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.building_material' })}
                                 help="">
-                                <ComboBox itemList={this.state.buildingMaterialTypes} placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}/>
+                                <ComboBox
+                                    name="buildingMaterial"
+                                    itemList={this.props.appData.buildingMaterialTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData.buildingMaterial}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}
+                                />
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.heating_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.heatingTypes} placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}/>
+                                <ComboBox
+                                    name="heatingType"
+                                    itemList={this.props.appData.heatingTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData.heatingType}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}
+                                />
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.windows_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.windowTypes} placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}/>
+                                <ComboBox
+                                    name="windowType"
+                                    itemList={this.props.appData.windowTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData.windowType}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}
+                                />
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.parking_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.parkingTypes} placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
+                                <ComboBox
+                                    name="parkingType"
+                                    itemList={this.props.appData.parkingTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData.parkingType}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.apartment_state' })}
                                 help="">
-                                <ComboBox itemList={this.state.apartmentStateTypes} placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
+                                <ComboBox
+                                    name="apartmentState"
+                                    itemList={this.props.appData.apartmentStateTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData.apartmentState}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
-                                <InputNumber min={1800} max={today.year()}/>
+                                <InputNumber
+                                    min={1800}
+                                    max={today.year()}
+                                    onChange={this.updateOnChangeWithName('yearBuilt')}
+                                    value={this.props.formData.yearBuilt}
+                                />
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.well_planned' })}>
-                                <Switch checkedChildren={intl.formatMessage({ id: 'labels.yes' })} unCheckedChildren={intl.formatMessage({ id: 'labels.no' })} title={intl.formatMessage({ id: 'labels.separate_wc' })}/>
+                                <Switch
+                                    name="wellPlanned"
+                                    checkedChildren={intl.formatMessage({ id: 'labels.yes' })}
+                                    unCheckedChildren={intl.formatMessage({ id: 'labels.no' })}
+                                    title={intl.formatMessage({ id: 'labels.well_planned' })}
+                                    onChange={this.updateOnChangeWithName('wellPlanned')}
+                                    checked={this.props.formData.wellPlanned}
+                                />
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.amenities' })} layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.state.apartmentAmenitiesTypes} span={8}/>
+                                <CheckBoxGrid
+                                    name="apartmentAmenities"
+                                    itemList={this.props.appData.apartmentAmenitiesTypes}
+                                    span={8}
+                                    onUpdate={this.props.onUpdate}
+                                    checkedValues={this.props.formData.apartmentAmenities}
+                                />
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
                             {rooms.map(room => (
-                                <RoomFrom roomFurnishing={this.state.roomFurnishing} num={room} {...this.props}/>
+                                <RoomFrom name="rooms" onUpdate={this.props.onUpdate} roomFurnishing={this.props.appData.roomFurnishing} num={room} {...this.props}/>
                             ))}
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.kitchen_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.kitchenTypes} placeholder={intl.formatMessage({ id: 'placeholders.kitchen_type' })}/>
+                                <ComboBox
+                                    name="kitchen.kitchenType"
+                                    itemList={this.props.appData.kitchenTypes}
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData["kitchen.kitchenType"]}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.kitchen_type' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
-                                <Input addonAfter="m2" name="large" autoComplete="off" placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
+                                <Input
+                                    name="kitchen.kitchenArea"
+                                    onChange={this.updateOnChange}
+                                    value={this.props.formData["kitchen.kitchenArea"]}
+                                    addonAfter="m2"
+                                    autoComplete="off"
+                                    placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.cooker_type' })}
                                 help="">
-                                <ComboBox itemList={this.state.cookerTypes} placeholder={intl.formatMessage({ id: 'placeholders.cooker_type' })}/>
+                                <ComboBox
+                                    name="kitchen.cookerType"
+                                    onUpdate={this.props.onUpdate}
+                                    value={this.props.formData["kitchen.cookerType"]}
+                                    itemList={this.props.appData.cookerTypes}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.cooker_type' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.accessories' })} layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.state.kitchenFurnishing} span={8}/>
+                                <CheckBoxGrid
+                                    name="kitchen.furnishing"
+                                    checkedValues={this.props.formData["kitchen.furnishing"]}
+                                    itemList={this.props.appData.kitchenFurnishing}
+                                    onUpdate={this.props.onUpdate}
+                                    span={8}/>
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.bathroom' })} bordered={false}>
                             <FormItem label={intl.formatMessage({ id: 'labels.number_of_bathrooms' })}>
-                                <InputNumber min={1} max={10} defaultValue={1}/>
+                                <InputNumber
+                                    min={1}
+                                    max={10}
+                                    onChange={this.updateOnChangeWithName('bathroom.numberOfBathrooms')}
+                                    value={this.props.formData["bathroom.numberOfBathrooms"]}
+                                />
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.separate_wc' })}>
-                                <Switch checkedChildren={intl.formatMessage({ id: 'labels.yes' })} unCheckedChildren={intl.formatMessage({ id: 'labels.no' })} title={intl.formatMessage({ id: 'labels.separate_wc' })}/>
+                                <Switch
+                                    checkedChildren={intl.formatMessage({ id: 'labels.yes' })}
+                                    unCheckedChildren={intl.formatMessage({ id: 'labels.no' })}
+                                    title={intl.formatMessage({ id: 'labels.separate_wc' })}
+                                    onChange={this.updateOnChangeWithName('bathroom.separateWC')}
+                                    checked={this.props.formData["bathroom.separateWC"]}
+                                />
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.accessories' })} layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.state.bathroomFurnishing} span={8}/>
+                                <CheckBoxGrid
+                                    name="bathroom.furnishing"
+                                    itemList={this.props.appData.bathroomFurnishing}
+                                    span={8}
+                                    onUpdate={this.props.onUpdate}
+                                    checkedValues={this.props.formData["bathroom.furnishing"]}
+                                />
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.media' })} bordered={false}>
                             <FormItem layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.state.media} span={8}/>
+                                <CheckBoxGrid itemList={this.props.appData.media} span={8}/>
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.preferences' })} bordered={false}>
                             <FormItem layout="horizontal" labelCol={0} wrapperCol={24} help="">
-                                <CheckBoxGrid itemList={this.state.preferences} span={8}/>
+                                <CheckBoxGrid
+                                    name="preferences"
+                                    itemList={this.props.appData.preferences}
+                                    span={8}
+                                    onUpdate={this.props.onUpdate}
+                                    checkedValues={this.props.formData.preferences}
+                                />
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.neighbourhood' })} bordered={false}>
                             <FormItem layout="horizontal" labelCol={0} wrapperCol={24} help="">
-                                <CheckBoxGrid itemList={this.state.neighbourhoodItems} span={8}/>
+                                <CheckBoxGrid
+                                    name="neighbourhood"
+                                    itemList={this.props.appData.neighbourhoodItems}
+                                    span={8}
+                                    onUpdate={this.props.onUpdate}
+                                    checkedValues={this.props.formData.neighbourhood}
+                                />
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.flat_description' })} bordered={false}>
-                            <TextArea rows={15}
+                            <TextArea
+                                name="description"
+                                rows={15}
+                                onChange={this.updateOnChange}
+                                value={this.props.formData.description}
                                 placeholder={intl.formatMessage({ id: 'placeholders.flat_description' })}
                             />
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.photos' })} bordered={false}>
-                            <Paragraph>Załącz zdjęcia mieszkania. Pierwsza fotografia będzie wyświetlana jako zdjęcie główne ogłosznia. Możesz załączyć do 20 zdjęć. Pamiętaj, że dobrze wykonane zjęcia znacząco zwiększają atrakcyjność oferty</Paragraph>
-                            <ImageGalleryUploader/>
+                            <Paragraph><FormattedMessage id={"text.attach_images_text"} values={{max_images : CONS.MAX_IMAGES}}/></Paragraph>
+                            <ImageGalleryUploader
+                                name="announcementImages"
+                                transientDataName="transient_announcementImages"
+                                onUpdate={this.props.onUpdate}
+                                fileList={this.props.formData.transient_announcementImages}/>
                         </Card>
                     </Form>
                 </div>

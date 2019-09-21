@@ -1,7 +1,9 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.EntityInfo;
+import com.flatrental.domain.announcement.attributes.Preference;
 import com.flatrental.domain.announcement.attributes.antiburglaryprotecions.AntiBurglaryProtecions;
+import com.flatrental.domain.announcement.attributes.apartmentamenities.ApartmentAmenity;
 import com.flatrental.domain.announcement.attributes.apartmentstate.ApartmentState;
 import com.flatrental.domain.announcement.attributes.buildingmaterial.BuildingMaterial;
 import com.flatrental.domain.announcement.attributes.buildingtype.BuildingType;
@@ -30,6 +32,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +71,9 @@ public class Announcement extends EntityInfo {
     @Positive
     private Integer pricePerMonth;
 
+    @PositiveOrZero
+    private Integer additionalCostsPerMonth;
+
     @Positive
     private Integer securityDeposit;
 
@@ -102,6 +108,8 @@ public class Announcement extends EntityInfo {
     @ManyToOne
     private ApartmentState apartmentState;
 
+    private Boolean wellPlanned;
+
     @Column(length = 1000)
     private String description;
 
@@ -118,16 +126,22 @@ public class Announcement extends EntityInfo {
     private Map<Integer, File> announcementImages = new HashMap<>();
 
     @OneToMany
+    private Set<ApartmentAmenity> apartmentAmenities;
+
+    @OneToMany
     private Set<AntiBurglaryProtecions> antiBurglaryProtecions;
 
     @OneToMany
-    private Set<NeighbourhoodItem> facilitiesInArea;
+    private Set<NeighbourhoodItem> neighbourhood;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private AnnouncementState announcementState;
 
     private AnnouncementStatistics announcementStatistics;
+
+    @OneToMany
+    private Set<Preference> preferences;
 
     private String aboutRoommates;
 }

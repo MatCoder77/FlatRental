@@ -19,7 +19,7 @@ import * as CONS from "../Constants";
 
 const FormItem = Form.Item;
 
-class RoomFrom extends Component {
+class RoomForm extends Component {
     constructor(props) {
         super(props);
     }
@@ -45,4 +45,4 @@ class RoomFrom extends Component {
     }
 }
 
-export default injectIntl(RoomFrom);
+export default injectIntl(RoomForm);

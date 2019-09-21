@@ -44,18 +44,3 @@ export const uploadFileRequest = (options) => {
             })
         );
 };
-
-
-export const uploadFilePromise = (options) => {
-    const headers = new Headers({
-    })
-
-    if(localStorage.getItem(ACCESS_TOKEN)) {
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
-    }
-
-    const defaults = {headers: headers};
-    options = Object.assign({}, defaults, options);
-
-    return fetch(options.url, options);
-};

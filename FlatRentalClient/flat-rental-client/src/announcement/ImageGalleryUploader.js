@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Upload, Icon, Modal } from 'antd';
 import './ImageGalleryUploader.css';
-import {getUploadFilePromise, uploadFile} from "../infrastructure/RestApiHandler";
+import {uploadFile} from "../infrastructure/RestApiHandler";
 import {API_BASE_URL} from "../Constants";
 
 function getBase64(file) {
@@ -14,9 +14,9 @@ function getBase64(file) {
 }
 
 const dummyRequest = ({ file, onSuccess }) => {
-    let response = uploadFile(file);
+    let promise = uploadFile(file);
     setTimeout(() => {
-        onSuccess(response);
+        onSuccess(promise);
     }, 0);
 };
 
@@ -24,8 +24,6 @@ class ImageGalleryUploader extends Component {
     state = {
         previewVisible: false,
         previewImage: '',
-        fileList: [],
-        uidToNameMap: []
     };
 
     handleCancel = () => this.setState({ previewVisible: false });
@@ -42,12 +40,24 @@ class ImageGalleryUploader extends Component {
     };
 
     handleChange = (change) => {
-        console.log(change);
-        this.setState({ fileList: change.fileList });
+        this.props.onUpdate(this.props.transientDataName, change.fileList);
+        this.updateFilenameList(change.fileList);
+    }
+
+    updateFilenameList(fileList) {
+        let promiseList = fileList.map(file => file.response);
+        if(!promiseList) {
+            return;
+        }
+        Promise.all(promiseList)
+            .then(values => {
+                let filenameList = values.map(value => value.fileName)
+                this.props.onUpdate(this.props.name, filenameList);
+            }).catch(error => {});
     }
 
     render() {
-        const { previewVisible, previewImage, fileList } = this.state;
+        const { previewVisible, previewImage } = this.state;
         const uploadButton = (
             <div>
                 <Icon type="plus" />
@@ -59,14 +69,14 @@ class ImageGalleryUploader extends Component {
                 <Upload
                     customRequest={dummyRequest}
                     listType="picture-card"
-                    fileList={fileList}
+                    fileList={this.props.fileList ? this.props.fileList : []}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                 >
-                    {fileList.length >= 10 ? null : uploadButton}
+                    {(this.props.fileList ? this.props.fileList.length : 0) >= 10 ? null : uploadButton}
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    <img alt="Image" style={{ width: '100%' }} src={previewImage} />
                 </Modal>
             </div>
         );
