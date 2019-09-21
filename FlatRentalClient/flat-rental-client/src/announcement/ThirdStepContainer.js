@@ -177,10 +177,10 @@ class ThirdStepContainer extends Component {
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.building_type' })}
                                 help="">
-                                <ComboBox name="buildingType"
+                                <ComboBox name="buildingType.id"
                                           itemList={this.props.appData.buildingTypes}
                                           onUpdate={this.props.onUpdate}
-                                          value={this.props.formData.buildingType}
+                                          value={this.props.formData["buildingType.id"]}
                                           placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}
                                 />
                             </FormItem>
@@ -188,10 +188,10 @@ class ThirdStepContainer extends Component {
                                 label={intl.formatMessage({ id: 'labels.building_material' })}
                                 help="">
                                 <ComboBox
-                                    name="buildingMaterial"
+                                    name="buildingMaterial.id"
                                     itemList={this.props.appData.buildingMaterialTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData.buildingMaterial}
+                                    value={this.props.formData["buildingMaterial.id"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}
                                 />
                             </FormItem>
@@ -199,10 +199,10 @@ class ThirdStepContainer extends Component {
                                 label={intl.formatMessage({ id: 'labels.heating_type' })}
                                 help="">
                                 <ComboBox
-                                    name="heatingType"
+                                    name="heatingType.id"
                                     itemList={this.props.appData.heatingTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData.heatingType}
+                                    value={this.props.formData["heatingType.id"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}
                                 />
                             </FormItem>
@@ -210,10 +210,10 @@ class ThirdStepContainer extends Component {
                                 label={intl.formatMessage({ id: 'labels.windows_type' })}
                                 help="">
                                 <ComboBox
-                                    name="windowType"
+                                    name="windowType.id"
                                     itemList={this.props.appData.windowTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData.windowType}
+                                    value={this.props.formData["windowType.id"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}
                                 />
                             </FormItem>
@@ -221,20 +221,20 @@ class ThirdStepContainer extends Component {
                                 label={intl.formatMessage({ id: 'labels.parking_type' })}
                                 help="">
                                 <ComboBox
-                                    name="parkingType"
+                                    name="parkingType.id"
                                     itemList={this.props.appData.parkingTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData.parkingType}
+                                    value={this.props.formData["parkingType.id"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.apartment_state' })}
                                 help="">
                                 <ComboBox
-                                    name="apartmentState"
+                                    name="apartmentState.id"
                                     itemList={this.props.appData.apartmentStateTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData.apartmentState}
+                                    value={this.props.formData["apartmentState.id"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
@@ -267,7 +267,7 @@ class ThirdStepContainer extends Component {
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
                             {rooms.map(room => (
-                                <RoomFrom name="rooms" onUpdate={this.props.onUpdate} roomFurnishing={this.props.appData.roomFurnishing} num={room} {...this.props}/>
+                                <RoomFrom name="room" onUpdate={this.props.onUpdate} roomFurnishing={this.props.appData.roomFurnishing} num={room} {...this.props}/>
                             ))}
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
@@ -377,7 +377,7 @@ class ThirdStepContainer extends Component {
                             <Paragraph><FormattedMessage id={"text.attach_images_text"} values={{max_images : CONS.MAX_IMAGES}}/></Paragraph>
                             <ImageGalleryUploader
                                 name="announcementImages"
-                                transientDataName="transient_announcementImages"
+                                transientDataName= {CONS.TRANSIENT_MARKER + "announcementImages"}
                                 onUpdate={this.props.onUpdate}
                                 fileList={this.props.formData.transient_announcementImages}/>
                         </Card>

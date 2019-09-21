@@ -14,11 +14,9 @@ public class CommuneDTO {
     @NotNull
     private Long id;
 
-    @NotNull
     @NotBlank
     private String name;
 
-    @NotNull
     private CommuneType communeType;
 
 }

@@ -14,7 +14,6 @@ public class LocalityDistrictDTO {
     private Long id;
 
     @NotBlank
-    @NotNull
     private String name;
 
 }

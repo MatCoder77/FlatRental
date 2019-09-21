@@ -35,7 +35,7 @@ class ComboBox extends Component {
                 //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 // }
             >
-                { items ? items.map(item => (<Option key={item.id} value={item.value}><FormattedMessage id={item.value}/></Option>)) : ""}
+                { items ? items.map(item => (<Option key={item.id} value={item.id}><FormattedMessage id={item.value}/></Option>)) : ""}
             </Select>
         );
     }

@@ -15,11 +15,9 @@ public class DistrictDTO {
     @NonNull
     private Long id;
 
-    @NonNull
     @NotBlank
     private String name;
 
-    @NotNull
     private DistrictType districtType;
 
 }

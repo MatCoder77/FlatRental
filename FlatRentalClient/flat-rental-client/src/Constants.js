@@ -18,3 +18,5 @@ export const EMAIL_MAX_LENGTH = 40;
 
 export const MAX_IMAGES = 20;
 
+export const TRANSIENT_MARKER = "transient_";
+

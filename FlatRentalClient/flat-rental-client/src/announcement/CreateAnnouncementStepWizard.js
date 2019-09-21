@@ -6,11 +6,12 @@ import './Step.css';
 import ComboBox from "../commons/ComboBox";
 import Text from "antd/lib/typography/Text";
 import moment from "moment";
-import {getBuildingTypes} from "../infrastructure/RestApiHandler";
+import {createAnnouncement, getBuildingTypes} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./FirstStepContainer";
 import ThirdStepContainer from "./ThirdStepContainer";
 import SecondStepContainer from "./SecondStepContainer";
 import {FormattedMessage, injectIntl} from "react-intl";
+import * as DTOUtils from "../infrastructure/DTOUtils";
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -37,21 +38,13 @@ class CreateAnnouncementStepWizard extends Component {
             current: 0,
             formData: {},
             appData: {},
-            // announcementTitle: null,
-            // totalArea: null,
-            // numberOfRooms: null,
-            // pricePerMonth: null,
-            // estimatedAdditionalCosts: null,
-            // deposit: null,
-            // floorNumber: null,
-            // maxFloorNumber: null,
-            // availableFrom: null,
         };
         this.updateFormData = this.updateFormData.bind(this);
         this.updateFormData('availableFrom', today);
         this.updateFormData('bathroom.numberOfBathrooms', 1);
 
         this.loadData = this.loadData.bind(this);
+        this.submitAnnouncement = this.submitAnnouncement.bind(this);
     }
 
     next() {
@@ -103,6 +96,12 @@ class CreateAnnouncementStepWizard extends Component {
         });
     }
 
+    submitAnnouncement() {
+        let filteredFormData = DTOUtils.excludeTransientProperties(this.state.formData);
+        let announcementDTO = DTOUtils.unflatten(filteredFormData);
+        let promise = createAnnouncement(announcementDTO);
+    }
+
     render() {
         const steps = [{
             title: 'General Information',
@@ -143,7 +142,7 @@ class CreateAnnouncementStepWizard extends Component {
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary">
+                        <Button type="primary" onClick={this.submitAnnouncement}>
                             Done
                         </Button>
                     )}

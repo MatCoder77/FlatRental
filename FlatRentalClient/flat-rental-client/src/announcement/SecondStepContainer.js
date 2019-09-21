@@ -2,7 +2,6 @@ import {Form, Select} from 'antd';
 import React, {Component} from "react";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {
-    getBuildingTypes,
     getCommunes,
     getDistricts,
     getLocalities,
@@ -109,12 +108,8 @@ class SecondStepContainer extends Component {
                                 placeholder={intl.formatMessage({ id: 'placeholders.voivodeship' })}
                                 optionFilterProp="children"
                                 onChange={this.loadDistrictForVoivodeship}
-                                onSelect={this.updateOnSelect('address.voivodeship')}
-                                value={this.props.formData["address.voivodeship"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.voivodeships)}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.voivodeship.id')}
+                                value={this.props.formData["address.voivodeship.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -128,12 +123,8 @@ class SecondStepContainer extends Component {
                                 placeholder={intl.formatMessage({ id: 'placeholders.district' })}
                                 optionFilterProp="children"
                                 onChange={this.loadCommunesForDistrict}
-                                onSelect={this.updateOnSelect('address.district')}
-                                value={this.props.formData["address.district"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.districts)}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.district.id')}
+                                value={this.props.formData["address.district.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -147,12 +138,8 @@ class SecondStepContainer extends Component {
                                 placeholder={intl.formatMessage({ id: 'placeholders.commune' })}
                                 optionFilterProp="children"
                                 onChange={this.loadLocalitiesForCommune}
-                                onSelect={this.updateOnSelect('address.commune')}
-                                value={this.props.formData["address.commune"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.communes)}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.commune.id')}
+                                value={this.props.formData["address.commune.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -166,12 +153,8 @@ class SecondStepContainer extends Component {
                                 placeholder={intl.formatMessage({ id: 'placeholders.locality' })}
                                 optionFilterProp="children"
                                 onChange={this.onLocalityChange}
-                                onSelect={this.updateOnSelect('address.locality')}
-                                value={this.props.formData["address.locality"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.localities)}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.locality.id')}
+                                value={this.props.formData["address.locality.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -185,12 +168,8 @@ class SecondStepContainer extends Component {
                                 placeholder={intl.formatMessage({ id: 'placeholders.localityDistrict' })}
                                 optionFilterProp="children"
                                 onChange={this.onLocalityDistrictChange}
-                                onSelect={this.updateOnSelect('address.localityDistrict')}
-                                value={this.props.formData["address.localityDistrict"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.localityDistricts)}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.localityDistrict.id')}
+                                value={this.props.formData["address.localityDistrict.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -203,13 +182,8 @@ class SecondStepContainer extends Component {
                                 showSearch
                                 placeholder={intl.formatMessage({ id: 'placeholders.localityPart' })}
                                 optionFilterProp="children"
-                                onSelect={this.updateOnSelect('address.localityPart')}
-                                value={this.props.formData["address.localityPart"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.localityParts)}
-                                //onChange={this.loadCommunesForDistrict}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.localityPart.id')}
+                                value={this.props.formData["address.localityPart.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
@@ -222,13 +196,8 @@ class SecondStepContainer extends Component {
                                 showSearch
                                 placeholder={intl.formatMessage({ id: 'placeholders.street' })}
                                 optionFilterProp="children"
-                                onSelect={this.updateOnSelect('address.street')}
-                                value={this.props.formData["address.street"]}
-                                //value={this.autoselectIfOnlyOneElement(this.state.communes)}
-                                //onChange={this.loadCommunesForDistrict}
-                                // onFocus={onFocus}
-                                // onBlur={onBlur}
-                                // onSearch={onSearch}8888888
+                                onSelect={this.updateOnSelect('address.street.id')}
+                                value={this.props.formData["address.street.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }

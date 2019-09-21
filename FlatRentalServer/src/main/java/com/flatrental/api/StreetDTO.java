@@ -14,13 +14,11 @@ public class StreetDTO {
     @NotNull
     private Long id;
 
-    @NotNull
     @NotBlank
     private String mainName;
 
     private String leadingName;
 
-    @NotNull
     @NotBlank
     private StreetType streetType;
 

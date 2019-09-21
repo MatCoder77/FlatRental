@@ -123,6 +123,7 @@ class FirstStepContainer extends Component {
                         <FormItem label={intl.formatMessage({ id: 'labels.available_from' })} required={true}>
                             <DatePicker
                                 name="availableFrom"
+                                disabledTime={true}
                                 value={this.props.formData.availableFrom}
                                 onChange={this.updateOnChangeDatePicker('availableFrom')}
                             />

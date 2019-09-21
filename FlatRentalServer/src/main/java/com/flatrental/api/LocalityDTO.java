@@ -15,10 +15,8 @@ public class LocalityDTO {
     private Long id;
 
     @NotBlank
-    @NotNull
     private String name;
 
-    @NotNull
     private LocalityType localityType;
 
 }

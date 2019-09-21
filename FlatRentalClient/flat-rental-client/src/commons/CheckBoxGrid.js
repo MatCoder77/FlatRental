@@ -13,9 +13,9 @@ class CheckBoxGrid extends Component {
         let currentValue = event.target.value;
 
         if (event.target.checked) {
-            checkedValues.push(currentValue);
+            checkedValues.push({id:currentValue});
         } else {
-            let index = checkedValues.indexOf(currentValue);
+            let index = checkedValues.map(value => value.id).indexOf(currentValue);
             if (index !== -1) checkedValues.splice(index, 1);
         }
         this.props.onUpdate(this.props.name, checkedValues);
@@ -23,7 +23,7 @@ class CheckBoxGrid extends Component {
 
     render() {
         let items = this.props.itemList;
-        let checkedValues = this.props.checkedValues;
+        let checkedValues = this.props.checkedValues ? this.props.checkedValues.map(value => value.id) : [];
         return (
             <Checkbox.Group style={{ width: '100%' }} value={checkedValues}>
                 <Row type="flex">

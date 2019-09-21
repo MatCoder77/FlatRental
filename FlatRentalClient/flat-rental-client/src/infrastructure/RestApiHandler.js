@@ -192,3 +192,11 @@ export function uploadFile(uploadedFile) {
         body: formData
     });
 }
+
+export function createAnnouncement(announcementDTO) {
+    return request({
+        url: API_BASE_URL + "/announcement/create",
+        method: 'POST',
+        body: JSON.stringify(announcementDTO)
+    })
+}

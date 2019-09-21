@@ -28,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -50,22 +51,20 @@ public class Announcement extends EntityInfo {
     @Enumerated(EnumType.STRING)
     private AnnouncementType announcementType;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 200)
-    private String title;
-
     @ManyToOne
     @NotNull
     private User author;
 
-    @ManyToOne
-    private BuildingType buildingType;
+    @NotNull
+    @NotBlank
+    @Size(max = 60)
+    private String title;
 
     @Positive
-    private Double totalArea;
+    private Integer totalArea;
 
     @Positive
+    @Max(10)
     private Integer numberOfRooms;
 
     @Positive
@@ -80,18 +79,17 @@ public class Announcement extends EntityInfo {
     @Min(-1)
     private Integer floor;
 
-    @Positive
+    @PositiveOrZero
     private Integer maxFloorInBuilding;
 
-    @FutureOrPresent
     @Temporal(TemporalType.DATE)
     private Date availableFrom;
 
-    private File mainPhoto;
-
+    @NotNull
     private Address address;
 
-    private Integer yearBuilt;
+    @ManyToOne
+    private BuildingType buildingType;
 
     @ManyToOne
     private BuildingMaterial buildingMaterial;
@@ -108,31 +106,38 @@ public class Announcement extends EntityInfo {
     @ManyToOne
     private ApartmentState apartmentState;
 
+    private Integer yearBuilt;
+
     private Boolean wellPlanned;
 
-    @Column(length = 1000)
-    private String description;
+    @OneToMany
+    private Set<ApartmentAmenity> apartmentAmenities;
+
+    @OneToMany
+    private Set<Room> rooms;
 
     private Kitchen kitchen;
 
     private Bathroom bathroom;
 
     @OneToMany
-    private Set<Room> rooms;
+    private Set<Preference> preferences;
+
+    @OneToMany
+    private Set<NeighbourhoodItem> neighbourhood;
+
+    @Column(length = 1000)
+    private String description;
 
     @ElementCollection
     @CollectionTable(name = "ANNOUNCEMENT_IMAGES")
     @MapKeyColumn(name = "IMAGE_NUMBER")
     private Map<Integer, File> announcementImages = new HashMap<>();
 
-    @OneToMany
-    private Set<ApartmentAmenity> apartmentAmenities;
 
-    @OneToMany
-    private Set<AntiBurglaryProtecions> antiBurglaryProtecions;
 
-    @OneToMany
-    private Set<NeighbourhoodItem> neighbourhood;
+
+    private File mainPhoto;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -140,8 +145,7 @@ public class Announcement extends EntityInfo {
 
     private AnnouncementStatistics announcementStatistics;
 
-    @OneToMany
-    private Set<Preference> preferences;
+
 
     private String aboutRoommates;
 }

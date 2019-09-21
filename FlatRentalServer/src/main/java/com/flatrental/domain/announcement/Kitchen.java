@@ -16,13 +16,10 @@ public class Kitchen {
     @ManyToOne
     private KitchenType kitchenType;
 
-    private Double kitchenArea;
+    private Integer kitchenArea;
 
     @ManyToOne
     private CookerType cookerType;
-
-    @Column(length = 500)
-    private String kitchenDescription;
 
     @OneToMany
     private Set<FurnishingItem> furnishing;
