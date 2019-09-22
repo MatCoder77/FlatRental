@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Steps, Form, Button } from 'antd';
+import {Steps, Form, Button, Row, Col, Icon} from 'antd';
 import './Step.css';
 import moment from "moment";
 import {createAnnouncement} from "../infrastructure/RestApiHandler";
@@ -8,6 +8,7 @@ import ThirdStepContainer from "./ThirdStepContainer";
 import SecondStepContainer from "./SecondStepContainer";
 import {FormattedMessage, injectIntl} from "react-intl";
 import * as DTOUtils from "../infrastructure/DTOUtils";
+import "./AnnouncementStepWizard.css"
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -118,22 +119,32 @@ class AnnouncementStepWizard extends Component {
             </Steps>
             <div className="steps-content">{steps[current].content}</div>
                 <div className="steps-action">
+                    <Row type="flex" justify="space-around">
+
                     {current > 0 && (
-                        <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                            Previous
+                        <Col span={10}>
+                        <Button className="step-wizard-button" onClick={() => this.prev()}>
+                            <FormattedMessage id="labels.previous"/>
+                            <Icon type="left" />
                         </Button>
+                        </Col>
                     )}
                     {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.next()}>
-                            Next
+                        <Col span={10}>
+                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()}>
+                            <FormattedMessage id="labels.next"/>
+                            <Icon type="right" />
                         </Button>
+                        </Col>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={this.submitAnnouncement}>
-                            Done
+                        <Col span={10}>
+                        <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement}>
+                            <FormattedMessage id="labels.add_announcement"/>
                         </Button>
+                        </Col>
                     )}
-
+                    </Row>
                 </div>
             </div>
         );

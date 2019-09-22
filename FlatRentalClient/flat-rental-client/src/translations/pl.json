@@ -122,31 +122,24 @@
     "placeholders.kitchen_type": "Podaj typ kuchni",
     "placeholders.cooker_type": "Podaj rodzaj płyty grzewczej",
 
-
     "labels.bathroom": "Łazienka",
     "labels.number_of_bathrooms": "Liczba łazienek",
     "labels.separate_wc": "Osobne WC",
     "labels.yes": "Tak",
     "labels.no": "Nie",
-
-
     "labels.media": "Media",
-
-
     "labels.preferences": "Preferencje",
-
-
     "labels.neighbourhood": "Okolica",
-
-
     "labels.flat_description": "Opis",
     "placeholders.flat_description": "Podaj opis ogłoszenia",
-
     "labels.photos": "Zdjęcia",
     "text.attach_images_text": "Załącz zdjęcia mieszkania. Pierwsza fotografia będzie wyświetlana jako zdjęcie główne ogłosznia. Możesz załączyć do {max_images} zdjęć. Pamiętaj, że załączone zdjęcia znacząco zwiększają atrakcyjność oferty.",
 
 
     "labels.summary": "Podsumowanie",
+    "labels.previous": "Wstecz",
+    "labels.next": "Dalej",
+    "labels.add_announcement": "Dodaj ogłoszenie",
 
 
     "BUILDING_TYPE_FLAT": "Blok",
