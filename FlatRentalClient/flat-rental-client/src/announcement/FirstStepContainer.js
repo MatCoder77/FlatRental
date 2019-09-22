@@ -1,17 +1,9 @@
-import React, { Component } from 'react';
-import {Steps, Form, Input, Button, notification, InputNumber, Row, Col, DatePicker, Checkbox } from 'antd';
-import * as CONS from "../infrastructure/Constants";
-import {Link} from "react-router-dom";
+import React, {Component} from 'react';
+import {Form, Input, InputNumber, Row, Col, DatePicker} from 'antd';
 import './Step.css';
-import ComboBox from "../commons/ComboBox";
-import Text from "antd/lib/typography/Text";
-import moment from "moment";
-import {getBuildingTypes} from "../infrastructure/RestApiHandler";
 import {FormattedMessage, injectIntl} from "react-intl";
 
 const FormItem = Form.Item;
-
-const today = moment(new Date())
 
 class FirstStepContainer extends Component {
     constructor(props) {
@@ -21,8 +13,6 @@ class FirstStepContainer extends Component {
         this.updateOnChangeInputNumber = this.updateOnChangeInputNumber.bind(this);
         this.updateOnChangeDatePicker = this.updateOnChangeDatePicker.bind(this);
     }
-
-
 
     updateOnChange(event) {
         this.props.onUpdate(event.target.name, event.target.value);
@@ -41,32 +31,36 @@ class FirstStepContainer extends Component {
     }
 
     render() {
-        const { intl } = this.props;
+        const {intl} = this.props;
         return (
             <div className="step-container">
                 <h1 className="page-title"><FormattedMessage id="labels.general_info"/></h1>
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
-                        <FormItem label={intl.formatMessage({ id: 'labels.title' })} layout="horizontal" hasFeedback required={true} help="">
+                        <FormItem label={intl.formatMessage({id: 'labels.title'})}
+                                  hasFeedback required={true} help="">
                             <Input
                                 name="title"
                                 autoComplete="off"
                                 value={this.props.formData.title}
                                 onChange={this.updateOnChange}
-                                placeholder={intl.formatMessage({ id: 'placeholders.title' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.title'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
+                        <FormItem label={intl.formatMessage({id: 'labels.area'})}
+                                  hasFeedback required={true}>
                             <Input
                                 addonAfter="m2"
                                 name="totalArea"
                                 autoComplete="off"
                                 value={this.props.formData.totalArea}
                                 onChange={this.updateOnChange}
-                                placeholder={intl.formatMessage({ id: 'placeholders.total_area' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.total_area'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.number_of_rooms' })} required={true}>
+                        <FormItem
+                            label={intl.formatMessage({id: 'labels.number_of_rooms'})}
+                            required={true}>
                             <InputNumber
                                 name="numberOfRooms"
                                 min={1} max={10}
@@ -74,34 +68,38 @@ class FirstStepContainer extends Component {
                                 onChange={this.updateOnChangeInputNumber('numberOfRooms')}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.price_per_month' })} required={true}>
+                        <FormItem
+                            label={intl.formatMessage({id: 'labels.price_per_month'})}
+                            required={true}>
                             <Input
                                 name="pricePerMonth"
                                 addonAfter="PLN"
                                 value={this.props.formData.pricePerMonth}
                                 onChange={this.updateOnChange}
-                                placeholder={intl.formatMessage({ id: 'placeholders.price_per_month' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.price_per_month'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.estimated_additional_costs' })} required={true}>
+                        <FormItem
+                            label={intl.formatMessage({id: 'labels.estimated_additional_costs'})}
+                            required={true}>
                             <Input
                                 name="additionalCostsPerMonth"
                                 addonAfter="PLN"
                                 value={this.props.formData.additionalCostsPerMonth}
                                 onChange={this.updateOnChange}
-                                placeholder={intl.formatMessage({ id: 'placeholders.estimated_additional_costs' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.estimated_additional_costs'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.deposit' })} required={true}>
+                        <FormItem label={intl.formatMessage({id: 'labels.deposit'})} required={true}>
                             <Input
                                 name="securityDeposit"
                                 addonAfter="PLN"
                                 value={this.props.formData.securityDeposit}
                                 onChange={this.updateOnChange}
-                                placeholder={intl.formatMessage({ id: 'placeholders.deposit' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.deposit'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.floor_max_floor' })} required={true}>
+                        <FormItem label={intl.formatMessage({id: 'labels.floor_max_floor'})} required={true}>
                             <Row gutter={1}>
                                 <Col span={3}>
                                     <Input
@@ -110,7 +108,9 @@ class FirstStepContainer extends Component {
                                         onChange={this.updateOnChange}
                                     />
                                 </Col>
-                                <Col span={1}> <center>/</center> </Col>
+                                <Col span={1}>
+                                    <center>/</center>
+                                </Col>
                                 <Col span={3}>
                                     <Input
                                         name="maxFloorInBuilding"
@@ -120,7 +120,7 @@ class FirstStepContainer extends Component {
                                 </Col>
                             </Row>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.available_from' })} required={true}>
+                        <FormItem label={intl.formatMessage({id: 'labels.available_from'})} required={true}>
                             <DatePicker
                                 name="availableFrom"
                                 disabledTime={true}

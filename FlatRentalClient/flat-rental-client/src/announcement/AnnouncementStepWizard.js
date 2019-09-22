@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Steps, Form, Button, Row, Col, Icon} from 'antd';
+import {Steps, Button, Row, Col, Icon} from 'antd';
 import './Step.css';
 import moment from "moment";
 import {createAnnouncement} from "../infrastructure/RestApiHandler";
@@ -10,7 +10,6 @@ import {FormattedMessage, injectIntl} from "react-intl";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import "./AnnouncementStepWizard.css"
 
-const FormItem = Form.Item;
 const Step = Steps.Step;
 
 const formItemLayout = {
@@ -31,6 +30,7 @@ class AnnouncementStepWizard extends Component {
             current: 0,
             formData: {},
             appData: {},
+            stepsValidateStatus: []
         };
         this.updateFormData = this.updateFormData.bind(this);
         this.updateFormData('availableFrom', moment(new Date()));
@@ -124,8 +124,8 @@ class AnnouncementStepWizard extends Component {
                     {current > 0 && (
                         <Col span={10}>
                         <Button className="step-wizard-button" onClick={() => this.prev()}>
-                            <FormattedMessage id="labels.previous"/>
                             <Icon type="left" />
+                            <FormattedMessage id="labels.previous"/>
                         </Button>
                         </Col>
                     )}
