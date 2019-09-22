@@ -67,7 +67,7 @@ public class AnnouncementDTO {
 
     private Boolean wellPlanned;
     List<SimpleResourceDTO> apartmentAmenities;
-
+    List<RoomDTO> rooms;
     KitchenDTO kitchen;
     BathroomDTO bathroom;
     List<SimpleResourceDTO> preferences;
@@ -77,5 +77,7 @@ public class AnnouncementDTO {
     private String description;
 
     List<String> announcementImages;
+
+
 
 }

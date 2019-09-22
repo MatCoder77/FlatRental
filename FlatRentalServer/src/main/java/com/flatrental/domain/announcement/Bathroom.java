@@ -14,9 +14,6 @@ public class Bathroom {
 
     private Boolean separateWC;
 
-    @Column(length = 500)
-    private String bathroomDescription;
-
     @OneToMany
     private Set<FurnishingItem> furnishing;
 

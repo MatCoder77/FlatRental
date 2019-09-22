@@ -145,6 +145,10 @@
     "labels.photos": "Photos",
     "text.attach_images_text": "Attach images to your announcement. First image will be shown as main photo. You can attach up to {max_images} images. Announcements with photos are perceived as more attractive.",
 
+
+    "labels.summary": "Summary",
+
+
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",

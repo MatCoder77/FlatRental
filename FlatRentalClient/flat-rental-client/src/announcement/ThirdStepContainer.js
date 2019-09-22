@@ -32,6 +32,7 @@ import CheckBoxGrid from "../commons/CheckBoxGrid";
 import ImageGalleryUploader from "./ImageGalleryUploader";
 import { Typography } from 'antd';
 import RoomFrom from "./RoomFrom";
+import RoomList from "./RoomList";
 
 const { Paragraph } = Typography;
 
@@ -166,8 +167,6 @@ class ThirdStepContainer extends Component {
 
     render() {
         const { intl } = this.props;
-        let numberOfRooms = this.props.formData.numberOfRooms;
-        let rooms = Array.from({length: numberOfRooms}, (v, k) => k+1);
         return (
             <div className="step-container">
                 <h1 className="page-title"><FormattedMessage id="labels.detail_info"/></h1>
@@ -266,9 +265,7 @@ class ThirdStepContainer extends Component {
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
-                            {rooms.map(room => (
-                                <RoomFrom name="room" onUpdate={this.props.onUpdate} roomFurnishing={this.props.appData.roomFurnishing} num={room} {...this.props}/>
-                            ))}
+                            <RoomList name={"rooms"} onUpdate={this.props.onUpdate} appData={this.props.appData} formData={this.props.formData}/>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
                             <FormItem

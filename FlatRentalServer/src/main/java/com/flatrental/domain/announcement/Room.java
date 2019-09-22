@@ -15,9 +15,10 @@ public class Room {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
+    private Long id;
 
     @Positive
-    private Integer personsNumber;
+    private Integer numberOfPersons;
 
     @PositiveOrZero
     private String personsOccupied;
@@ -27,9 +28,6 @@ public class Room {
 
     @Positive
     private Integer pricePerMounth;
-
-//    @ManyToOne
-//    private File mainPhoto;
 
     @ManyToMany
     private Set<FurnishingItem> furnishings;

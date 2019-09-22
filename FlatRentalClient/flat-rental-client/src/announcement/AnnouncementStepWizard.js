@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import {Steps, Form, Input, Button, notification, InputNumber, Row, Col, DatePicker, Checkbox } from 'antd';
-import * as CONS from "../Constants";
-import {Link} from "react-router-dom";
+import {Steps, Form, Button } from 'antd';
 import './Step.css';
-import ComboBox from "../commons/ComboBox";
-import Text from "antd/lib/typography/Text";
 import moment from "moment";
-import {createAnnouncement, getBuildingTypes} from "../infrastructure/RestApiHandler";
+import {createAnnouncement} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./FirstStepContainer";
 import ThirdStepContainer from "./ThirdStepContainer";
 import SecondStepContainer from "./SecondStepContainer";
@@ -27,11 +23,7 @@ const formItemLayout = {
     },
 };
 
-const today = moment(new Date())
-
-
-
-class CreateAnnouncementStepWizard extends Component {
+class AnnouncementStepWizard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,7 +32,7 @@ class CreateAnnouncementStepWizard extends Component {
             appData: {},
         };
         this.updateFormData = this.updateFormData.bind(this);
-        this.updateFormData('availableFrom', today);
+        this.updateFormData('availableFrom', moment(new Date()));
         this.updateFormData('bathroom.numberOfBathrooms', 1);
 
         this.loadData = this.loadData.bind(this);
@@ -63,12 +55,6 @@ class CreateAnnouncementStepWizard extends Component {
         formData[fieldName] = fieldValue;
         this.setState({ formData });
     }
-
-    // updateAppData(fieldName, fieldValue) {
-    //     const { appData } = this.state;
-    //     appData[fieldName] = fieldValue;
-    //     this.setState( { appData });
-    // }
 
     loadData(supplierFunction, fieldName, param) {
         let promise = supplierFunction(param);
@@ -103,23 +89,24 @@ class CreateAnnouncementStepWizard extends Component {
     }
 
     render() {
+        const { intl } = this.props;
         const steps = [{
-            title: 'General Information',
+            title: intl.formatMessage({ id: "labels.general_info" }),
             content: (
                 <FirstStepContainer formData={this.state.formData} onUpdate={this.updateFormData} {...formItemLayout}/>
             ),
         }, {
-            title: 'Localization',
+            title: intl.formatMessage({ id: "labels.localization" }),
             content: (
                 <SecondStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout}/>
             ),
         }, {
-            title: 'Detail Information',
+            title: intl.formatMessage({ id: "labels.detail_info" }),
             content: (
                 <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout}/>
             ),
         },{
-            title: 'Summary',
+            title: intl.formatMessage({ id: "labels.summary" }),
             content: 'Last-content',
         }];
 
@@ -153,4 +140,4 @@ class CreateAnnouncementStepWizard extends Component {
     }
 }
 
-export default injectIntl(CreateAnnouncementStepWizard);
+export default injectIntl(AnnouncementStepWizard);

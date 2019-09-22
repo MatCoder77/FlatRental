@@ -7,7 +7,7 @@ import './App.css';
 import LoadingIcon from "./commons/LoadingIcon";
 import RegistrationFrom from "./registration/RegistrationFrom";
 import Login from "./login/Login";
-import CreateAnnouncementStepWizard from "./announcement/CreateAnnouncementStepWizard";
+import CreateAnnouncementStepWizard from "./announcement/AnnouncementStepWizard";
 import PageHeader from "./pageheader/PageHeader";
 import MainPage from "./mainpage/MainPage";
 

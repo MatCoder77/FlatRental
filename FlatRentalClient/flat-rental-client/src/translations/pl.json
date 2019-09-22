@@ -88,7 +88,7 @@
     "placeholders.street": "Wybierz ulicę",
 
 
-    "labels.detail_info": "Informacje szczegółowe",
+    "labels.detail_info": "Informacje Szczegółowe",
 
     "labels.apartment": "Mieszkanie",
     "labels.building_type": "Typ budynku",
@@ -145,6 +145,10 @@
     "labels.photos": "Zdjęcia",
     "text.attach_images_text": "Załącz zdjęcia mieszkania. Pierwsza fotografia będzie wyświetlana jako zdjęcie główne ogłosznia. Możesz załączyć do {max_images} zdjęć. Pamiętaj, że załączone zdjęcia znacząco zwiększają atrakcyjność oferty.",
 
+
+    "labels.summary": "Podsumowanie",
+
+
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
     "BUILDING_TYPE_TENEMENT": "Kamienica",
@@ -186,7 +190,7 @@
     "HEATING_TYPE_OTHER": "Inne",
 
     "PARKING_TYPE_GARAGE": "Garaż",
-    "PARKING_TYPE_STREET": "Na ulicay",
+    "PARKING_TYPE_STREET": "Na ulicy",
     "PARKING_TYPE_UNDERGROUND": "Podziemny",
     "PARKING_TYPE_GROUND_LEVEL_PARKING": "Naziemny",
     "PARKING_TYPE_NO_PARKING": "Brak",
