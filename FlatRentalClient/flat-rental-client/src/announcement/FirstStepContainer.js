@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Form, Input, InputNumber, Row, Col, DatePicker} from 'antd';
 import './Step.css';
 import {FormattedMessage, injectIntl} from "react-intl";
+import * as CONS from "../infrastructure/Constants";
 
 const FormItem = Form.Item;
 
@@ -12,6 +13,9 @@ class FirstStepContainer extends Component {
         this.updateOnChange = this.updateOnChange.bind(this);
         this.updateOnChangeInputNumber = this.updateOnChangeInputNumber.bind(this);
         this.updateOnChangeDatePicker = this.updateOnChangeDatePicker.bind(this);
+
+        this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
+        this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
     }
 
     updateOnChange(event) {
@@ -132,6 +136,26 @@ class FirstStepContainer extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    validateTitle = (title) => {
+        if(title.length < CONS.TITLE_MIN_LENGTH) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.titleIsTooShortMessage
+            }
+        } else if (title.length > CONS.TITLE_MAX_LENGTH) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.titleIsTooLongMessage
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
+        }
     }
 
 }

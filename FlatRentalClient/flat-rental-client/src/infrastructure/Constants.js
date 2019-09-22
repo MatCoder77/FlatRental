@@ -16,6 +16,9 @@ export const PASSWORD_MAX_LENGTH = 100;
 export const EMAIL_MIN_LENGTH = 1;
 export const EMAIL_MAX_LENGTH = 40;
 
+export const TITLE_MAX_LENGTH = 60;
+export const TITLE_MIN_LENGTH = 10;
+
 export const MAX_IMAGES = 20;
 
 export const TRANSIENT_MARKER = "transient_";

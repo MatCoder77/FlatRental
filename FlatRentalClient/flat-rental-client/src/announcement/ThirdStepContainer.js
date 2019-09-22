@@ -264,6 +264,14 @@ class ThirdStepContainer extends Component {
                                 />
                             </FormItem>
                         </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.photos' })} bordered={false}>
+                            <Paragraph><FormattedMessage id={"text.attach_images_text"} values={{max_images : CONS.MAX_IMAGES}}/></Paragraph>
+                            <ImageGalleryUploader
+                                name="announcementImages"
+                                transientDataName= {CONS.TRANSIENT_MARKER + "announcementImages"}
+                                onUpdate={this.props.onUpdate}
+                                fileList={this.props.formData.transient_announcementImages}/>
+                        </Card>
                         <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
                             <RoomList name={"rooms"} onUpdate={this.props.onUpdate} appData={this.props.appData} formData={this.props.formData}/>
                         </Card>
@@ -369,14 +377,6 @@ class ThirdStepContainer extends Component {
                                 value={this.props.formData.description}
                                 placeholder={intl.formatMessage({ id: 'placeholders.flat_description' })}
                             />
-                        </Card>
-                        <Card title={intl.formatMessage({ id: 'labels.photos' })} bordered={false}>
-                            <Paragraph><FormattedMessage id={"text.attach_images_text"} values={{max_images : CONS.MAX_IMAGES}}/></Paragraph>
-                            <ImageGalleryUploader
-                                name="announcementImages"
-                                transientDataName= {CONS.TRANSIENT_MARKER + "announcementImages"}
-                                onUpdate={this.props.onUpdate}
-                                fileList={this.props.formData.transient_announcementImages}/>
                         </Card>
                     </Form>
                 </div>

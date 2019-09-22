@@ -30,7 +30,7 @@ class AnnouncementStepWizard extends Component {
             current: 0,
             formData: {},
             appData: {},
-            stepsValidateStatus: []
+            validationStatus: {}
         };
         this.updateFormData = this.updateFormData.bind(this);
         this.updateFormData('availableFrom', moment(new Date()));
@@ -123,7 +123,7 @@ class AnnouncementStepWizard extends Component {
 
                     {current > 0 && (
                         <Col span={10}>
-                        <Button className="step-wizard-button" onClick={() => this.prev()}>
+                        <Button className="step-wizard-button" onClick={() => this.prev()} size="large">
                             <Icon type="left" />
                             <FormattedMessage id="labels.previous"/>
                         </Button>
@@ -131,7 +131,7 @@ class AnnouncementStepWizard extends Component {
                     )}
                     {current < steps.length - 1 && (
                         <Col span={10}>
-                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()}>
+                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()} size="large">
                             <FormattedMessage id="labels.next"/>
                             <Icon type="right" />
                         </Button>
@@ -139,7 +139,7 @@ class AnnouncementStepWizard extends Component {
                     )}
                     {current === steps.length - 1 && (
                         <Col span={10}>
-                        <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement}>
+                        <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement} size="large">
                             <FormattedMessage id="labels.add_announcement"/>
                         </Button>
                         </Col>
