@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import { getCurrentUser} from "./infrastructure/RestApiHandler";
-import { ACCESS_TOKEN} from "./Constants";
+import { ACCESS_TOKEN} from "./infrastructure/Constants";
 import { Layout, notification } from 'antd';
 import './App.css';
 import LoadingIcon from "./commons/LoadingIcon";

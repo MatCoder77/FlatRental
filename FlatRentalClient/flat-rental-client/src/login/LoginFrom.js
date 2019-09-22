@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { login} from "../infrastructure/RestApiHandler";
 import './LoginForm.css';
 import { Link } from 'react-router-dom';
-import { ACCESS_TOKEN} from "../Constants";
+import { ACCESS_TOKEN} from "../infrastructure/Constants";
 import { Form, Input, Button, Icon, notification } from 'antd';
 import {injectIntl} from 'react-intl';
 import {FormattedMessage} from "react-intl";

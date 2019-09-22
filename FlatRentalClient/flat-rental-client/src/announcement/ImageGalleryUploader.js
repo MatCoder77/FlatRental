@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Upload, Icon, Modal } from 'antd';
 import './ImageGalleryUploader.css';
 import {uploadFile} from "../infrastructure/RestApiHandler";
-import {API_BASE_URL} from "../Constants";
+import {API_BASE_URL} from "../infrastructure/Constants";
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {

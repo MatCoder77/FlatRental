@@ -13,7 +13,7 @@ import {
     Card,
     Switch,
 } from 'antd';
-import * as CONS from "../Constants";
+import * as CONS from "../infrastructure/Constants";
 import {Link} from "react-router-dom";
 import './Step.css';
 import ComboBox from "../commons/ComboBox";

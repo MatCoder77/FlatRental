@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { signup, checkUsernameAvailability, checkEmailAvailability } from "../infrastructure/RestApiHandler";
 import './RegistrationForm.css';
 import { Link } from 'react-router-dom';
-import * as CONS from "../Constants"
+import * as CONS from "../infrastructure/Constants"
 import {FormattedMessage, injectIntl} from 'react-intl';
 import { Form, Input, Button, notification } from 'antd';
 const FormItem = Form.Item;

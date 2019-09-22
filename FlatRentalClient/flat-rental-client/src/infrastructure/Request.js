@@ -1,4 +1,4 @@
-import {ACCESS_TOKEN} from "../Constants";
+import {ACCESS_TOKEN} from "./Constants";
 
 export const request = (options) => {
     const headers = new Headers({

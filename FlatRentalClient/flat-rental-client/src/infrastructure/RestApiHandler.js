@@ -1,4 +1,4 @@
-import {ACCESS_TOKEN, API_BASE_URL} from "../Constants";
+import {ACCESS_TOKEN, API_BASE_URL} from "./Constants";
 import {request, uploadFileRequest} from "./Request";
 
 export function login(loginRequest) {

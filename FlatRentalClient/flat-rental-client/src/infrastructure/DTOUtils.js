@@ -1,4 +1,4 @@
-import * as CONS from "../Constants"
+import * as CONS from "./Constants"
 
 
 export function unflatten(data) {

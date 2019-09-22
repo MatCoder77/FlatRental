@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import CheckBoxGrid from "../commons/CheckBoxGrid";
-import * as CONS from "../Constants";
+import * as CONS from "../infrastructure/Constants";
 import RoomFrom from "./RoomFrom";
 
 const FormItem = Form.Item;

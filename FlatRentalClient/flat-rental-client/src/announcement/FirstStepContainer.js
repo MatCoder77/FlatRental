@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Steps, Form, Input, Button, notification, InputNumber, Row, Col, DatePicker, Checkbox } from 'antd';
-import * as CONS from "../Constants";
+import * as CONS from "../infrastructure/Constants";
 import {Link} from "react-router-dom";
 import './Step.css';
 import ComboBox from "../commons/ComboBox";
