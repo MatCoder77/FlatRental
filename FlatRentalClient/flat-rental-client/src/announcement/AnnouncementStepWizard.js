@@ -30,7 +30,8 @@ class AnnouncementStepWizard extends Component {
             current: 0,
             formData: {},
             appData: {},
-            validationStatus: {}
+            validationStatus: {},
+            errorMessages: {}
         };
         this.updateFormData = this.updateFormData.bind(this);
         this.updateFormData('availableFrom', moment(new Date()));
@@ -38,6 +39,9 @@ class AnnouncementStepWizard extends Component {
 
         this.loadData = this.loadData.bind(this);
         this.submitAnnouncement = this.submitAnnouncement.bind(this);
+        this.updateValidation = this.updateValidation.bind(this);
+        this.getValidationStatus = this.getValidationStatus.bind(this);
+        this.getErrorMessage = this.getErrorMessage.bind(this);
     }
 
     next() {
@@ -51,10 +55,34 @@ class AnnouncementStepWizard extends Component {
         this.setState({ current });
     }
 
-    updateFormData(fieldName, fieldValue) {
+    updateFormData(fieldName, fieldValue, validationResult) {
         const { formData } = this.state;
         formData[fieldName] = fieldValue;
         this.setState({ formData });
+
+        this.updateValidation(fieldName, validationResult)
+    }
+
+    updateValidation(validationName, validationResult) {
+        const {validationStatus} = this.state;
+        const {errorMessages} = this.state;
+        const currentStep = this.state.current.toString();
+        validationStatus[currentStep + validationName] = validationResult ? validationResult.validateStatus : undefined;
+        errorMessages[currentStep + validationName] = validationResult ? validationResult.errorMsg : undefined;
+        this.setState({validationStatus});
+        this.setState({errorMessages});
+    }
+
+    getErrorMessage(filedName) {
+        const {errorMessages} = this.state;
+        const currentStep = this.state.current.toString();
+        return errorMessages[currentStep + filedName];
+    }
+
+    getValidationStatus(fieldName) {
+        const {validationStatus} = this.state;
+        const currentStep = this.state.current.toString();
+        return validationStatus[currentStep + fieldName];
     }
 
     loadData(supplierFunction, fieldName, param) {
@@ -94,17 +122,17 @@ class AnnouncementStepWizard extends Component {
         const steps = [{
             title: intl.formatMessage({ id: "labels.general_info" }),
             content: (
-                <FirstStepContainer formData={this.state.formData} onUpdate={this.updateFormData} {...formItemLayout}/>
+                <FirstStepContainer formData={this.state.formData} onUpdate={this.updateFormData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
             ),
         }, {
             title: intl.formatMessage({ id: "labels.localization" }),
             content: (
-                <SecondStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout}/>
+                <SecondStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
             ),
         }, {
             title: intl.formatMessage({ id: "labels.detail_info" }),
             content: (
-                <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout}/>
+                <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
             ),
         },{
             title: intl.formatMessage({ id: "labels.summary" }),
@@ -131,7 +159,7 @@ class AnnouncementStepWizard extends Component {
                     )}
                     {current < steps.length - 1 && (
                         <Col span={10}>
-                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()} size="large">
+                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()} size="large" disabled={!this.isStepValid()}>
                             <FormattedMessage id="labels.next"/>
                             <Icon type="right" />
                         </Button>
@@ -148,6 +176,18 @@ class AnnouncementStepWizard extends Component {
                 </div>
             </div>
         );
+    }
+
+    isStepValid() {
+        let validationStatus = this.state.validationStatus;
+        for(let validation in validationStatus) {
+            if(Object.prototype.hasOwnProperty.call(validationStatus, validation) && validation.startsWith(this.props.current)) {
+                if(validationStatus[validation] !== 'success') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 

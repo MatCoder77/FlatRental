@@ -14,12 +14,17 @@ class FirstStepContainer extends Component {
         this.updateOnChangeInputNumber = this.updateOnChangeInputNumber.bind(this);
         this.updateOnChangeDatePicker = this.updateOnChangeDatePicker.bind(this);
 
+        this.validateTitle = this.validateTitle.bind(this);
+        this.validateArea = this.validateArea.bind(this);
+
         this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
         this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
+        this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' }, { max: CONS.TITLE_MAX_LENGTH });
     }
 
-    updateOnChange(event) {
-        this.props.onUpdate(event.target.name, event.target.value);
+    updateOnChange(event, validationFunction) {
+        const validationResult = validationFunction(event.target.value);
+        this.props.onUpdate(event.target.name, event.target.value, validationResult);
     }
 
     updateOnChangeInputNumber = name => value => {
@@ -29,6 +34,8 @@ class FirstStepContainer extends Component {
     updateOnChangeDatePicker = name => (timeMoment, timeString) => {
         this.props.onUpdate(name, timeMoment);
     };
+
+
 
     componentDidMount() {
 
@@ -42,23 +49,28 @@ class FirstStepContainer extends Component {
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
                         <FormItem label={intl.formatMessage({id: 'labels.title'})}
-                                  hasFeedback required={true} help="">
+                                  hasFeedback
+                                  validateStatus={this.props.getValidationStatus("title")}
+                                  help={this.props.getErrorMessage("title")}
+                                  required={true}>
                             <Input
                                 name="title"
                                 autoComplete="off"
                                 value={this.props.formData.title}
-                                onChange={this.updateOnChange}
+                                onChange={event => this.updateOnChange(event, this.validateTitle)}
                                 placeholder={intl.formatMessage({id: 'placeholders.title'})}
                             />
                         </FormItem>
                         <FormItem label={intl.formatMessage({id: 'labels.area'})}
-                                  hasFeedback required={true}>
+                                  validateStatus={this.props.getValidationStatus("totalArea")}
+                                  help={this.props.getErrorMessage("totalArea")}
+                                  required={true}>
                             <Input
                                 addonAfter="m2"
                                 name="totalArea"
                                 autoComplete="off"
                                 value={this.props.formData.totalArea}
-                                onChange={this.updateOnChange}
+                                onChange={event => this.updateOnChange(event, this.validateArea)}
                                 placeholder={intl.formatMessage({id: 'placeholders.total_area'})}
                             />
                         </FormItem>
@@ -156,6 +168,24 @@ class FirstStepContainer extends Component {
                 errorMsg: null,
             };
         }
+    }
+
+    validateArea = (area) => {
+        if(!this.isPositiveInteger(area)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.onlyPositiveInteger
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
+        }
+    }
+
+    isPositiveInteger(str) {
+        return /^\+?[1-9]\d*$/.test(str);
     }
 
 }

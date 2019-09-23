@@ -54,7 +54,10 @@
 
     "labels.general_info": "Informacje Ogólne",
     "labels.title": "Tytuł",
+    "text.title_too_short_msg": "Podany tytuł jest za krótki. Wymagane co najmniej {min} znaków.",
+    "text.title_too_long_msg": "Podany tytuł jest za długi. Maksymalna długość to {max} znaków.",
     "labels.area": "Powierzchnia",
+    "text.only_positive_integer_msg": "Podaj dodatnią liczbę całkowitą.",
     "labels.number_of_rooms": "Liczba pokojów",
     "labels.price_per_month": "Cena za miesiąc",
     "labels.estimated_additional_costs": "Koszty dodatkowe:",

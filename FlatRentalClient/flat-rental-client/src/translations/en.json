@@ -55,7 +55,10 @@
 
     "labels.general_info": "General Information",
     "labels.title": "Title",
+    "text.title_too_short_msg": "Title is too short. Minimum {min} characters required.",
+    "text.title_too_long_msg": "Title is too long. Maximum {max} characters allowed.",
     "labels.area": "Area",
+    "text.only_positive_integer_msg": "Type in positive integer.",
     "labels.number_of_rooms": "Number of rooms",
     "labels.price_per_month": "Price per month",
     "labels.estimated_additional_costs": "Additional costs:",
