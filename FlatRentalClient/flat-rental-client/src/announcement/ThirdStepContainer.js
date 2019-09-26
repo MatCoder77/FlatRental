@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
 import {
-    Steps,
     Form,
     Input,
-    Button,
-    notification,
     InputNumber,
-    Row,
-    Col,
-    DatePicker,
-    Checkbox,
     Card,
     Switch,
 } from 'antd';
 import * as CONS from "../infrastructure/Constants";
-import {Link} from "react-router-dom";
 import './Step.css';
 import ComboBox from "../commons/ComboBox";
-import Text from "antd/lib/typography/Text";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import moment from "moment";
 import {
@@ -31,7 +22,6 @@ import {
 import CheckBoxGrid from "../commons/CheckBoxGrid";
 import ImageGalleryUploader from "./ImageGalleryUploader";
 import { Typography } from 'antd';
-import RoomFrom from "./RoomFrom";
 import RoomList from "./RoomList";
 
 const { Paragraph } = Typography;
@@ -44,24 +34,7 @@ const today = moment(new Date());
 class ThirdStepContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            // buildingTypes: [],
-            // buildingMaterialTypes: [],
-            // heatingTypes: [],
-            // parkingTypes: [],
-            // windowTypes: [],
-            // apartmentStateTypes: [],
-            // apartmentAmenitiesTypes: [],
-            // roomFurnishing: [],
-            // kitchenTypes: [],
-            // cookerTypes: [],
-            // kitchenFurnishing: [],
-            //
-            // bathroomFurnishing: [],
-            // media: [],
-            // neighbourhoodItems: [],
-            // preferences: [],
-        }
+
         this.loadBuildingTypes = this.loadBuildingTypes.bind(this);
         this.loadBuildingMaterialTypes = this.loadBuildingMaterialTypes.bind(this);
         this.loadHeatingTypes = this.loadHeatingTypes.bind(this);

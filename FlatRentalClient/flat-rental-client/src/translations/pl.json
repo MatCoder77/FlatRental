@@ -58,11 +58,15 @@
     "text.title_too_long_msg": "Podany tytuł jest za długi. Maksymalna długość to {max} znaków.",
     "labels.area": "Powierzchnia",
     "text.only_positive_integer_msg": "Podaj dodatnią liczbę całkowitą.",
+    "text.only_positive_integer_or_zero_msg" : "Podaj nieujemną liczbę całkowitą.",
     "labels.number_of_rooms": "Liczba pokojów",
     "labels.price_per_month": "Cena za miesiąc",
     "labels.estimated_additional_costs": "Koszty dodatkowe:",
     "labels.deposit": "Kaucja",
     "labels.floor_max_floor": "Piętro / Liczba pięter",
+    "text.only_integer": "Podaj liczbę całkowitą.",
+    "text.smaller_than_minus_one": "Numer piętra musi być większy lub równy -1.",
+    "text.floor_number_grater_than_max_floor": "Numer piętra nie może być większy niż liczba pięter w budynku.",
     "labels.floor": "Piętro",
     "labels.max_floor": "Ostatnie piętro",
     "labels.available_from": "Dostępne od",
@@ -72,6 +76,7 @@
     "placeholders.number_of_rooms": "Podaj liczbę pokojów w mieszkaniu",
     "placeholders.price_per_month": "Podaj miesięczny koszt wynajmu mieszkania",
     "placeholders.deposit": "Podaj wysokość kaucji",
+    "placeholders.select_date": "Wybierz date",
 
 
     "labels.localization": "Lokalizacja",

@@ -34,7 +34,7 @@ class AnnouncementStepWizard extends Component {
             errorMessages: {}
         };
         this.updateFormData = this.updateFormData.bind(this);
-        this.updateFormData('availableFrom', moment(new Date()));
+        this.updateFormData('availableFrom', moment(new Date()), {validateStatus: 'success', errorMsg: null});
         this.updateFormData('bathroom.numberOfBathrooms', 1);
 
         this.loadData = this.loadData.bind(this);
@@ -42,6 +42,7 @@ class AnnouncementStepWizard extends Component {
         this.updateValidation = this.updateValidation.bind(this);
         this.getValidationStatus = this.getValidationStatus.bind(this);
         this.getErrorMessage = this.getErrorMessage.bind(this);
+        this.registerRequiredFields = this.registerRequiredFields.bind(this);
     }
 
     next() {
@@ -64,13 +65,16 @@ class AnnouncementStepWizard extends Component {
     }
 
     updateValidation(validationName, validationResult) {
-        const {validationStatus} = this.state;
-        const {errorMessages} = this.state;
-        const currentStep = this.state.current.toString();
-        validationStatus[currentStep + validationName] = validationResult ? validationResult.validateStatus : undefined;
-        errorMessages[currentStep + validationName] = validationResult ? validationResult.errorMsg : undefined;
-        this.setState({validationStatus});
-        this.setState({errorMessages});
+        if(validationResult) {
+            const {validationStatus} = this.state;
+            const {errorMessages} = this.state;
+            const currentStep = this.state.current.toString();
+            validationStatus[currentStep + validationName] = validationResult.validateStatus;
+            errorMessages[currentStep + validationName] = validationResult.errorMsg;
+            this.setState({validationStatus});
+            this.setState({errorMessages});
+        }
+        console.log(this.state.validationStatus);
     }
 
     getErrorMessage(filedName) {
@@ -83,6 +87,14 @@ class AnnouncementStepWizard extends Component {
         const {validationStatus} = this.state;
         const currentStep = this.state.current.toString();
         return validationStatus[currentStep + fieldName];
+    }
+
+    registerRequiredFields(requiredFields) {
+        for (let field of requiredFields) {
+            if(this.getValidationStatus(field) !== 'success') {
+                this.updateValidation(field, {validateStatus: undefined, errorMsg: undefined});
+            }
+        }
     }
 
     loadData(supplierFunction, fieldName, param) {
@@ -122,7 +134,13 @@ class AnnouncementStepWizard extends Component {
         const steps = [{
             title: intl.formatMessage({ id: "labels.general_info" }),
             content: (
-                <FirstStepContainer formData={this.state.formData} onUpdate={this.updateFormData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
+                <FirstStepContainer
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                />
             ),
         }, {
             title: intl.formatMessage({ id: "labels.localization" }),
@@ -181,7 +199,7 @@ class AnnouncementStepWizard extends Component {
     isStepValid() {
         let validationStatus = this.state.validationStatus;
         for(let validation in validationStatus) {
-            if(Object.prototype.hasOwnProperty.call(validationStatus, validation) && validation.startsWith(this.props.current)) {
+            if(Object.prototype.hasOwnProperty.call(validationStatus, validation) && validation.startsWith(this.state.current)) {
                 if(validationStatus[validation] !== 'success') {
                     return false;
                 }
