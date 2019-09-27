@@ -144,7 +144,7 @@ class AnnouncementStepWizard extends Component {
 
     render() {
         const {intl} = this.props;
-        const steps = [{
+        const steps = [/*{
             title: intl.formatMessage({id: "labels.general_info"}),
             content: (
                 <FirstStepContainer
@@ -167,7 +167,7 @@ class AnnouncementStepWizard extends Component {
                                      registerRequiredFields={this.registerRequiredFields}
                                      unregisterRequiredFields={this.unregisterRequiredFields}/>
             ),
-        }, {
+        }, */{
             title: intl.formatMessage({id: "labels.detail_info"}),
             content: (
                 <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData}

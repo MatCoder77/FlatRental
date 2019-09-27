@@ -324,19 +324,6 @@ class SecondStepContainer extends Component {
         );
     }
 
-    validateIfNotEmpty = (input) => {
-        if (input) {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
-        }
-        return {
-            validateStatus: undefined,
-            errorMsg: null,
-        };
-    };
-
 }
 
 export default injectIntl(SecondStepContainer);

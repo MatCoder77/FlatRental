@@ -51,6 +51,7 @@ class ThirdStepContainer extends Component {
         this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
         this.updateOnChange = this.updateOnChange.bind(this);
         this.updateOnChangeWithName = this.updateOnChangeWithName.bind(this);
+        this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
     }
 
     loadBuildingTypes() {
@@ -113,8 +114,9 @@ class ThirdStepContainer extends Component {
         this.props.loadData(getFurnishing, 'roomFurnishing', 'ROOM')
     }
 
-    updateOnChange(event) {
-        this.props.onUpdate(event.target.name, event.target.value);
+    updateOnChange(event, validationFunction) {
+        const validationResult = validationFunction ? validationFunction(event.target.value) : undefined;
+        this.props.onUpdate(event.target.name, event.target.value, validationResult);
     }
 
     updateOnChangeWithName = name => value => {
@@ -259,10 +261,12 @@ class ThirdStepContainer extends Component {
                                     value={this.props.formData["kitchen.kitchenType"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.kitchen_type' })}/>
                             </FormItem>
-                            <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
+                            <FormItem label={intl.formatMessage({ id: 'labels.area' })}
+                                      validateStatus={this.props.getValidationStatus("kitchen.kitchenArea")}
+                                      help={this.props.getErrorMessage("kitchen.kitchenArea")}>
                                 <Input
                                     name="kitchen.kitchenArea"
-                                    onChange={this.updateOnChange}
+                                    onChange={event => this.updateOnChange(event, this.validateIfOptionalPositiveInteger)}
                                     value={this.props.formData["kitchen.kitchenArea"]}
                                     addonAfter="m2"
                                     autoComplete="off"
@@ -355,6 +359,29 @@ class ThirdStepContainer extends Component {
                 </div>
             </div>
         );
+    }
+
+    validateIfOptionalPositiveInteger = (input) => {
+        if (!input) {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
+        }
+        if(!this.isPositiveInteger(input)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.onlyPositiveInteger
+            };
+        }
+        return {
+            validateStatus: 'success',
+            errorMsg: null,
+        };
+    };
+
+    isPositiveInteger(str) {
+        return /^[1-9]\d*$/.test(str);
     }
 
 }
