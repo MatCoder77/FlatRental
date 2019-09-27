@@ -260,6 +260,14 @@
     "PREFERENCE_FOR_FEMALE": "Dla mężczyzn",
     "PREFERENCE_ANIMALS_NOT_ALLOWED": "Bez zwierząt",
     "PREFERENCE_ANIMALS_ALLOWED": "Zwierzęta mile widziane",
-    "PREFERENCE_PARTIES_NOT_AT_HOME": "Imprezy poza domem"
+    "PREFERENCE_PARTIES_NOT_AT_HOME": "Imprezy poza domem",
+
+    "DISTRICT" : "powiat",
+    "DISTRICT_CITY" : "m. powiatowe",
+    "DISTRICT_CAPITAL" : "m. stołeczne",
+    "URBAN_COMMUNE" : "gm. miejska",
+    "RURAL_COMMUNE" :  "gm. wiejska",
+    "MIXED_COMMUNE" :  "gm. miejsko-wiejska",
+    "CAPITAL_COMMUNE" : "gm. stołeczna"
 
 }

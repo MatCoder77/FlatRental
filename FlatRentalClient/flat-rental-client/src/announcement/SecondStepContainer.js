@@ -11,8 +11,9 @@ import {
     getStreets,
     getVoivodeships
 } from "../infrastructure/RestApiHandler";
+import './Step.css';
 
-const { Option } = Select;
+const {Option} = Select;
 const FormItem = Form.Item;
 
 class SecondStepContainer extends Component {
@@ -31,13 +32,31 @@ class SecondStepContainer extends Component {
         this.getStreetLabel = this.getStreetLabel.bind(this);
         this.autoselectIfOnlyOneElement = this.autoselectIfOnlyOneElement.bind(this);
         this.updateOnSelect = this.updateOnSelect.bind(this);
+        this.onVoivodeshipChange = this.onVoivodeshipChange.bind(this);
+        this.onDistrictChange = this.onDistrictChange.bind(this);
+        this.onCommuneChange = this.onCommuneChange.bind(this);
+        this.hasAnyLoadedData = this.hasAnyLoadedData.bind(this);
+        this.autoselectAndMakeOptionalIfNecessary = this.autoselectAndMakeOptionalIfNecessary.bind(this);
+
+        this.props.registerRequiredFields(['address.voivodeship.id', 'address.district.id', 'address.commune.id', 'address.locality.id', 'address.localityDistrict.id', 'address.street.id']);
     }
 
-    autoselectIfOnlyOneElement(data) {
-        if(data.length == 1) {
-            return data[0].name;
+    autoselectIfOnlyOneElement(loadedData, callbackParam) {
+        if (this.props.appData[loadedData].length == 1) {
+            let id = this.props.appData[loadedData][0].id;
+            this.updateOnSelect(callbackParam, id);
+            if (callbackParam === 'address.voivodeship.id') {
+                this.loadDistrictForVoivodeship(id);
+            } else if (callbackParam === 'address.district.id') {
+                this.loadCommunesForDistrict(id);
+            } else if (callbackParam === 'address.commune.id') {
+                this.loadLocalitiesForCommune(id);
+            } else if (callbackParam === 'address.locality.id') {
+                this.onLocalityChange(id);
+            } else if (callbackParam === 'address.localityDistrict.id') {
+                this.onLocalityDistrictChange(id);
+            }
         }
-        return;
     }
 
     loadVoivodeships() {
@@ -45,19 +64,19 @@ class SecondStepContainer extends Component {
     }
 
     loadDistrictForVoivodeship(voivodeshipId) {
-        this.props.loadData(getDistricts, 'districts', voivodeshipId);
+        this.props.loadData(getDistricts, 'districts', voivodeshipId, this.autoselectIfOnlyOneElement, 'address.district.id');
     }
 
     loadCommunesForDistrict(districtId) {
-        this.props.loadData(getCommunes, 'communes', districtId);
+        this.props.loadData(getCommunes, 'communes', districtId, this.autoselectIfOnlyOneElement, 'address.commune.id');
     }
 
     loadLocalitiesForCommune(communeId) {
-        this.props.loadData(getLocalities, 'localities', communeId);
+        this.props.loadData(getLocalities, 'localities', communeId, this.autoselectIfOnlyOneElement, 'address.locality.id');
     }
 
     loadLocalityDistrictsForLocality(localityId) {
-        this.props.loadData(getLocalityDistricts, 'localityDistricts', localityId);
+        this.props.loadData(getLocalityDistricts, 'localityDistricts', localityId, this.autoselectAndMakeOptionalIfNecessary, 'address.localityDistrict.id');
     }
 
     loadLocalityPartsForParentLocality(parentLocalityId) {
@@ -69,18 +88,7 @@ class SecondStepContainer extends Component {
     }
 
     loadStreetsForParentLocality(parentLocalityId) {
-        this.props.loadData(getStreets, 'streets', parentLocalityId);
-    }
-
-    onLocalityChange(localityId) {
-        this.loadLocalityDistrictsForLocality(localityId);
-        this.loadLocalityPartsForParentLocality(localityId);
-        this.loadStreetsForParentLocality(localityId);
-    }
-
-    onLocalityDistrictChange(localityDistrictId) {
-        this.loadLocalityPartsForParentLocalityDistrict(localityDistrictId);
-        this.loadStreetsForParentLocality(localityDistrictId);
+        this.props.loadData(getStreets, 'streets', parentLocalityId, this.autoselectAndMakeOptionalIfNecessary, 'address.street.id');
     }
 
     componentDidMount() {
@@ -91,125 +99,243 @@ class SecondStepContainer extends Component {
         return street.streetType.readableValue + " " + (street.leadingName ? street.leadingName + " " : "") + street.mainName;
     }
 
-    updateOnSelect = name => (value, option) => {
-        this.props.onUpdate(name, value);
+    autoselectAndMakeOptionalIfNecessary(loadedData, callbackParam) {
+        if(this.props.appData[loadedData].length === 0) {
+            this.props.unregisterRequiredFields([callbackParam]);
+        }
+        this.autoselectIfOnlyOneElement(loadedData, callbackParam);
+    }
+
+    onVoivodeshipChange(voivodeshipId) {
+        this.props.formData["address.district.id"] = undefined;
+        this.props.appData.districts = [];
+        this.props.formData["address.commune.id"] = undefined;
+        this.props.appData.communes = [];
+        this.props.formData["address.locality.id"] = undefined;
+        this.props.appData.localities = [];
+        this.props.formData["address.localityDistrict.id"] = undefined;
+        this.props.appData.localityDistricts = [];
+        this.props.formData["address.localityPart.id"] = undefined;
+        this.props.appData.localityParts = [];
+        this.props.formData["address.street.id"] = undefined;
+        this.props.appData.streets = [];
+        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        this.loadDistrictForVoivodeship(voivodeshipId);
+    }
+
+    onDistrictChange(districtId) {
+        this.props.formData["address.commune.id"] = undefined;
+        this.props.appData.communes = [];
+        this.props.formData["address.locality.id"] = undefined;
+        this.props.appData.localities = [];
+        this.props.formData["address.localityDistrict.id"] = undefined;
+        this.props.appData.localityDistricts = [];
+        this.props.formData["address.localityPart.id"] = undefined;
+        this.props.appData.localityParts = [];
+        this.props.formData["address.street.id"] = undefined;
+        this.props.appData.streets = [];
+        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        this.loadCommunesForDistrict(districtId);
+    }
+
+    onCommuneChange(communeId) {
+        this.props.formData["address.locality.id"] = undefined;
+        this.props.appData.localities = [];
+        this.props.formData["address.localityDistrict.id"] = undefined;
+        this.props.appData.localityDistricts = [];
+        this.props.formData["address.localityPart.id"] = undefined;
+        this.props.appData.localityParts = [];
+        this.props.formData["address.street.id"] = undefined;
+        this.props.appData.streets = [];
+        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        this.loadLocalitiesForCommune(communeId);
+    }
+
+    onLocalityChange(localityId) {
+        this.props.formData["address.localityDistrict.id"] = undefined;
+        this.props.appData.localityDistricts = [];
+        this.props.formData["address.localityPart.id"] = undefined;
+        this.props.appData.localityParts = [];
+        this.props.formData["address.street.id"] = undefined;
+        this.props.appData.streets = [];
+        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        this.loadLocalityDistrictsForLocality(localityId);
+        this.loadLocalityPartsForParentLocality(localityId);
+        this.loadStreetsForParentLocality(localityId);
+    }
+
+    onLocalityDistrictChange(localityDistrictId) {
+        this.props.formData["address.localityPart.id"] = undefined;
+        this.props.appData.localityParts = [];
+        this.props.formData["address.street.id"] = undefined;
+        this.props.appData.streets = [];
+        this.props.registerRequiredFields(['address.street.id'], true);
+        this.loadLocalityPartsForParentLocalityDistrict(localityDistrictId);
+        this.loadStreetsForParentLocality(localityDistrictId);
+    }
+
+    hasAnyLoadedData(data) {
+        return data && data.length > 0;
+    }
+
+    updateOnSelect(name, value, validationFunction) {
+        let validationResult = validationFunction ? validationFunction(value) : {validateStatus: 'success', errorMsg: null};
+        this.props.onUpdate(name, value, validationResult);
     }
 
     render() {
-        const { intl } = this.props;
+        const {intl} = this.props;
         return (
             <div className="step-container">
                 <h1 className="page-title"><FormattedMessage id="labels.localization"/></h1>
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
-                        <FormItem label={intl.formatMessage({ id: 'labels.voivodeship' })}>
+                        <FormItem label={intl.formatMessage({id: 'labels.voivodeship'})} required={true}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.voivodeship' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.voivodeship'})}
                                 optionFilterProp="children"
-                                onChange={this.loadDistrictForVoivodeship}
-                                onSelect={this.updateOnSelect('address.voivodeship.id')}
+                                onChange={this.onVoivodeshipChange}
+                                onSelect={value => this.updateOnSelect('address.voivodeship.id', value)}
                                 value={this.props.formData["address.voivodeship.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.voivodeships ? this.props.appData.voivodeships.map(voivodeship => (<Option key={voivodeship.id} value={voivodeship.id}>{voivodeship.name}</Option>)) : ""}
+                                {this.props.appData.voivodeships ? this.props.appData.voivodeships.map(voivodeship => (
+                                    <Option key={voivodeship.id}
+                                            value={voivodeship.id}>{voivodeship.name}</Option>)) : ""}
                             </Select>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.district' })}>
+                        {this.hasAnyLoadedData(this.props.appData.districts) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.district'})} required={true}>
+
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.district' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.district'})}
                                 optionFilterProp="children"
-                                onChange={this.loadCommunesForDistrict}
-                                onSelect={this.updateOnSelect('address.district.id')}
+                                onChange={this.onDistrictChange}
+                                onSelect={value => this.updateOnSelect('address.district.id', value)}
                                 value={this.props.formData["address.district.id"]}
                                 filterOption={(input, option) =>
-                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.districts ? this.props.appData.districts.map(district => (<Option key={district.id} value={district.id}>{district.name}</Option>)) : ""}
+                                {this.props.appData.districts ? this.props.appData.districts.map(district => (
+                                    <Option key={district.id} value={district.id}>{district.name} <FormattedMessage id={district.districtType}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
                             </Select>
+
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.commune' })}>
+                        }
+                        {this.hasAnyLoadedData(this.props.appData.communes) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.commune'})} required={true}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.commune' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.commune'})}
                                 optionFilterProp="children"
-                                onChange={this.loadLocalitiesForCommune}
-                                onSelect={this.updateOnSelect('address.commune.id')}
+                                onChange={this.onCommuneChange}
+                                onSelect={value => this.updateOnSelect('address.commune.id', value)}
                                 value={this.props.formData["address.commune.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.communes ? this.props.appData.communes.map(commune => (<Option key={commune.id} value={commune.id}>{commune.name}</Option>)) : ""}
+                                {this.props.appData.communes ? this.props.appData.communes.map(commune => (
+                                    <Option key={commune.id} value={commune.id}>{commune.name} <FormattedMessage id={commune.communeType}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
                             </Select>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.locality' })}>
+                        }
+                        {this.hasAnyLoadedData(this.props.appData.localities) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.locality'})} required={true}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.locality' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.locality'})}
                                 optionFilterProp="children"
                                 onChange={this.onLocalityChange}
-                                onSelect={this.updateOnSelect('address.locality.id')}
+                                onSelect={value => this.updateOnSelect('address.locality.id', value)}
                                 value={this.props.formData["address.locality.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                {  this.props.appData.localities ? this.props.appData.localities.map(locality => (<Option key={locality.id} value={locality.id}>{locality.name}</Option>)) : ""}
+                                {this.props.appData.localities ? this.props.appData.localities.map(locality => (
+                                    <Option key={locality.id} value={locality.id}>{locality.name}</Option>)) : ""}
                             </Select>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.localityDistrict' })}>
+                        }
+                        {this.hasAnyLoadedData(this.props.appData.localityDistricts) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.localityDistrict'})} required={true}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.localityDistrict' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.localityDistrict'})}
                                 optionFilterProp="children"
                                 onChange={this.onLocalityDistrictChange}
-                                onSelect={this.updateOnSelect('address.localityDistrict.id')}
+                                onSelect={value => this.updateOnSelect('address.localityDistrict.id', value)}
                                 value={this.props.formData["address.localityDistrict.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.localityDistricts ? this.props.appData.localityDistricts.map(localityDistrict => (<Option key={localityDistrict.id} value={localityDistrict.id}>{localityDistrict.name}</Option>)) : ""}
+                                {this.props.appData.localityDistricts ? this.props.appData.localityDistricts.map(localityDistrict => (
+                                    <Option key={localityDistrict.id}
+                                            value={localityDistrict.id}>{localityDistrict.name}</Option>)) : ""}
                             </Select>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.localityPart' })}>
+                        }
+                        {this.hasAnyLoadedData(this.props.appData.localityParts) && (this.props.formData["address.localityDistrict.id"] || !this.hasAnyLoadedData(this.props.appData.localityDistricts)) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.localityPart'})}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.localityPart' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.localityPart'})}
                                 optionFilterProp="children"
-                                onSelect={this.updateOnSelect('address.localityPart.id')}
+                                onSelect={value => this.updateOnSelect('address.localityPart.id', value)}
                                 value={this.props.formData["address.localityPart.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.localityParts ? this.props.appData.localityParts.map(localityPart => (<Option key={localityPart.id} value={localityPart.id}>{localityPart.name}</Option>)) : ""}
+                                {this.props.appData.localityParts ? this.props.appData.localityParts.map(localityPart => (
+                                    <Option key={localityPart.id}
+                                            value={localityPart.id}>{localityPart.name}</Option>)) : ""}
                             </Select>
                         </FormItem>
-                        <FormItem label={intl.formatMessage({ id: 'labels.street' })}>
+                        }
+                        {this.hasAnyLoadedData(this.props.appData.streets) &&
+                        <FormItem label={intl.formatMessage({id: 'labels.street'})} required={true}>
                             <Select
                                 showSearch
-                                placeholder={intl.formatMessage({ id: 'placeholders.street' })}
+                                placeholder={intl.formatMessage({id: 'placeholders.street'})}
                                 optionFilterProp="children"
-                                onSelect={this.updateOnSelect('address.street.id')}
+                                onSelect={value => this.updateOnSelect('address.street.id', value)}
                                 value={this.props.formData["address.street.id"]}
                                 filterOption={(input, option) =>
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                { this.props.appData.streets ? this.props.appData.streets.map(street => (<Option key={street.id} value={street.id}>{this.getStreetLabel(street)}</Option>)) : ""}
+                                {this.props.appData.streets ? this.props.appData.streets.map(street => (
+                                    <Option key={street.id}
+                                            value={street.id}>{this.getStreetLabel(street)}</Option>)) : ""}
                             </Select>
                         </FormItem>
+                        }
                     </Form>
                 </div>
             </div>
         );
     }
+
+    validateIfNotEmpty = (input) => {
+        if (input) {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
+        }
+        return {
+            validateStatus: undefined,
+            errorMsg: null,
+        };
+    };
 
 }
 

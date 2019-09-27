@@ -2,5 +2,8 @@
     margin: 0 auto;
     margin: 0 auto;
     margin-top: 40px;
+}
 
+.step-container-content {
+    min-height: 33em;
 }

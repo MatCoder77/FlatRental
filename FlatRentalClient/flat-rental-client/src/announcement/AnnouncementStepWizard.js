@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Steps, Button, Row, Col, Icon} from 'antd';
 import './Step.css';
 import moment from "moment";
@@ -14,12 +14,12 @@ const Step = Steps.Step;
 
 const formItemLayout = {
     labelCol: {
-        xs: { span: 12 },
-        sm: { span: 4 },
+        xs: {span: 12},
+        sm: {span: 4},
     },
     wrapperCol: {
-        xs: { span: 28 },
-        sm: { span: 18 },
+        xs: {span: 28},
+        sm: {span: 18},
     },
 };
 
@@ -43,29 +43,30 @@ class AnnouncementStepWizard extends Component {
         this.getValidationStatus = this.getValidationStatus.bind(this);
         this.getErrorMessage = this.getErrorMessage.bind(this);
         this.registerRequiredFields = this.registerRequiredFields.bind(this);
+        this.unregisterRequiredFields = this.unregisterRequiredFields.bind(this);
     }
 
     next() {
         const current = this.state.current + 1;
         console.log(this.state.formData);
-        this.setState({ current });
+        this.setState({current});
     }
 
     prev() {
         const current = this.state.current - 1;
-        this.setState({ current });
+        this.setState({current});
     }
 
     updateFormData(fieldName, fieldValue, validationResult) {
-        const { formData } = this.state;
+        const {formData} = this.state;
         formData[fieldName] = fieldValue;
-        this.setState({ formData });
+        this.setState({formData});
 
         this.updateValidation(fieldName, validationResult)
     }
 
     updateValidation(validationName, validationResult) {
-        if(validationResult) {
+        if (validationResult) {
             const {validationStatus} = this.state;
             const {errorMessages} = this.state;
             const currentStep = this.state.current.toString();
@@ -89,18 +90,27 @@ class AnnouncementStepWizard extends Component {
         return validationStatus[currentStep + fieldName];
     }
 
-    registerRequiredFields(requiredFields) {
+    registerRequiredFields(requiredFields, force) {
         for (let field of requiredFields) {
-            if(this.getValidationStatus(field) !== 'success') {
+            if (this.getValidationStatus(field) !== 'success' || force) {
                 this.updateValidation(field, {validateStatus: undefined, errorMsg: undefined});
             }
         }
     }
 
-    loadData(supplierFunction, fieldName, param) {
+    unregisterRequiredFields(fields) {
+        const {validationStatus} = this.state;
+        const currentStep = this.state.current.toString();
+        for (let field of fields) {
+            delete validationStatus[currentStep + field];
+        }
+        this.setState({validationStatus});
+    }
+
+    loadData(supplierFunction, fieldName, param, onDataLoadedCallbackFunction, callbackFunctionParam) {
         let promise = supplierFunction(param);
 
-        if(!promise) {
+        if (!promise) {
             return;
         }
 
@@ -110,12 +120,15 @@ class AnnouncementStepWizard extends Component {
 
         promise
             .then(response => {
-                const { appData } = this.state;
+                const {appData} = this.state;
                 appData[fieldName] = response;
                 this.setState({
                     appData
                     // isLoading: false
-                })
+                });
+                if (onDataLoadedCallbackFunction) {
+                    onDataLoadedCallbackFunction(fieldName, callbackFunctionParam);
+                }
             }).catch(error => {
             // this.setState({
             //     isLoading: false
@@ -130,9 +143,9 @@ class AnnouncementStepWizard extends Component {
     }
 
     render() {
-        const { intl } = this.props;
+        const {intl} = this.props;
         const steps = [{
-            title: intl.formatMessage({ id: "labels.general_info" }),
+            title: intl.formatMessage({id: "labels.general_info"}),
             content: (
                 <FirstStepContainer
                     formData={this.state.formData}
@@ -143,53 +156,65 @@ class AnnouncementStepWizard extends Component {
                 />
             ),
         }, {
-            title: intl.formatMessage({ id: "labels.localization" }),
+            title: intl.formatMessage({id: "labels.localization"}),
             content: (
-                <SecondStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
             ),
         }, {
-            title: intl.formatMessage({ id: "labels.detail_info" }),
+            title: intl.formatMessage({id: "labels.detail_info"}),
             content: (
-                <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData} loadData={this.loadData} appData={this.state.appData} {...formItemLayout} getValidationStatus={this.getValidationStatus} getErrorMessage={this.getErrorMessage}/>
+                <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData}
+                                    loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                    getValidationStatus={this.getValidationStatus}
+                                    getErrorMessage={this.getErrorMessage}/>
             ),
-        },{
-            title: intl.formatMessage({ id: "labels.summary" }),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
             content: 'Last-content',
         }];
 
-        const { current } = this.state;
+        const {current} = this.state;
         return (
             <div className="step-wizard-container">
-            <Steps current={current}>
-                {steps.map(item => <Step key={item.title} title={item.title} />)}
-            </Steps>
-            <div className="steps-content">{steps[current].content}</div>
+                <Steps current={current}>
+                    {steps.map(item => <Step key={item.title} title={item.title}/>)}
+                </Steps>
+                <div className="steps-content">{steps[current].content}</div>
                 <div className="steps-action">
                     <Row type="flex" justify="space-around">
 
-                    {current > 0 && (
-                        <Col span={10}>
-                        <Button className="step-wizard-button" onClick={() => this.prev()} size="large">
-                            <Icon type="left" />
-                            <FormattedMessage id="labels.previous"/>
-                        </Button>
-                        </Col>
-                    )}
-                    {current < steps.length - 1 && (
-                        <Col span={10}>
-                        <Button className="step-wizard-button" type="primary" onClick={() => this.next()} size="large" disabled={!this.isStepValid()}>
-                            <FormattedMessage id="labels.next"/>
-                            <Icon type="right" />
-                        </Button>
-                        </Col>
-                    )}
-                    {current === steps.length - 1 && (
-                        <Col span={10}>
-                        <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement} size="large">
-                            <FormattedMessage id="labels.add_announcement"/>
-                        </Button>
-                        </Col>
-                    )}
+                        {current > 0 && (
+                            <Col span={10}>
+                                <Button className="step-wizard-button" onClick={() => this.prev()} size="large">
+                                    <Icon type="left"/>
+                                    <FormattedMessage id="labels.previous"/>
+                                </Button>
+                            </Col>
+                        )}
+                        {current < steps.length - 1 && (
+                            <Col span={10}>
+                                <Button className="step-wizard-button" type="primary" onClick={() => this.next()}
+                                        size="large" disabled={!this.isStepValid()}>
+                                    <FormattedMessage id="labels.next"/>
+                                    <Icon type="right"/>
+                                </Button>
+                            </Col>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Col span={10}>
+                                <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement}
+                                        size="large">
+                                    <FormattedMessage id="labels.add_announcement"/>
+                                </Button>
+                            </Col>
+                        )}
                     </Row>
                 </div>
             </div>
@@ -198,9 +223,9 @@ class AnnouncementStepWizard extends Component {
 
     isStepValid() {
         let validationStatus = this.state.validationStatus;
-        for(let validation in validationStatus) {
-            if(Object.prototype.hasOwnProperty.call(validationStatus, validation) && validation.startsWith(this.state.current)) {
-                if(validationStatus[validation] !== 'success') {
+        for (let validation in validationStatus) {
+            if (Object.prototype.hasOwnProperty.call(validationStatus, validation) && validation.startsWith(this.state.current)) {
+                if (validationStatus[validation] !== 'success') {
                     return false;
                 }
             }
