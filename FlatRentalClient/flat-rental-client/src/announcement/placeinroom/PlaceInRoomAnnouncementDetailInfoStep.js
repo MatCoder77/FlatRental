@@ -6,9 +6,9 @@ import {
     Card,
     Switch,
 } from 'antd';
-import * as CONS from "../infrastructure/Constants";
-import './Step.css';
-import ComboBox from "../commons/ComboBox";
+import * as CONS from "../../infrastructure/Constants";
+import '../Step.css';
+import ComboBox from "../../commons/ComboBox";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import moment from "moment";
 import {
@@ -18,11 +18,11 @@ import {
     getBuildingTypes, getCookerTypes, getFurnishing,
     getHeatingTypes, getKitchenTypes, getNeighborhoodItems, getParkingTypes, getPreferences,
     getWindowTypes
-} from "../infrastructure/RestApiHandler";
-import CheckBoxGrid from "../commons/CheckBoxGrid";
-import ImageGalleryUploader from "./ImageGalleryUploader";
+} from "../../infrastructure/RestApiHandler";
+import CheckBoxGrid from "../../commons/CheckBoxGrid";
+import ImageGalleryUploader from "../ImageGalleryUploader";
 import { Typography } from 'antd';
-import RoomList from "./RoomList";
+import RoomList from "../RoomList";
 
 const { Paragraph } = Typography;
 
@@ -147,6 +147,14 @@ class ThirdStepContainer extends Component {
                 <h1 className="page-title"><FormattedMessage id="labels.detail_info"/></h1>
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
+                        <Card title={intl.formatMessage({ id: 'labels.room_accessories' })} bordered={false}>
+                            <CheckBoxGrid name="room.furnishing"
+                                          itemList={this.props.appData.roomFurnishing}
+                                          onUpdate={this.props.onUpdate}
+                                          checkedValues={this.props.formData["room.furnishing"]}
+                                          span={8}
+                            />
+                        </Card>
                         <Card title={intl.formatMessage({ id: 'labels.apartment' })} bordered={false}>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.building_type' })}
@@ -219,6 +227,18 @@ class ThirdStepContainer extends Component {
                                     value={this.props.formData.yearBuilt}
                                 />
                             </FormItem>
+                            <FormItem
+                                label={intl.formatMessage({id: 'labels.number_of_rooms'})}
+                                validateStatus={this.props.getValidationStatus("numberOfRooms")}
+                                help={this.props.getErrorMessage("numberOfRooms")}>
+                                <InputNumber
+                                    name="numberOfRooms"
+                                    min={1}
+                                    max={10}
+                                    value={this.props.formData.numberOfRooms}
+                                    onChange={this.updateOnChangeWithName('numberOfRooms')}
+                                />
+                            </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.well_planned' })}>
                                 <Switch
                                     name="wellPlanned"
@@ -246,9 +266,6 @@ class ThirdStepContainer extends Component {
                                 transientDataName= {CONS.TRANSIENT_MARKER + "announcementImages"}
                                 onUpdate={this.props.onUpdate}
                                 fileList={this.props.formData.transient_announcementImages}/>
-                        </Card>
-                        <Card title={intl.formatMessage({ id: 'labels.rooms' })} bordered={false}>
-                            <RoomList name={"rooms"} onUpdate={this.props.onUpdate} appData={this.props.appData} formData={this.props.formData}/>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.kitchen' })} bordered={false}>
                             <FormItem
@@ -316,6 +333,25 @@ class ThirdStepContainer extends Component {
                                     span={8}
                                     onUpdate={this.props.onUpdate}
                                     checkedValues={this.props.formData["bathroom.furnishing"]}
+                                />
+                            </FormItem>
+                        </Card>
+                        <Card title={intl.formatMessage({ id: 'labels.flatmates' })} bordered={false}>
+                            <FormItem label={intl.formatMessage({ id: 'labels.flatmates_number' })}>
+                                <InputNumber
+                                    min={1}
+                                    max={10}
+                                    onChange={this.updateOnChangeWithName('numberOfFlatmates')}
+                                    value={this.props.formData["numberOfFlatmates"]}
+                                />
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({ id: 'labels.about_flatmates' })} layout="horizontal" help="">
+                                <TextArea
+                                    name="aboutFlatmates"
+                                    rows={6}
+                                    onChange={this.updateOnChange}
+                                    value={this.props.formData.aboutFlatmates}
+                                    placeholder={intl.formatMessage({ id: 'placeholders.about_flatmates' })}
                                 />
                             </FormItem>
                         </Card>

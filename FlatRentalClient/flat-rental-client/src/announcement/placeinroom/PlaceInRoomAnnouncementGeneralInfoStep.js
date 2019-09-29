@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Form, Input, InputNumber, Row, Col, DatePicker} from 'antd';
-import './Step.css';
+import {Form, Input, InputNumber, Row, Col, DatePicker, Card} from 'antd';
+import '../Step.css';
 import {FormattedMessage, injectIntl} from "react-intl";
-import * as CONS from "../infrastructure/Constants";
+import * as CONS from "../../infrastructure/Constants";
+import CheckBoxGrid from "../../commons/CheckBoxGrid";
 
 const FormItem = Form.Item;
 
-class FirstStepContainer extends Component {
+class RoomAnnouncementGeneralInfoStep extends Component {
     constructor(props) {
         super(props);
 
@@ -26,24 +27,22 @@ class FirstStepContainer extends Component {
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
         this.onlyPositiveIntegerOrZero = this.props.intl.formatMessage({ id: 'text.only_positive_integer_or_zero_msg' });
         this.onlyInteger = this.props.intl.formatMessage({ id: 'text.only_integer' });
-        this.smallerThanMinusOne = this.props.intl.formatMessage({ id: 'text.smaller_than_minus_one' });
         this.floorNumberGreaterThanMaxFloor = this.props.intl.formatMessage({ id: 'text.floor_number_grater_than_max_floor' });
-
-        this.props.registerRequiredFields(['title', 'totalArea', 'numberOfRooms', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);
+        this.props.registerRequiredFields(['title', 'room.area', 'room.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);
     }
 
     updateOnChange(event, validationFunction) {
-        const validationResult = validationFunction(event.target.value);
+        const validationResult = validationFunction ? validationFunction(event.target.value) : {validateStatus: 'success', errorMsg: null};
         this.props.onUpdate(event.target.name, event.target.value, validationResult);
     }
 
     updateOnChangeInputNumber(name, value, validationFunction) {
-        const validationResult = validationFunction(value);
+        const validationResult = validationFunction ? validationFunction(value) : {validateStatus: 'success', errorMsg: null};
         this.props.onUpdate(name, value, validationResult);
     };
 
     updateOnChangeDatePicker(name, timeMoment, validationFunction) {
-        const validationResult = validationFunction(timeMoment);
+        const validationResult = validationFunction ? validationFunction(timeMoment) : {validateStatus: 'success', errorMsg: null};
         this.props.onUpdate(name, timeMoment, validationResult);
     };
 
@@ -71,29 +70,29 @@ class FirstStepContainer extends Component {
                                 placeholder={intl.formatMessage({id: 'placeholders.title'})}
                             />
                         </FormItem>
-                        <FormItem label={intl.formatMessage({id: 'labels.area'})}
-                                  validateStatus={this.props.getValidationStatus("totalArea")}
-                                  help={this.props.getErrorMessage("totalArea")}
+                        <FormItem label={intl.formatMessage({id: 'labels.room_area'})}
+                                  validateStatus={this.props.getValidationStatus("room.area")}
+                                  help={this.props.getErrorMessage("room.area")}
                                   required={true}>
                             <Input
                                 addonAfter="m2"
-                                name="totalArea"
+                                name="room.area"
                                 autoComplete="off"
-                                value={this.props.formData.totalArea}
+                                value={this.props.formData['room.area']}
                                 onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
-                                placeholder={intl.formatMessage({id: 'placeholders.total_area'})}
+                                placeholder={intl.formatMessage({id: 'placeholders.room_area'})}
                             />
                         </FormItem>
                         <FormItem
-                            label={intl.formatMessage({id: 'labels.number_of_rooms'})}
-                            validateStatus={this.props.getValidationStatus("numberOfRooms")}
-                            help={this.props.getErrorMessage("numberOfRooms")}
+                            label={intl.formatMessage({ id: 'labels.number_of_persons' })}
+                            validateStatus={this.props.getValidationStatus("room.numberOfPersons")}
+                            help={this.props.getErrorMessage("room.numberOfPersons")}
                             required={true}>
                             <InputNumber
-                                name="numberOfRooms"
-                                min={1} max={10}
-                                value={this.props.formData.numberOfRooms}
-                                onChange={value => this.updateOnChangeInputNumber('numberOfRooms', value, this.validateIfPositiveInteger)}
+                                min={1}
+                                max={10}
+                                onChange={value => this.updateOnChangeInputNumber('room.numberOfPersons', value, this.validateIfPositiveInteger)}
+                                value={this.props.formData['room.numberOfPersons']}
                             />
                         </FormItem>
                         <FormItem
@@ -168,11 +167,11 @@ class FirstStepContainer extends Component {
                             help={this.props.getErrorMessage("availableFrom")}
                             required={true}>
                             <DatePicker style={{width: '100%'}}
-                                name="availableFrom"
-                                disabledTime={true}
-                                value={this.props.formData.availableFrom}
-                                onChange={value => this.updateOnChangeDatePicker('availableFrom', value, this.validateIfNotEmpty)}
-                                placeholder={intl.formatMessage({id: 'placeholders.select_date'})}
+                                        name="availableFrom"
+                                        disabledTime={true}
+                                        value={this.props.formData.availableFrom}
+                                        onChange={value => this.updateOnChangeDatePicker('availableFrom', value, this.validateIfNotEmpty)}
+                                        placeholder={intl.formatMessage({id: 'placeholders.select_date'})}
                             />
                         </FormItem>
                     </Form>
@@ -318,4 +317,4 @@ class FirstStepContainer extends Component {
 
 }
 
-export default injectIntl(FirstStepContainer);
+export default injectIntl(RoomAnnouncementGeneralInfoStep);

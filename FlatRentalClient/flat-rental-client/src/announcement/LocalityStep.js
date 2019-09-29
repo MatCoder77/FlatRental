@@ -16,7 +16,7 @@ import './Step.css';
 const {Option} = Select;
 const FormItem = Form.Item;
 
-class SecondStepContainer extends Component {
+class LocalityStep extends Component {
     constructor(props) {
         super(props);
         this.loadVoivodeships = this.loadVoivodeships.bind(this);
@@ -102,6 +102,7 @@ class SecondStepContainer extends Component {
     autoselectAndMakeOptionalIfNecessary(loadedData, callbackParam) {
         if(this.props.appData[loadedData].length === 0) {
             this.props.unregisterRequiredFields([callbackParam]);
+            this.props.onUpdate(callbackParam, undefined, {validateStatus: 'success', errorMsg: null});
         }
         this.autoselectIfOnlyOneElement(loadedData, callbackParam);
     }
@@ -326,4 +327,4 @@ class SecondStepContainer extends Component {
 
 }
 
-export default injectIntl(SecondStepContainer);
+export default injectIntl(LocalityStep);

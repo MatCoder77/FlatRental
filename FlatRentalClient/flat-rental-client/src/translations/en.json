@@ -154,6 +154,13 @@
     "labels.next": "Next",
     "labels.add_announcement": "Add announcement",
 
+    "labels.room_area" : "Room area",
+    "placeholders.room_area": "Type in area of room",
+    "labels.room_accessories": "Accessories in room",
+    "labels.flatmates" : "Flatmates",
+    "labels.flatmates_number" : "Flatmates number",
+    "labels.about_flatmates" : "About flatmates",
+
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",

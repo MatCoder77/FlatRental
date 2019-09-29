@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
 import {Steps, Button, Row, Col, Icon} from 'antd';
+import { withRouter } from 'react-router-dom';
 import './Step.css';
 import moment from "moment";
 import {createAnnouncement} from "../infrastructure/RestApiHandler";
-import FirstStepContainer from "./FirstStepContainer";
-import ThirdStepContainer from "./ThirdStepContainer";
-import SecondStepContainer from "./SecondStepContainer";
+import FirstStepContainer from "./flat/FlatAnnouncementGeneralInfoStep";
+import ThirdStepContainer from "./flat/FlatAnnouncementDetailInfoStep";
+import SecondStepContainer from "./LocalityStep";
 import {FormattedMessage, injectIntl} from "react-intl";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import "./AnnouncementStepWizard.css"
+import RoomAnnouncementGeneralInfoStep from "./room/RoomAnnouncementGeneralInfoStep";
+import RoomAnnouncementDetailInfoStep from "./room/RoomAnnouncementDetailInfoStep";
+import PlaceInRoomAnnouncementGeneralInfoStep from "./placeinroom/PlaceInRoomAnnouncementGeneralInfoStep";
+import PlaceInRoomAnnouncementDetailInfoStep from "./placeinroom/PlaceInRoomAnnouncementDetailInfoStep";
 
 const Step = Steps.Step;
 
@@ -144,7 +149,8 @@ class AnnouncementStepWizard extends Component {
 
     render() {
         const {intl} = this.props;
-        const steps = [/*{
+        const {announcementType} = this.props.match.params;
+        const flatSteps = [{
             title: intl.formatMessage({id: "labels.general_info"}),
             content: (
                 <FirstStepContainer
@@ -167,7 +173,7 @@ class AnnouncementStepWizard extends Component {
                                      registerRequiredFields={this.registerRequiredFields}
                                      unregisterRequiredFields={this.unregisterRequiredFields}/>
             ),
-        }, */{
+        }, {
             title: intl.formatMessage({id: "labels.detail_info"}),
             content: (
                 <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData}
@@ -179,6 +185,83 @@ class AnnouncementStepWizard extends Component {
             title: intl.formatMessage({id: "labels.summary"}),
             content: 'Last-content',
         }];
+
+        const roomSteps = [{
+            title: intl.formatMessage({id: "labels.general_info"}),
+            content: (
+                <RoomAnnouncementGeneralInfoStep
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                    loadData={this.loadData}
+                    appData={this.state.appData} {...formItemLayout}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.localization"}),
+            content: (
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.detail_info"}),
+            content: (
+                <RoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
+                                    loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                    getValidationStatus={this.getValidationStatus}
+                                    getErrorMessage={this.getErrorMessage}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
+            content: 'Last-content',
+        }];
+        const placeInRoomSteps =  [{
+            title: intl.formatMessage({id: "labels.general_info"}),
+            content: (
+                <PlaceInRoomAnnouncementGeneralInfoStep
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                    loadData={this.loadData}
+                    appData={this.state.appData} {...formItemLayout}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.localization"}),
+            content: (
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.detail_info"}),
+            content: (
+                <PlaceInRoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
+                                                loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                                getValidationStatus={this.getValidationStatus}
+                                                getErrorMessage={this.getErrorMessage}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
+            content: 'Last-content',
+        }];
+        const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps]]);
+        const steps = stepsByAnnouncementType.get(announcementType);
 
         const {current} = this.state;
         return (
@@ -234,4 +317,4 @@ class AnnouncementStepWizard extends Component {
     }
 }
 
-export default injectIntl(AnnouncementStepWizard);
+export default withRouter(injectIntl(AnnouncementStepWizard));

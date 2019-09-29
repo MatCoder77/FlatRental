@@ -99,7 +99,7 @@ class App extends Component {
                             </Route>
                             <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/signup" component={RegistrationFrom}/>
-                            <Route exact path="/announcement/new" render={(props) => <CreateAnnouncementStepWizard/>}/>
+                            <Route exact path="/announcement/new/:announcementType" render={(props) => <CreateAnnouncementStepWizard/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

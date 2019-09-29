@@ -44,7 +44,7 @@ class RoomForm extends Component {
                         autoComplete="off"
                         placeholder={intl.formatMessage({ id: 'placeholders.room_area' })}/>
                 </FormItem>
-                <FormItem label={intl.formatMessage({ id: 'labels.number_of_persons' })} required={true}>
+                <FormItem label={intl.formatMessage({ id: 'labels.number_of_persons' })}>
                     <InputNumber
                         min={1}
                         max={10}
