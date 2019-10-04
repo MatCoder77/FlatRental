@@ -4,6 +4,7 @@ import '../Step.css';
 import {FormattedMessage, injectIntl} from "react-intl";
 import * as CONS from "../../infrastructure/Constants";
 import CheckBoxGrid from "../../commons/CheckBoxGrid";
+import {getPreferences} from "../../infrastructure/RestApiHandler";
 
 const FormItem = Form.Item;
 
@@ -21,6 +22,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.validateIfNotEmpty = this.validateIfNotEmpty.bind(this);
         this.validateFloor = this.validateFloor.bind(this);
         this.validateMaxFloor = this.validateMaxFloor.bind(this);
+        this.loadPreferences = this.loadPreferences.bind(this);
 
         this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
         this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
@@ -46,8 +48,12 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.props.onUpdate(name, timeMoment, validationResult);
     };
 
-    componentDidMount() {
+    loadPreferences() {
+        this.props.loadData(getPreferences, 'preferences')
+    }
 
+    componentDidMount() {
+        this.loadPreferences();
     }
 
     render() {
@@ -75,7 +81,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                   help={this.props.getErrorMessage("room.area")}
                                   required={true}>
                             <Input
-                                addonAfter="m2"
+                                addonAfter={<span>m<sup>2</sup></span>}
                                 name="room.area"
                                 autoComplete="off"
                                 value={this.props.formData['room.area']}
@@ -160,6 +166,16 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                     />
                                 </Col>
                             </Row>
+                        </FormItem>
+                        <FormItem label={intl.formatMessage({ id: 'labels.preferences' })}
+                                  layout="horizontal">
+                            <CheckBoxGrid
+                                name="preferences"
+                                itemList={this.props.appData.preferences}
+                                span={8}
+                                onUpdate={this.props.onUpdate}
+                                checkedValues={this.props.formData.preferences}
+                            />
                         </FormItem>
                         <FormItem
                             label={intl.formatMessage({id: 'labels.available_from'})}

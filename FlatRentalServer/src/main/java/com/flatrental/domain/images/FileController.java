@@ -55,6 +55,15 @@ public class FileController {
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = fileService.loadFileAsResource(fileName);
+        String contentType = getContentType(resource, request);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    private String getContentType(Resource resource, HttpServletRequest request) {
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
@@ -64,11 +73,31 @@ public class FileController {
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
+        return contentType;
+    }
 
+    @GetMapping("/download-multiple")
+    public ResponseEntity<List<Resource>> downloadMultipleFiles(@RequestParam List<String> filenameList, HttpServletRequest request) {
+        List<Resource> resources = filenameList.stream()
+                .map(fileService::loadFileAsResource)
+                .collect(Collectors.toList());
+        String contentType = getCommonContentTypeWhenAllTheSameOrThrow(resources, request);
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+                //.contentType(MediaType.parseMediaType(contentType))
+                .body(resources);
+    }
+
+    private String getCommonContentTypeWhenAllTheSameOrThrow(List<Resource> resources, HttpServletRequest request) {
+        List<String> distinctContentTypes = resources.stream()
+                .map(resource -> getContentType(resource, request))
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (distinctContentTypes.size() != 1) {
+            throw new IllegalArgumentException("Tried to download files with distinct media types.");
+        }
+
+        return distinctContentTypes.get(0);
     }
 
 }

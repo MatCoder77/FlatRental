@@ -14,7 +14,8 @@ class ComboBox extends Component {
     }
 
     updateOnSelect = name => (value, option) => {
-        this.props.onUpdate(name, value);
+        this.props.onUpdate(name + ".value", value);
+        this.props.onUpdate(name + ".id", option.key);
     }
 
 
@@ -35,7 +36,7 @@ class ComboBox extends Component {
                 //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 // }
             >
-                { items ? items.map(item => (<Option key={item.id} value={item.id}><FormattedMessage id={item.value}/></Option>)) : ""}
+                { items ? items.map(item => (<Option key={item.id} value={item.value}><FormattedMessage id={item.value}/></Option>)) : ""}
             </Select>
         );
     }

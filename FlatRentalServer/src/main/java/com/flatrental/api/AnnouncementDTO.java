@@ -76,8 +76,6 @@ public class AnnouncementDTO {
     @Size(max = 1000)
     private String description;
 
-    List<String> announcementImages;
-
-
+    List<FileDTO> announcementImages;
 
 }

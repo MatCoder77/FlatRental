@@ -12,6 +12,7 @@ import ComboBox from "../../commons/ComboBox";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import moment from "moment";
 import {
+    downloadFile,
     getApartmentAmenitiesTypes,
     getApartmentStateTypes,
     getBuildingMaterialTypes,
@@ -138,6 +139,8 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.loadNeighbourhoodItems();
         this.loadPreferences();
         this.loadRoomFurnishing();
+        this.props.loadData(downloadFile, 'file', 'c55538d4-9db8-4dfa-9129-89378fe4259eb0e68582-46cc-4e22-bc9d-eaad45c7a0ca.jpg');
+        console.log(this.props.appData);
     }
 
     render() {
@@ -151,10 +154,10 @@ class FlatAnnouncementDetailInfoStep extends Component {
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.building_type' })}
                                 help="">
-                                <ComboBox name="buildingType.id"
+                                <ComboBox name="buildingType"
                                           itemList={this.props.appData.buildingTypes}
                                           onUpdate={this.props.onUpdate}
-                                          value={this.props.formData["buildingType.id"]}
+                                          value={this.props.formData["buildingType.value"]}
                                           placeholder={intl.formatMessage({ id: 'placeholders.building_type' })}
                                 />
                             </FormItem>
@@ -162,10 +165,10 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 label={intl.formatMessage({ id: 'labels.building_material' })}
                                 help="">
                                 <ComboBox
-                                    name="buildingMaterial.id"
+                                    name="buildingMaterial"
                                     itemList={this.props.appData.buildingMaterialTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["buildingMaterial.id"]}
+                                    value={this.props.formData["buildingMaterial.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.building_material' })}
                                 />
                             </FormItem>
@@ -173,10 +176,10 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 label={intl.formatMessage({ id: 'labels.heating_type' })}
                                 help="">
                                 <ComboBox
-                                    name="heatingType.id"
+                                    name="heatingType"
                                     itemList={this.props.appData.heatingTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["heatingType.id"]}
+                                    value={this.props.formData["heatingType.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.heating_type' })}
                                 />
                             </FormItem>
@@ -184,10 +187,10 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 label={intl.formatMessage({ id: 'labels.windows_type' })}
                                 help="">
                                 <ComboBox
-                                    name="windowType.id"
+                                    name="windowType"
                                     itemList={this.props.appData.windowTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["windowType.id"]}
+                                    value={this.props.formData["windowType.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.windows_type' })}
                                 />
                             </FormItem>
@@ -195,20 +198,20 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 label={intl.formatMessage({ id: 'labels.parking_type' })}
                                 help="">
                                 <ComboBox
-                                    name="parkingType.id"
+                                    name="parkingType"
                                     itemList={this.props.appData.parkingTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["parkingType.id"]}
+                                    value={this.props.formData["parkingType.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.parking_type' })}/>
                             </FormItem>
                             <FormItem
                                 label={intl.formatMessage({ id: 'labels.apartment_state' })}
                                 help="">
                                 <ComboBox
-                                    name="apartmentState.id"
+                                    name="apartmentState"
                                     itemList={this.props.appData.apartmentStateTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["apartmentState.id"]}
+                                    value={this.props.formData["apartmentState.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}>
@@ -258,7 +261,7 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                     name="kitchen.kitchenType"
                                     itemList={this.props.appData.kitchenTypes}
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["kitchen.kitchenType"]}
+                                    value={this.props.formData["kitchen.kitchenType.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.kitchen_type' })}/>
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.area' })}
@@ -268,7 +271,7 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                     name="kitchen.kitchenArea"
                                     onChange={event => this.updateOnChange(event, this.validateIfOptionalPositiveInteger)}
                                     value={this.props.formData["kitchen.kitchenArea"]}
-                                    addonAfter="m2"
+                                    addonAfter={<span>m<sup>2</sup></span>}
                                     autoComplete="off"
                                     placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
                             </FormItem>
@@ -278,7 +281,7 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 <ComboBox
                                     name="kitchen.cookerType"
                                     onUpdate={this.props.onUpdate}
-                                    value={this.props.formData["kitchen.cookerType"]}
+                                    value={this.props.formData["kitchen.cookerType.value"]}
                                     itemList={this.props.appData.cookerTypes}
                                     placeholder={intl.formatMessage({ id: 'placeholders.cooker_type' })}/>
                             </FormItem>

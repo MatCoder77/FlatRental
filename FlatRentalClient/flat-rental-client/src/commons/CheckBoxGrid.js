@@ -8,17 +8,18 @@ class CheckBoxGrid extends Component {
         this.updateOnChange = this.updateOnChange.bind(this);
     }
 
-    updateOnChange(event) {
-        let checkedValues = this.props.checkedValues ? this.props.checkedValues : [];
-        let currentValue = event.target.value;
+    updateOnChange(event, item) {
+        console.log(item);
+        let checkedItems = this.props.checkedValues ? this.props.checkedValues : [];
+        let currentItemId = event.target.value;
 
         if (event.target.checked) {
-            checkedValues.push({id:currentValue});
+            checkedItems.push({id:currentItemId, value: item.value});
         } else {
-            let index = checkedValues.map(value => value.id).indexOf(currentValue);
-            if (index !== -1) checkedValues.splice(index, 1);
+            let index = checkedItems.map(value => value.id).indexOf(currentItemId);
+            if (index !== -1) checkedItems.splice(index, 1);
         }
-        this.props.onUpdate(this.props.name, checkedValues);
+        this.props.onUpdate(this.props.name, checkedItems);
     }
 
     render() {
@@ -27,7 +28,7 @@ class CheckBoxGrid extends Component {
         return (
             <Checkbox.Group style={{ width: '100%' }} value={checkedValues}>
                 <Row type="flex">
-                    { items ? (items.map(item => (<Col span={this.props.span}><Checkbox onChange={this.updateOnChange} key={item.id} value={item.id}><FormattedMessage id={item.value}/></Checkbox></Col>))) : ""}
+                    { items ? (items.map(item => (<Col span={this.props.span}><Checkbox onChange={event => this.updateOnChange(event, item)} key={item.id} value={item.id}><FormattedMessage id={item.value}/></Checkbox></Col>))) : ""}
                 </Row>
             </Checkbox.Group>
         );

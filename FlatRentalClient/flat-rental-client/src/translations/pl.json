@@ -61,7 +61,7 @@
     "text.only_positive_integer_or_zero_msg" : "Podaj nieujemną liczbę całkowitą.",
     "labels.number_of_rooms": "Liczba pokojów",
     "labels.price_per_month": "Cena za miesiąc",
-    "labels.estimated_additional_costs": "Koszty dodatkowe:",
+    "labels.estimated_additional_costs": "Koszty dodatkowe",
     "labels.deposit": "Kaucja",
     "labels.floor_max_floor": "Piętro / Liczba pięter",
     "text.only_integer": "Podaj liczbę całkowitą.",

@@ -285,7 +285,7 @@ class ThirdStepContainer extends Component {
                                     name="kitchen.kitchenArea"
                                     onChange={event => this.updateOnChange(event, this.validateIfOptionalPositiveInteger)}
                                     value={this.props.formData["kitchen.kitchenArea"]}
-                                    addonAfter="m2"
+                                    addonAfter={<span>m<sup>2</sup></span>}
                                     autoComplete="off"
                                     placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
                             </FormItem>

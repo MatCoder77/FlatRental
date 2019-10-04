@@ -76,7 +76,7 @@ class FlatAnnouncementGeneralInfoStep extends Component {
                                   help={this.props.getErrorMessage("totalArea")}
                                   required={true}>
                             <Input
-                                addonAfter="m2"
+                                addonAfter={<span>m<sup>2</sup></span>}
                                 name="totalArea"
                                 autoComplete="off"
                                 value={this.props.formData.totalArea}

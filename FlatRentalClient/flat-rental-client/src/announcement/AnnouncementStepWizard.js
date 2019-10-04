@@ -3,7 +3,7 @@ import {Steps, Button, Row, Col, Icon} from 'antd';
 import { withRouter } from 'react-router-dom';
 import './Step.css';
 import moment from "moment";
-import {createAnnouncement} from "../infrastructure/RestApiHandler";
+import {createAnnouncement, downloadFile} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./flat/FlatAnnouncementGeneralInfoStep";
 import ThirdStepContainer from "./flat/FlatAnnouncementDetailInfoStep";
 import SecondStepContainer from "./LocalityStep";
@@ -14,6 +14,7 @@ import RoomAnnouncementGeneralInfoStep from "./room/RoomAnnouncementGeneralInfoS
 import RoomAnnouncementDetailInfoStep from "./room/RoomAnnouncementDetailInfoStep";
 import PlaceInRoomAnnouncementGeneralInfoStep from "./placeinroom/PlaceInRoomAnnouncementGeneralInfoStep";
 import PlaceInRoomAnnouncementDetailInfoStep from "./placeinroom/PlaceInRoomAnnouncementDetailInfoStep";
+import AnnouncementView from "./AnnouncementView";
 
 const Step = Steps.Step;
 
@@ -41,6 +42,8 @@ class AnnouncementStepWizard extends Component {
         this.updateFormData = this.updateFormData.bind(this);
         this.updateFormData('availableFrom', moment(new Date()), {validateStatus: 'success', errorMsg: null});
         this.updateFormData('bathroom.numberOfBathrooms', 1);
+        this.updateFormData('wellPlanned', false);
+        this.updateFormData('bathroom.separateWC', false);
 
         this.loadData = this.loadData.bind(this);
         this.submitAnnouncement = this.submitAnnouncement.bind(this);
@@ -66,7 +69,7 @@ class AnnouncementStepWizard extends Component {
         const {formData} = this.state;
         formData[fieldName] = fieldValue;
         this.setState({formData});
-
+        console.log(formData);
         this.updateValidation(fieldName, validationResult)
     }
 
@@ -183,7 +186,9 @@ class AnnouncementStepWizard extends Component {
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
-            content: 'Last-content',
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData}/>
+            ),
         }];
 
         const roomSteps = [{
@@ -284,7 +289,7 @@ class AnnouncementStepWizard extends Component {
                         {current < steps.length - 1 && (
                             <Col span={10}>
                                 <Button className="step-wizard-button" type="primary" onClick={() => this.next()}
-                                        size="large" disabled={!this.isStepValid()}>
+                                        size="large" disabled={false} /*{!this.isStepValid()}*/>
                                     <FormattedMessage id="labels.next"/>
                                     <Icon type="right"/>
                                 </Button>

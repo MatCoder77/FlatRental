@@ -37,7 +37,7 @@ class RoomForm extends Component {
             <Card title={intl.formatMessage({ id: 'labels.room_name' }, { num: this.props.num })} bordered={false}>
                 <FormItem label={intl.formatMessage({ id: 'labels.area' })}>
                     <Input
-                        addonAfter="m2"
+                        addonAfter={<span>m<sup>2</sup></span>}
                         name="area"
                         onChange={this.updateOnChange}
                         value={this.props.roomList[roomNumber - 1]["area"]}

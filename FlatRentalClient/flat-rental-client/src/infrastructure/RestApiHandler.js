@@ -200,3 +200,10 @@ export function createAnnouncement(announcementDTO) {
         body: JSON.stringify(announcementDTO)
     })
 }
+
+export function downloadFile(filename) {
+    return request({
+        url: API_BASE_URL + "/file/download/" + filename,
+        method: 'GET'
+    })
+}

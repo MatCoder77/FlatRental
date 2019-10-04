@@ -76,7 +76,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                   help={this.props.getErrorMessage("room.area")}
                                   required={true}>
                             <Input
-                                addonAfter="m2"
+                                addonAfter={<span>m<sup>2</sup></span>}
                                 name="room.area"
                                 autoComplete="off"
                                 value={this.props.formData['room.area']}

@@ -47,7 +47,6 @@ class ThirdStepContainer extends Component {
         this.loadBathroomFurnishing = this.loadBathroomFurnishing.bind(this);
         //this.loadMedia = this.loadMedia.bind(this);
         this.loadNeighbourhoodItems = this.loadNeighbourhoodItems.bind(this);
-        this.loadPreferences = this.loadPreferences.bind(this);
         this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
         this.updateOnChange = this.updateOnChange.bind(this);
         this.updateOnChangeWithName = this.updateOnChangeWithName.bind(this);
@@ -106,10 +105,6 @@ class ThirdStepContainer extends Component {
         this.props.loadData(getNeighborhoodItems, 'neighbourhoodItems');
     }
 
-    loadPreferences() {
-        this.props.loadData(getPreferences, 'preferences')
-    }
-
     loadRoomFurnishing() {
         this.props.loadData(getFurnishing, 'roomFurnishing', 'ROOM')
     }
@@ -136,7 +131,6 @@ class ThirdStepContainer extends Component {
         this.loadKitchenFurnishing();
         this.loadBathroomFurnishing();
         this.loadNeighbourhoodItems();
-        this.loadPreferences();
         this.loadRoomFurnishing();
     }
 
@@ -285,7 +279,7 @@ class ThirdStepContainer extends Component {
                                     name="kitchen.kitchenArea"
                                     onChange={event => this.updateOnChange(event, this.validateIfOptionalPositiveInteger)}
                                     value={this.props.formData["kitchen.kitchenArea"]}
-                                    addonAfter="m2"
+                                    addonAfter={<span>m<sup>2</sup></span>}
                                     autoComplete="off"
                                     placeholder={intl.formatMessage({ id: 'placeholders.kitchen_area' })}/>
                             </FormItem>
@@ -358,17 +352,6 @@ class ThirdStepContainer extends Component {
                         <Card title={intl.formatMessage({ id: 'labels.media' })} bordered={false}>
                             <FormItem layout="horizontal" help="">
                                 <CheckBoxGrid itemList={this.props.appData.media} span={8}/>
-                            </FormItem>
-                        </Card>
-                        <Card title={intl.formatMessage({ id: 'labels.preferences' })} bordered={false}>
-                            <FormItem layout="horizontal" labelCol={0} wrapperCol={24} help="">
-                                <CheckBoxGrid
-                                    name="preferences"
-                                    itemList={this.props.appData.preferences}
-                                    span={8}
-                                    onUpdate={this.props.onUpdate}
-                                    checkedValues={this.props.formData.preferences}
-                                />
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.neighbourhood' })} bordered={false}>
