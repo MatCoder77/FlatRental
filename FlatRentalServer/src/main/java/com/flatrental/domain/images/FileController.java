@@ -76,28 +76,4 @@ public class FileController {
         return contentType;
     }
 
-    @GetMapping("/download-multiple")
-    public ResponseEntity<List<Resource>> downloadMultipleFiles(@RequestParam List<String> filenameList, HttpServletRequest request) {
-        List<Resource> resources = filenameList.stream()
-                .map(fileService::loadFileAsResource)
-                .collect(Collectors.toList());
-        String contentType = getCommonContentTypeWhenAllTheSameOrThrow(resources, request);
-        return ResponseEntity.ok()
-                //.contentType(MediaType.parseMediaType(contentType))
-                .body(resources);
-    }
-
-    private String getCommonContentTypeWhenAllTheSameOrThrow(List<Resource> resources, HttpServletRequest request) {
-        List<String> distinctContentTypes = resources.stream()
-                .map(resource -> getContentType(resource, request))
-                .distinct()
-                .collect(Collectors.toList());
-
-        if (distinctContentTypes.size() != 1) {
-            throw new IllegalArgumentException("Tried to download files with distinct media types.");
-        }
-
-        return distinctContentTypes.get(0);
-    }
-
 }
