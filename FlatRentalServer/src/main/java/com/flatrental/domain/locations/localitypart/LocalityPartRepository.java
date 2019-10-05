@@ -71,4 +71,9 @@ public class LocalityPartRepository {
                 .collect(Collectors.toList());
     }
 
+    public Optional<LocalityPart> findLocalityPartById(Long id) {
+        return abstractLocalityRepository.findAbstractLocalityByIdAndGenericLocalityType(id, GenericLocalityType.LOCALITY_PART)
+                .map(LocalityPart::fromAbstractLocality);
+    }
+
 }

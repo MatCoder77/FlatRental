@@ -1,5 +1,6 @@
 package com.flatrental.domain.announcement.attributes.neighbourhood;
 
+import com.flatrental.api.SimpleResourceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,14 @@ public class NeighbourhoodItemService {
 
     public List<NeighbourhoodItem> getAllNeighbourItems() {
         return neighbourhoodItemRepository.findAll();
+    }
+
+    public List<NeighbourhoodItem> getNeighbourhoodItems(List<Long> ids) {
+        return neighbourhoodItemRepository.findAllById(ids);
+    }
+
+    public SimpleResourceDTO mapToSimpleResourceDTO(NeighbourhoodItem neighbourhoodItem) {
+        return new SimpleResourceDTO(neighbourhoodItem.getId(), neighbourhoodItem.getName());
     }
 
 }

@@ -39,15 +39,8 @@ public class UserController {
     @GetMapping("/current")
     @HasAnyRole
     public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
-        User user = userService.getUserFormDatabase(currentUserInfo.getId());
-        return UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
+        User user = userService.getExistingUser(currentUserInfo.getId());
+        return userService.mapToUserDTO(user);
     }
 
 }

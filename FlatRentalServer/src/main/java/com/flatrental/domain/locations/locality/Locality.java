@@ -7,6 +7,7 @@ import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.localitytype.LocalityType;
 import com.flatrental.domain.locations.street.Street;
 
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.MessageFormat;

@@ -160,4 +160,8 @@ public class LocalityService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_LOCALITY_WITH_ID, id)));
     }
 
+    public com.flatrental.api.LocalityDTO mapToLocalityDTO(Locality locality) {
+        return new com.flatrental.api.LocalityDTO(locality.getId(), locality.getName(), locality.getLocalityType());
+    }
+
 }

@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @Entity
 @NoArgsConstructor
+@Table(name = "Streets")
 public class Street {
 
     @Id

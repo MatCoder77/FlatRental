@@ -2,6 +2,7 @@ package com.flatrental.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.flatrental.domain.ManagedObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class AnnouncementDTO {
+
+    private Long id;
+
+    @NotNull
+    private String type;
 
     @NotNull
     @NotBlank
@@ -77,5 +83,11 @@ public class AnnouncementDTO {
     private String description;
 
     List<FileDTO> announcementImages;
+    String aboutRoommates;
+
+    @PositiveOrZero
+    Integer numberOfFlatmates;
+
+    ManagedObjectDTO info;
 
 }

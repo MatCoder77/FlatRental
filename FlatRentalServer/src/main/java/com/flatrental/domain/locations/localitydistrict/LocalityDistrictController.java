@@ -29,12 +29,8 @@ public class LocalityDistrictController {
     public List<LocalityDistrictDTO> getLocalityDistrictsForLocality(@PathVariable(LOCALITY_ID) Long localityId) {
         Locality locality = localityService.getExistingLocality(localityId);
         return localityDistrictService.getAllLocalityDistrictsForLocality(locality).stream()
-                .map(this::mapToLocalityDistrictDTO)
+                .map(localityDistrictService::mapToLocalityDistrictDTO)
                 .collect(Collectors.toList());
-    }
-
-    private LocalityDistrictDTO mapToLocalityDistrictDTO(LocalityDistrict localityDistrict) {
-        return new LocalityDistrictDTO(localityDistrict.getId(), localityDistrict.getName());
     }
 
 }

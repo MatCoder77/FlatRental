@@ -19,12 +19,8 @@ public class ApartmentAmenityController {
     @GetMapping
     public List<SimpleResourceDTO> getAllApartmentAmenityTypes() {
         return apartmentAmenityService.getAllApartmentAmenityTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(apartmentAmenityService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(ApartmentAmenity apartmentAmenity) {
-        return new SimpleResourceDTO(apartmentAmenity.getId(), apartmentAmenity.getName());
     }
 
 }

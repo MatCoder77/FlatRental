@@ -29,12 +29,8 @@ public class LocalityController {
     public List<LocalityDTO> getLocalitiesForCommune(@PathVariable(COMMUNE_ID) Long communeId) {
         Commune commune = communeService.getExistingCommune(communeId);
         return localityService.getLocalitiesForCommune(commune).stream()
-                .map(this::mapToLocalityDTO)
+                .map(localityService::mapToLocalityDTO)
                 .collect(Collectors.toList());
-    }
-
-    private LocalityDTO mapToLocalityDTO(Locality locality) {
-        return new LocalityDTO(locality.getId(), locality.getName(), locality.getLocalityType());
     }
 
 }

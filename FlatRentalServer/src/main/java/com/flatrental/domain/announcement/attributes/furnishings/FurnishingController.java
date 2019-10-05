@@ -25,17 +25,13 @@ public class FurnishingController {
     public List<SimpleResourceDTO> getFurnishing(@RequestParam(FURNISHING_TYPE_PARAM) Optional<FurnishingType> furnishingType) {
         return furnishingService.getFurnishingItems().stream()
                 .filter(item -> hasSuppliedFurnishingType(item, furnishingType))
-                .map(this::mapToSimpleResourceDTO)
+                .map(furnishingService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
     }
 
     private boolean hasSuppliedFurnishingType(FurnishingItem furnishingItem, Optional<FurnishingType> furnishingType) {
         return furnishingType.map(type -> furnishingItem.getFurnishingType() == type)
                 .orElse(TRUE_VALUE_WHEN_NO_TYPE_SUPPLIED);
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(FurnishingItem furnishingItem) {
-        return new SimpleResourceDTO(furnishingItem.getId(), furnishingItem.getName());
     }
 
 }

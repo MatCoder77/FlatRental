@@ -19,12 +19,8 @@ public class HeatingTypeController {
     @GetMapping
     public List<SimpleResourceDTO> getHeatingTypes() {
         return heatingTypeService.getAllHeatingTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(heatingTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(HeatingType heatingType) {
-        return new SimpleResourceDTO(heatingType.getId(), heatingType.getName());
     }
 
 }

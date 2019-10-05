@@ -36,4 +36,5 @@ public class Settings {
     public static Settings createSetting(SettingName settingName, String value) {
         return new Settings(settingName, value);
     }
+
 }

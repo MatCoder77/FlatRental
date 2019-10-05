@@ -19,12 +19,8 @@ public class ApartmentStateController {
     @GetMapping
     public List<SimpleResourceDTO> getApartmentStateTypes() {
         return apartmentStateService.getAllApartmentStateTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(apartmentStateService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(ApartmentState apartmentState) {
-        return new SimpleResourceDTO(apartmentState.getId(), apartmentState.getName());
     }
 
 }

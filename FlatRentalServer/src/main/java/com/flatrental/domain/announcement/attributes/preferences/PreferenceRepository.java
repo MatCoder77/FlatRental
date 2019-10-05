@@ -1,4 +1,4 @@
-package com.flatrental.domain.announcement.attributes;
+package com.flatrental.domain.announcement.attributes.preferences;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

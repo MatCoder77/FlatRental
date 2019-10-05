@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.localitypart;
 
+import com.flatrental.api.LocalityPartDTO;
 import com.google.common.collect.Lists;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
@@ -44,6 +45,7 @@ public class LocalityPartService {
     private static final int MAX_SAVED_AT_ONCE_SIZE = 1000;
     private static final String SUPPLIED_LOCALITY_IS_NOT_LOCALITY_PART = "Supplied locality {0} is locality part";
     private static final String THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_CODE = "There is no locality part with code {0}";
+    private static final String THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_ID = "There is no locality part with id {0}";
 
 
     public List<LocalityPart> createLocalityParts(List<LocalityDTO> localityPartDTOs,
@@ -144,6 +146,11 @@ public class LocalityPartService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_CODE, code)));
     }
 
+    public LocalityPart getExistingLocalityPart(Long id) {
+        return localityPartRepository.findLocalityPartById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_ID, id)));
+    }
+
     private boolean willBeChangedToAutonomousLocality(LocalityDTO localityDTO) {
         return localityDTOService.isAutonomousLocality(localityDTO);
     }
@@ -166,6 +173,10 @@ public class LocalityPartService {
 
     public List<LocalityPart> getLocalityPartsForParentLocalityDistrict(LocalityDistrict parentLocalityDistrict) {
         return localityPartRepository.getLocalityPartsForParentLocalityDistrict(parentLocalityDistrict);
+    }
+
+    public LocalityPartDTO mapToLocalityPart(LocalityPart localityPart) {
+        return new LocalityPartDTO(localityPart.getId(), localityPart.getName(), localityPart.getLocalityType());
     }
 
 }

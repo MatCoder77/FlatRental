@@ -29,12 +29,8 @@ public class CommuneController {
     private List<CommuneDTO> getCommunesForDistrict(@PathVariable(DISTRICT_ID) Long districtId) {
         District district = districtService.getExistingDistrict(districtId);
         return communeService.getCommunesForDistrict(district).stream()
-                .map(this::mapToCommuneDTO)
+                .map(communeService::mapToCommuneDTO)
                 .collect(Collectors.toList());
-    }
-
-    private CommuneDTO mapToCommuneDTO(Commune commune) {
-        return new CommuneDTO(commune.getId(), commune.getName(), commune.getType());
     }
 
 }

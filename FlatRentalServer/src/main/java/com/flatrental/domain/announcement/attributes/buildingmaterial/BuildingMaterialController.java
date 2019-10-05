@@ -19,12 +19,8 @@ public class BuildingMaterialController {
     @GetMapping
     public List<SimpleResourceDTO> getBuildingMaterials() {
         return buildingMaterialService.getAllBuildingMaterials().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(buildingMaterialService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(BuildingMaterial buildingMaterial) {
-        return new SimpleResourceDTO(buildingMaterial.getId(), buildingMaterial.getName());
     }
 
 }

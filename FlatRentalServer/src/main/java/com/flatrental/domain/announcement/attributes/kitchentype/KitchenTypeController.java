@@ -20,11 +20,8 @@ public class KitchenTypeController {
     @GetMapping
     public List<SimpleResourceDTO> getKitchenTypes() {
         return kitchenTypeService.getAllKitchenTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(kitchenTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
     }
 
-    private SimpleResourceDTO mapToSimpleResourceDTO(KitchenType kitchenType) {
-        return new SimpleResourceDTO(kitchenType.getId(), kitchenType.getName());
-    }
 }

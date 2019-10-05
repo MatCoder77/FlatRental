@@ -1,6 +1,7 @@
 package com.flatrental.domain.locations.district;
 
 
+import com.flatrental.api.DistrictDTO;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
@@ -90,6 +91,10 @@ public class DistrictService {
     public District getExistingDistrict(Long id) {
         return districtRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_DISTRICT_WITH_ID, id)));
+    }
+
+    public DistrictDTO mapToDistrictDTO(District district) {
+        return new DistrictDTO(district.getId(), district.getName(), district.getType());
     }
 
 }

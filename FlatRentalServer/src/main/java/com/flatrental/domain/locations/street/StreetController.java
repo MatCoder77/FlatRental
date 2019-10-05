@@ -30,11 +30,8 @@ public class StreetController {
     public List<StreetDTO> getStreetsForParentLocality(@PathVariable(ID) Long parentLocationId) {
         AbstractLocality parentLocality = abstractLocalityService.getExistingAbstratcLocality(parentLocationId);
         return parentLocality.getStreets().stream()
-                .map(this::mapToStreetDTO)
+                .map(streetService::mapToStreetDTO)
                 .collect(Collectors.toList());
     }
 
-    private StreetDTO mapToStreetDTO(Street street) {
-        return new StreetDTO(street.getId(), street.getMainName(), street.getLeadingName().orElse(null), street.getStreetType());
-    }
 }

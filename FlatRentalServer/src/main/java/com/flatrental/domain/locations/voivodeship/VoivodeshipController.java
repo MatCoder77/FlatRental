@@ -21,12 +21,8 @@ public class VoivodeshipController {
     @GetMapping
     public List<VoivodeshipDTO> getVoivodeships() {
         return voivodeshipService.getAllVoivodeships().stream()
-                .map(this::mapToVoivodeshipDTO)
+                .map(voivodeshipService::mapToVoivodeshipDTO)
                 .collect(Collectors.toList());
-    }
-
-    private VoivodeshipDTO mapToVoivodeshipDTO(Voivodeship voivodeship) {
-        return new VoivodeshipDTO(voivodeship.getId(), voivodeship.getName());
     }
 
 }

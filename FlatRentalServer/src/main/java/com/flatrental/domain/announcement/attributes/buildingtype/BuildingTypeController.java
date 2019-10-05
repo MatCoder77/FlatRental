@@ -21,12 +21,8 @@ public class BuildingTypeController {
     @GetMapping
     public List<SimpleResourceDTO> getAllBuildingTypes(@LoggedUser UserInfo userInfo) {
         return buildingTypeService.getAllBuildingTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(buildingTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(BuildingType buildingType) {
-        return new SimpleResourceDTO(buildingType.getId(), buildingType.getName());
     }
 
 }

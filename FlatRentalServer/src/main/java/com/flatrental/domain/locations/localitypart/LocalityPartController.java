@@ -39,7 +39,7 @@ public class LocalityPartController {
         Locality parentLocality = localityService.getExistingLocality(parentLocalityId);
         return localityPartService.getLocalityPartsForParentLocality(parentLocality)
                 .stream()
-                .map(this::mapToLocalityPart)
+                .map(localityPartService::mapToLocalityPart)
                 .collect(Collectors.toList());
     }
 
@@ -48,12 +48,8 @@ public class LocalityPartController {
         LocalityDistrict localityDistrict = localityDistrictService.getExistingLocalityDistrict(parentLocalityDistrictId);
         return localityPartService.getLocalityPartsForParentLocalityDistrict(localityDistrict)
                 .stream()
-                .map(this::mapToLocalityPart)
+                .map(localityPartService::mapToLocalityPart)
                 .collect(Collectors.toList());
-    }
-
-    private LocalityPartDTO mapToLocalityPart(LocalityPart localityPart) {
-        return new LocalityPartDTO(localityPart.getId(), localityPart.getName(), localityPart.getLocalityType());
     }
 
 }

@@ -1,6 +1,6 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.domain.EntityInfo;
+import com.flatrental.domain.ManagedObject;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends EntityInfo {
+public class User extends ManagedObject {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -54,7 +54,7 @@ public class User extends EntityInfo {
     private String phoneNumber;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "Users_X_UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRole> roles = new HashSet<>();

@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.localitydistrict;
 
+import com.flatrental.api.LocalityDistrictDTO;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
 import com.flatrental.domain.locations.district.District;
@@ -152,6 +153,10 @@ public class LocalityDistrictService {
 
     public LocalityDistrict getExistingLocalityDistrict(Long id) {
         return localityDistrictRepository.getExistingLocalityDistrict(id);
+    }
+
+    public LocalityDistrictDTO mapToLocalityDistrictDTO(LocalityDistrict localityDistrict) {
+        return new LocalityDistrictDTO(localityDistrict.getId(), localityDistrict.getName());
     }
 
 }

@@ -19,12 +19,8 @@ public class ParkingTypeController {
     @GetMapping
     public List<SimpleResourceDTO> getParkingTypes() {
         return parkingTypeService.getAllParkingTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(parkingTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(ParkingType parkingType) {
-        return new SimpleResourceDTO(parkingType.getId(), parkingType.getName());
     }
 
 }

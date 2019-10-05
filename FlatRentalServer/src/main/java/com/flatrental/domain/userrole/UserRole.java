@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "account_types")
+@Table(name = "UserRoles")
 public class UserRole {
 
     @Id

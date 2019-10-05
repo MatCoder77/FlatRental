@@ -1,4 +1,4 @@
-package com.flatrental.domain.announcement.attributes;
+package com.flatrental.domain.announcement.attributes.preferences;
 
 import com.flatrental.api.SimpleResourceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,8 @@ public class PreferenceController {
     public List<SimpleResourceDTO> getAllPreferences() {
         return preferenceService.getAllPreferences()
                 .stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(preferenceService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(Preference preference) {
-        return new SimpleResourceDTO(preference.getId(), preference.getName());
     }
 
 }

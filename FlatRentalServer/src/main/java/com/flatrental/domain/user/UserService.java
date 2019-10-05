@@ -43,7 +43,7 @@ public class UserService {
         }
     }
 
-    public User getUserFormDatabase(Long userId) {
+    public User getExistingUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NO_SUCH_USER, userId)));
     }
@@ -60,5 +60,15 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public UserDTO mapToUserDTO(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
+    }
 
 }

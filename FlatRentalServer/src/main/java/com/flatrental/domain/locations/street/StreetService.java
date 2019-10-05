@@ -30,6 +30,7 @@ public class StreetService {
     private AbstractLocalityService abstractLocalityService;
 
     private static final String STREET_NOT_FOUND = "Not found street with code {0}";
+    private static final String THERE_IS_NO_STREET_WITH_ID = "There is no street with id {0}";
 
 
     public List<Street> createStreets(List<StreetDTO> streetDTOs,
@@ -115,6 +116,15 @@ public class StreetService {
 
     public List<Street> getAllStreets() {
         return streetRepository.findAll();
+    }
+
+    public Street getExistingStreet(Long id) {
+        return streetRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_STREET_WITH_ID, id)));
+    }
+
+    public com.flatrental.api.StreetDTO mapToStreetDTO(Street street) {
+        return new com.flatrental.api.StreetDTO(street.getId(), street.getMainName(), street.getLeadingName().orElse(null), street.getStreetType());
     }
 
 }

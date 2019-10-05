@@ -33,6 +33,8 @@ import com.flatrental.domain.locations.teryt.ulic.StreetDTO;
 import com.flatrental.domain.locations.teryt.ulic.StreetDTOService;
 import com.flatrental.domain.locations.teryt.ulic.StreetDTOUpdateService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
+import com.flatrental.infrastructure.security.HasAdminRole;
+import com.flatrental.infrastructure.security.HasAnyRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,6 +104,7 @@ public class TerytController {
 
 
     @PostMapping("/load")
+    @HasAdminRole
     @Transactional
     public Boolean loadTeryt() throws IOException, ParserConfigurationException, JAXBException, SAXException {
         List<AdministrationUnitDTO> administrationUnitDTOs = administrationUnitService.getAllAdministrationUnitsFromTercCatalog();
@@ -155,6 +158,7 @@ public class TerytController {
     }
 
     @PutMapping("/update")
+    @HasAdminRole
     @Transactional
     public boolean updateTeryt() throws SAXException, ParseException, IOException, JAXBException, ParserConfigurationException, DatatypeConfigurationException {
         List<AdministrationUnitChangeDTO> administrationUnitChangeDTOs = administrationUnitUpdateService.getAllAdministrationUnitsChangesFromTercCatalog();

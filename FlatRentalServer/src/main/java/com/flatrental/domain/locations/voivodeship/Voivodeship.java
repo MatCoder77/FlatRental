@@ -6,12 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
 @Entity
 @NoArgsConstructor
+@Table(name = "Voivodeships")
 public class Voivodeship {
 
     @Id

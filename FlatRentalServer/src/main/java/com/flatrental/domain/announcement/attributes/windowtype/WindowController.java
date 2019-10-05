@@ -19,12 +19,8 @@ public class WindowController {
     @GetMapping
     public List<SimpleResourceDTO> getWindowTypes() {
         return windowTypeService.getAllWindowTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(windowTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(WindowType windowType) {
-        return new SimpleResourceDTO(windowType.getId(), windowType.getName());
     }
 
 }

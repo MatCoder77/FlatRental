@@ -29,12 +29,8 @@ public class DistrictController {
     public List<DistrictDTO> getDistrictsForVoivodeship(@PathVariable(VOIVODESHIP_ID) Long voivodeshipId) {
         Voivodeship voivodeship = voivodeshipService.getExistingVoivodeship(voivodeshipId);
         return districtService.getDistrictsForVoivodeship(voivodeship).stream()
-                .map(this::mapToDistricDTO)
+                .map(districtService::mapToDistrictDTO)
                 .collect(Collectors.toList());
-    }
-
-    private DistrictDTO mapToDistricDTO(District district) {
-        return new DistrictDTO(district.getId(), district.getName(), district.getType());
     }
 
 }

@@ -15,8 +15,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -24,6 +26,7 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@Table(name = "AbstractLocalities")
 public class AbstractLocality {
 
     @Id
@@ -60,6 +63,7 @@ public class AbstractLocality {
     private AbstractLocality localityDistrict;
 
     @ManyToMany
+    @JoinTable(name = "AbstractLocalities_X_Streets")
     private Set<Street> streets = new HashSet<>();
 
 

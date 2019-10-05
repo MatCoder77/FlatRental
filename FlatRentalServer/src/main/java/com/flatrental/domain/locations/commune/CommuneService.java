@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.commune;
 
+import com.flatrental.api.CommuneDTO;
 import com.flatrental.domain.locations.district.District;
 import com.flatrental.domain.locations.district.DistrictService;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
@@ -95,6 +96,10 @@ public class CommuneService {
 
     public List<Commune> getCommunesForDistrict(District district) {
         return communeRepository.getCommunesByDistrict(district);
+    }
+
+    public CommuneDTO mapToCommuneDTO(Commune commune) {
+        return new CommuneDTO(commune.getId(), commune.getName(), commune.getType());
     }
 
 }

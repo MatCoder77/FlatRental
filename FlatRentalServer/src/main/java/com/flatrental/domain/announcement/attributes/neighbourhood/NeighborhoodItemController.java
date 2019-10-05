@@ -20,12 +20,8 @@ public class NeighborhoodItemController {
     public List<SimpleResourceDTO> getNeighborhoodItems() {
         return neighbourhoodItemService.getAllNeighbourItems()
                 .stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(neighbourhoodItemService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
-    }
-
-    private SimpleResourceDTO mapToSimpleResourceDTO(NeighbourhoodItem neighbourhoodItem) {
-        return new SimpleResourceDTO(neighbourhoodItem.getId(), neighbourhoodItem.getName());
     }
 
 }

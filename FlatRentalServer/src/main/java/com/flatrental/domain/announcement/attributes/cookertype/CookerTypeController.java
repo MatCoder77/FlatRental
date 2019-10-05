@@ -19,12 +19,10 @@ public class CookerTypeController {
     @GetMapping
     public List<SimpleResourceDTO> getCookerTypes() {
         return cookerTypeService.getAllCookerTypes().stream()
-                .map(this::mapToSimpleResourceDTO)
+                .map(cookerTypeService::mapToSimpleResourceDTO)
                 .collect(Collectors.toList());
     }
 
-    private SimpleResourceDTO mapToSimpleResourceDTO(CookerType cookerType) {
-        return new SimpleResourceDTO(cookerType.getId(), cookerType.getName());
-    }
+
 
 }

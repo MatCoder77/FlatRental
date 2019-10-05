@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.voivodeship;
 
+import com.flatrental.api.VoivodeshipDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
@@ -71,6 +72,10 @@ public class VoivodeshipService {
 
     public List<Voivodeship> getAllVoivodeships() {
         return voivodeshipRepository.findAll();
+    }
+
+    public VoivodeshipDTO mapToVoivodeshipDTO(Voivodeship voivodeship) {
+        return new VoivodeshipDTO(voivodeship.getId(), voivodeship.getName());
     }
 
 }

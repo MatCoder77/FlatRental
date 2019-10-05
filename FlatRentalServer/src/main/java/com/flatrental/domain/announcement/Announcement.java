@@ -1,8 +1,8 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.domain.EntityInfo;
-import com.flatrental.domain.announcement.attributes.Preference;
-import com.flatrental.domain.announcement.attributes.antiburglaryprotecions.AntiBurglaryProtecions;
+import com.flatrental.domain.ManagedObject;
+import com.flatrental.domain.announcement.address.Address;
+import com.flatrental.domain.announcement.attributes.preferences.Preference;
 import com.flatrental.domain.announcement.attributes.apartmentamenities.ApartmentAmenity;
 import com.flatrental.domain.announcement.attributes.apartmentstate.ApartmentState;
 import com.flatrental.domain.announcement.attributes.buildingmaterial.BuildingMaterial;
@@ -11,9 +11,14 @@ import com.flatrental.domain.announcement.attributes.heatingtype.HeatingType;
 import com.flatrental.domain.announcement.attributes.neighbourhood.NeighbourhoodItem;
 import com.flatrental.domain.images.File;
 import com.flatrental.domain.announcement.attributes.parkingtype.ParkingType;
-import com.flatrental.domain.user.User;
 import com.flatrental.domain.announcement.attributes.windowtype.WindowType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -22,12 +27,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -41,7 +49,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Entity
-public class Announcement extends EntityInfo {
+@SuperBuilder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Announcements")
+public class Announcement extends ManagedObject {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -49,11 +62,7 @@ public class Announcement extends EntityInfo {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private AnnouncementType announcementType;
-
-    @ManyToOne
-    @NotNull
-    private User author;
+    private AnnouncementType type;
 
     @NotNull
     @NotBlank
@@ -110,42 +119,38 @@ public class Announcement extends EntityInfo {
 
     private Boolean wellPlanned;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "Announcements_X_ApartmentAmenities")
     private Set<ApartmentAmenity> apartmentAmenities;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "announcement_id")
     private Set<Room> rooms;
 
     private Kitchen kitchen;
 
     private Bathroom bathroom;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "Announcements_X_Preferences")
     private Set<Preference> preferences;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "Announcements_X_NeighbourhoodItems")
     private Set<NeighbourhoodItem> neighbourhood;
 
     @Column(length = 1000)
     private String description;
 
     @ElementCollection
-    @CollectionTable(name = "ANNOUNCEMENT_IMAGES")
+    @CollectionTable(name = "Announcements_X_Images")
     @MapKeyColumn(name = "IMAGE_NUMBER")
     private Map<Integer, File> announcementImages = new HashMap<>();
 
-
-
-
-    private File mainPhoto;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private AnnouncementState announcementState;
-
     private AnnouncementStatistics announcementStatistics;
 
-
-
     private String aboutRoommates;
+
+    @PositiveOrZero
+    private Integer numberOfFlatmates;
 }
