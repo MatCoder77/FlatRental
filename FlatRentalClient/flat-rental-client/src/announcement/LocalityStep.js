@@ -37,6 +37,9 @@ class LocalityStep extends Component {
         this.onCommuneChange = this.onCommuneChange.bind(this);
         this.hasAnyLoadedData = this.hasAnyLoadedData.bind(this);
         this.autoselectAndMakeOptionalIfNecessary = this.autoselectAndMakeOptionalIfNecessary.bind(this);
+        this.loadLocalityPartsFromLocalityDistrictIfEmpty = this.loadLocalityPartsFromLocalityDistrictIfEmpty.bind(this);
+        this.loadStreetsFromLocalityDistrictIfEmpty = this.loadStreetsFromLocalityDistrictIfEmpty.bind(this);
+        this.validateAndMakeOptionalIfNecessary = this.validateAndMakeOptionalIfNecessary.bind(this);
 
         this.props.registerRequiredFields(['address.voivodeship.id', 'address.district.id', 'address.commune.id', 'address.locality.id', 'address.localityDistrict.id', 'address.street.id']);
     }
@@ -91,8 +94,55 @@ class LocalityStep extends Component {
         this.props.loadData(getStreets, 'streets', parentLocalityId, this.autoselectAndMakeOptionalIfNecessary, 'address.street.id');
     }
 
+    loadLocalityPartsFromLocalityDistrictIfEmpty(loadedData) {
+        if (this.props.appData[loadedData].length == 0 && this.props.formData["address.localityDistrict.id"]) {
+            this.loadLocalityPartsForParentLocalityDistrict(this.props.formData["address.localityDistrict.id"]);
+        }
+    }
+
+    loadStreetsFromLocalityDistrictIfEmpty(loadedData) {
+        if(this.props.appData[loadedData].length != 0 && this.props.formData["address.street.id"]) {
+            this.validateAndMakeOptionalIfNecessary(loadedData, "address.street.id");
+        }
+        if (this.props.appData[loadedData].length == 0 && this.props.formData["address.localityDistrict.id"]) {
+            this.props.loadData(getStreets, 'streets', this.props.formData["address.localityDistrict.id"], this.validateAndMakeOptionalIfNecessary, "address.street.id");
+        }
+    }
+
     componentDidMount() {
         this.loadVoivodeships();
+
+        if (this.props.formData["address.voivodeship.id"] && !this.hasAnyLoadedData(this.props.appData.districts)) {
+            this.props.updateValidation("address.voivodeship.id", {validateStatus: 'success', errorMsg: null});
+            this.loadDistrictForVoivodeship(this.props.formData["address.voivodeship.id"]);
+        }
+        if (this.props.formData["address.district.id"] && !this.hasAnyLoadedData(this.props.appData.communes)) {
+            this.props.updateValidation("address.district.id", {validateStatus: 'success', errorMsg: null});
+            this.props.loadData(getCommunes, 'communes', this.props.formData["address.district.id"]);
+        }
+        if (this.props.formData["address.commune.id"] && !this.hasAnyLoadedData(this.props.appData.localities)) {
+            this.props.updateValidation("address.commune.id", {validateStatus: 'success', errorMsg: null});
+            this.props.loadData(getLocalities, 'localities', this.props.formData["address.commune.id"]);
+        }
+        if (this.props.formData["address.locality.id"] && !this.hasAnyLoadedData(this.props.appData.localityDistricts)) {
+            this.props.updateValidation("address.locality.id", {validateStatus: 'success', errorMsg: null});
+            this.props.loadData(getLocalityDistricts, 'localityDistricts', this.props.formData["address.locality.id"], this.validateAndMakeOptionalIfNecessary, "address.localityDistrict.id");
+        }
+        if (this.props.formData["address.locality.id"] && !this.hasAnyLoadedData(this.props.appData.localityParts)) {
+            this.props.updateValidation("address.locality.id", {validateStatus: 'success', errorMsg: null});
+            this.props.loadData(getLocalityPartsForParentLocality, 'localityParts', this.props.formData["address.locality.id"],
+                this.loadLocalityPartsFromLocalityDistrictIfEmpty);
+        }
+        if (this.props.formData["address.locality.id"] && !this.hasAnyLoadedData(this.props.appData.streets)) {
+            this.props.updateValidation("address.locality.id", {validateStatus: 'success', errorMsg: null});
+            this.props.loadData(getStreets, 'streets', this.props.formData["address.locality.id"], this.loadStreetsFromLocalityDistrictIfEmpty);
+        }
+    }
+
+    validateAndMakeOptionalIfNecessary(loadedData, param) {
+        if (this.props.appData[loadedData].length == 0 || this.props.formData[param]) {
+            this.props.updateValidation(param, {validateStatus: 'success', errorMsg: null});
+        }
     }
 
     getStreetLabel(street) {

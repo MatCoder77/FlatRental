@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "antd": "^3.23.2",
+    "query-string": "^6.8.3",
+    "rc-banner-anim": "^2.4.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-intl": "2.9.0",

@@ -20,6 +20,8 @@ class FlatAnnouncementGeneralInfoStep extends Component {
         this.validateIfNotEmpty = this.validateIfNotEmpty.bind(this);
         this.validateFloor = this.validateFloor.bind(this);
         this.validateMaxFloor = this.validateMaxFloor.bind(this);
+        this.validateSuppliedValues = this.validateSuppliedValues.bind(this);
+        this.validateIfSupplied = this.validateIfSupplied.bind(this);
 
         this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
         this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
@@ -30,6 +32,25 @@ class FlatAnnouncementGeneralInfoStep extends Component {
         this.floorNumberGreaterThanMaxFloor = this.props.intl.formatMessage({ id: 'text.floor_number_grater_than_max_floor' });
 
         this.props.registerRequiredFields(['title', 'totalArea', 'numberOfRooms', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);
+        this.validateSuppliedValues();
+    }
+
+    validateSuppliedValues() {
+        this.validateIfSupplied('title', this.validateTitle);
+        this.validateIfSupplied('totalArea', this.validateIfPositiveInteger);
+        this.validateIfSupplied('numberOfRooms', this.validateIfPositiveInteger);
+        this.validateIfSupplied('pricePerMonth', this.validateIfPositiveInteger);
+        this.validateIfSupplied('additionalCostsPerMonth', this.validateIfNaturalNumber);
+        this.validateIfSupplied('securityDeposit', this.validateIfNaturalNumber);
+        this.validateIfSupplied('floor', this.validateFloor);
+        this.validateIfSupplied('maxFloorInBuilding', this.validateMaxFloor);
+        this.validateIfSupplied('availableFrom', this.validateIfNotEmpty);
+    }
+
+    validateIfSupplied(fieldName, validatorFunction) {
+        if (this.props.formData[fieldName]) {
+            this.props.updateValidation(fieldName, validatorFunction(this.props.formData[fieldName]));
+        }
     }
 
     updateOnChange(event, validationFunction) {

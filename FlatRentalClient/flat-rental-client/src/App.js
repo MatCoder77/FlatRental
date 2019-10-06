@@ -10,6 +10,9 @@ import Login from "./login/Login";
 import CreateAnnouncementStepWizard from "./announcement/AnnouncementStepWizard";
 import PageHeader from "./pageheader/PageHeader";
 import MainPage from "./mainpage/MainPage";
+import CreateAnnouncement from "./announcement/CreateAnnouncement";
+import EditAnnouncement from "./announcement/EditAnnouncement";
+import DeleteAnnouncement from "./announcement/DeleteAnnouncement";
 
 const { Content } = Layout;
 
@@ -99,7 +102,9 @@ class App extends Component {
                             </Route>
                             <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/signup" component={RegistrationFrom}/>
-                            <Route exact path="/announcement/new/:announcementType" render={(props) => <CreateAnnouncementStepWizard/>}/>
+                            <Route exact path="/announcement/create/:announcementType" render={(props) => <CreateAnnouncement/>}/>
+                            <Route exact path="/announcement/edit/:announcementId" render={(props) => <EditAnnouncement/>}/>
+                            <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

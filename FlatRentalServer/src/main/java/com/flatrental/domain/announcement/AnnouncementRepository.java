@@ -1,6 +1,6 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.domain.ManagedObjectState;
+import com.flatrental.domain.managedobject.ManagedObjectState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

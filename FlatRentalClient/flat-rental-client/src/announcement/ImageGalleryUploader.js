@@ -51,7 +51,7 @@ class ImageGalleryUploader extends Component {
         }
         Promise.all(promiseList)
             .then(values => {
-                let filenameList = values.map(value => value.fileName)
+                let filenameList = values.map(value => new {filename: value.fileName});
                 this.props.onUpdate(this.props.name, filenameList);
             }).catch(error => {});
     }

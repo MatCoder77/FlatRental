@@ -3,7 +3,7 @@ import {Steps, Button, Row, Col, Icon} from 'antd';
 import { withRouter } from 'react-router-dom';
 import './Step.css';
 import moment from "moment";
-import {createAnnouncement, downloadFile} from "../infrastructure/RestApiHandler";
+import {createAnnouncement, downloadFile, getAnnouncement, updateAnnouncement} from "../infrastructure/RestApiHandler";
 import FirstStepContainer from "./flat/FlatAnnouncementGeneralInfoStep";
 import ThirdStepContainer from "./flat/FlatAnnouncementDetailInfoStep";
 import SecondStepContainer from "./LocalityStep";
@@ -15,6 +15,7 @@ import RoomAnnouncementDetailInfoStep from "./room/RoomAnnouncementDetailInfoSte
 import PlaceInRoomAnnouncementGeneralInfoStep from "./placeinroom/PlaceInRoomAnnouncementGeneralInfoStep";
 import PlaceInRoomAnnouncementDetailInfoStep from "./placeinroom/PlaceInRoomAnnouncementDetailInfoStep";
 import AnnouncementView from "./AnnouncementView";
+import * as CONS from "../infrastructure/Constants";
 
 const Step = Steps.Step;
 
@@ -34,16 +35,17 @@ class AnnouncementStepWizard extends Component {
         super(props);
         this.state = {
             current: 0,
-            formData: {},
+            formData: this.props.formData ? this.props.formData : {type: this.props.announcementType},
             appData: {},
             validationStatus: {},
             errorMessages: {}
         };
         this.updateFormData = this.updateFormData.bind(this);
-        this.updateFormData('availableFrom', moment(new Date()), {validateStatus: 'success', errorMsg: null});
+        this.setAvailableFrom = this.setAvailableFrom.bind(this);
+
         this.updateFormData('bathroom.numberOfBathrooms', 1);
-        this.updateFormData('wellPlanned', false);
-        this.updateFormData('bathroom.separateWC', false);
+        this.updateFormData('wellPlanned', this.props.formData['wellPlanned'] ? this.props.formData['wellPlanned'] : false);
+        this.updateFormData('bathroom.separateWC', this.props.formData['bathroom.separateWC'] ? this.props.formData['bathroom.separateWC'] : false);
 
         this.loadData = this.loadData.bind(this);
         this.submitAnnouncement = this.submitAnnouncement.bind(this);
@@ -52,6 +54,15 @@ class AnnouncementStepWizard extends Component {
         this.getErrorMessage = this.getErrorMessage.bind(this);
         this.registerRequiredFields = this.registerRequiredFields.bind(this);
         this.unregisterRequiredFields = this.unregisterRequiredFields.bind(this);
+        // this.setFormWithSuppliedData = this.setFormWithSuppliedData.bind(this);
+        // this.setFormWithSuppliedData();
+        this.setAvailableFrom();
+    }
+
+    setAvailableFrom() {
+        let suppliedAvailableFrom = this.props.formData ? this.props.formData.availableFrom : undefined;
+        let availableFrom = suppliedAvailableFrom ? moment(suppliedAvailableFrom) : moment(new Date());
+        this.updateFormData('availableFrom', availableFrom, {validateStatus: 'success', errorMsg: null});
     }
 
     next() {
@@ -144,6 +155,16 @@ class AnnouncementStepWizard extends Component {
         });
     }
 
+    // setFormWithSuppliedData() {
+    //     if(this.props.formData) {
+    //         for (let property in this.props.formData) {
+    //             if (Object.prototype.hasOwnProperty.call(this.props.formData, property)) {
+    //                this.updateFormData(property, this.props.formData[property], {validateStatus: 'success', errorMsg: null});
+    //             }
+    //         }
+    //     }
+    // }
+
     submitAnnouncement() {
         let filteredFormData = DTOUtils.excludeTransientProperties(this.state.formData);
         let announcementDTO = DTOUtils.unflatten(filteredFormData);
@@ -152,7 +173,6 @@ class AnnouncementStepWizard extends Component {
 
     render() {
         const {intl} = this.props;
-        const {announcementType} = this.props.match.params;
         const flatSteps = [{
             title: intl.formatMessage({id: "labels.general_info"}),
             content: (
@@ -162,6 +182,7 @@ class AnnouncementStepWizard extends Component {
                     getValidationStatus={this.getValidationStatus}
                     getErrorMessage={this.getErrorMessage}
                     registerRequiredFields={this.registerRequiredFields}
+                    updateValidation={this.updateValidation}
                 />
             ),
         }, {
@@ -174,7 +195,8 @@ class AnnouncementStepWizard extends Component {
                                      getValidationStatus={this.getValidationStatus}
                                      getErrorMessage={this.getErrorMessage}
                                      registerRequiredFields={this.registerRequiredFields}
-                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}/>
             ),
         }, {
             title: intl.formatMessage({id: "labels.detail_info"}),
@@ -182,7 +204,8 @@ class AnnouncementStepWizard extends Component {
                 <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData}
                                     loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
                                     getValidationStatus={this.getValidationStatus}
-                                    getErrorMessage={this.getErrorMessage}/>
+                                    getErrorMessage={this.getErrorMessage}
+                                    updateValidation={this.updateValidation}/>
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
@@ -266,7 +289,7 @@ class AnnouncementStepWizard extends Component {
             content: 'Last-content',
         }];
         const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps]]);
-        const steps = stepsByAnnouncementType.get(announcementType);
+        const steps = stepsByAnnouncementType.get(this.state.formData.type);
 
         const {current} = this.state;
         return (
@@ -289,7 +312,7 @@ class AnnouncementStepWizard extends Component {
                         {current < steps.length - 1 && (
                             <Col span={10}>
                                 <Button className="step-wizard-button" type="primary" onClick={() => this.next()}
-                                        size="large" disabled={false} /*{!this.isStepValid()}*/>
+                                        size="large" disabled={!this.isStepValid()}>
                                     <FormattedMessage id="labels.next"/>
                                     <Icon type="right"/>
                                 </Button>

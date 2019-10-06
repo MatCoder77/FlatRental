@@ -24,6 +24,7 @@ import CheckBoxGrid from "../../commons/CheckBoxGrid";
 import ImageGalleryUploader from "../ImageGalleryUploader";
 import { Typography } from 'antd';
 import RoomList from "../RoomList";
+import {API_BASE_URL} from "../../infrastructure/Constants";
 
 const { Paragraph } = Typography;
 
@@ -53,6 +54,8 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.updateOnChange = this.updateOnChange.bind(this);
         this.updateOnChangeWithName = this.updateOnChangeWithName.bind(this);
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
+        this.setTransientAnnouncementImagesData = this.setTransientAnnouncementImagesData.bind(this);
+        this.setTransientAnnouncementImagesData();
     }
 
     loadBuildingTypes() {
@@ -139,8 +142,14 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.loadNeighbourhoodItems();
         this.loadPreferences();
         this.loadRoomFurnishing();
-        this.props.loadData(downloadFile, 'file', 'c55538d4-9db8-4dfa-9129-89378fe4259eb0e68582-46cc-4e22-bc9d-eaad45c7a0ca.jpg');
         console.log(this.props.appData);
+    }
+
+    setTransientAnnouncementImagesData() {
+        if(this.props.formData && this.props.formData.announcementImages && !this.props.formData.transient_announcementImages) {
+            let fileList = this.props.formData.announcementImages.map((image, index) => new Object({uid: "-" + index, name: image.filename, status: 'done', url: API_BASE_URL + "/file/download/" + image.filename}));
+            this.props.onUpdate('transient_announcementImages', fileList);
+        }
     }
 
     render() {

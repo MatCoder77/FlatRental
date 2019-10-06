@@ -195,8 +195,23 @@ export function uploadFile(uploadedFile) {
 
 export function createAnnouncement(announcementDTO) {
     return request({
-        url: API_BASE_URL + "/announcement/create",
+        url: API_BASE_URL + "/announcements",
         method: 'POST',
+        body: JSON.stringify(announcementDTO)
+    })
+}
+
+export function getAnnouncement(announcementId) {
+    return request({
+        url: API_BASE_URL + "/announcements/" + announcementId,
+        method: 'GET'
+    })
+}
+
+export function updateAnnouncement(announcementId, announcementDTO) {
+    return request({
+        url: API_BASE_URL + "/announcements/" + announcementId,
+        method: 'PUT',
         body: JSON.stringify(announcementDTO)
     })
 }

@@ -1,6 +1,6 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.domain.ManagedObject;
+import com.flatrental.domain.managedobject.ManagedObject;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

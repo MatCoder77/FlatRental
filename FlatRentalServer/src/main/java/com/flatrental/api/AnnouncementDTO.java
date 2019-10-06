@@ -2,7 +2,6 @@ package com.flatrental.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.flatrental.domain.ManagedObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

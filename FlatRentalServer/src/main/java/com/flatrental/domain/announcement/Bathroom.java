@@ -1,6 +1,6 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.domain.announcement.attributes.furnishings.FurnishingItem;
+import com.flatrental.domain.announcement.simpleattributes.furnishings.FurnishingItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

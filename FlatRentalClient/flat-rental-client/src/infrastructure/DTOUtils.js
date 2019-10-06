@@ -28,10 +28,11 @@ export function flatten(data) {
         if (Object(cur) !== cur) {
             result[prop] = cur;
         } else if (Array.isArray(cur)) {
-            for(var i=0, l=cur.length; i<l; i++)
-                recurse(cur[i], prop ? prop+"."+i : ""+i);
-            if (l == 0)
-                result[prop] = [];
+            result[prop] = cur.map(element => flatten(element));
+            // for(var i=0, l=cur.length; i<l; i++)
+            //     recurse(cur[i], "");
+            // if (l == 0)
+            //     result[prop] = [];
         } else {
             let isEmpty = true;
             for (let p in cur) {
