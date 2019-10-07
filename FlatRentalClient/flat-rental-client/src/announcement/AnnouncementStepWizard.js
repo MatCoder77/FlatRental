@@ -44,8 +44,8 @@ class AnnouncementStepWizard extends Component {
         this.setAvailableFrom = this.setAvailableFrom.bind(this);
 
         this.updateFormData('bathroom.numberOfBathrooms', 1);
-        this.updateFormData('wellPlanned', this.props.formData['wellPlanned'] ? this.props.formData['wellPlanned'] : false);
-        this.updateFormData('bathroom.separateWC', this.props.formData['bathroom.separateWC'] ? this.props.formData['bathroom.separateWC'] : false);
+        this.updateFormData('wellPlanned', this.props.formData ? (this.props.formData['wellPlanned'] ? this.props.formData['wellPlanned'] : false) : false);
+        this.updateFormData('bathroom.separateWC', this.props.formData ? (this.props.formData['bathroom.separateWC'] ? this.props.formData['bathroom.separateWC'] : false) : false);
 
         this.loadData = this.loadData.bind(this);
         this.submitAnnouncement = this.submitAnnouncement.bind(this);

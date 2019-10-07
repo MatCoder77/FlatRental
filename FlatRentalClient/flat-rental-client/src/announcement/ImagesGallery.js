@@ -8,10 +8,7 @@ const BgElement = Element.BgElement;
 class ImageGallery extends React.Component {
     constructor() {
         super(...arguments);
-        this.imgArray = [
-            'https://apollo-ireland.akamaized.net/v1/files/eyJmbiI6ImY4NWduODhwaTZmMTEtQVBMIiwidyI6W3siZm4iOiJqMWozbzEzbTZiZ24xLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.HWgV0FPvYSqGPfX9Y3ajrZz7GJuxvuyy4nvJFMEVjZE/image;s=1280x1024;q=80',
-            'https://apollo-ireland.akamaized.net/v1/files/eyJmbiI6Im9qbXM1ejZxbHptNzMtQVBMIiwidyI6W3siZm4iOiJqMWozbzEzbTZiZ24xLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.g1-wcn868jiqlQKx2JDgvdrBwdqCdsrIT6Mp-F80EzU/image;s=1280x1024;q=80',
-        ];
+        this.imgArray = this.props.imagesList ? this.props.imagesList : [];
         this.state = {
             intShow: 0,
             prevEnter: false,

@@ -288,7 +288,7 @@ class LocalityStep extends Component {
                                 onSelect={value => this.updateOnSelect('address.commune.id', value)}
                                 value={this.props.formData["address.commune.id"]}
                                 filterOption={(input, option) =>
-                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
                                 {this.props.appData.communes ? this.props.appData.communes.map(commune => (

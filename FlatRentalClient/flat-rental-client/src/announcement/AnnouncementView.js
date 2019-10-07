@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PageHeader, Tabs, Button, Statistic, Descriptions } from 'antd';
 import {FormattedMessage, injectIntl} from "react-intl";
 import ImagesGallery2 from "./ImagesGallery";
+import {API_BASE_URL} from "../infrastructure/Constants";
 
 const { TabPane } = Tabs;
 
@@ -14,6 +15,7 @@ class AnnouncementView extends Component {
         this.getEnumValueOptionalDescriptionItem = this.getEnumValueOptionalDescriptionItem.bind(this);
         this.getBooleanValueOptionalDescriptionItem = this.getBooleanValueOptionalDescriptionItem.bind(this);
         this.getDescriptionListForCheckedItems = this.getDescriptionListForCheckedItems.bind(this);
+        this.getImages = this.getImages.bind(this);
     }
 
     getTextValueOptionalDescriptionItem(labelKey, value, suffix) {
@@ -60,6 +62,11 @@ class AnnouncementView extends Component {
         let street = this.props.data.street;
 
 
+    }
+
+    getImages() {
+        let images = this.props.data.announcementImages ? this.props.data.announcementImages : [];
+        return images.map(image => API_BASE_URL + "/file/download/" + image.filename);
     }
 
     render() {
@@ -130,7 +137,7 @@ class AnnouncementView extends Component {
                 </PageHeader>
 
                 <div>
-                    <ImagesGallery2/>
+                    <ImagesGallery2 imagesList={this.getImages()}/>
                 </div>
                 <Descriptions size={"default"} title={intl.formatMessage({id: "labels.general_info"})} column={3}>
                     {this.getTextValueOptionalDescriptionItem('labels.area', this.props.data.totalArea, squareMeterSuffix)};
@@ -157,9 +164,11 @@ class AnnouncementView extends Component {
                     {this.getEnumValueOptionalDescriptionItem('labels.kitchen_type', this.props.data["kitchen.kitchenType.value"])};
                     {this.getTextValueOptionalDescriptionItem('labels.area', this.props.data["kitchen.kitchenArea"], squareMeterSuffix)};
                     {this.getEnumValueOptionalDescriptionItem('labels.cooker_type', this.props.data["kitchen.cookerType.value"])};
-
-                    {this.getEnumValueOptionalDescriptionItem('labels.number_of_bathrooms', this.props.data["bathroom.numberOfBathrooms"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.separate_wc', this.props.data["bathroom.separateWC"])};
+                    {this.getTextValueOptionalDescriptionItem('labels.number_of_bathrooms', this.props.data["bathroom.numberOfBathrooms"])};
+                    {this.getBooleanValueOptionalDescriptionItem('labels.separate_wc', this.props.data["bathroom.separateWC"])};
+                </Descriptions>
+                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
+                    {this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"])}
                 </Descriptions>
             </div>
         );
