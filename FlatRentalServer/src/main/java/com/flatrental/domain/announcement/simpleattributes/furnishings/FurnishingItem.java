@@ -1,5 +1,6 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,6 +20,7 @@ public class FurnishingItem {
     @NotNull
     private String name;
 
+    @Column(name = "furnishing_type")
     @Enumerated(EnumType.STRING)
     private FurnishingType furnishingType;
 

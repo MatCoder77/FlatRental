@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinTable;
@@ -30,6 +31,7 @@ public class Kitchen {
     private CookerType cookerType;
 
     @ManyToMany
+    @Where(clause = "furnishing_type = 'KITCHEN'")
     @JoinTable(name = "Announcements_X_FurnishingItems")
     private Set<FurnishingItem> furnishing;
 
