@@ -96,32 +96,21 @@ class ImageGallery extends React.Component {
                 onMouseLeave={this.onMouseLeave}
                 prefixCls="custom-arrow-thumb"
             >
-                <Element key="aaa"
-                         prefixCls="banner-user-elem"
-                >
-                    <BgElement
-                        key="bg"
-                        className="bg"
-                        style={{
-                            backgroundImage: `url(${this.imgArray[0]})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
-                    />
-                </Element>
-                <Element key="bbb"
-                         prefixCls="banner-user-elem"
-                >
-                    <BgElement
-                        key="bg"
-                        className="bg"
-                        style={{
-                            backgroundImage: `url(${this.imgArray[1]})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
-                    />
-                </Element>
+                {this.imgArray.map((image, index) =>
+                    <Element key={index}
+                             prefixCls="banner-user-elem"
+                    >
+                        <BgElement
+                            key="bg"
+                            className="bg"
+                            style={{
+                                backgroundImage: `url(${image})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                            }}
+                        />
+                    </Element>
+                )}
                 <Arrow arrowType="prev" key="prev" prefixCls="user-arrow" component={TweenOne}
                        onMouseEnter={this.prevEnter}
                        onMouseLeave={this.prevLeave}
