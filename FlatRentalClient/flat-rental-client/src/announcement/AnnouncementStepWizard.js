@@ -225,6 +225,7 @@ class AnnouncementStepWizard extends Component {
                     registerRequiredFields={this.registerRequiredFields}
                     loadData={this.loadData}
                     appData={this.state.appData} {...formItemLayout}
+                    updateValidation={this.updateValidation}
                 />
             ),
         }, {
@@ -237,7 +238,8 @@ class AnnouncementStepWizard extends Component {
                                      getValidationStatus={this.getValidationStatus}
                                      getErrorMessage={this.getErrorMessage}
                                      registerRequiredFields={this.registerRequiredFields}
-                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}/>
             ),
         }, {
             title: intl.formatMessage({id: "labels.detail_info"}),
@@ -245,7 +247,8 @@ class AnnouncementStepWizard extends Component {
                 <RoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
                                     loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
                                     getValidationStatus={this.getValidationStatus}
-                                    getErrorMessage={this.getErrorMessage}/>
+                                    getErrorMessage={this.getErrorMessage} updateValidation={this.updateValidation}
+                />
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),

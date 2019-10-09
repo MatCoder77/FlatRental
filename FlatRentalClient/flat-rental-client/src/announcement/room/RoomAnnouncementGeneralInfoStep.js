@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Form, Input, InputNumber, Row, Col, DatePicker, Card} from 'antd';
+import {Form, Input, InputNumber, Row, Col, DatePicker} from 'antd';
 import '../Step.css';
 import {FormattedMessage, injectIntl} from "react-intl";
 import * as CONS from "../../infrastructure/Constants";
-import CheckBoxGrid from "../../commons/CheckBoxGrid";
 
 const FormItem = Form.Item;
 
@@ -21,29 +20,50 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.validateIfNotEmpty = this.validateIfNotEmpty.bind(this);
         this.validateFloor = this.validateFloor.bind(this);
         this.validateMaxFloor = this.validateMaxFloor.bind(this);
+        this.validateSuppliedValues = this.validateSuppliedValues.bind(this);
+        this.validateIfSupplied = this.validateIfSupplied.bind(this);
 
         this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
         this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
         this.onlyPositiveIntegerOrZero = this.props.intl.formatMessage({ id: 'text.only_positive_integer_or_zero_msg' });
         this.onlyInteger = this.props.intl.formatMessage({ id: 'text.only_integer' });
+        this.smallerThanMinusOne = this.props.intl.formatMessage({ id: 'text.smaller_than_minus_one' });
         this.floorNumberGreaterThanMaxFloor = this.props.intl.formatMessage({ id: 'text.floor_number_grater_than_max_floor' });
 
-        this.props.registerRequiredFields(['title', 'room.area', 'room.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding','availableFrom']);
+        this.props.registerRequiredFields(['title', 'rooms.0.area', 'rooms.0.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);        this.validateSuppliedValues();
+    }
+
+    validateSuppliedValues() {
+        this.validateIfSupplied('title', this.validateTitle);
+        this.validateIfSupplied('totalArea', this.validateIfPositiveInteger);
+        this.validateIfSupplied('numberOfRooms', this.validateIfPositiveInteger);
+        this.validateIfSupplied('pricePerMonth', this.validateIfPositiveInteger);
+        this.validateIfSupplied('additionalCostsPerMonth', this.validateIfNaturalNumber);
+        this.validateIfSupplied('securityDeposit', this.validateIfNaturalNumber);
+        this.validateIfSupplied('floor', this.validateFloor);
+        this.validateIfSupplied('maxFloorInBuilding', this.validateMaxFloor);
+        this.validateIfSupplied('availableFrom', this.validateIfNotEmpty);
+    }
+
+    validateIfSupplied(fieldName, validatorFunction) {
+        if (this.props.formData[fieldName]) {
+            this.props.updateValidation(fieldName, validatorFunction(this.props.formData[fieldName]));
+        }
     }
 
     updateOnChange(event, validationFunction) {
-        const validationResult = validationFunction ? validationFunction(event.target.value) : {validateStatus: 'success', errorMsg: null};
+        const validationResult = validationFunction(event.target.value);
         this.props.onUpdate(event.target.name, event.target.value, validationResult);
     }
 
     updateOnChangeInputNumber(name, value, validationFunction) {
-        const validationResult = validationFunction ? validationFunction(value) : {validateStatus: 'success', errorMsg: null};
+        const validationResult = validationFunction(value);
         this.props.onUpdate(name, value, validationResult);
     };
 
     updateOnChangeDatePicker(name, timeMoment, validationFunction) {
-        const validationResult = validationFunction ? validationFunction(timeMoment) : {validateStatus: 'success', errorMsg: null};
+        const validationResult = validationFunction(timeMoment);
         this.props.onUpdate(name, timeMoment, validationResult);
     };
 
@@ -72,28 +92,28 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                             />
                         </FormItem>
                         <FormItem label={intl.formatMessage({id: 'labels.room_area'})}
-                                  validateStatus={this.props.getValidationStatus("room.area")}
-                                  help={this.props.getErrorMessage("room.area")}
+                                  validateStatus={this.props.getValidationStatus("rooms.0.area")}
+                                  help={this.props.getErrorMessage("rooms.0.area")}
                                   required={true}>
                             <Input
                                 addonAfter={<span>m<sup>2</sup></span>}
-                                name="room.area"
+                                name="rooms.0.area"
                                 autoComplete="off"
-                                value={this.props.formData['room.area']}
+                                value={this.props.formData['rooms.0.area']}
                                 onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
                                 placeholder={intl.formatMessage({id: 'placeholders.room_area'})}
                             />
                         </FormItem>
                         <FormItem
                             label={intl.formatMessage({ id: 'labels.number_of_persons' })}
-                            validateStatus={this.props.getValidationStatus("room.numberOfPersons")}
-                            help={this.props.getErrorMessage("room.numberOfPersons")}
+                            validateStatus={this.props.getValidationStatus("rooms.0.numberOfPersons")}
+                            help={this.props.getErrorMessage("rooms.0.numberOfPersons")}
                             required={true}>
                             <InputNumber
                                 min={1}
                                 max={10}
-                                onChange={value => this.updateOnChangeInputNumber('room.numberOfPersons', value, this.validateIfPositiveInteger)}
-                                value={this.props.formData['room.numberOfPersons']}
+                                onChange={value => this.updateOnChangeInputNumber('rooms.0.numberOfPersons', value, this.validateIfPositiveInteger)}
+                                value={this.props.formData['rooms.0.numberOfPersons']}
                             />
                         </FormItem>
                         <FormItem
