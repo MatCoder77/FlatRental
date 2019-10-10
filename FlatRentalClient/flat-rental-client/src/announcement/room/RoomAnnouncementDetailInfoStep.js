@@ -53,6 +53,9 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
         this.updateOnChange = this.updateOnChange.bind(this);
         this.updateOnChangeWithName = this.updateOnChangeWithName.bind(this);
+        this.onRoomChange = this.onRoomChange.bind(this);
+        this.getRoomAttribute = this.getRoomAttribute.bind(this);
+        this.onRoomChangeCheckboxFurnishing = this.onRoomChangeCheckboxFurnishing.bind(this);
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
         this.setTransientAnnouncementImagesData = this.setTransientAnnouncementImagesData.bind(this);
         this.setTransientAnnouncementImagesData();
@@ -128,6 +131,28 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.props.onUpdate(name, value, validationResult);
     };
 
+    onRoomChange(name, value, validationFunction, roomAttribute) {
+        const validationResult = validationFunction ? validationFunction(value) : {validateStatus: 'success', errorMsg: null};
+        let rooms = this.props.formData.rooms;
+        if (rooms && rooms[0]) {
+            rooms[0][roomAttribute] = value;
+        } else {
+            rooms = new Array(new Object({[roomAttribute]: value}));
+        }
+        this.props.onUpdate("rooms", rooms, validationResult, "rooms.0." + roomAttribute);
+    }
+
+    onRoomChangeCheckboxFurnishing(name, value, validationFunction) {
+        this.onRoomChange(name, value, validationFunction, 'furnishing');
+    }
+
+    getRoomAttribute(attribute) {
+        if(this.props.formData && this.props.formData.rooms && this.props.formData.rooms[0]) {
+            return this.props.formData.rooms[0][attribute];
+        }
+        return undefined;
+    }
+
     componentDidMount() {
         this.loadBuildingTypes();
         this.loadBuildingMaterialTypes();
@@ -161,10 +186,10 @@ class FlatAnnouncementDetailInfoStep extends Component {
                 <div className="step-container-content">
                     <Form className="step-form" layout="horizontal" {...this.props}>
                         <Card title={intl.formatMessage({ id: 'labels.room_accessories' })} bordered={false}>
-                            <CheckBoxGrid name="rooms.0.furnishing"
+                            <CheckBoxGrid name="rooms"
                                           itemList={this.props.appData.roomFurnishing}
-                                          onUpdate={this.props.onUpdate}
-                                          checkedValues={this.props.formData["rooms.0.furnishing"]}
+                                          onUpdate={this.onRoomChangeCheckboxFurnishing}
+                                          checkedValues={this.getRoomAttribute('furnishing')}
                                           span={8}
                             />
                         </Card>
@@ -231,6 +256,18 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                     onUpdate={this.props.onUpdate}
                                     value={this.props.formData["apartmentState.value"]}
                                     placeholder={intl.formatMessage({ id: 'placeholders.apartment_state' })}/>
+                            </FormItem>
+                            <FormItem label={intl.formatMessage({id: 'labels.area'})}
+                                      validateStatus={this.props.getValidationStatus("totalArea")}
+                                      help={this.props.getErrorMessage("totalArea")}>
+                                <Input
+                                    addonAfter={<span>m<sup>2</sup></span>}
+                                    name="totalArea"
+                                    autoComplete="off"
+                                    value={this.props.formData.totalArea}
+                                    onChange={event => this.updateOnChange(event, this.validateIfOptionalPositiveInteger)}
+                                    placeholder={intl.formatMessage({id: 'placeholders.total_area'})}
+                                />
                             </FormItem>
                             <FormItem label={intl.formatMessage({ id: 'labels.year_built' })}
                                       validateStatus={this.props.getValidationStatus("yearBuilt")}

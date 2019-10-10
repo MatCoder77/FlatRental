@@ -22,6 +22,9 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.validateMaxFloor = this.validateMaxFloor.bind(this);
         this.validateSuppliedValues = this.validateSuppliedValues.bind(this);
         this.validateIfSupplied = this.validateIfSupplied.bind(this);
+        this.getRoomAttribute = this.getRoomAttribute.bind(this);
+        this.onRoomChange = this.onRoomChange.bind(this);
+        this.validateRoomAttribute = this.validateRoomAttribute.bind(this);
 
         this.titleIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.title_too_short_msg' }, { min: CONS.TITLE_MIN_LENGTH });
         this.titleIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.title_too_long_msg' }, { max: CONS.TITLE_MAX_LENGTH });
@@ -36,8 +39,8 @@ class RoomAnnouncementGeneralInfoStep extends Component {
 
     validateSuppliedValues() {
         this.validateIfSupplied('title', this.validateTitle);
-        this.validateIfSupplied('totalArea', this.validateIfPositiveInteger);
-        this.validateIfSupplied('numberOfRooms', this.validateIfPositiveInteger);
+        this.validateIfSupplied('area', 'rooms.0.area',this.validateIfPositiveInteger)
+        this.validateIfSupplied('numberOfPersons', 'rooms.0.numberOfPersons',this.validateIfPositiveInteger)
         this.validateIfSupplied('pricePerMonth', this.validateIfPositiveInteger);
         this.validateIfSupplied('additionalCostsPerMonth', this.validateIfNaturalNumber);
         this.validateIfSupplied('securityDeposit', this.validateIfNaturalNumber);
@@ -49,6 +52,12 @@ class RoomAnnouncementGeneralInfoStep extends Component {
     validateIfSupplied(fieldName, validatorFunction) {
         if (this.props.formData[fieldName]) {
             this.props.updateValidation(fieldName, validatorFunction(this.props.formData[fieldName]));
+        }
+    }
+
+    validateRoomAttribute(attribute, validationName, validatorFunction) {
+        if (this.props.formData.rooms && this.props.formData.rooms[0] && this.props.formData.rooms[0][attribute]) {
+            this.props.updateValidation(validationName, validatorFunction(this.props.formData.rooms[0][attribute]));
         }
     }
 
@@ -66,6 +75,25 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         const validationResult = validationFunction(timeMoment);
         this.props.onUpdate(name, timeMoment, validationResult);
     };
+
+    onRoomChange(name, value, validationFunction, roomAttribute) {
+        const validationResult = validationFunction(value);
+        let rooms = this.props.formData.rooms;
+        if (rooms && rooms[0]) {
+            rooms[0][roomAttribute] = value;
+        } else {
+            rooms = new Array(new Object({[roomAttribute]: value}));
+        }
+        this.props.onUpdate("rooms", rooms, validationResult, "rooms.0." + roomAttribute);
+    }
+
+
+    getRoomAttribute(attribute) {
+        if(this.props.formData && this.props.formData.rooms && this.props.formData.rooms[0]) {
+            return this.props.formData.rooms[0][attribute];
+        }
+        return undefined;
+    }
 
     componentDidMount() {
 
@@ -97,10 +125,10 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                   required={true}>
                             <Input
                                 addonAfter={<span>m<sup>2</sup></span>}
-                                name="rooms.0.area"
+                                name="rooms"
                                 autoComplete="off"
-                                value={this.props.formData['rooms.0.area']}
-                                onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                value={this.getRoomAttribute('area')}
+                                onChange={event => this.onRoomChange(event.target.name, event.target.value, this.validateIfPositiveInteger, 'area')}
                                 placeholder={intl.formatMessage({id: 'placeholders.room_area'})}
                             />
                         </FormItem>
@@ -112,8 +140,8 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                             <InputNumber
                                 min={1}
                                 max={10}
-                                onChange={value => this.updateOnChangeInputNumber('rooms.0.numberOfPersons', value, this.validateIfPositiveInteger)}
-                                value={this.props.formData['rooms.0.numberOfPersons']}
+                                onChange={value => this.onRoomChange('rooms', value, this.validateIfPositiveInteger, 'numberOfPersons')}
+                                value={this.getRoomAttribute('numberOfPersons')}
                             />
                         </FormItem>
                         <FormItem

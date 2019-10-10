@@ -76,12 +76,12 @@ class AnnouncementStepWizard extends Component {
         this.setState({current});
     }
 
-    updateFormData(fieldName, fieldValue, validationResult) {
+    updateFormData(fieldName, fieldValue, validationResult, customValidationName) {
         const {formData} = this.state;
         formData[fieldName] = fieldValue;
         this.setState({formData});
         console.log(formData);
-        this.updateValidation(fieldName, validationResult)
+        this.updateValidation(customValidationName ? customValidationName : fieldName, validationResult)
     }
 
     updateValidation(validationName, validationResult) {
@@ -265,6 +265,7 @@ class AnnouncementStepWizard extends Component {
                     registerRequiredFields={this.registerRequiredFields}
                     loadData={this.loadData}
                     appData={this.state.appData} {...formItemLayout}
+                    updateValidation={this.updateValidation}
                 />
             ),
         }, {
