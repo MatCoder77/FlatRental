@@ -17,6 +17,6 @@ public class CommuneDTO {
     @NotBlank
     private String name;
 
-    private CommuneType communeType;
+    private CommuneType type;
 
 }

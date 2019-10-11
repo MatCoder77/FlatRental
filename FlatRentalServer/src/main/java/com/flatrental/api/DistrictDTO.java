@@ -18,6 +18,6 @@ public class DistrictDTO {
     @NotBlank
     private String name;
 
-    private DistrictType districtType;
+    private DistrictType type;
 
 }

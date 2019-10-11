@@ -138,7 +138,7 @@ public class Announcement extends ManagedObject {
     @JoinTable(name = "Announcements_X_NeighbourhoodItems")
     private Set<NeighbourhoodItem> neighbourhood;
 
-    @Column(length = 1000)
+    @Column(length = 10000)
     private String description;
 
     @ElementCollection

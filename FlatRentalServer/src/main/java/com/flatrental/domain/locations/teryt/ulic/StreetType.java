@@ -1,11 +1,9 @@
 package com.flatrental.domain.locations.teryt.ulic;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum StreetType {
 
     STREET("ul."),

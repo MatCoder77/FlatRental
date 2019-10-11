@@ -20,6 +20,6 @@ public class StreetDTO {
     private String leadingName;
 
     @NotBlank
-    private StreetType streetType;
+    private StreetType type;
 
 }

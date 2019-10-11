@@ -17,6 +17,6 @@ public class LocalityPartDTO {
     @NotBlank
     private String name;
 
-    private LocalityType localityType;
+    private LocalityType type;
 
 }

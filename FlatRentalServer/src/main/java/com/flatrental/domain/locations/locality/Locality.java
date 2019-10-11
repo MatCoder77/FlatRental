@@ -153,7 +153,7 @@ public class Locality {
     @Override
     public String toString() {
         return "Locality {" + "id = " + Optional.ofNullable(id).map(String::valueOf).orElse("null")
-                + ", localityType = " + localityType
+                + ", type = " + localityType
                 + ", hasCustomaryName = " + hasCustomaryName
                 + ", name = " + name
                 + ", commune id = " + commune.getId()

@@ -78,7 +78,7 @@ public class AnnouncementDTO {
     List<SimpleResourceDTO> preferences;
     List<SimpleResourceDTO> neighbourhood;
 
-    @Size(max = 1000)
+    @Size(max = 10000)
     private String description;
 
     List<FileDTO> announcementImages;
