@@ -161,6 +161,13 @@
     "labels.flatmates_number" : "Flatmates number",
     "labels.about_flatmates" : "About flatmates",
 
+    "labels.announcement_type_flat": "Flat for rent",
+    "labels.announcement_type_room": "Room for rent",
+    "labels.announcement_type_place_in_room": "Place in room for rent",
+    "labels.announcement_type_looking_for_flat": "Looking for a flat",
+    "labels.announcement_type_looking_for_room": "Looking for a room",
+    "labels.announcement_type_looking_for_place_in_room": "Looking for a place in room",
+
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",
@@ -279,5 +286,21 @@
     "URBAN_COMMUNE" : "gm. miejska",
     "RURAL_COMMUNE" :  "gm. wiejska",
     "MIXED_COMMUNE" :  "gm. miejsko-wiejska",
-    "CAPITAL_COMMUNE" : "gm. stołeczna"
+    "CAPITAL_COMMUNE" : "gm. stołeczna",
+
+    "STREET": "ul.",
+    "AVENUE" : "al.",
+    "SQUARE": "pl.",
+    "GARDEN_SQUARE": "skwer",
+    "BOULEVARD": "bulw.",
+    "ROUNDABOUT": "rondo",
+    "PARK": "park",
+    "MARKET_SQUARE": "rynek",
+    "CHAUSSEE": "szosa",
+    "ROUTE": "droga",
+    "ESTATE": "os.",
+    "GARDEN": "ogród",
+    "ISLAND": "wyspa",
+    "COAST": "wyb.",
+    "OTHER": "inne"
 }

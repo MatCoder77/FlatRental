@@ -16,6 +16,18 @@ class AnnouncementView extends Component {
         this.getBooleanValueOptionalDescriptionItem = this.getBooleanValueOptionalDescriptionItem.bind(this);
         this.getDescriptionListForCheckedItems = this.getDescriptionListForCheckedItems.bind(this);
         this.getImages = this.getImages.bind(this);
+        this.attachLocalityData = this.attachLocalityData.bind(this);
+        this.attachLocalityData();
+    }
+
+    attachLocalityData() {
+        this.props.setLocalityAttribute('voivodeship', 'voivodeships', ['name']);
+        this.props.setLocalityAttribute('district', 'districts', ['name', 'type']);
+        this.props.setLocalityAttribute('commune', 'communes', ['name', 'type']);
+        this.props.setLocalityAttribute('locality', 'localities', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
+        this.props.setLocalityAttribute('localityDistrict', 'localityDistricts', ['name']);
+        this.props.setLocalityAttribute('localityPart', 'localityParts', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
+        this.props.setLocalityAttribute('street', 'streets', ['name', 'type', 'mainName', 'leadingName']);
     }
 
     getTextValueOptionalDescriptionItem(labelKey, value, suffix) {
@@ -61,7 +73,7 @@ class AnnouncementView extends Component {
         let localityPart = this.props.data.localityPart;
         let street = this.props.data.street;
 
-
+        //return voivodeship ? voivodeship + ", " : "" +  district ? district +
     }
 
     getImages() {
@@ -71,54 +83,54 @@ class AnnouncementView extends Component {
 
     render() {
         const {intl} = this.props;
-        const renderContent = (column = 2) => (
-            <Descriptions size="small" column={column}>
-                <Descriptions.Item label="Created">Lili Qu</Descriptions.Item>
-                <Descriptions.Item label="Association">
-                    <a>421421</a>
-                </Descriptions.Item>
-                <Descriptions.Item label="Creation Time">2017-01-10</Descriptions.Item>
-                <Descriptions.Item label="Effective Time">2017-10-10</Descriptions.Item>
-                <Descriptions.Item label="Remarks">
-                    Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-                </Descriptions.Item>
-            </Descriptions>
-        );
+        // const renderContent = (column = 2) => (
+        //     <Descriptions size="small" column={column}>
+        //         <Descriptions.Item label="Created">Lili Qu</Descriptions.Item>
+        //         <Descriptions.Item label="Association">
+        //             <a>421421</a>
+        //         </Descriptions.Item>
+        //         <Descriptions.Item label="Creation Time">2017-01-10</Descriptions.Item>
+        //         <Descriptions.Item label="Effective Time">2017-10-10</Descriptions.Item>
+        //         <Descriptions.Item label="Remarks">
+        //             Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
+        //         </Descriptions.Item>
+        //     </Descriptions>
+        // );
 
-        const extraContent = (
-            <div
-                style={{
-                    display: 'flex',
-                    width: 'max-content',
-                    justifyContent: 'flex-end',
-                }}
-            >
-                <Statistic
-                    title="Status"
-                    value="Pending"
-                    style={{
-                        marginRight: 32,
-                    }}
-                />
-                <Statistic title="Price" prefix="$" value={568.08} />
-            </div>
-        );
+        // const extraContent = (
+        //     <div
+        //         style={{
+        //             display: 'flex',
+        //             width: 'max-content',
+        //             justifyContent: 'flex-end',
+        //         }}
+        //     >
+        //         <Statistic
+        //             title="Status"
+        //             value="Pending"
+        //             style={{
+        //                 marginRight: 32,
+        //             }}
+        //         />
+        //         <Statistic title="Price" prefix="$" value={568.08} />
+        //     </div>
+        // );
 
-        const Content = ({ children, extra }) => {
-            return (
-                <div className="content">
-                    <div className="main">{children}</div>
-                    <div className="extra">{extra}</div>
-                </div>
-            );
-        };
+        // const Content = ({ children, extra }) => {
+        //     return (
+        //         <div className="content">
+        //             <div className="main">{children}</div>
+        //             <div className="extra">{extra}</div>
+        //         </div>
+        //     );
+        // };
         const squareMeterSuffix = (<span>m<sup>2</sup></span>);
         return (
             <div>
                 <PageHeader
                     onBack={() => window.history.back()}
                     title={this.props.data.title}
-                    subTitle="This is a subtitle"
+                    subTitle={intl.formatMessage({id: "labels.announcement_type_" + this.props.data.type})}
                     extra={[
                         <Button key="3">Operation</Button>,
                         <Button key="2">Operation</Button>,
@@ -133,7 +145,7 @@ class AnnouncementView extends Component {
                         </Tabs>
                     }
                 >
-                    <Content extra={extraContent}>{renderContent()}</Content>
+                    {/*<Content extra={extraContent}>{renderContent()}</Content>*/}
                 </PageHeader>
 
                 <div>
@@ -166,6 +178,12 @@ class AnnouncementView extends Component {
                     {this.getEnumValueOptionalDescriptionItem('labels.cooker_type', this.props.data["kitchen.cookerType.value"])};
                     {this.getTextValueOptionalDescriptionItem('labels.number_of_bathrooms', this.props.data["bathroom.numberOfBathrooms"])};
                     {this.getBooleanValueOptionalDescriptionItem('labels.separate_wc', this.props.data["bathroom.separateWC"])};
+                </Descriptions>
+                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
+                    {this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"])}
+                </Descriptions>
+                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
+                    {this.getDescriptionListForCheckedItems(this.props.data["bathroom.furnishing"])}
                 </Descriptions>
                 <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
                     {this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"])}

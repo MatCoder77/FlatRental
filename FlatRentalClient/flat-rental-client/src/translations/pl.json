@@ -157,6 +157,12 @@
     "labels.about_flatmates" : "O współlokatorach",
     "placeholders.about_flatmates" : "Podaj informacje o współlokatorach takie jak wiek, płeć. Opisz krótko czym się zajmują (np. pracują, studiują). Możesz również wspomnieć o oczekiwaniach lokatorów w stosunku do osoby zainteresowanej wynajmem.",
 
+    "labels.announcement_type_flat": "Mieszkanie do wynajęcia",
+    "labels.announcement_type_room": "Pokój do wynajęcia",
+    "labels.announcement_type_place_in_room": "Miejsce w pokoju",
+    "labels.announcement_type_looking_for_flat": "Szukam mieszkania",
+    "labels.announcement_type_looking_for_room": "Szukam pokoju",
+    "labels.announcement_type_looking_for_place_in_room": "Szukam miejsca w pokoju",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
@@ -276,6 +282,22 @@
     "URBAN_COMMUNE" : "gm. miejska",
     "RURAL_COMMUNE" :  "gm. wiejska",
     "MIXED_COMMUNE" :  "gm. miejsko-wiejska",
-    "CAPITAL_COMMUNE" : "gm. stołeczna"
+    "CAPITAL_COMMUNE" : "gm. stołeczna",
+
+    "STREET": "ul.",
+    "AVENUE" : "al.",
+    "SQUARE": "pl.",
+    "GARDEN_SQUARE": "skwer",
+    "BOULEVARD": "bulw.",
+    "ROUNDABOUT": "rondo",
+    "PARK": "park",
+    "MARKET_SQUARE": "rynek",
+    "CHAUSSEE": "szosa",
+    "ROUTE": "droga",
+    "ESTATE": "os.",
+    "GARDEN": "ogród",
+    "ISLAND": "wyspa",
+    "COAST": "wyb.",
+    "OTHER": "inne"
 
 }

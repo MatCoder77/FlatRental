@@ -54,6 +54,7 @@ class AnnouncementStepWizard extends Component {
         this.getErrorMessage = this.getErrorMessage.bind(this);
         this.registerRequiredFields = this.registerRequiredFields.bind(this);
         this.unregisterRequiredFields = this.unregisterRequiredFields.bind(this);
+        this.setLocalityAttribute = this.setLocalityAttribute.bind(this);
         // this.setFormWithSuppliedData = this.setFormWithSuppliedData.bind(this);
         // this.setFormWithSuppliedData();
         this.setAvailableFrom();
@@ -155,6 +156,19 @@ class AnnouncementStepWizard extends Component {
         });
     }
 
+    setLocalityAttribute(attribute, attributeData, properties) {
+        let id = this.state.formData["address." + attribute + ".id"];
+        if (id) {
+            let list =this.state.appData[attributeData];
+            let elementsById = new Map(list.map(i => [i.id, i]));
+            for (let property of properties) {
+                if(!this.state.formData["address." + attribute + "." + property]) {
+                    this.updateFormData("address." + attribute + "." + property, elementsById.get(id)[property])
+                }
+            }
+        }
+    }
+
     // setFormWithSuppliedData() {
     //     if(this.props.formData) {
     //         for (let property in this.props.formData) {
@@ -210,7 +224,7 @@ class AnnouncementStepWizard extends Component {
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
             content: (
-                <AnnouncementView data={this.state.formData} loadData={this.loadData}/>
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
             ),
         }];
 

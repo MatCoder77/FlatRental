@@ -146,7 +146,7 @@ class LocalityStep extends Component {
     }
 
     getStreetLabel(street) {
-        return street.streetType.readableValue + " " + (street.leadingName ? street.leadingName + " " : "") + street.mainName;
+        return this.props.intl.formatMessage({id: street.type}) + " " + (street.leadingName ? street.leadingName + " " : "") + street.mainName;
     }
 
     autoselectAndMakeOptionalIfNecessary(loadedData, callbackParam) {
@@ -273,7 +273,7 @@ class LocalityStep extends Component {
                                 }
                             >
                                 {this.props.appData.districts ? this.props.appData.districts.map(district => (
-                                    <Option key={district.id} value={district.id}>{district.name} <FormattedMessage id={district.districtType}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
+                                    <Option key={district.id} value={district.id}>{district.name} <FormattedMessage id={district.type}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
                             </Select>
 
                         </FormItem>
@@ -292,7 +292,7 @@ class LocalityStep extends Component {
                                 }
                             >
                                 {this.props.appData.communes ? this.props.appData.communes.map(commune => (
-                                    <Option key={commune.id} value={commune.id}>{commune.name} <FormattedMessage id={commune.communeType}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
+                                    <Option key={commune.id} value={commune.id}>{commune.name} <FormattedMessage id={commune.type}>{txt => <font color="#808080"><i>({txt})</i></font>}</FormattedMessage></Option>)) : ""}
                             </Select>
                         </FormItem>
                         }
