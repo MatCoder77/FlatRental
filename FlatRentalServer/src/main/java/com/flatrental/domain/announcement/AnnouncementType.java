@@ -7,7 +7,10 @@ public enum AnnouncementType {
 
     FLAT,
     ROOM,
-    PLACE_IN_ROOM;
+    PLACE_IN_ROOM,
+    LOOK_FOR_FLAT,
+    LOOK_FOR_ROOM,
+    LOOK_FOR_PLACE_IN_ROOM;
 
     private static final String CANNOT_CONVERT_MSG = "Cannot convert from {0} to AnnouncementType";
 

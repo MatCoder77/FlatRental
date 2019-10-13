@@ -1,17 +1,5 @@
 package com.flatrental.domain.announcement.search;
 
-import com.flatrental.domain.announcement.simpleattributes.apartmentamenities.ApartmentAmenity;
-import com.flatrental.domain.announcement.simpleattributes.apartmentstate.ApartmentState;
-import com.flatrental.domain.announcement.simpleattributes.buildingmaterial.BuildingMaterial;
-import com.flatrental.domain.announcement.simpleattributes.buildingtype.BuildingType;
-import com.flatrental.domain.announcement.simpleattributes.cookertype.CookerType;
-import com.flatrental.domain.announcement.simpleattributes.furnishings.FurnishingItem;
-import com.flatrental.domain.announcement.simpleattributes.heatingtype.HeatingType;
-import com.flatrental.domain.announcement.simpleattributes.kitchentype.KitchenType;
-import com.flatrental.domain.announcement.simpleattributes.neighbourhood.NeighbourhoodItem;
-import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType;
-import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
-import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType;
 import lombok.Data;
 
 import java.util.Date;
@@ -20,7 +8,7 @@ import java.util.Set;
 @Data
 public class SearchCriteria {
 
-    private Integer id;
+    private Long id;
     private String announcementType;
     private Integer minTotalArea;
     private Integer maxTotalArea;
@@ -35,35 +23,36 @@ public class SearchCriteria {
     private Integer minFloor;
     private Integer maxFloor;
     private Integer minMaxFloorInBuilding;
-    private Integer maxMaxFlo0rInBuilding;
+    private Integer maxMaxFloorInBuilding;
     private Date minAvailableFrom;
     private Date maxAvailableFrom;
-    private Set<BuildingType> allowedBuildingTypes;
-    private Set<BuildingMaterial> allowedBuildingMaterials;
-    private Set<HeatingType> allowedHeatingTypes;
-    private Set<WindowType> allowedWindowTypes;
-    private Set<ParkingType> allowedParkingTypes;
-    private Set<ApartmentState> allowedApartmentStates;
+    private Set<Long> allowedBuildingTypes;
+    private Set<Long> allowedBuildingMaterials;
+    private Set<Long> allowedHeatingTypes;
+    private Set<Long> allowedWindowTypes;
+    private Set<Long> allowedParkingTypes;
+    private Set<Long> allowedApartmentStates;
     private Integer minYearBuilt;
     private Integer maxYearBuilt;
     private Boolean isWellPlanned;
-    private Set<ApartmentAmenity> requiredApartmentAmenities;
+    private Set<Long> requiredApartmentAmenities;
 
-    private Set<KitchenType> allowedKitchenTypes;
+    private Set<Long> allowedKitchenTypes;
     private Integer minKitchenArea;
     private Integer maxKitchenArea;
-    private Set<CookerType> allowedCookerTypes;
-    private Set<FurnishingItem> requiredKitchenFurnishing;
+    private Set<Long> allowedCookerTypes;
+    private Set<Long> requiredKitchenFurnishing;
 
     private Integer minNumberOfBathrooms;
     private Integer maxNumberOfBathrooms;
     private Boolean hasSeparatedWC;
-    private Set<FurnishingItem> requiredBathroomFurnishing;
+    private Set<Long> requiredBathroomFurnishing;
 
 
-    private Set<Preference> requiredPreferences;
-    private Set<NeighbourhoodItem> requiredNeighbourhoodItems;
+    private Set<Long> requiredPreferences;
+    private Set<Long> requiredNeighbourhoodItems;
     private Integer minNumberOfFlatmates;
     private Integer maxNumberOfFlatmates;
+
 
 }

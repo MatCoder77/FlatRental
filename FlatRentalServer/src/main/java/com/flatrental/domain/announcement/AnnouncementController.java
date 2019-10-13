@@ -3,12 +3,14 @@ package com.flatrental.domain.announcement;
 import com.flatrental.api.AnnouncementDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
+import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,6 +81,11 @@ public class AnnouncementController {
         return ResponseDTO.builder()
                 .success(isSuccessfullyRemoved)
                 .build();
+    }
+
+    @GetMapping("/search")
+    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable) {
+        return announcementService.searchAnnouncements(searchCriteria, pageable);
     }
 
 }

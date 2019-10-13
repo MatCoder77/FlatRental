@@ -7,6 +7,7 @@ import com.flatrental.api.KitchenDTO;
 import com.flatrental.api.ManagedObjectDTO;
 import com.flatrental.api.RoomDTO;
 import com.flatrental.api.SimpleResourceDTO;
+import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.announcement.address.AddressService;
 import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
@@ -28,6 +29,8 @@ import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType
 import com.flatrental.domain.file.File;
 import com.flatrental.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -436,6 +439,12 @@ public class AnnouncementService {
         announcement.setObjectState(ManagedObjectState.REMOVED);
         announcementRepository.save(announcement);
         return true;
+    }
+
+    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable) {
+        return announcementRepository.searchAnnouncementsByCriteria(searchCriteria, pageable).get()
+                .map(this::mapToAnnouncementDTO)
+                .collect(Collectors.toList());
     }
 
 }

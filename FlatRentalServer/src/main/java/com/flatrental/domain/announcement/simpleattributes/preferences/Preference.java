@@ -1,6 +1,8 @@
 package com.flatrental.domain.announcement.simpleattributes.preferences;
 
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "Preferences")
 public class Preference {
 
@@ -26,6 +29,14 @@ public class Preference {
 
     public String getName() {
         return name;
+    }
+
+    private Preference(Long id) {
+        this.id = id;
+    }
+
+    public static Preference fromId(Long id) {
+        return new Preference(id);
     }
 
 }

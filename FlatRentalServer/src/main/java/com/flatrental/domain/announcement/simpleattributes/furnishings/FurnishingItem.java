@@ -1,5 +1,7 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "FurnishingItems")
 public class FurnishingItem {
 
@@ -35,4 +38,13 @@ public class FurnishingItem {
     public FurnishingType getFurnishingType() {
         return furnishingType;
     }
+
+    private FurnishingItem(Long id) {
+        this.id = id;
+    }
+
+    public static FurnishingItem fromId(Long id) {
+        return new FurnishingItem(id);
+    }
+
 }

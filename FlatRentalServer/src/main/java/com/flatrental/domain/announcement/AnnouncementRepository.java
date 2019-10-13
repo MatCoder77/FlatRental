@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
+public interface AnnouncementRepository extends JpaRepository<Announcement, Long>, CustomAnnouncementRepository {
 
     Optional<Announcement> findByIdAndObjectStateNot(Long id, ManagedObjectState objectState);
 

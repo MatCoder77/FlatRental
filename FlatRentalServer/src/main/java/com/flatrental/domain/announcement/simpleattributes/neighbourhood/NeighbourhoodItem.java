@@ -1,5 +1,6 @@
 package com.flatrental.domain.announcement.simpleattributes.neighbourhood;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "NeighbourhoodItems")
 public class NeighbourhoodItem {
 
@@ -25,4 +27,13 @@ public class NeighbourhoodItem {
     public String getName() {
         return name;
     }
+
+    private NeighbourhoodItem(Long id) {
+        this.id = id;
+    }
+
+    public static NeighbourhoodItem fromId(Long id) {
+        return new NeighbourhoodItem(id);
+    }
+
 }
