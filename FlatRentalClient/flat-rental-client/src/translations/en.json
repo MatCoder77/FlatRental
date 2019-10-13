@@ -78,9 +78,11 @@
     "placeholders.price_per_month": "Monthly cost of flat rental",
     "placeholders.deposit": "Deposit",
     "placeholders.select_date": "Select date",
+    "text.incorrect_range_msg": "Incorrect range",
 
 
-    "labels.localization": "Localization",
+
+  "labels.localization": "Localization",
     "labels.voivodeship": "Voivodeship",
     "placeholders.voivodeship": "Select voivodeship",
     "labels.district": "District",

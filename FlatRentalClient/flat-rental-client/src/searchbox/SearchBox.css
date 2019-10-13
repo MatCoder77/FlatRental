@@ -36,3 +36,7 @@ global-search-wrapper {
 .search-btn {
     width: 80px;
 }
+
+.ant-form-explain {
+    margin-bottom: -8px;
+}

@@ -13,6 +13,7 @@ import MainPage from "./mainpage/MainPage";
 import CreateAnnouncement from "./announcement/CreateAnnouncement";
 import EditAnnouncement from "./announcement/EditAnnouncement";
 import DeleteAnnouncement from "./announcement/DeleteAnnouncement";
+import AnnouncementList from "./announcementlist/AnnouncementList";
 
 const { Content } = Layout;
 
@@ -105,6 +106,7 @@ class App extends Component {
                             <Route exact path="/announcement/create/:announcementType" render={(props) => <CreateAnnouncement/>}/>
                             <Route exact path="/announcement/edit/:announcementId" render={(props) => <EditAnnouncement/>}/>
                             <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
+                            <Route exact path="/announcement/list" render={(props) => <AnnouncementList {...props}/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

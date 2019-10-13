@@ -7,22 +7,17 @@ import ComboBox from "../commons/ComboBox";
 import { Collapse } from 'antd';
 import { Radio } from 'antd';
 import {
+    getApartmentAmenitiesTypes,
     getApartmentStateTypes,
     getBuildingMaterialTypes,
-    getBuildingTypes, getCookerTypes,
+    getBuildingTypes, getCookerTypes, getFurnishing,
     getHeatingTypes, getKitchenTypes,
-    getLocations, getParkingTypes, getWindowTypes
+    getLocations, getNeighborhoodItems, getParkingTypes, getPreferences, getWindowTypes, searchAnnouncementsByCriteria
 } from "../infrastructure/RestApiHandler";
 import MultiSelect from "../commons/MultiSelect";
 
 const { Option } = AutoComplete;
 const FormItem = Form.Item;
-
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
 
 class SearchBox extends Component {
     constructor(props) {
@@ -31,10 +26,11 @@ class SearchBox extends Component {
             dataSource: [],
             appData: {},
             formData: {},
-            isExpanded: false
+            isExpanded: false,
+            validationStatus: {},
+            errorMessages: {}
         };
 
-        this.getRandomInt = this.getRandomInt.bind(this);
         this.searchResult = this.searchResult.bind(this);
         this.updateFormData = this.updateFormData.bind(this);
         this.renderOption = this.renderOption.bind(this);
@@ -42,12 +38,25 @@ class SearchBox extends Component {
         this.createSearchResultLabel = this.createSearchResultLabel.bind(this);
         this.changeIsExpanded = this.changeIsExpanded.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.validatePositiveIntegerRange = this.validatePositiveIntegerRange.bind(this);
+        this.getValidationStatus = this.getValidationStatus.bind(this);
+        this.getErrorMessage = this.getErrorMessage.bind(this);
+        this.updateValidation = this.updateValidation.bind(this);
+        this.onPositiveRangeBeginChanged = this.onPositiveRangeBeginChanged.bind(this);
+        this.onPositiveRangeEndChanged = this.onPositiveRangeEndChanged.bind(this);
+        this.isPositiveInteger = this.isPositiveInteger.bind(this);
+        this.onPositiveWithZeroRangeBeginChanged = this.onPositiveWithZeroRangeBeginChanged.bind(this);
+        this.onPositiveWithZeroRangeEndChanged = this.onPositiveWithZeroRangeEndChanged.bind(this);
+        this.validatePositiveOrZeroIntegerRange = this.validatePositiveOrZeroIntegerRange.bind(this);
+        this.areSearchCriteriaValid = this.areSearchCriteriaValid.bind(this);
+        this.performSearchByCriteria = this.performSearchByCriteria.bind(this);
+        this.navigateToAnnouncementsList = this.navigateToAnnouncementsList.bind(this);
 
+        this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
+        this.onlyPositiveIntegerOrZero = this.props.intl.formatMessage({ id: 'text.only_positive_integer_or_zero_msg' });
+        this.incorrectRange = this.props.intl.formatMessage({ id: 'text.incorrect_range_msg' });
         this.announcementTypes = ["FLAT", "ROOM", "PLACE_IN_ROOM", "LOOK_FOR_FLAT", "LOOK_FOR_ROOM", "LOOK_FOR_PLACE_IN_ROOM"]
-    }
-
-    getRandomInt(max, min = 0) {
-        return Math.floor(Math.random() * (max - min + 1)) + min; // eslint-disable-line no-mixed-operators
+        this.updateFormData('announcementType', "FLAT")
     }
 
     searchResult(searchText) {
@@ -79,7 +88,7 @@ class SearchBox extends Component {
         });
     }
 
-    loadData(supplierFunction, fieldName, param) {
+    loadData(supplierFunction, fieldName, param, callbackFunction) {
         let promise = supplierFunction(param);
 
         if (!promise) {
@@ -98,6 +107,9 @@ class SearchBox extends Component {
                     appData
                     // isLoading: false
                 });
+                if (callbackFunction) {
+                    callbackFunction(appData[fieldName]);
+                }
             }).catch(error => {
             // this.setState({
             //     isLoading: false
@@ -143,11 +155,56 @@ class SearchBox extends Component {
         this.searchResult(value);
     };
 
+    onPositiveRangeBeginChanged(value, beginName, endName, rangeName) {
+        this.updateFormData(beginName, value);
+        let validationResult = this.validatePositiveIntegerRange(value, this.state.formData[endName]);
+        this.updateValidation(rangeName, validationResult);
+    }
+
+    onPositiveRangeEndChanged(value, beginName, endName, rangeName) {
+        this.updateFormData(endName, value);
+        let validationResult = this.validatePositiveIntegerRange(this.state.formData[beginName], value);
+        this.updateValidation(rangeName, validationResult);
+    }
+
+    onPositiveWithZeroRangeBeginChanged(value, beginName, endName, rangeName) {
+        this.updateFormData(beginName, value);
+        let validationResult = this.validatePositiveOrZeroIntegerRange(value, this.state.formData[endName]);
+        this.updateValidation(rangeName, validationResult);
+    }
+
+    onPositiveWithZeroRangeEndChanged(value, beginName, endName, rangeName) {
+        this.updateFormData(endName, value);
+        let validationResult = this.validatePositiveOrZeroIntegerRange(this.state.formData[beginName], value);
+        this.updateValidation(rangeName, validationResult);
+    }
     updateFormData(fieldName, fieldValue) {
         const {formData} = this.state;
         formData[fieldName] = fieldValue;
         this.setState({formData});
         console.log(this.state.formData);
+    }
+
+    updateValidation(validationName, validationResult) {
+        if (validationResult) {
+            const {validationStatus} = this.state;
+            const {errorMessages} = this.state;
+            validationStatus[validationName] = validationResult.validateStatus;
+            errorMessages[validationName] = validationResult.errorMsg;
+            this.setState({validationStatus});
+            this.setState({errorMessages});
+        }
+        console.log(this.state.validationStatus);
+    }
+
+    getErrorMessage(validationName) {
+        const {errorMessages} = this.state;
+        return errorMessages[validationName];
+    }
+
+    getValidationStatus(validationName) {
+        const {validationStatus} = this.state;
+        return validationStatus[validationName];
     }
 
     changeIsExpanded() {
@@ -164,6 +221,111 @@ class SearchBox extends Component {
         this.loadData(getApartmentStateTypes, 'apartmentStates');
         this.loadData(getKitchenTypes, 'kitchenTypes');
         this.loadData(getCookerTypes, 'cookerTypes');
+        this.loadData(getApartmentAmenitiesTypes, 'apartmentAmenities');
+        this.loadData(getFurnishing, 'kitchenFurnishing', 'KITCHEN');
+        this.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
+        this.loadData(getPreferences, 'preferences');
+        this.loadData(getNeighborhoodItems, 'neighborhood');
+    }
+
+    validatePositiveIntegerRange(begin, end) {
+        if (!this.validateIfOptionalPositiveInteger(begin) || !this.validateIfOptionalPositiveInteger(end)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.onlyPositiveInteger
+            };
+        }
+        if (begin && end) {
+            let intBeg = parseInt(begin, 10);
+            let intEnd = parseInt(end, 10);
+            if (intBeg > intEnd) {
+                return {
+                    validateStatus: 'error',
+                    errorMsg: this.incorrectRange
+                };
+            }
+        }
+        return {
+            validateStatus: 'success',
+            errorMsg: null,
+        };
+    }
+
+    validateIfOptionalPositiveInteger = (input) => {
+        if (!input) {
+            return true;
+        }
+        if(!this.isPositiveInteger(input)) {
+            return false;
+        }
+        return true;
+    };
+
+    isPositiveInteger(str) {
+        return /^[1-9]\d*$/.test(str);
+    }
+
+    validatePositiveOrZeroIntegerRange(begin, end) {
+        if (!this.validateIfOptionalPositiveIntegerOrZero(begin) || !this.validateIfOptionalPositiveIntegerOrZero(end)) {
+            return {
+                validateStatus: 'error',
+                errorMsg: this.onlyPositiveIntegerOrZero
+            };
+        }
+        if (begin && end) {
+            let intBeg = parseInt(begin, 10);
+            let intEnd = parseInt(end, 10);
+            if (intBeg > intEnd) {
+                return {
+                    validateStatus: 'error',
+                    errorMsg: this.incorrectRange
+                };
+            }
+        }
+        return {
+            validateStatus: 'success',
+            errorMsg: null,
+        };
+    }
+
+    validateIfOptionalPositiveIntegerOrZero = (input) => {
+        if (!input) {
+            return true;
+        }
+        if(!this.isPositiveIntegerOrZero(input)) {
+            return false;
+        }
+        return true;
+    };
+
+    isPositiveIntegerOrZero(str) {
+        return /^(0|[1-9]\d*)$/.test(str);
+    }
+
+    areSearchCriteriaValid() {
+        let validationStatus = this.state.validationStatus;
+        for (let validation in validationStatus) {
+            if (Object.prototype.hasOwnProperty.call(validationStatus, validation)) {
+                if (validationStatus[validation] !== 'success') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    performSearchByCriteria() {
+        this.loadData(searchAnnouncementsByCriteria, 'foundAnnouncements', this.state.formData, this.navigateToAnnouncementsList);
+        console.log(this.state.appData.foundAnnouncements);
+
+    }
+
+    navigateToAnnouncementsList(data) {
+        this.props.history.push({
+            pathname: '/announcement/list',
+            // search: '?query=abc',
+            state: { announcementsList: data }
+        });
     }
 
     render() {
@@ -208,6 +370,8 @@ class SearchBox extends Component {
                                                 style={{ marginRight: -12 }}
                                                 size="large"
                                                 type="primary"
+                                                disabled={!this.areSearchCriteriaValid()}
+                                                onClick={this.performSearchByCriteria}
                                             >
                                                 <Icon type="search" />
                                             </Button>
@@ -220,16 +384,16 @@ class SearchBox extends Component {
                     <Row gutter={12}>
                         <Col span={6}>
                             <FormItem label={intl.formatMessage({id: 'labels.area'})}
-                                //validateStatus={this.props.getValidationStatus("totalArea")}
-                                //help={this.props.getErrorMessage("totalArea")}
+                                validateStatus={this.getValidationStatus("totalArea")}
+                                help={this.getErrorMessage("totalArea")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minTotalArea"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minTotalArea}
+                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -237,8 +401,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxTotalArea"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxTotalArea}
+                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -248,16 +412,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.number_of_rooms'})}
-                                //validateStatus={this.props.getValidationStatus("numberOfRooms")}
-                                //help={this.props.getErrorMessage("numberOfRooms")}
+                                validateStatus={this.getValidationStatus("numberOfRooms")}
+                                help={this.getErrorMessage("numberOfRooms")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minNumberOfRooms"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minNumberOfRooms}
+                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -265,8 +429,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxNumberOfRooms"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxNumberOfRooms}
+                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -276,16 +440,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.price_per_month'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("pricePerMonth")}
+                                help={this.getErrorMessage("pricePerMonth")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minPricePerMonth"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minPricePerMonth}
+                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -293,8 +457,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxPricePerMonth"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxPricePerMonth}
+                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -311,20 +475,20 @@ class SearchBox extends Component {
                         </Col>
                     </Row>
                     {this.state.isExpanded &&
-                    <Row gutter={12}>
+                    <Row gutter={12} type="flex" justify="space-between">
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.estimated_additional_costs'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("additionalCostsPerMonth")}
+                                help={this.getErrorMessage("additionalCostsPerMonth")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minAdditionalCostsPerMonth"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minAdditionalCostsPerMonth}
+                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -332,8 +496,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxAdditionalCostsPerMonth"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxAdditionalCostsPerMonth}
+                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -343,25 +507,25 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.deposit'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("securityDeposit")}
+                                help={this.getErrorMessage("securityDeposit")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minSecurityDeposit"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minSecurityDeposit}
+                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
                                     <Col span={12}>
                                         <Input
-                                            name="minSecurityDeposit"
+                                            name="maxSecurityDeposit"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxSecurityDeposit}
+                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -371,16 +535,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.floor'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("floor")}
+                                help={this.getErrorMessage("floor")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minFloor"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minFloor}
+                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -388,8 +552,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxFloor"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxFloor}
+                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -399,16 +563,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.max_floor'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("max_floor")}
+                                help={this.getErrorMessage("max_floor")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minMaxFloorInBuilding"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minMaxFloorInBuilding}
+                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -416,8 +580,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxMaxFloorInBuilding"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxMaxFloorInBuilding}
+                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -507,16 +671,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.area'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("kitchenArea")}
+                                help={this.getErrorMessage("kitchenArea")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minKitchenArea"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minKitchenArea}
+                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -524,8 +688,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxKitchenArea"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxKitchenArea}
+                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -535,16 +699,16 @@ class SearchBox extends Component {
                         <Col span={6}>
                             <FormItem
                                 label={intl.formatMessage({id: 'labels.year_built'})}
-                                //validateStatus={this.props.getValidationStatus("pricePerMonth")}
-                                //help={this.props.getErrorMessage("pricePerMonth")}
+                                validateStatus={this.getValidationStatus("yearBuilt")}
+                                help={this.getErrorMessage("yearBuilt")}
                             >
                                 <Row gutter={6}>
                                     <Col span={12}>
                                         <Input
                                             name="minYearBuilt"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.minYearBuilt}
+                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
                                             placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
                                         />
                                     </Col>
@@ -552,8 +716,8 @@ class SearchBox extends Component {
                                         <Input
                                             name="maxYearBuilt"
                                             //addonAfter="PLN"
-                                            //value={this.props.formData.pricePerMonth}
-                                            //onChange={event => this.updateOnChange(event, this.validateIfPositiveInteger)}
+                                            value={this.state.formData.maxYearBuilt}
+                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
                                             placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
                                         />
                                     </Col>
@@ -562,7 +726,93 @@ class SearchBox extends Component {
                         </Col>
                         <Col span={6}>
                             <FormItem label={intl.formatMessage({id: 'labels.well_planned'})}>
-                                <Radio.Group buttonStyle="solid" style={{width: '100%'}}>
+                                <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('isWellPlanned', event.target.value)}>
+                                    <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
+                                    <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
+                                </Radio.Group>
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.amenities'})}>
+                                <MultiSelect
+                                    itemList={this.state.appData.apartmentAmenities}
+                                    onUpdate={this.updateFormData}
+                                    selectedItems={this.state.formData.requiredApartmentAmenities}
+                                    name='requiredApartmentAmenities'
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
+                                <MultiSelect
+                                    itemList={this.state.appData.kitchenFurnishing}
+                                    onUpdate={this.updateFormData}
+                                    selectedItems={this.state.formData.requiredKitchenFurnishing}
+                                    name='requiredKitchenFurnishing'
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
+                                <MultiSelect
+                                    itemList={this.state.appData.bathroomFurnishing}
+                                    onUpdate={this.updateFormData}
+                                    selectedItems={this.state.formData.requiredBathroomFurnishing}
+                                    name='requiredBathroomFurnishing'
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.preferences'})}>
+                                <MultiSelect
+                                    itemList={this.state.appData.preferences}
+                                    onUpdate={this.updateFormData}
+                                    selectedItems={this.state.formData.requiredPreferences}
+                                    name='requiredPreferences'
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.neighbourhood'})}>
+                                <MultiSelect
+                                    itemList={this.state.appData.neighborhood}
+                                    onUpdate={this.updateFormData}
+                                    selectedItems={this.state.formData.requiredNeighbourhoodItems}
+                                    name='requiredNeighbourhoodItems'
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem
+                                label={intl.formatMessage({id: 'labels.number_of_bathrooms'})}
+                                validateStatus={this.getValidationStatus("numberOfBathrooms")}
+                                help={this.getErrorMessage("numberOfBathrooms")}
+                            >
+                                <Row gutter={6}>
+                                    <Col span={12}>
+                                        <Input
+                                            name="minNumberOfBathrooms"
+                                            //addonAfter="PLN"
+                                            value={this.state.formData.minNumberOfBathrooms}
+                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
+                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                                        />
+                                    </Col>
+                                    <Col span={12}>
+                                        <Input
+                                            name="maxNumberOfBathrooms"
+                                            //addonAfter="PLN"
+                                            value={this.state.formData.maxNumberOfBathrooms}
+                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
+                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                                        />
+                                    </Col>
+                                </Row>
+                            </FormItem>
+                        </Col>
+                        <Col span={6}>
+                            <FormItem label={intl.formatMessage({id: 'labels.separate_wc'})}>
+                                <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('hasSeparatedWC', event.target.value)}>
                                     <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
                                     <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
                                 </Radio.Group>

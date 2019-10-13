@@ -1,5 +1,8 @@
 import {ACCESS_TOKEN, API_BASE_URL} from "./Constants";
 import {request, uploadFileRequest} from "./Request";
+import {unflatten} from "./DTOUtils";
+
+const queryString = require('query-string');
 
 export function login(loginRequest) {
     return request({
@@ -226,6 +229,14 @@ export function downloadFile(filename) {
 export function getLocations(searchText) {
     return request({
         url: API_BASE_URL + "/locations/search" + (searchText ? "?searchText=" + searchText : "") ,
+        method: 'GET'
+    });
+}
+
+export function searchAnnouncementsByCriteria(searchCriteria) {
+    let queryParams = queryString.stringify(searchCriteria);
+    return request({
+        url: API_BASE_URL + "/announcements/search?" + queryParams,
         method: 'GET'
     });
 }

@@ -77,6 +77,7 @@
     "placeholders.price_per_month": "Podaj miesięczny koszt wynajmu mieszkania",
     "placeholders.deposit": "Podaj wysokość kaucji",
     "placeholders.select_date": "Wybierz date",
+    "text.incorrect_range_msg": "Nieprawidłowy przedział",
 
 
     "labels.localization": "Lokalizacja",

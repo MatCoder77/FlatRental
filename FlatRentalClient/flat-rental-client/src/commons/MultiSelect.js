@@ -34,7 +34,7 @@ class MultiSelect extends Component {
             <Select
                 //showSearch
                 mode="multiple"
-                style={{ width: '100%', fontSize: '0.85em'}}
+                style={{ width: '100%', fontSize: '0.84em'}}
                 placeholder={this.props.placeholder}
                 onSelect={this.updateOnSelect(this.props.name)}
                 onDeselect={this.updateOnDeselect(this.props.name)}
