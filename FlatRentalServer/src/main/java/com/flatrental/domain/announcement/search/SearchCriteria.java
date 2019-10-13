@@ -26,6 +26,15 @@ public class SearchCriteria {
     private Integer maxMaxFloorInBuilding;
     private Date minAvailableFrom;
     private Date maxAvailableFrom;
+
+    private Long voivodeshipId;
+    private Long districtId;
+    private Long communeId;
+    private Long localityId;
+    private Long localityDistrictId;
+    private Long localityPartId;
+    private Long streetId;
+
     private Set<Long> allowedBuildingTypes;
     private Set<Long> allowedBuildingMaterials;
     private Set<Long> allowedHeatingTypes;

@@ -1,5 +1,6 @@
 package com.flatrental.domain.announcement;
 
+import com.flatrental.domain.announcement.address.Address_;
 import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.announcement.simpleattributes.apartmentamenities.ApartmentAmenity;
 import com.flatrental.domain.announcement.simpleattributes.apartmentstate.ApartmentState_;
@@ -13,6 +14,11 @@ import com.flatrental.domain.announcement.simpleattributes.neighbourhood.Neighbo
 import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType_;
 import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
 import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType_;
+import com.flatrental.domain.locations.abstractlocality.AbstractLocality_;
+import com.flatrental.domain.locations.commune.Commune_;
+import com.flatrental.domain.locations.district.District_;
+import com.flatrental.domain.locations.street.Street_;
+import com.flatrental.domain.locations.voivodeship.Voivodeship_;
 import org.springframework.data.domain.Page;
 
 import javax.persistence.EntityManager;
@@ -61,7 +67,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getNumberMinMaxPredicate(a.get(Announcement_.floor), searchCriteria.getMinFloor(), searchCriteria.getMaxFloor(), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.maxFloorInBuilding), searchCriteria.getMinMaxFloorInBuilding(), searchCriteria.getMaxMaxFloorInBuilding(), criteriaBuilder),
                 //availableFrom
-                //address
+                getAddressPredicate(a, searchCriteria, criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.buildingType).get(BuildingType_.id), searchCriteria.getAllowedBuildingTypes(), criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id), searchCriteria.getAllowedBuildingMaterials(), criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.heatingType).get(HeatingType_.id), searchCriteria.getAllowedHeatingTypes(), criteriaBuilder),
@@ -146,9 +152,29 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 .collect(Collectors.collectingAndThen(Collectors.toList(), list -> criteriaBuilder.and(list.toArray(new Predicate[0])))));
     }
 
-//    private Optional<Predicate> getAddressPredicate(Root<Announcement> announcement, CriteriaBuilder criteriaBuilder) {
-//        Root<ApartmentAmenity> amenityRoot = announcement.join(Announcement_.apartmentAmenities);
-//    }
+    private Optional<Predicate> getAddressPredicate(Root<Announcement> a, SearchCriteria searchCriteria, CriteriaBuilder criteriaBuilder) {
+        Path<Long> voivodeshipIdPath = a.get(Announcement_.address).get(Address_.voivodeship).get(Voivodeship_.id);
+        Path<Long> districtIdPath = a.get(Announcement_.address).get(Address_.district).get(District_.id);
+        Path<Long> communeIdPath = a.get(Announcement_.address).get(Address_.commune).get(Commune_.id);
+        Path<Long> localityIdPath = a.get(Announcement_.address).get(Address_.locality).get(AbstractLocality_.id);
+        Path<Long> localityDistrictIdPath = a.get(Announcement_.address).get(Address_.localityDistrict).get(AbstractLocality_.id);
+        Path<Long> localityPartIdPath = a.get(Announcement_.address).get(Address_.localityPart).get(AbstractLocality_.id);
+        Path<Long> streetIdPath = a.get(Announcement_.address).get(Address_.street).get(Street_.id);
+
+        List<Optional<Predicate>> addressPredicates = Arrays.asList(
+                getEqualsPredicate(voivodeshipIdPath, searchCriteria.getVoivodeshipId(), criteriaBuilder),
+                getEqualsPredicate(districtIdPath, searchCriteria.getDistrictId(),criteriaBuilder),
+                getEqualsPredicate(communeIdPath, searchCriteria.getCommuneId(), criteriaBuilder),
+                getEqualsPredicate(localityIdPath, searchCriteria.getLocalityId(), criteriaBuilder),
+                getEqualsPredicate(localityDistrictIdPath, searchCriteria.getLocalityDistrictId(), criteriaBuilder),
+                getEqualsPredicate(localityPartIdPath, searchCriteria.getLocalityPartId(), criteriaBuilder),
+                getEqualsPredicate(streetIdPath, searchCriteria.getStreetId(), criteriaBuilder));
+
+        return Optional.ofNullable(addressPredicates.stream()
+                .flatMap(Optional::stream)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> criteriaBuilder.and(list.toArray(new Predicate[0])))));
+    }
+
 
     private Optional<Predicate> getAttributeInSetPredicate(Path<Long> attribute, Set<Long> allowedValues, CriteriaBuilder criteriaBuilder) {
         if (CollectionUtils.isEmpty(allowedValues)) {
