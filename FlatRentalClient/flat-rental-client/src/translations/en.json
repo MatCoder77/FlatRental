@@ -167,8 +167,15 @@
     "labels.announcement_type_looking_for_flat": "Looking for a flat",
     "labels.announcement_type_looking_for_room": "Looking for a room",
     "labels.announcement_type_looking_for_place_in_room": "Looking for a place in room",
+    "placeholders.announcement_type": "Announcement type",
+    "placeholders.min_value": "From",
+    "placeholders.max_value": "To",
+    "labels.additional_criteria": "Additional criteria",
+    "labels.expand": "Expand",
+    "labels.collapse": "Collapse",
 
-    "BUILDING_TYPE_FLAT": "Flat",
+
+  "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",
     "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Multi-family house",
@@ -302,5 +309,14 @@
     "GARDEN": "ogród",
     "ISLAND": "wyspa",
     "COAST": "wyb.",
-    "OTHER": "inne"
+    "OTHER": "inne",
+
+    "labels.SB_FLAT": "Flats",
+    "labels.SB_ROOM": "Rooms",
+    "labels.SB_PLACE_IN_ROOM": "Places in room",
+    "labels.SB_LOOK_FOR_FLAT": "Demanded flats",
+    "labels.SB_LOOK_FOR_ROOM": "Demanded rooms",
+    "labels.SB_LOOK_FOR_PLACE_IN_ROOM": "Demanded places in room",
+
+    "labels.sb_placeholder": "Type in address"
 }

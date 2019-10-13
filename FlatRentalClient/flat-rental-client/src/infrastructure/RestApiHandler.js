@@ -222,3 +222,10 @@ export function downloadFile(filename) {
         method: 'GET'
     })
 }
+
+export function getLocations(searchText) {
+    return request({
+        url: API_BASE_URL + "/locations/search" + (searchText ? "?searchText=" + searchText : "") ,
+        method: 'GET'
+    });
+}

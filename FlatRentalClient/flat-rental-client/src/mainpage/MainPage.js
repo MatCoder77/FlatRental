@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {FormattedMessage} from "react-intl";
+import SearchBox from "../searchbox/SearchBox";
 
 class MainPage extends Component {
     constructor(props) {
@@ -8,7 +9,7 @@ class MainPage extends Component {
 
     render() {
         return (
-          <h1><FormattedMessage id="browser"/></h1>
+          <SearchBox/>
         );
     }
 }

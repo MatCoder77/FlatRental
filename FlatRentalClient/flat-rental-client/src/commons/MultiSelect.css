@@ -1,0 +1,6 @@
+.ant-select-selection--multiple
+{
+    white-space: nowrap;
+    height: 30px;
+    overflow: auto
+}

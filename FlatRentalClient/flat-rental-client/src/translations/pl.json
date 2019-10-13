@@ -68,7 +68,7 @@
     "text.smaller_than_minus_one": "Numer piętra musi być większy lub równy -1.",
     "text.floor_number_grater_than_max_floor": "Numer piętra nie może być większy niż liczba pięter w budynku.",
     "labels.floor": "Piętro",
-    "labels.max_floor": "Ostatnie piętro",
+    "labels.max_floor": "Liczba pięter",
     "labels.available_from": "Dostępne od",
     "placeholders.title": "Podaj tytuł ogłoszenia",
     "placeholders.estimated_additional_costs": "Szacowane miesięczne koszty dodatkowe (woda, gaz, prad, internet, śmieci itd.)",
@@ -163,6 +163,12 @@
     "labels.announcement_type_looking_for_flat": "Szukam mieszkania",
     "labels.announcement_type_looking_for_room": "Szukam pokoju",
     "labels.announcement_type_looking_for_place_in_room": "Szukam miejsca w pokoju",
+    "placeholders.announcement_type": "Wybierz typ ogloszenia",
+    "placeholders.min_value": "Od",
+    "placeholders.max_value": "Do",
+    "labels.additional_criteria": "Dodatkowe kryteria",
+    "labels.expand": "Rozwiń",
+    "labels.collapse": "Zwiń",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
@@ -298,6 +304,15 @@
     "GARDEN": "ogród",
     "ISLAND": "wyspa",
     "COAST": "wyb.",
-    "OTHER": "inne"
+    "OTHER": "inne",
+
+    "labels.SB_FLAT": "Mieszkania",
+    "labels.SB_ROOM": "Pokoje",
+    "labels.SB_PLACE_IN_ROOM": "Miejsca w pokoju",
+    "labels.SB_LOOK_FOR_FLAT": "Poszukiwane mieszkania",
+    "labels.SB_LOOK_FOR_ROOM": "Poszukiwane pokoje",
+    "labels.SB_LOOK_FOR_PLACE_IN_ROOM": "Poszukiwane m. w pokoju",
+
+    "labels.sb_placeholder": "Wpisz dokładny adres lub obszar jak cześć miasa, miasto czy gmina"
 
 }
