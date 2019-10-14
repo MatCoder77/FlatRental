@@ -96,6 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/heatingtype",
                         "/api/apartmentstate",
                         "/api/apartmentamenity",
+                        "/api/preferences",
                         "/api//neighbourhood",
                         "/api/furnishing",
                         "/api/announcements/**")
