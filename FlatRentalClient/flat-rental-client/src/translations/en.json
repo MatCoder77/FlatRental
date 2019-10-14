@@ -176,8 +176,15 @@
     "labels.expand": "Expand",
     "labels.collapse": "Collapse",
 
+    "labels.voivodeship_abbreviation": "woj.",
+    "labels.district_abbreviation": "pow.",
+    "labels.urban_commune_abbreviation": "gm. m.",
+    "labels.rural_commune_abbreviation": "gm. w.",
+    "labels.mixed_abbreviation": "gm. mw.",
+    "labels.capital_commune_abbreviation": "gm. s.",
 
-  "BUILDING_TYPE_FLAT": "Flat",
+
+    "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",
     "BUILDING_TYPE_TENEMENT": "Tenement",
     "BUILDING_TYPE_MULTI_FAMILY_HOUSE": "Multi-family house",
@@ -311,7 +318,7 @@
     "GARDEN": "ogród",
     "ISLAND": "wyspa",
     "COAST": "wyb.",
-    "OTHER": "inne",
+    "OTHER": "",
 
     "labels.SB_FLAT": "Flats",
     "labels.SB_ROOM": "Rooms",

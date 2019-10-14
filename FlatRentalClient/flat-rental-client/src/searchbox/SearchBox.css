@@ -34,9 +34,13 @@ global-search-wrapper {
 }
 
 .search-btn {
-    width: 80px;
+    width: 85px;
 }
 
 .ant-form-explain {
     margin-bottom: -8px;
+}
+
+.global-search-criteria-input {
+    margin-top: -4px;
 }

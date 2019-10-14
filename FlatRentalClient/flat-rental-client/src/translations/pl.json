@@ -171,6 +171,13 @@
     "labels.expand": "Rozwiń",
     "labels.collapse": "Zwiń",
 
+    "labels.voivodeship_abbreviation": "woj.",
+    "labels.district_abbreviation": "pow.",
+    "labels.urban_commune_abbreviation": "gm. m.",
+    "labels.rural_commune_abbreviation": "gm. w.",
+    "labels.mixed_abbreviation": "gm. mw.",
+    "labels.capital_commune_abbreviation": "gm. s.",
+
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",
     "BUILDING_TYPE_TENEMENT": "Kamienica",
@@ -305,7 +312,7 @@
     "GARDEN": "ogród",
     "ISLAND": "wyspa",
     "COAST": "wyb.",
-    "OTHER": "inne",
+    "OTHER": "",
 
     "labels.SB_FLAT": "Mieszkania",
     "labels.SB_ROOM": "Pokoje",
