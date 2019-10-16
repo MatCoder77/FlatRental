@@ -149,12 +149,14 @@
     "labels.previous": "Wstecz",
     "labels.next": "Dalej",
     "labels.add_announcement": "Dodaj ogłoszenie",
+    "labels.update_announcement": "Zaakceptuj zmiany",
 
     "labels.room_area" : "Powierzchnia pokoju",
     "placeholders.room_area": "Podaj powierzchnię pokoju",
     "labels.room_accessories": "Wyposażenie pokoju",
     "labels.flatmates" : "Współlokatorzy",
     "labels.flatmates_number" : "Liczba",
+    "labels.flatmates_number2" : "Liczba osób w pokoju",
     "labels.about_flatmates" : "O współlokatorach",
     "placeholders.about_flatmates" : "Podaj informacje o współlokatorach takie jak wiek, płeć. Opisz krótko czym się zajmują (np. pracują, studiują). Możesz również wspomnieć o oczekiwaniach lokatorów w stosunku do osoby zainteresowanej wynajmem.",
 
@@ -177,6 +179,10 @@
     "labels.rural_commune_abbreviation": "gm. w.",
     "labels.mixed_abbreviation": "gm. mw.",
     "labels.capital_commune_abbreviation": "gm. s.",
+
+    "labels.offer": "Oferta",
+    "labels.room": "Pokój",
+    "labels.preferences_and_neighbourhood": "Preferencje i Okolica",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",

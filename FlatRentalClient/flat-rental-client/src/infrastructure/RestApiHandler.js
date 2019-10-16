@@ -234,9 +234,9 @@ export function getLocations(searchText) {
 }
 
 export function searchAnnouncementsByCriteria(searchCriteria) {
-    let queryParams = queryString.stringify(searchCriteria);
     return request({
-        url: API_BASE_URL + "/announcements/search?" + queryParams,
-        method: 'GET'
+        url: API_BASE_URL + "/announcements/search",
+        method: 'POST',
+        body: JSON.stringify(searchCriteria)
     });
 }

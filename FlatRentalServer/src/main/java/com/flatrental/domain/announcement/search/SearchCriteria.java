@@ -45,7 +45,7 @@ public class SearchCriteria {
     private Integer maxYearBuilt;
     private Boolean isWellPlanned;
     private Set<Long> requiredApartmentAmenities;
-
+    private Set<RoomCriteria> rooms;
     private Set<Long> allowedKitchenTypes;
     private Integer minKitchenArea;
     private Integer maxKitchenArea;
@@ -56,7 +56,6 @@ public class SearchCriteria {
     private Integer maxNumberOfBathrooms;
     private Boolean hasSeparatedWC;
     private Set<Long> requiredBathroomFurnishing;
-
 
     private Set<Long> requiredPreferences;
     private Set<Long> requiredNeighbourhoodItems;

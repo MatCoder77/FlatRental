@@ -1,6 +1,7 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.announcement.address.Address_;
+import com.flatrental.domain.announcement.search.RoomCriteria;
 import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.announcement.simpleattributes.apartmentamenities.ApartmentAmenity;
 import com.flatrental.domain.announcement.simpleattributes.apartmentstate.ApartmentState_;
@@ -27,9 +28,12 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.SetJoin;
+import javax.persistence.criteria.Subquery;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -77,7 +81,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getNumberMinMaxPredicate(a.get(Announcement_.yearBuilt), searchCriteria.getMinYearBuilt(), searchCriteria.getMaxYearBuilt(), criteriaBuilder),
                 getEqualsPredicate(a.get(Announcement_.wellPlanned), searchCriteria.getIsWellPlanned(), criteriaBuilder),
                 getRequiredAttributesPredicate(a.get(Announcement_.apartmentAmenities), getAttributesFromIds(searchCriteria.getRequiredApartmentAmenities(), ApartmentAmenity::fromId), criteriaBuilder),
-                //rooms
+                getRoomsPredicates(a, criteriaQuery, searchCriteria, criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id), searchCriteria.getAllowedKitchenTypes(), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea), searchCriteria.getMinKitchenArea(), searchCriteria.getMaxKitchenArea(), criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id), searchCriteria.getAllowedCookerTypes(), criteriaBuilder),
@@ -181,6 +185,50 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
             return Optional.empty();
         }
         return Optional.ofNullable(allowedValues).map(values -> attribute.in(values));
+    }
+
+    private Optional<Predicate> getRoomsPredicates(Root<Announcement> a, CriteriaQuery<Announcement> criteriaQuery,
+                                                   SearchCriteria searchCriteria, CriteriaBuilder criteriaBuilder) {
+        List<Predicate> specifiedRoomPredicates = Optional.ofNullable(searchCriteria.getRooms())
+                .orElse(Collections.emptySet())
+                .stream()
+                .map(roomCriteria -> getPredicateForRoom(a, criteriaQuery, roomCriteria, criteriaBuilder))
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
+
+        if (specifiedRoomPredicates.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Predicate predicate = criteriaBuilder.and(specifiedRoomPredicates.toArray(new Predicate[0]));
+        return Optional.ofNullable(predicate);
+    }
+
+    private Optional<Predicate> getPredicateForRoom(Root<Announcement> a, CriteriaQuery<Announcement> criteriaQuery, RoomCriteria roomCriteria, CriteriaBuilder criteriaBuilder) {
+        Subquery<Room> roomSubquery = criteriaQuery.subquery(Room.class);
+        Root<Announcement> subRoot = roomSubquery.correlate(a);
+        Join<Announcement, Room> announcementXroom = subRoot.join(Announcement_.rooms);
+        //Join<Room, FurnishingItem> announcementXroomXfurnishing = announcementXrooms.join(Room_.furnishings);
+        roomSubquery.select(announcementXroom);
+        List<Optional<Predicate>> roomPredicates = Arrays.asList(
+                getNumberMinMaxPredicate(announcementXroom.get(Room_.area), roomCriteria.getMinArea(), roomCriteria.getMaxArea(), criteriaBuilder),
+                getNumberMinMaxPredicate(announcementXroom.get(Room_.numberOfPersons), roomCriteria.getMinNumberOfPersons(), roomCriteria.getMaxNumberOfPersons(), criteriaBuilder),
+                getNumberMinMaxPredicate(announcementXroom.get(Room_.personsOccupied), roomCriteria.getMinPersonsOccupied(), roomCriteria.getMaxPersonsOccupied(), criteriaBuilder),
+                getRequiredAttributesPredicate(announcementXroom.get(Room_.furnishings), getAttributesFromIds(roomCriteria.getRequiredFurnishing(), FurnishingItem::fromId), criteriaBuilder)
+        );
+        List<Predicate> specifiedRoomPredicates = roomPredicates.stream()
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
+
+        if (specifiedRoomPredicates.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Predicate predicate = criteriaBuilder.and(specifiedRoomPredicates.toArray(new Predicate[0]));
+
+        roomSubquery.where(predicate);
+
+        return Optional.ofNullable(criteriaBuilder.exists(roomSubquery));
     }
 
     private Long getTotalCount(Predicate predicate) {

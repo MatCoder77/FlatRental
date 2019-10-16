@@ -127,7 +127,7 @@ class FlatAnnouncementDetailInfoStep extends Component {
     }
 
     updateOnChangeWithName(name, value, validationFunction) {
-        const validationResult = validationFunction(value);
+        const validationResult = validationFunction ? validationFunction(value) : undefined;;
         this.props.onUpdate(name, value, validationResult);
     };
 

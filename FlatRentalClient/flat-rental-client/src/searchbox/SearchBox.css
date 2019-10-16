@@ -1,5 +1,5 @@
-global-search-wrapper {
-    padding-right: 50px;
+.global-search-wrapper {
+    padding-top: 80px;
 }
 
 .global-search {
@@ -41,6 +41,6 @@ global-search-wrapper {
     margin-bottom: -8px;
 }
 
-.global-search-criteria-input {
+.align-gs-marker .ant-form-item-control-wrapper  {
     margin-top: -4px;
 }

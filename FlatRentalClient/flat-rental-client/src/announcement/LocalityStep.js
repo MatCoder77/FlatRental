@@ -107,6 +107,9 @@ class LocalityStep extends Component {
         if (this.props.appData[loadedData].length == 0 && this.props.formData["address.localityDistrict.id"]) {
             this.props.loadData(getStreets, 'streets', this.props.formData["address.localityDistrict.id"], this.validateAndMakeOptionalIfNecessary, "address.street.id");
         }
+        if (this.props.appData[loadedData].length == 0 && !this.props.formData["address.localityDistrict.id"]) {
+            this.props.updateValidation("address.street.id", {validateStatus: 'success', errorMsg: null});
+        }
     }
 
     componentDidMount() {

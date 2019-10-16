@@ -182,7 +182,7 @@ class AnnouncementStepWizard extends Component {
     submitAnnouncement() {
         let filteredFormData = DTOUtils.excludeTransientProperties(this.state.formData);
         let announcementDTO = DTOUtils.unflatten(filteredFormData);
-        let promise = createAnnouncement(announcementDTO);
+        let promise = announcementDTO.id ? updateAnnouncement(announcementDTO.id, announcementDTO) : createAnnouncement(announcementDTO);
     }
 
     render() {
@@ -340,7 +340,7 @@ class AnnouncementStepWizard extends Component {
                             <Col span={10}>
                                 <Button className="step-wizard-button" type="primary" onClick={this.submitAnnouncement}
                                         size="large">
-                                    <FormattedMessage id="labels.add_announcement"/>
+                                    <FormattedMessage id={this.state.formData.id ? "labels.update_announcement" : "labels.add_announcement"}/>
                                 </Button>
                             </Col>
                         )}

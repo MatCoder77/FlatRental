@@ -38,7 +38,7 @@ class MultiSelect extends Component {
                 placeholder={this.props.placeholder}
                 onSelect={this.updateOnSelect(this.props.name)}
                 onDeselect={this.updateOnDeselect(this.props.name)}
-                maxTagCount={1}
+                maxTagCount={this.props.maxTagCount ? this.props.maxTagCount : 1}
                 // maxTagTextLength="10"
                 //optionFilterProp="children"
                 // onChange={onChange}

@@ -155,12 +155,14 @@
     "labels.previous": "Previous",
     "labels.next": "Next",
     "labels.add_announcement": "Add announcement",
+  "labels.update_announcement": "Accept changes",
 
     "labels.room_area" : "Room area",
     "placeholders.room_area": "Type in area of room",
     "labels.room_accessories": "Accessories in room",
     "labels.flatmates" : "Flatmates",
     "labels.flatmates_number" : "Flatmates number",
+    "labels.flatmates_number2" : "Flatmates number",
     "labels.about_flatmates" : "About flatmates",
 
     "labels.announcement_type_flat": "Flat for rent",
@@ -183,6 +185,9 @@
     "labels.mixed_abbreviation": "gm. mw.",
     "labels.capital_commune_abbreviation": "gm. s.",
 
+    "labels.offer": "Offer",
+    "labels.room": "Room",
+    "labels.preferences_and_neighbourhood": "Preferences and Neighbourhood",
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",

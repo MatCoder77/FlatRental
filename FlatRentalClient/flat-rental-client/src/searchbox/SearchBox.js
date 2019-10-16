@@ -16,6 +16,7 @@ import {
 } from "../infrastructure/RestApiHandler";
 import MultiSelect from "../commons/MultiSelect";
 import { Tabs } from 'antd';
+import {unflatten} from "../infrastructure/DTOUtils";
 
 const { TabPane } = Tabs;
 const { Option } = AutoComplete;
@@ -55,6 +56,9 @@ class SearchBox extends Component {
         this.performSearchByCriteria = this.performSearchByCriteria.bind(this);
         this.navigateToAnnouncementsList = this.navigateToAnnouncementsList.bind(this);
         this.onSelect = this.onSelect.bind(this);
+        this.onPositiveRangeBeginChangedForRoom = this.onPositiveRangeBeginChangedForRoom.bind(this);
+        this.onPositiveRangeEndChangedForRoom = this.onPositiveRangeEndChangedForRoom.bind(this);
+        this.updateFormDataForSingleRoom = this.updateFormDataForSingleRoom.bind(this);
 
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
         this.onlyPositiveIntegerOrZero = this.props.intl.formatMessage({ id: 'text.only_positive_integer_or_zero_msg' });
@@ -211,9 +215,21 @@ class SearchBox extends Component {
         this.updateValidation(rangeName, validationResult);
     }
 
+    onPositiveRangeBeginChangedForRoom(value, beginName, endName, rangeName) {
+        this.updateFormDataForSingleRoom(beginName, value);
+        let validationResult = this.validatePositiveIntegerRange(value, this.state.formData.rooms[0][endName]);
+        this.updateValidation(rangeName, validationResult);
+    }
+
     onPositiveRangeEndChanged(value, beginName, endName, rangeName) {
         this.updateFormData(endName, value);
         let validationResult = this.validatePositiveIntegerRange(this.state.formData[beginName], value);
+        this.updateValidation(rangeName, validationResult);
+    }
+
+    onPositiveRangeEndChangedForRoom(value, beginName, endName, rangeName) {
+        this.updateFormDataForSingleRoom(endName, value);
+        let validationResult = this.validatePositiveIntegerRange(this.state.formData.rooms[0][beginName], value);
         this.updateValidation(rangeName, validationResult);
     }
 
@@ -228,9 +244,24 @@ class SearchBox extends Component {
         let validationResult = this.validatePositiveOrZeroIntegerRange(this.state.formData[beginName], value);
         this.updateValidation(rangeName, validationResult);
     }
+
     updateFormData(fieldName, fieldValue) {
         const {formData} = this.state;
         formData[fieldName] = fieldValue;
+        this.setState({formData});
+        console.log(this.state.formData);
+    }
+
+    updateFormDataForSingleRoom(fieldName, fieldValue) {
+        const {formData} = this.state;
+        let rooms;
+        if (!this.state.formData['rooms']) {
+            rooms = [new Object({[fieldName]: fieldValue})];
+        } else {
+            rooms = formData['rooms'];
+            rooms[0][fieldName] = fieldValue;
+        }
+        formData['rooms'] = rooms;
         this.setState({formData});
         console.log(this.state.formData);
     }
@@ -274,6 +305,7 @@ class SearchBox extends Component {
         this.loadData(getApartmentAmenitiesTypes, 'apartmentAmenities');
         this.loadData(getFurnishing, 'kitchenFurnishing', 'KITCHEN');
         this.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
+        this.loadData(getFurnishing, 'roomFurnishing', 'ROOM');
         this.loadData(getPreferences, 'preferences');
         this.loadData(getNeighborhoodItems, 'neighborhood');
     }
@@ -365,7 +397,8 @@ class SearchBox extends Component {
     }
 
     performSearchByCriteria() {
-        this.loadData(searchAnnouncementsByCriteria, 'foundAnnouncements', this.state.formData, this.navigateToAnnouncementsList);
+        let criteria = unflatten(this.state.formData);
+        this.loadData(searchAnnouncementsByCriteria, 'foundAnnouncements', criteria, this.navigateToAnnouncementsList);
         console.log(this.state.appData.foundAnnouncements);
 
     }
@@ -394,6 +427,854 @@ class SearchBox extends Component {
     render() {
         const {intl} = this.props;
         const buildingTypes = this.state.appData.buildingTypes ? this.state.appData.buildingTypes : [];
+
+        const totalAreaCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.area'})}
+                      validateStatus={this.getValidationStatus("totalArea")}
+                      help={this.getErrorMessage("totalArea")}>
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minTotalArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minTotalArea}
+                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}/>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxTotalArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxTotalArea}
+                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}/>
+                    </Col>
+                </Row>
+            </FormItem>
+            );
+
+        const numberOfRoomsCriteria  = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.number_of_rooms'})}
+                validateStatus={this.getValidationStatus("numberOfRooms")}
+                help={this.getErrorMessage("numberOfRooms")}>
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minNumberOfRooms"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minNumberOfRooms}
+                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}/>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxNumberOfRooms"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxNumberOfRooms}
+                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}/>
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const pricePerMonthCriteria = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.price_per_month'})}
+                validateStatus={this.getValidationStatus("pricePerMonth")}
+                help={this.getErrorMessage("pricePerMonth")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minPricePerMonth"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minPricePerMonth}
+                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxPricePerMonth"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxPricePerMonth}
+                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const showMoreCriteriaButton = (
+            <FormItem label={intl.formatMessage({id: 'labels.additional_criteria'})} >
+                <Button className="expand-criteria-button" type="default" style={{width: '100%'}} onClick={this.changeIsExpanded}>
+                    <FormattedMessage id={this.state.isExpanded ? "labels.collapse" : "labels.expand"}/>
+                    <Icon type={this.state.isExpanded ? "up" : "down"}/>
+                </Button>
+            </FormItem>
+        );
+
+        const additionalCostsCriteria = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.estimated_additional_costs'})}
+                validateStatus={this.getValidationStatus("additionalCostsPerMonth")}
+                help={this.getErrorMessage("additionalCostsPerMonth")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minAdditionalCostsPerMonth"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minAdditionalCostsPerMonth}
+                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxAdditionalCostsPerMonth"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxAdditionalCostsPerMonth}
+                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const depositCriteria = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.deposit'})}
+                validateStatus={this.getValidationStatus("securityDeposit")}
+                help={this.getErrorMessage("securityDeposit")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minSecurityDeposit"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minSecurityDeposit}
+                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxSecurityDeposit"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxSecurityDeposit}
+                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const floorCriteria = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.floor'})}
+                validateStatus={this.getValidationStatus("floor")}
+                help={this.getErrorMessage("floor")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minFloor"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minFloor}
+                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxFloor"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxFloor}
+                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const maxFloorCriteria = (
+            <FormItem
+                label={intl.formatMessage({id: 'labels.max_floor'})}
+                validateStatus={this.getValidationStatus("max_floor")}
+                help={this.getErrorMessage("max_floor")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minMaxFloorInBuilding"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minMaxFloorInBuilding}
+                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxMaxFloorInBuilding"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxMaxFloorInBuilding}
+                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const buildingTypeCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.building_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.buildingTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedBuildingTypes}
+                    name='allowedBuildingTypes'
+                />
+            </FormItem>
+        );
+
+        const buildingMaterialCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.building_material'})}>
+                <MultiSelect
+                    itemList={this.state.appData.buildingMaterials}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedBuildingMaterials}
+                    name='allowedBuildingMaterials'
+                />
+            </FormItem>
+        );
+
+        const heatingTypeCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.heating_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.heatingTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedHeatingTypes}
+                    name='allowedHeatingTypes'
+                />
+            </FormItem>
+        );
+
+        const windowTypeCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.windows_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.windowTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedWindowTypes}
+                    name='allowedWindowTypes'
+                />
+            </FormItem>
+        );
+
+        const parkingTypeCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.parking_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.parkingTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedParkingTypes}
+                    name='allowedParkingTypes'
+                />
+            </FormItem>
+        );
+
+        const apartmentStateCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.apartment_state'})}>
+                <MultiSelect
+                    itemList={this.state.appData.apartmentStates}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedApartmentStates}
+                    name='allowedApartmentStates'
+                />
+            </FormItem>
+        );
+
+        const yearBuiltCriteria = alignMarker => {
+            return (
+                <FormItem
+                    className={alignMarker ? "align-gs-marker" : "not-align-gs-marker"}
+                    label={intl.formatMessage({id: 'labels.year_built'})}
+                    validateStatus={this.getValidationStatus("yearBuilt")}
+                    help={this.getErrorMessage("yearBuilt")}
+                >
+                    <Row gutter={6}>
+                        <Col span={12}>
+                            <Input
+                                name="minYearBuilt"
+                                //addonAfter="PLN"
+                                value={this.state.formData.minYearBuilt}
+                                onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
+                                placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <Input
+                                name="maxYearBuilt"
+                                //addonAfter="PLN"
+                                value={this.state.formData.maxYearBuilt}
+                                onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
+                                placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                            />
+                        </Col>
+                    </Row>
+                </FormItem>
+            )
+        };
+
+        const wellPlannedCriteria = alignMarker => {
+            return (
+                <FormItem label={intl.formatMessage({id: 'labels.well_planned'})} className={alignMarker ? "align-gs-marker" : "not-align-gs-marker"}>
+                    <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('isWellPlanned', event.target.value)}>
+                        <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
+                        <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
+                    </Radio.Group>
+                </FormItem>
+            )
+        };
+
+        const apartmentAmenitiesCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.amenities'})}>
+                <MultiSelect
+                    itemList={this.state.appData.apartmentAmenities}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.requiredApartmentAmenities}
+                    name='requiredApartmentAmenities'
+                />
+            </FormItem>
+        );
+
+        const kitchenTypesCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.kitchen_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.kitchenTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedKitchenTypes}
+                    name='allowedKitchenTypes'
+                />
+            </FormItem>
+        );
+
+        const cookerTypesCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.cooker_type'})}>
+                <MultiSelect
+                    itemList={this.state.appData.cookerTypes}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.allowedCookerTypes}
+                    name='allowedCookerTypes'
+                />
+            </FormItem>
+        );
+
+        const kitchenAreaCriteria = (
+            <FormItem
+                className="align-gs-marker"
+                label={intl.formatMessage({id: 'labels.area'})}
+                validateStatus={this.getValidationStatus("kitchenArea")}
+                help={this.getErrorMessage("kitchenArea")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minKitchenArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minKitchenArea}
+                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxKitchenArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxKitchenArea}
+                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const kitchenFurnishingCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
+                <MultiSelect
+                    itemList={this.state.appData.kitchenFurnishing}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.requiredKitchenFurnishing}
+                    name='requiredKitchenFurnishing'
+                />
+            </FormItem>
+        );
+
+        const numberOfBathroomsCriteria = (
+            <FormItem
+                className="align-gs-marker"
+                label={intl.formatMessage({id: 'labels.number_of_bathrooms'})}
+                validateStatus={this.getValidationStatus("numberOfBathrooms")}
+                help={this.getErrorMessage("numberOfBathrooms")}
+            >
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minNumberOfBathrooms"
+                            //addonAfter="PLN"
+                            value={this.state.formData.minNumberOfBathrooms}
+                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxNumberOfBathrooms"
+                            //addonAfter="PLN"
+                            value={this.state.formData.maxNumberOfBathrooms}
+                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
+                        />
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const separateWcCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.separate_wc'})} className="align-gs-marker">
+                <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('hasSeparatedWC', event.target.value)}>
+                    <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
+                    <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
+                </Radio.Group>
+            </FormItem>
+        );
+
+        const bathroomFurnishingCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
+                <MultiSelect
+                    itemList={this.state.appData.bathroomFurnishing}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.requiredBathroomFurnishing}
+                    name='requiredBathroomFurnishing'
+                />
+            </FormItem>
+        );
+
+        const preferencesCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.preferences'})}>
+                <MultiSelect
+                    itemList={this.state.appData.preferences}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.requiredPreferences}
+                    name='requiredPreferences'
+                />
+            </FormItem>
+        );
+
+        const neighbourhoodCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.neighbourhood'})}>
+                <MultiSelect
+                    itemList={this.state.appData.neighborhood}
+                    onUpdate={this.updateFormData}
+                    selectedItems={this.state.formData.requiredNeighbourhoodItems}
+                    name='requiredNeighbourhoodItems'
+                />
+            </FormItem>
+        );
+
+        const roomAreaCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.area'})}
+                      validateStatus={this.getValidationStatus("roomArea")}
+                      help={this.getErrorMessage("roomArea")}>
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.rooms ? this.state.formData.rooms[0] ? this.state.formData.rooms[0].minArea : undefined : undefined}
+                            onChange={event => this.onPositiveRangeBeginChangedForRoom(event.target.value, 'minArea', 'maxArea', 'roomArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}/>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxArea"
+                            //addonAfter="PLN"
+                            value={this.state.formData.rooms ? this.state.formData.rooms[0] ? this.state.formData.rooms[0].maxArea : undefined : undefined}
+                            onChange={event => this.onPositiveRangeEndChangedForRoom(event.target.value, 'minArea', 'maxArea', 'roomArea')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}/>
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const numberOfPersonsCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.number_of_persons'})}
+                      validateStatus={this.getValidationStatus("numberOfPersons")}
+                      help={this.getErrorMessage("numberOfPersons")}>
+                <Row gutter={6}>
+                    <Col span={12}>
+                        <Input
+                            name="minNumberOfPersons"
+                            //addonAfter="PLN"
+                            value={this.state.formData.rooms ? this.state.formData.rooms[0] ? this.state.formData.rooms[0].minNumberOfPersons : undefined : undefined}
+                            onChange={event => this.onPositiveRangeBeginChangedForRoom(event.target.value, 'minNumberOfPersons', 'maxNumberOfPersons', 'numberOfPersons')}
+                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}/>
+                    </Col>
+                    <Col span={12}>
+                        <Input
+                            name="maxNumberOfPersons"
+                            //addonAfter="PLN"
+                            value={this.state.formData.rooms ? this.state.formData.rooms[0] ? this.state.formData.rooms[0].maxNumberOfPersons : undefined : undefined}
+                            onChange={event => this.onPositiveRangeEndChangedForRoom(event.target.value, 'minNumberOfPersons', 'maxNumberOfPersons', 'numberOfPersons')}
+                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}/>
+                    </Col>
+                </Row>
+            </FormItem>
+        );
+
+        const roomFurnishingCriteria = (
+            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
+                <MultiSelect
+                    maxTagCount={10}
+                    itemList={this.state.appData.roomFurnishing}
+                    onUpdate={this.updateFormDataForSingleRoom}
+                    selectedItems={this.state.formData.rooms ? this.state.formData.rooms[0] ? this.state.formData.rooms[0].requiredFurnishing : undefined : undefined}
+                    name='requiredFurnishing'
+                />
+            </FormItem>
+        );
+
+        const flatCriteriaContainer = (
+            <div>
+                <Row gutter={12} className="global-search-lower-container">
+                    <Col span={6}>
+                        {totalAreaCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {numberOfRoomsCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {pricePerMonthCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {showMoreCriteriaButton}
+                    </Col>
+                </Row>
+                {this.state.isExpanded &&
+                <Row gutter={12} type="flex" justify="space-between">
+                    <Tabs>
+                        <TabPane tab={intl.formatMessage({ id: "labels.offer" })} key="1">
+                            <Col span={6}>
+                                {additionalCostsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {depositCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: "labels.apartment" })} key="2">
+                            <Col span={6}>
+                                {floorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {maxFloorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {yearBuiltCriteria(false)}
+                            </Col>
+                            <Col span={6}>
+                                {wellPlannedCriteria(false)}
+                            </Col>
+                            <Col span={6}>
+                                {buildingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {buildingMaterialCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {heatingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {windowTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {parkingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentStateCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentAmenitiesCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.kitchen' })} key="3">
+                            <Col span={6}>
+                                {kitchenTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {cookerTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenAreaCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.bathroom' })} key="4">
+                            <Col span={6}>
+                                {numberOfBathroomsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {separateWcCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {bathroomFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.preferences_and_neighbourhood' })} key="5">
+                            <Col span={6}>
+                                {preferencesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {neighbourhoodCriteria}
+                            </Col>
+                        </TabPane>
+                    </Tabs>
+                </Row>}
+            </div>
+        );
+
+        const roomCriteriaContainer = (
+            <div>
+                <Row gutter={12} className="global-search-lower-container">
+                    <Col span={6}>
+                        {roomAreaCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {numberOfPersonsCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {pricePerMonthCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {showMoreCriteriaButton}
+                    </Col>
+                </Row>
+                {this.state.isExpanded &&
+                <Row gutter={12} type="flex" justify="space-between">
+                    <Tabs>
+                        <TabPane tab={intl.formatMessage({ id: "labels.offer" })} key="1">
+                            <Col span={6}>
+                                {additionalCostsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {depositCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: "labels.apartment" })} key="2">
+                            <Col span={6}>
+                                {totalAreaCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {numberOfRoomsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {floorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {maxFloorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {yearBuiltCriteria(true)}
+                            </Col>
+                            <Col span={6}>
+                                {wellPlannedCriteria(true)}
+                            </Col>
+                            <Col span={6}>
+                                {buildingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {buildingMaterialCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {heatingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {windowTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {parkingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentStateCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentAmenitiesCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.room' })} key="3">
+                            <Col span={24}>
+                                {roomFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.kitchen' })} key="4">
+                            <Col span={6}>
+                                {kitchenTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {cookerTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenAreaCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.bathroom' })} key="5">
+                            <Col span={6}>
+                                {numberOfBathroomsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {separateWcCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {bathroomFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.preferences_and_neighbourhood' })} key="6">
+                            <Col span={6}>
+                                {preferencesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {neighbourhoodCriteria}
+                            </Col>
+                        </TabPane>
+                    </Tabs>
+                </Row>}
+            </div>
+        );
+
+        const placeInRoomCriteriaContainer = (
+            <div>
+                <Row gutter={12} className="global-search-lower-container">
+                    <Col span={6}>
+                        {roomAreaCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {numberOfPersonsCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {pricePerMonthCriteria}
+                    </Col>
+                    <Col span={6}>
+                        {showMoreCriteriaButton}
+                    </Col>
+                </Row>
+                {this.state.isExpanded &&
+                <Row gutter={12} type="flex" justify="space-between">
+                    <Tabs>
+                        <TabPane tab={intl.formatMessage({ id: "labels.offer" })} key="1">
+                            <Col span={6}>
+                                {additionalCostsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {depositCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: "labels.apartment" })} key="2">
+                            <Col span={6}>
+                                {totalAreaCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {numberOfRoomsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {floorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {maxFloorCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {yearBuiltCriteria(true)}
+                            </Col>
+                            <Col span={6}>
+                                {wellPlannedCriteria(true)}
+                            </Col>
+                            <Col span={6}>
+                                {buildingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {buildingMaterialCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {heatingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {windowTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {parkingTypeCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentStateCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {apartmentAmenitiesCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.room' })} key="3">
+                            <Col span={24}>
+                                {roomFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.kitchen' })} key="4">
+                            <Col span={6}>
+                                {kitchenTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {cookerTypesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenAreaCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {kitchenFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.bathroom' })} key="5">
+                            <Col span={6}>
+                                {numberOfBathroomsCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {separateWcCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {bathroomFurnishingCriteria}
+                            </Col>
+                        </TabPane>
+                        <TabPane tab={intl.formatMessage({ id: 'labels.preferences_and_neighbourhood' })} key="6">
+                            <Col span={6}>
+                                {preferencesCriteria}
+                            </Col>
+                            <Col span={6}>
+                                {neighbourhoodCriteria}
+                            </Col>
+                        </TabPane>
+                    </Tabs>
+                </Row>}
+            </div>
+        );
+
+        const criteriaContainerByType = new Map([['FLAT', flatCriteriaContainer], ['ROOM', roomCriteriaContainer], ['PLACE_IN_ROOM', placeInRoomCriteriaContainer]]);
+
+
         return (
             <div className="global-search-wrapper" style={{ width: '100%' }}>
                 <Form className="search-box-form">
@@ -444,459 +1325,7 @@ class SearchBox extends Component {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={12} className="global-search-lower-container">
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.area'})}
-                                validateStatus={this.getValidationStatus("totalArea")}
-                                help={this.getErrorMessage("totalArea")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minTotalArea"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minTotalArea}
-                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxTotalArea"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxTotalArea}
-                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minTotalArea', 'maxTotalArea', 'totalArea')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.number_of_rooms'})}
-                                validateStatus={this.getValidationStatus("numberOfRooms")}
-                                help={this.getErrorMessage("numberOfRooms")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minNumberOfRooms"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minNumberOfRooms}
-                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxNumberOfRooms"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxNumberOfRooms}
-                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minNumberOfRooms', 'maxNumberOfRooms', 'numberOfRooms')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.price_per_month'})}
-                                validateStatus={this.getValidationStatus("pricePerMonth")}
-                                help={this.getErrorMessage("pricePerMonth")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minPricePerMonth"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minPricePerMonth}
-                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxPricePerMonth"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxPricePerMonth}
-                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minPricePerMonth', 'maxPricePerMonth', 'pricePerMonth')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.additional_criteria'})} >
-                                <Button className="expand-criteria-button" type="default" style={{width: '100%'}} onClick={this.changeIsExpanded}>
-                                    <FormattedMessage id={this.state.isExpanded ? "labels.collapse" : "labels.expand"}/>
-                                    <Icon type={this.state.isExpanded ? "up" : "down"}/>
-                                </Button>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    {this.state.isExpanded &&
-                    <Row gutter={12} type="flex" justify="space-between">
-                        <Tabs>
-                            <TabPane tab="Ogólne" key="1">
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.estimated_additional_costs'})}
-                                validateStatus={this.getValidationStatus("additionalCostsPerMonth")}
-                                help={this.getErrorMessage("additionalCostsPerMonth")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minAdditionalCostsPerMonth"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minAdditionalCostsPerMonth}
-                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxAdditionalCostsPerMonth"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxAdditionalCostsPerMonth}
-                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minAdditionalCostsPerMonth', 'maxAdditionalCostsPerMonth', 'additionalCostsPerMonth')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.deposit'})}
-                                validateStatus={this.getValidationStatus("securityDeposit")}
-                                help={this.getErrorMessage("securityDeposit")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minSecurityDeposit"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minSecurityDeposit}
-                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxSecurityDeposit"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxSecurityDeposit}
-                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minSecurityDeposit', 'maxSecurityDeposit', 'securityDeposit')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.floor'})}
-                                validateStatus={this.getValidationStatus("floor")}
-                                help={this.getErrorMessage("floor")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minFloor"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minFloor}
-                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxFloor"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxFloor}
-                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minFloor', 'maxFloor', 'floor')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                label={intl.formatMessage({id: 'labels.max_floor'})}
-                                validateStatus={this.getValidationStatus("max_floor")}
-                                help={this.getErrorMessage("max_floor")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minMaxFloorInBuilding"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minMaxFloorInBuilding}
-                                            onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxMaxFloorInBuilding"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxMaxFloorInBuilding}
-                                            onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minMaxFloorInBuilding', 'maxMaxFloorInBuilding', 'max_floor')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                            </TabPane>
-                            <TabPane tab="Mieszkanie" key="2">
-                            <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.building_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.buildingTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedBuildingTypes}
-                                    name='allowedBuildingTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.building_material'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.buildingMaterials}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedBuildingMaterials}
-                                    name='allowedBuildingMaterials'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.heating_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.heatingTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedHeatingTypes}
-                                    name='allowedHeatingTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.windows_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.windowTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedWindowTypes}
-                                    name='allowedWindowTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.parking_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.parkingTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedParkingTypes}
-                                    name='allowedParkingTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.apartment_state'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.apartmentStates}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedApartmentStates}
-                                    name='allowedApartmentStates'
-                                />
-                            </FormItem>
-                        </Col>
-                                <Col span={6}>
-                                    <FormItem
-                                        className="global-search-criteria-input"
-                                        label={intl.formatMessage({id: 'labels.year_built'})}
-                                        validateStatus={this.getValidationStatus("yearBuilt")}
-                                        help={this.getErrorMessage("yearBuilt")}
-                                    >
-                                        <Row gutter={6}>
-                                            <Col span={12}>
-                                                <Input
-                                                    name="minYearBuilt"
-                                                    //addonAfter="PLN"
-                                                    value={this.state.formData.minYearBuilt}
-                                                    onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
-                                                    placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                                />
-                                            </Col>
-                                            <Col span={12}>
-                                                <Input
-                                                    name="maxYearBuilt"
-                                                    //addonAfter="PLN"
-                                                    value={this.state.formData.maxYearBuilt}
-                                                    onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minYearBuilt', 'maxYearBuilt', 'yearBuilt')}
-                                                    placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </FormItem>
-                                </Col>
-                                <Col span={6}>
-                                    <FormItem label={intl.formatMessage({id: 'labels.well_planned'})} className="global-search-criteria-input">
-                                        <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('isWellPlanned', event.target.value)}>
-                                            <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
-                                            <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
-                                        </Radio.Group>
-                                    </FormItem>
-                                </Col>
-                                <Col span={6}>
-                                    <FormItem label={intl.formatMessage({id: 'labels.amenities'})}>
-                                        <MultiSelect
-                                            itemList={this.state.appData.apartmentAmenities}
-                                            onUpdate={this.updateFormData}
-                                            selectedItems={this.state.formData.requiredApartmentAmenities}
-                                            name='requiredApartmentAmenities'
-                                        />
-                                    </FormItem>
-                                </Col>
-                            </TabPane>
-                            <TabPane tab={intl.formatMessage({ id: 'labels.kitchen' })} key="3">
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.kitchen_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.kitchenTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedKitchenTypes}
-                                    name='allowedKitchenTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.cooker_type'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.cookerTypes}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.allowedCookerTypes}
-                                    name='allowedCookerTypes'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem
-                                className="global-search-criteria-input"
-                                label={intl.formatMessage({id: 'labels.area'})}
-                                validateStatus={this.getValidationStatus("kitchenArea")}
-                                help={this.getErrorMessage("kitchenArea")}
-                            >
-                                <Row gutter={6}>
-                                    <Col span={12}>
-                                        <Input
-                                            name="minKitchenArea"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.minKitchenArea}
-                                            onChange={event => this.onPositiveRangeBeginChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <Input
-                                            name="maxKitchenArea"
-                                            //addonAfter="PLN"
-                                            value={this.state.formData.maxKitchenArea}
-                                            onChange={event => this.onPositiveRangeEndChanged(event.target.value, 'minKitchenArea', 'maxKitchenArea', 'kitchenArea')}
-                                            placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormItem>
-                        </Col>
-                                <Col span={6}>
-                                    <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
-                                        <MultiSelect
-                                            itemList={this.state.appData.kitchenFurnishing}
-                                            onUpdate={this.updateFormData}
-                                            selectedItems={this.state.formData.requiredKitchenFurnishing}
-                                            name='requiredKitchenFurnishing'
-                                        />
-                                    </FormItem>
-                                </Col>
-                            </TabPane>
-                        <TabPane tab="Łazienka" key="4">
-                            <Col span={6}>
-                                <FormItem
-                                    className="global-search-criteria-input"
-                                    label={intl.formatMessage({id: 'labels.number_of_bathrooms'})}
-                                    validateStatus={this.getValidationStatus("numberOfBathrooms")}
-                                    help={this.getErrorMessage("numberOfBathrooms")}
-                                >
-                                    <Row gutter={6}>
-                                        <Col span={12}>
-                                            <Input
-                                                name="minNumberOfBathrooms"
-                                                //addonAfter="PLN"
-                                                value={this.state.formData.minNumberOfBathrooms}
-                                                onChange={event => this.onPositiveWithZeroRangeBeginChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
-                                                placeholder={intl.formatMessage({id: 'placeholders.min_value'})}
-                                            />
-                                        </Col>
-                                        <Col span={12}>
-                                            <Input
-                                                name="maxNumberOfBathrooms"
-                                                //addonAfter="PLN"
-                                                value={this.state.formData.maxNumberOfBathrooms}
-                                                onChange={event => this.onPositiveWithZeroRangeEndChanged(event.target.value, 'minNumberOfBathrooms', 'maxNumberOfBathrooms', 'numberOfBathrooms')}
-                                                placeholder={intl.formatMessage({id: 'placeholders.max_value'})}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </FormItem>
-                            </Col>
-                            <Col span={6}>
-                                <FormItem label={intl.formatMessage({id: 'labels.separate_wc'})} className="global-search-criteria-input">
-                                    <Radio.Group buttonStyle="solid" style={{width: '100%'}} onChange={event => this.updateFormData('hasSeparatedWC', event.target.value)}>
-                                        <Radio.Button style={{width: '50%'}} value="true"><FormattedMessage id={"labels.yes"}/></Radio.Button>
-                                        <Radio.Button style={{width: '50%'}} value="false"><FormattedMessage id={"labels.no"}/></Radio.Button>
-                                    </Radio.Group>
-                                </FormItem>
-                            </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.accessories'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.bathroomFurnishing}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.requiredBathroomFurnishing}
-                                    name='requiredBathroomFurnishing'
-                                />
-                            </FormItem>
-                        </Col>
-                        </TabPane>
-                        <TabPane tab={"Preferencje i okolica"} key="5">
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.preferences'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.preferences}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.requiredPreferences}
-                                    name='requiredPreferences'
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={6}>
-                            <FormItem label={intl.formatMessage({id: 'labels.neighbourhood'})}>
-                                <MultiSelect
-                                    itemList={this.state.appData.neighborhood}
-                                    onUpdate={this.updateFormData}
-                                    selectedItems={this.state.formData.requiredNeighbourhoodItems}
-                                    name='requiredNeighbourhoodItems'
-                                />
-                            </FormItem>
-                        </Col>
-                        </TabPane>
-                        </Tabs>
-                    </Row>}
+                    {this.state.formData.announcementType ? criteriaContainerByType.get(this.state.formData.announcementType) : ""}
                 </Form>
             </div>
         );

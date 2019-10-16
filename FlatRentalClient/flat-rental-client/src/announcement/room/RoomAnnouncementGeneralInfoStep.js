@@ -35,18 +35,25 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.floorNumberGreaterThanMaxFloor = this.props.intl.formatMessage({ id: 'text.floor_number_grater_than_max_floor' });
 
         this.props.registerRequiredFields(['title', 'rooms.0.area', 'rooms.0.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);        this.validateSuppliedValues();
+        this.onRoomChange('rooms', 1, undefined, 'roomNumber');
     }
 
     validateSuppliedValues() {
         this.validateIfSupplied('title', this.validateTitle);
-        this.validateIfSupplied('area', 'rooms.0.area',this.validateIfPositiveInteger)
-        this.validateIfSupplied('numberOfPersons', 'rooms.0.numberOfPersons',this.validateIfPositiveInteger)
+        this.validateIfSuppliedRooms('rooms',this.validateIfPositiveInteger,  'area');
+        this.validateIfSuppliedRooms('rooms',this.validateIfPositiveInteger, 'numberOfPersons');
         this.validateIfSupplied('pricePerMonth', this.validateIfPositiveInteger);
         this.validateIfSupplied('additionalCostsPerMonth', this.validateIfNaturalNumber);
         this.validateIfSupplied('securityDeposit', this.validateIfNaturalNumber);
         this.validateIfSupplied('floor', this.validateFloor);
         this.validateIfSupplied('maxFloorInBuilding', this.validateMaxFloor);
         this.validateIfSupplied('availableFrom', this.validateIfNotEmpty);
+    }
+
+    validateIfSuppliedRooms(fieldName, validatorFunction, attribute) {
+        if (this.props.formData[fieldName] && this.props.formData[fieldName][0] && this.props.formData[fieldName][0][attribute]) {
+            this.props.updateValidation(fieldName + ".0." + attribute, validatorFunction(this.props.formData[fieldName][0][attribute]));
+        }
     }
 
     validateIfSupplied(fieldName, validatorFunction) {
@@ -77,7 +84,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
     };
 
     onRoomChange(name, value, validationFunction, roomAttribute) {
-        const validationResult = validationFunction(value);
+        const validationResult = validationFunction ? validationFunction(value) : undefined;
         let rooms = this.props.formData.rooms;
         if (rooms && rooms[0]) {
             rooms[0][roomAttribute] = value;
