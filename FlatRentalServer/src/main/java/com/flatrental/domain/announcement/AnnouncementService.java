@@ -29,7 +29,6 @@ import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType
 import com.flatrental.domain.file.File;
 import com.flatrental.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -124,7 +123,7 @@ public class AnnouncementService {
                 .preferences(getPreferences(announcementDTO))
                 .neighbourhood(getNeighbourhoodItems(announcementDTO))
                 .announcementImages(getAnnouncementImages(announcementDTO))
-                .aboutRoommates(announcementDTO.getAboutRoommates())
+                .aboutRoommates(announcementDTO.getAboutFlatmates())
                 .numberOfFlatmates(announcementDTO.getNumberOfFlatmates());
 
         Optional.ofNullable(announcementDTO.getBuildingType())
@@ -292,7 +291,7 @@ public class AnnouncementService {
                 .preferences(getPreferencesDTOs(announcement))
                 .neighbourhood(getNeighbourhoodDTOs(announcement))
                 .announcementImages(getAnnouncementImagesDTOs(announcement))
-                .aboutRoommates(announcement.getAboutRoommates())
+                .aboutFlatmates(announcement.getAboutRoommates())
                 .numberOfFlatmates(announcement.getNumberOfFlatmates())
                 .info(getManagedObjectDTO(announcement));
 

@@ -48,7 +48,10 @@ public class AuthenticationController {
                 .path("/api/users/{username}")
                 .buildAndExpand(newUser.getUsername())
                 .toUri();
-        return new ResourceDTO(uri);
+        return ResourceDTO.builder()
+                .id(newUser.getId())
+                .uri(uri)
+                .build();
     }
 
 }

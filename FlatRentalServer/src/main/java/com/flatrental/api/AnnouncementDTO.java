@@ -82,7 +82,7 @@ public class AnnouncementDTO {
     private String description;
 
     List<FileDTO> announcementImages;
-    String aboutRoommates;
+    String aboutFlatmates;
 
     @PositiveOrZero
     Integer numberOfFlatmates;
