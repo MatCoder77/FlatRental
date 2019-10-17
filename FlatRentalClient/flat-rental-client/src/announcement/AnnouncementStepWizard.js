@@ -183,6 +183,28 @@ class AnnouncementStepWizard extends Component {
         let filteredFormData = DTOUtils.excludeTransientProperties(this.state.formData);
         let announcementDTO = DTOUtils.unflatten(filteredFormData);
         let promise = announcementDTO.id ? updateAnnouncement(announcementDTO.id, announcementDTO) : createAnnouncement(announcementDTO);
+        if (!promise) {
+            return;
+        }
+
+        // this.setState({
+        //     isLoading: true
+        // });
+
+        promise
+            .then(response => {
+                this.navigateToAnnouncement(response.id);
+            }).catch(error => {
+            // this.setState({
+            //     isLoading: false
+            // })
+        });
+    }
+
+    navigateToAnnouncement(announcementId) {
+        this.props.history.push({
+            pathname: '/announcement/view/' + announcementId
+        });
     }
 
     render() {
@@ -266,7 +288,9 @@ class AnnouncementStepWizard extends Component {
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
-            content: 'Last-content',
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
+            ),
         }];
         const placeInRoomSteps =  [{
             title: intl.formatMessage({id: "labels.general_info"}),
@@ -304,7 +328,9 @@ class AnnouncementStepWizard extends Component {
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
-            content: 'Last-content',
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
+            )
         }];
         const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps]]);
         const steps = stepsByAnnouncementType.get(this.state.formData.type);

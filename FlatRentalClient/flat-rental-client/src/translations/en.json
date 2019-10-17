@@ -62,6 +62,7 @@
     "text.only_positive_integer_or_zero_msg" : "Type in natural number.",
     "labels.number_of_rooms": "Number of rooms",
     "labels.price_per_month": "Price per month",
+    "labels.price_per_month_2": "zł/month",
     "labels.estimated_additional_costs": "Additional costs:",
     "labels.deposit": "Deposit",
     "labels.floor_max_floor": "Floor / Max Floor",

@@ -3,6 +3,7 @@ import {FormattedMessage, injectIntl} from "react-intl";
 import { withRouter } from 'react-router-dom';
 import {List, Avatar, Icon, Descriptions} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
+import './AnnouncementList.css'
 
 const IconText = ({ type, text }) => (
     <span>
@@ -37,9 +38,9 @@ class AnnouncementList extends Component{
         console.log(this.state.formData);
     }
 
-    navigateToAnnouncement() {
+    navigateToAnnouncement(id) {
         this.props.history.push({
-            pathname: '/',
+            pathname: '/announcement/view/' + id,
             // search: '?query=abc',
             //state: { announcementsList: data }
         });
@@ -95,7 +96,7 @@ class AnnouncementList extends Component{
         return (<Descriptions style={{marginTop: '10px'}} column={3}>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.price_per_month'})}>{item.pricePerMonth} PLN</Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.area'})}>{item.rooms[0].area} <span>m<sup>2</sup></span></Descriptions.Item>
-            <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.flatmates_number2'})}>{item.rooms[0].personsOccupied}</Descriptions.Item></Descriptions>);
+            <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.number_of_persons'})}>{item.rooms[0].numberOfPersons}</Descriptions.Item></Descriptions>);
     }
 
     getDescription(item) {
@@ -133,7 +134,7 @@ class AnnouncementList extends Component{
                 }
                 renderItem={item => (
                     <List.Item
-                        onClick={this.navigateToAnnouncement}
+                        onClick={() => {this.navigateToAnnouncement(item.id)}}
                         key={item.id}
                         actions={[
                             <IconText type="star-o" text="156" key="list-vertical-star-o" />,
@@ -145,7 +146,7 @@ class AnnouncementList extends Component{
                                 {item.announcementImages && item.announcementImages[0] &&
                             <img
                                 width={272}
-                                alt="logo"
+                                alt=" "
                                 src={API_BASE_URL + "/file/download/" + item.announcementImages[0].filename}
                             />}
                             </div>

@@ -60,7 +60,10 @@ public class AnnouncementController {
                 .path("/api/announcements/{id}")
                 .buildAndExpand(announcementId)
                 .toUri();
-        return new ResourceDTO(uri);
+        return ResourceDTO.builder()
+                .id(announcement.getId())
+                .uri(uri)
+                .build();
     }
 
     @PutMapping(ID_PATH)
@@ -83,9 +86,19 @@ public class AnnouncementController {
                 .build();
     }
 
-    @GetMapping("/search")
-    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable) {
+    @PostMapping("/search")
+    public List<AnnouncementDTO> searchAnnouncements(@Valid @RequestBody SearchCriteria searchCriteria, Pageable pageable) {
         return announcementService.searchAnnouncements(searchCriteria, pageable);
     }
+
+    @GetMapping("/permissions" + ID_PATH)
+    public ResponseDTO checkPermissionToModifyAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
+        Announcement announcement = announcementService.getExistingAnnouncement(id);
+        boolean hasPermission = permissionsValidationService.hasPermissionToEditAnnouncement(userInfo, announcement);
+        return ResponseDTO.builder()
+                .success(hasPermission)
+                .build();
+    }
+
 
 }

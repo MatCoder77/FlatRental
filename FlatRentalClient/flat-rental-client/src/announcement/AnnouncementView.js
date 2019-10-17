@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { PageHeader, Tabs, Button, Statistic, Descriptions } from 'antd';
+import {PageHeader, Tabs, Button, Statistic, Descriptions, Input, Card} from 'antd';
 import {FormattedMessage, injectIntl} from "react-intl";
 import ImagesGallery2 from "./ImagesGallery";
 import {API_BASE_URL} from "../infrastructure/Constants";
+import moment from "moment";
+import { Typography, Divider } from 'antd';
+import './AnnouncementView.css'
+
+const { Title, Paragraph, Text } = Typography;
 
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 class AnnouncementView extends Component {
 
@@ -17,17 +23,29 @@ class AnnouncementView extends Component {
         this.getDescriptionListForCheckedItems = this.getDescriptionListForCheckedItems.bind(this);
         this.getImages = this.getImages.bind(this);
         this.attachLocalityData = this.attachLocalityData.bind(this);
+        this.createSearchResultLabel = this.createSearchResultLabel.bind(this);
+
         this.attachLocalityData();
+
+        this.voivodeshipAbbreviation = this.props.intl.formatMessage({ id: 'labels.voivodeship_abbreviation' });
+        this.districtAbbreviation = this.props.intl.formatMessage({ id: 'labels.district_abbreviation' });
+        this.urbanCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.urban_commune_abbreviation' });
+        this.ruralCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.rural_commune_abbreviation' });
+        this.mixedCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.mixed_abbreviation' });
+        this.capitalCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.capital_commune_abbreviation' });
+        console.log(this.props.data);
     }
 
     attachLocalityData() {
-        this.props.setLocalityAttribute('voivodeship', 'voivodeships', ['name']);
-        this.props.setLocalityAttribute('district', 'districts', ['name', 'type']);
-        this.props.setLocalityAttribute('commune', 'communes', ['name', 'type']);
-        this.props.setLocalityAttribute('locality', 'localities', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
-        this.props.setLocalityAttribute('localityDistrict', 'localityDistricts', ['name']);
-        this.props.setLocalityAttribute('localityPart', 'localityParts', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
-        this.props.setLocalityAttribute('street', 'streets', ['name', 'type', 'mainName', 'leadingName']);
+        if (this.props.setLocalityAttribute) {
+            this.props.setLocalityAttribute('voivodeship', 'voivodeships', ['name']);
+            this.props.setLocalityAttribute('district', 'districts', ['name', 'type']);
+            this.props.setLocalityAttribute('commune', 'communes', ['name', 'type']);
+            this.props.setLocalityAttribute('locality', 'localities', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
+            this.props.setLocalityAttribute('localityDistrict', 'localityDistricts', ['name']);
+            this.props.setLocalityAttribute('localityPart', 'localityParts', ['name', 'type.id', 'type.typeCode', 'type.typeName']);
+            this.props.setLocalityAttribute('street', 'streets', ['name', 'type', 'mainName', 'leadingName']);
+        }
     }
 
     getTextValueOptionalDescriptionItem(labelKey, value, suffix) {
@@ -64,25 +82,286 @@ class AnnouncementView extends Component {
         return items ? items.map(item => item.value ? (<Descriptions.Item>&#8226; {this.props.intl.formatMessage({id: item.value})}</Descriptions.Item>) : "") : "";
     }
 
-    getLocalization() {
-        let voivodeship = this.props.data.voivodeship;
-        let district = this.props.data.district;
-        let commune = this.props.data.commune;
-        let locality = this.props.data.locality;
-        let localityDistrict = this.props.data.localityDistrict;
-        let localityPart = this.props.data.localityPart;
-        let street = this.props.data.street;
-
-        //return voivodeship ? voivodeship + ", " : "" +  district ? district +
-    }
-
     getImages() {
         let images = this.props.data.announcementImages ? this.props.data.announcementImages : [];
         return images.map(image => API_BASE_URL + "/file/download/" + image.filename);
     }
 
+    createSearchResultLabel(item) {
+        let voivodeship = item['address.voivodeship.name'] ? this.voivodeshipAbbreviation + " " + item['address.voivodeship.name'] : undefined;
+        let district = item['address.district.name'] ? (item['address.district.type'] != 'DISTRICT_CITY' && item['address.district.type'] != 'DISTRICT_CAPITAL') ? this.districtAbbreviation + " " + item['address.district.name'] : undefined : undefined;
+        //let hasCommuneSameNameAsDistrict = searchResult.commune && searchResult.district && (searchResult.commune.name != searchResult.district.name);
+        let commune = (item['address.commune.name']) ? (item['address.district.type'] != 'DISTRICT_CITY' && item['address.district.type'] != 'DISTRICT_CAPITAL') ? this.getCommuneAbbreviation(item['address.commune.type']) + " " + item['address.commune.name'] : undefined : undefined;
+        let locality = (item['address.locality.name'] ? item['address.locality.name'] : undefined);
+        let localityDistrict = (item['address.localityDistrict.name'] ? item['address.localityDistrict.name'] : undefined);
+        let localityPart = (item['address.localityPart.name'] ? item['address.localityPart.name'] : undefined);
+        let street = this.getStreetLabel(item['address.street.id'], item['address.street.type'], item['address.street.mainName'], item['address.street.leadingName']);
+
+        return [voivodeship, district, commune, locality, localityDistrict, localityPart, street].filter(Boolean).join(", ");
+    }
+
+    getStreetLabel(id, type, mainName, leadingName) {
+        if (id && type && mainName) {
+            return this.props.intl.formatMessage({id: type}) + " " + (leadingName ? leadingName + " " : "") + mainName;
+        }
+        return undefined;
+    }
+
+    getCommuneAbbreviation(type) {
+        if (type == 'URBAN_COMMUNE')
+            return this.urbanCommuneAbbreviation;
+        if (type == 'RURAL_COMMUNE')
+            return this.ruralCommuneAbbreviation;
+        if (type == 'MIXED_COMMUNE')
+            return this.mixedCommuneAbbreviation;
+        if (type == 'CAPITAL_COMMUNE')
+            return this.capitalCommuneAbbreviation;
+        return "";
+    }
+
     render() {
         const {intl} = this.props;
+        const squareMeterSuffix = (<span>m<sup>2</sup></span>);
+        const totalArea = this.getTextValueOptionalDescriptionItem('labels.area', this.props.data.totalArea, squareMeterSuffix);
+        const numberOfRooms = this.getTextValueOptionalDescriptionItem('labels.number_of_rooms', this.props.data.numberOfRooms);
+        const floorAndMaxFloor = this.getTextValueOptionalDescriptionItem('labels.floor_max_floor', (this.props.data.floor && this.props.data.maxFloorInBuilding) ? this.props.data.floor + "/" + this.props.data.maxFloorInBuilding : undefined);
+        const pricePerMonth = this.getTextValueOptionalDescriptionItem('labels.price_per_month', this.props.data.pricePerMonth, 'PLN');
+        const additionalCosts = this.getTextValueOptionalDescriptionItem('labels.estimated_additional_costs', this.props.data.additionalCostsPerMonth, 'PLN');
+        const deposit = this.getTextValueOptionalDescriptionItem('labels.deposit', this.props.data.securityDeposit, 'PLN');
+        const availableFrom = this.getTextValueOptionalDescriptionItem('labels.available_from', moment(this.props.data.availableFrom).format('YYYY-MM-DD'));
+        const apartmentAmenities = this.getDescriptionListForCheckedItems(this.props.data.apartmentAmenities);
+        const buildingType = this.getEnumValueOptionalDescriptionItem('labels.building_type', this.props.data["buildingType.value"]);
+        const buildingMaterial = this.getEnumValueOptionalDescriptionItem('labels.building_material', this.props.data["buildingMaterial.value"]);
+        const heatingType = this.getEnumValueOptionalDescriptionItem('labels.heating_type', this.props.data["heatingType.value"]);
+        const windowType = this.getEnumValueOptionalDescriptionItem('labels.windows_type', this.props.data["windowType.value"]);
+        const parkingType = this.getEnumValueOptionalDescriptionItem('labels.parking_type', this.props.data["parkingType.value"]);
+        const apartmentState = this.getEnumValueOptionalDescriptionItem('labels.apartment_state', this.props.data["apartmentState.value"]);
+        const yearBuilt = this.getTextValueOptionalDescriptionItem('labels.year_built', this.props.data["yearBuilt"]);
+        const wellPlanned = this.getBooleanValueOptionalDescriptionItem('labels.well_planned', this.props.data["wellPlanned"]);
+        const kitchenType = this.getEnumValueOptionalDescriptionItem('labels.kitchen_type', this.props.data["kitchen.kitchenType.value"]);
+        const kitchenArea = this.getTextValueOptionalDescriptionItem('labels.area', this.props.data["kitchen.kitchenArea"], squareMeterSuffix);
+        const cookerType = this.getEnumValueOptionalDescriptionItem('labels.cooker_type', this.props.data["kitchen.cookerType.value"]);
+        const numberOfBathrooms = this.getTextValueOptionalDescriptionItem('labels.number_of_bathrooms', this.props.data["bathroom.numberOfBathrooms"]);
+        const separateWc = this.getBooleanValueOptionalDescriptionItem('labels.separate_wc', this.props.data["bathroom.separateWC"]);
+        const kitchenFurnishing = this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"]);
+        const bathroomFurnishing = this.getDescriptionListForCheckedItems(this.props.data["bathroom.furnishing"]);
+        const preferences = this.getDescriptionListForCheckedItems(this.props.data["preferences"]);
+        const neighbourhood = this.getDescriptionListForCheckedItems(this.props.data["neighbourhood"]);
+        const sidePricePerMonth = this.props.data.pricePerMonth ? <span className="ant-descriptions-title" style={{fontSize: '1.3em'}}>{this.props.data.pricePerMonth} {intl.formatMessage({id: "labels.price_per_month_2"})}</span> : "";
+        const roomArea = room => {
+            return this.getTextValueOptionalDescriptionItem('labels.area', room.area, squareMeterSuffix);
+        };
+        const numberOfPersons = room => {
+            return this.getTextValueOptionalDescriptionItem('labels.number_of_persons', room.numberOfPersons);
+        };
+        const roomFurnishing = room => {
+            return this.getDescriptionListForCheckedItems(room.furnishing);
+        };
+        const roomDescription = (room, roomNumber) => {
+            return (
+                <Card title={intl.formatMessage({ id: 'labels.room_name' }, { num: roomNumber + 1})} bordered={false} style={{width: '90%'}}>
+                    <Descriptions size={"small"} column={3}>
+                        {roomArea(room)}
+                        {numberOfPersons(room)}
+                    </Descriptions>
+                    <Descriptions>
+                        <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                            <Descriptions column={3}>
+                                {roomFurnishing(room)}
+                            </Descriptions>
+                        </Descriptions.Item>
+                    </Descriptions>
+                </Card>
+            );
+        };
+
+        const numberOfFlatmates = this.getTextValueOptionalDescriptionItem('labels.flatmates_number', this.props.data.numberOfFlatmates);
+
+        const flatAnnouncement = (
+            <div>
+                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.general_info"})} column={3}>
+                    {totalArea}
+                    {numberOfRooms}
+                    {floorAndMaxFloor}
+                    {pricePerMonth}
+                    {additionalCosts}
+                    {deposit}
+                    {availableFrom}
+                </Descriptions>
+                <div className="ant-descriptions-title">{intl.formatMessage({ id: "labels.detail_info" })}</div>
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab={intl.formatMessage({id: "labels.apartment"})} key="1">
+                        <Descriptions size={"default"} column={3}>
+                            {buildingType}
+                            {buildingMaterial}
+                            {heatingType}
+                            {windowType}
+                            {parkingType}
+                            {apartmentState}
+                            {yearBuilt}
+                            {wellPlanned}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.amenities"})}><br/>
+                                <Descriptions column={3}>
+                                    {apartmentAmenities}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.rooms"})} key="2">
+                        <div className="rooms-description-container">
+                            {this.props.data.rooms ? this.props.data.rooms.map((room, index) => (roomDescription(room, index))) : ""}
+                        </div>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.kitchen"})} key="3">
+                        <Descriptions size={"default"} column={3}>
+                            {kitchenType}
+                            {kitchenArea}
+                            {cookerType}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                                <Descriptions column={3}>
+                                    {kitchenFurnishing}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.bathroom"})} key="4">
+                        <Descriptions size={"default"} column={3}>
+                            {numberOfBathrooms}
+                            {separateWc}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                                <Descriptions column={3}>
+                                    {bathroomFurnishing}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.preferences"})} key="5">
+                        <Descriptions column={3}>
+                            {preferences}
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.neighbourhood"})} key="6">
+                        <Descriptions column={3}>
+                            {neighbourhood}
+                        </Descriptions>
+                    </TabPane>
+                </Tabs>
+                <div className="ant-descriptions-title">{intl.formatMessage({ id: 'labels.flat_description' })}</div>
+                <Typography>
+                    <Paragraph>
+                        {this.props.data.description}
+                    </Paragraph>
+                </Typography>
+            </div>
+        );
+
+        const roomAnnouncement = (
+            <div>
+                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.general_info"})} column={3}>
+                    {roomArea(this.props.data.rooms[0])}
+                    {numberOfPersons(this.props.data.rooms[0])}
+                    {floorAndMaxFloor}
+                    {pricePerMonth}
+                    {additionalCosts}
+                    {deposit}
+                    {availableFrom}
+                </Descriptions>
+                <div className="ant-descriptions-title">{intl.formatMessage({ id: "labels.detail_info" })}</div>
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab={intl.formatMessage({id: "labels.apartment"})} key="1">
+                        <Descriptions size={"default"} column={3}>
+                            {totalArea}
+                            {numberOfRooms}
+                            {buildingType}
+                            {buildingMaterial}
+                            {heatingType}
+                            {windowType}
+                            {parkingType}
+                            {apartmentState}
+                            {yearBuilt}
+                            {wellPlanned}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.amenities"})}><br/>
+                                <Descriptions column={3}>
+                                    {apartmentAmenities}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.room"})} key="2">
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                                <Descriptions column={3}>
+                                    {roomFurnishing(this.props.data.rooms[0])}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.kitchen"})} key="3">
+                        <Descriptions size={"default"} column={3}>
+                            {kitchenType}
+                            {kitchenArea}
+                            {cookerType}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                                <Descriptions column={3}>
+                                    {kitchenFurnishing}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.bathroom"})} key="4">
+                        <Descriptions size={"default"} column={3}>
+                            {numberOfBathrooms}
+                            {separateWc}
+                        </Descriptions>
+                        <Descriptions>
+                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
+                                <Descriptions column={3}>
+                                    {bathroomFurnishing}
+                                </Descriptions>
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.flatmates"})} key="5">
+                        <Descriptions size={"default"} column={1}>
+                            {numberOfFlatmates}
+                            <Typography>
+                                <Paragraph>
+                                    {this.props.data.aboutFlatmates}
+                                </Paragraph>
+                            </Typography>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.preferences"})} key="6">
+                        <Descriptions column={3}>
+                            {preferences}
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab={intl.formatMessage({id: "labels.neighbourhood"})} key="7">
+                        <Descriptions column={3}>
+                            {neighbourhood}
+                        </Descriptions>
+                    </TabPane>
+                </Tabs>
+                <div className="ant-descriptions-title">{intl.formatMessage({ id: 'labels.flat_description' })}</div>
+                <Typography>
+                    <Paragraph>
+                        {this.props.data.description}
+                    </Paragraph>
+                </Typography>
+            </div>
+        );
+
+        const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement]]);
         // const renderContent = (column = 2) => (
         //     <Descriptions size="small" column={column}>
         //         <Descriptions.Item label="Created">Lili Qu</Descriptions.Item>
@@ -124,26 +403,15 @@ class AnnouncementView extends Component {
         //         </div>
         //     );
         // };
-        const squareMeterSuffix = (<span>m<sup>2</sup></span>);
+
         return (
             <div>
                 <PageHeader
-                    onBack={() => window.history.back()}
+                    //onBack={() => window.history.back()}
                     title={this.props.data.title}
                     subTitle={intl.formatMessage({id: "labels.announcement_type_" + this.props.data.type})}
-                    extra={[
-                        <Button key="3">Operation</Button>,
-                        <Button key="2">Operation</Button>,
-                        <Button key="1" type="primary">
-                            Primary
-                        </Button>,
-                    ]}
-                    footer={
-                        <Tabs defaultActiveKey="1">
-                            <TabPane tab="Details" key="1" />
-                            <TabPane tab="Rule" key="2" />
-                        </Tabs>
-                    }
+                    extra={sidePricePerMonth}
+                    footer={this.createSearchResultLabel(this.props.data)}
                 >
                     {/*<Content extra={extraContent}>{renderContent()}</Content>*/}
                 </PageHeader>
@@ -151,43 +419,8 @@ class AnnouncementView extends Component {
                 <div>
                     <ImagesGallery2 imagesList={this.getImages()}/>
                 </div>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.general_info"})} column={3}>
-                    {this.getTextValueOptionalDescriptionItem('labels.area', this.props.data.totalArea, squareMeterSuffix)};
-                    {this.getTextValueOptionalDescriptionItem('labels.number_of_rooms', this.props.data.numberOfRooms)};
-                    {this.getTextValueOptionalDescriptionItem('labels.floor_max_floor', (this.props.data.floor && this.props.data.maxFloorInBuilding) ? this.props.data.floor + "/" + this.props.data.maxFloorInBuilding : undefined)};
-                    {this.getTextValueOptionalDescriptionItem('labels.price_per_month', this.props.data.pricePerMonth, 'PLN')};
-                    {this.getTextValueOptionalDescriptionItem('labels.estimated_additional_costs', this.props.data.additionalCostsPerMonth, 'PLN')};
-                    {this.getTextValueOptionalDescriptionItem('labels.deposit', this.props.data.securityDeposit, 'PLN')};
-                    {this.getTextValueOptionalDescriptionItem('labels.available_from', this.props.data.availableFrom.format('YYYY-MM-DD'))};
-                </Descriptions>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.amenities"})} column={3}>
-                    {this.getDescriptionListForCheckedItems(this.props.data.apartmentAmenities)}
-                </Descriptions>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.detail_info"})} column={3}>
-                    {this.getEnumValueOptionalDescriptionItem('labels.building_type', this.props.data["buildingType.value"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.building_material', this.props.data["buildingMaterial.value"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.heating_type', this.props.data["heatingType.value"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.windows_type', this.props.data["windowType.value"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.parking_type', this.props.data["parkingType.value"])};
-                    {this.getEnumValueOptionalDescriptionItem('labels.apartment_state', this.props.data["apartmentState.value"])};
-                    {this.getTextValueOptionalDescriptionItem('labels.year_built', this.props.data["yearBuilt"])};
-                    {this.getBooleanValueOptionalDescriptionItem('labels.well_planned', this.props.data["wellPlanned"])};
-
-                    {this.getEnumValueOptionalDescriptionItem('labels.kitchen_type', this.props.data["kitchen.kitchenType.value"])};
-                    {this.getTextValueOptionalDescriptionItem('labels.area', this.props.data["kitchen.kitchenArea"], squareMeterSuffix)};
-                    {this.getEnumValueOptionalDescriptionItem('labels.cooker_type', this.props.data["kitchen.cookerType.value"])};
-                    {this.getTextValueOptionalDescriptionItem('labels.number_of_bathrooms', this.props.data["bathroom.numberOfBathrooms"])};
-                    {this.getBooleanValueOptionalDescriptionItem('labels.separate_wc', this.props.data["bathroom.separateWC"])};
-                </Descriptions>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
-                    {this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"])}
-                </Descriptions>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
-                    {this.getDescriptionListForCheckedItems(this.props.data["bathroom.furnishing"])}
-                </Descriptions>
-                <Descriptions size={"default"} title={intl.formatMessage({id: "labels.accessories"})} column={3}>
-                    {this.getDescriptionListForCheckedItems(this.props.data["kitchen.furnishing"])}
-                </Descriptions>
+                <br/>
+                {announcementByType.get(this.props.data.type)}
             </div>
         );
     }

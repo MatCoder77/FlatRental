@@ -1,0 +1,9 @@
+.rooms-description-container {
+
+}
+
+.rooms-description-container .ant-card-body {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-bottom: -5px;
+}

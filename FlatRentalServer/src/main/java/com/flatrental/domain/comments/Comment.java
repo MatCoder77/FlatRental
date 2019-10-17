@@ -1,4 +1,4 @@
-package com.flatrental.domain;
+package com.flatrental.domain.comments;
 
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.user.User;

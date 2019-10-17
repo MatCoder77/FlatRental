@@ -24,17 +24,27 @@ public class PermissionsValidationService {
     private static final String PERMISSION_DENIED_TO_EDIT_ANNOUNCEMENT = "You have no permission to edit announcement with id {0}";
 
     public void validatePermissionToEditAnnouncement(UserInfo userInfo, Announcement announcement) {
+        if (!hasPermissionToEditAnnouncement(userInfo, announcement)) {
+            throw new IllegalArgumentException(MessageFormat.format(PERMISSION_DENIED_TO_EDIT_ANNOUNCEMENT, String.valueOf(announcement.getId())));
+
+        }
+    }
+
+    public boolean hasPermissionToEditAnnouncement(UserInfo userInfo, Announcement announcement) {
+        if (userInfo == null) {
+            return false;
+        }
+
         User user = userService.getExistingUser(userInfo.getId());
         if (hasAnyOfRoles(user, UserRoleName.ROLE_ADMIN, UserRoleName.ROLE_MODERATOR)) {
-            return;
+            return true;
         }
 
         if (hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement)) {
-            return;
+            return true;
         }
 
-        throw new IllegalArgumentException(MessageFormat.format(PERMISSION_DENIED_TO_EDIT_ANNOUNCEMENT, String.valueOf(announcement.getId())));
-
+        return false;
     }
 
     private boolean hasAnyOfRoles(User user, UserRoleName ...userRoles) {
