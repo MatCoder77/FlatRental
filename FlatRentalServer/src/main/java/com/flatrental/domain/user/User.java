@@ -53,6 +53,8 @@ public class User extends ManagedObject {
     @NotBlank
     private String phoneNumber;
 
+    private String avatar;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Users_X_UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -122,4 +124,13 @@ public class User extends ManagedObject {
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
 }

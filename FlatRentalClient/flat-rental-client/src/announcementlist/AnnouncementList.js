@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import {List, Avatar, Icon, Descriptions} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
 import './AnnouncementList.css'
+import moment from "moment";
+
 
 const IconText = ({ type, text }) => (
     <span>
@@ -127,11 +129,7 @@ class AnnouncementList extends Component{
                     pageSize: 3,
                 }}
                 dataSource={this.state.formData.announcementsList}
-                footer={
-                    <div>
-                        <b>ant design</b> footer part
-                    </div>
-                }
+                footer={""}
                 renderItem={item => (
                     <List.Item
                         onClick={() => {this.navigateToAnnouncement(item.id)}}
@@ -140,6 +138,7 @@ class AnnouncementList extends Component{
                             <IconText type="star-o" text="156" key="list-vertical-star-o" />,
                             <IconText type="like-o" text="156" key="list-vertical-like-o" />,
                             <IconText type="message" text="2" key="list-vertical-message" />,
+                            <span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>
                         ]}
                         extra={
                             <div>

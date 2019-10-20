@@ -1,12 +1,18 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.UserDTO;
+import com.flatrental.domain.file.FileService;
+import com.flatrental.domain.userrole.UserRole;
+import com.flatrental.domain.userrole.UserRoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -18,9 +24,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FileService fileService;
 
     public User registerUser(User newUser) {
         validateUsernameUniqueness(newUser);
@@ -68,7 +76,20 @@ public class UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .phoneNumber(user.getPhoneNumber())
+                .avatarUrl(Optional.ofNullable(user.getAvatar())
+                        .map(fileService::getDownloadUri)
+                        .orElse(null))
+                .roles(user.getRoles().stream()
+                        .map(UserRole::getName)
+                        .map(UserRoleName::name)
+                        .collect(Collectors.toSet()))
                 .build();
+    }
+
+    public void setAvatar(String filename, Long userId) {
+        User user = getExistingUser(userId);
+        user.setAvatar(filename);
+        userRepository.save(user);
     }
 
 }

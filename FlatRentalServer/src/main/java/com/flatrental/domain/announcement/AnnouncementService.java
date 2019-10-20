@@ -8,6 +8,7 @@ import com.flatrental.api.ManagedObjectDTO;
 import com.flatrental.api.RoomDTO;
 import com.flatrental.api.SimpleResourceDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
+import com.flatrental.domain.managedobject.ManagedObjectService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.announcement.address.AddressService;
 import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
@@ -93,6 +94,9 @@ public class AnnouncementService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ManagedObjectService managedObjectService;
 
     public static final String NOT_FOUND = "There is no announcement with id {0}";
 
@@ -293,7 +297,7 @@ public class AnnouncementService {
                 .announcementImages(getAnnouncementImagesDTOs(announcement))
                 .aboutFlatmates(announcement.getAboutRoommates())
                 .numberOfFlatmates(announcement.getNumberOfFlatmates())
-                .info(getManagedObjectDTO(announcement));
+                .info(managedObjectService.mapToManagedObjectDTO(announcement));
 
         Optional.ofNullable(announcement.getBuildingType())
                 .map(buildingTypeService::mapToSimpleResourceDTO)
@@ -414,15 +418,6 @@ public class AnnouncementService {
         return new FileDTO(file.getFilename());
     }
 
-    private ManagedObjectDTO getManagedObjectDTO(Announcement announcement) {
-        return ManagedObjectDTO.builder()
-                .createdAt(announcement.getCreatedAt())
-                .createdBy(userService.mapToUserDTO(announcement.getCreatedBy()))
-                .updatedAt(announcement.getUpdatedAt())
-                .updatedBy(userService.mapToUserDTO(announcement.getUpdatedBy()))
-                .objectState(announcement.getObjectState().name())
-                .build();
-    }
 
     public Announcement updateAnnouncement(Announcement existingAnnouncement, AnnouncementDTO updatedAnnouncementDTO) {
         Announcement updatedAnnouncement = mapToExistingAnnouncement(updatedAnnouncementDTO, existingAnnouncement);

@@ -184,6 +184,17 @@
     "labels.offer": "Oferta",
     "labels.room": "Pokój",
     "labels.preferences_and_neighbourhood": "Preferencje i Okolica",
+    "labels.about_offer": "O ofercie",
+    "labels.announcement_author": "Wystawiający",
+    "labels.created_at": "Data dodania",
+    "labels.updated_at": "Data ostatniej aktualizacji",
+    "labels.comments": "Komentarze",
+    "labels.like": "Lubię",
+    "labels.dislike": "Nie lubię",
+    "labels.reply": "Odpowiedz",
+    "labels.delete": "Usuń",
+    "labels.add_comment": "Dodaj komentarz",
+
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",

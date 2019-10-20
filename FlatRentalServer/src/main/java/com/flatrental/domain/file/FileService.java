@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -66,5 +68,14 @@ public class FileService {
         } catch (MalformedURLException ex) {
             throw new ResourceNotFoundException("File not found " + fileName, ex);
         }
+    }
+
+    public String getDownloadUri(String filename) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api")
+                .path("/file")
+                .path("/download/")
+                .path(filename)
+                .toUriString();
     }
 }

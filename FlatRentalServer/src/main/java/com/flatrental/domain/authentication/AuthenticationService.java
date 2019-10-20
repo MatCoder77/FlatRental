@@ -40,6 +40,7 @@ public class AuthenticationService {
                 registrationFormDTO.getPassword(),
                 registrationFormDTO.getEmail(),
                 registrationFormDTO.getPhoneNumber(),
+                null,
                 Collections.singleton(userRole));
         return userService.registerUser(newUser);
     }

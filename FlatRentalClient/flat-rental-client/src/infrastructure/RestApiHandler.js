@@ -240,3 +240,25 @@ export function searchAnnouncementsByCriteria(searchCriteria) {
         body: JSON.stringify(searchCriteria)
     });
 }
+
+export function createComment(commentDTO) {
+    return request({
+        url: API_BASE_URL + "/comments",
+        method: 'POST',
+        body: JSON.stringify(commentDTO)
+    });
+}
+
+export function getComments(announcementId) {
+    return request({
+        url: API_BASE_URL + "/comments/" + announcementId,
+        method: 'GET'
+    });
+}
+
+export function deleteComment(id) {
+    return request({
+        url: API_BASE_URL + "/comments/" + id,
+        method: 'DELETE'
+    });
+}

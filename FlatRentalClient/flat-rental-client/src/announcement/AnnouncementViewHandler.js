@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {FormattedMessage, injectIntl} from "react-intl";
-import AnnouncementStepWizard from "./AnnouncementStepWizard";
 import {getAnnouncement} from "../infrastructure/RestApiHandler";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import { withRouter } from 'react-router-dom';
@@ -32,7 +31,6 @@ class AnnouncementViewHandler extends Component{
         });
         promise
             .then(response => {
-                const {formData} = this.state;
                 let announcementData = response;
                 let flattenData = DTOUtils.flatten(announcementData);
                 this.setState({
@@ -52,7 +50,7 @@ class AnnouncementViewHandler extends Component{
             return (<LoadingIcon/>);
         }
         return (
-            <AnnouncementView data={this.state.formData}/>
+            <AnnouncementView data={this.state.formData} currentUser={this.props.currentUser}/>
         );
     }
 }

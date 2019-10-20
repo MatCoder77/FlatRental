@@ -1,15 +1,23 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.AvailableDTO;
+import com.flatrental.api.FileDTO;
+import com.flatrental.api.FileUploadDTO;
+import com.flatrental.api.ResourceDTO;
+import com.flatrental.api.ResponseDTO;
 import com.flatrental.api.UserDTO;
+import com.flatrental.domain.file.FileController;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -41,6 +49,16 @@ public class UserController {
     public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
         User user = userService.getExistingUser(currentUserInfo.getId());
         return userService.mapToUserDTO(user);
+    }
+
+    @PostMapping("/set-avatar")
+    @HasAnyRole
+    public ResponseDTO setAvatar(String filename, @LoggedUser UserInfo userInfo) {
+        userService.setAvatar(filename, userInfo.getId());
+        return ResponseDTO.builder()
+                .success(true)
+                .message("Avatar updated successfully")
+                .build();
     }
 
 }

@@ -109,7 +109,7 @@ class App extends Component {
                             <Route exact path="/announcement/edit/:announcementId" render={(props) => <EditAnnouncement/>}/>
                             <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
                             <Route exact path="/announcement/list" render={(props) => <AnnouncementList {...props}/>}/>
-                            <Route exact path="/announcement/view/:id" render={(props) => <AnnouncementViewHandler {...props}/>}/>
+                            <Route exact path="/announcement/view/:id" render={(props) => <AnnouncementViewHandler currentUser={this.state.currentUser} {...props}/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

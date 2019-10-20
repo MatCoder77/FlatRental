@@ -33,14 +33,7 @@ public class FileController {
     @HasAnyRole
     public FileUploadDTO uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileService.storeFile(file);
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api")
-                .path("/file")
-                .path("/download/")
-                .path(fileName)
-                .toUriString();
-
+        String fileDownloadUri = fileService.getDownloadUri(fileName);
         return new FileUploadDTO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 

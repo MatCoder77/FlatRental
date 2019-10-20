@@ -8,7 +8,6 @@ import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,9 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/announcements")

@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
-import {PageHeader, Tabs, Button, Statistic, Descriptions, Input, Card} from 'antd';
+import {PageHeader, Tabs, Button, Statistic, Descriptions, Input, Card, Icon, Row, Col} from 'antd';
 import {FormattedMessage, injectIntl} from "react-intl";
 import ImagesGallery2 from "./ImagesGallery";
 import {API_BASE_URL} from "../infrastructure/Constants";
 import moment from "moment";
 import { Typography, Divider } from 'antd';
 import './AnnouncementView.css'
+import CommentsSection from "../comment/CommentsSection";
 
 const { Title, Paragraph, Text } = Typography;
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
+
+const IconText = ({ type, text }) => (
+    <span>
+    <Icon type={type} style={{ marginRight: 8 }} />
+        {text}
+  </span>
+);
 
 class AnnouncementView extends Component {
 
@@ -176,6 +184,10 @@ class AnnouncementView extends Component {
         };
 
         const numberOfFlatmates = this.getTextValueOptionalDescriptionItem('labels.flatmates_number', this.props.data.numberOfFlatmates);
+        const createdBy = this.getTextValueOptionalDescriptionItem('labels.announcement_author', this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']);
+        const createdAt = this.getTextValueOptionalDescriptionItem('labels.created_at', moment(this.props.data['info.createdAt']).format('YYYY-MM-DD'));
+        const updatedAt = this.getTextValueOptionalDescriptionItem('labels.updated_at', moment(this.props.data['info.updatedAt']).format('YYYY-MM-DD'));
+        const phoneNumber = this.getTextValueOptionalDescriptionItem('labels.phoneNumber', this.props.data['info.createdBy.phoneNumber']);
 
         const flatAnnouncement = (
             <div>
@@ -362,47 +374,6 @@ class AnnouncementView extends Component {
         );
 
         const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement]]);
-        // const renderContent = (column = 2) => (
-        //     <Descriptions size="small" column={column}>
-        //         <Descriptions.Item label="Created">Lili Qu</Descriptions.Item>
-        //         <Descriptions.Item label="Association">
-        //             <a>421421</a>
-        //         </Descriptions.Item>
-        //         <Descriptions.Item label="Creation Time">2017-01-10</Descriptions.Item>
-        //         <Descriptions.Item label="Effective Time">2017-10-10</Descriptions.Item>
-        //         <Descriptions.Item label="Remarks">
-        //             Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-        //         </Descriptions.Item>
-        //     </Descriptions>
-        // );
-
-        // const extraContent = (
-        //     <div
-        //         style={{
-        //             display: 'flex',
-        //             width: 'max-content',
-        //             justifyContent: 'flex-end',
-        //         }}
-        //     >
-        //         <Statistic
-        //             title="Status"
-        //             value="Pending"
-        //             style={{
-        //                 marginRight: 32,
-        //             }}
-        //         />
-        //         <Statistic title="Price" prefix="$" value={568.08} />
-        //     </div>
-        // );
-
-        // const Content = ({ children, extra }) => {
-        //     return (
-        //         <div className="content">
-        //             <div className="main">{children}</div>
-        //             <div className="extra">{extra}</div>
-        //         </div>
-        //     );
-        // };
 
         return (
             <div>
@@ -411,7 +382,7 @@ class AnnouncementView extends Component {
                     title={this.props.data.title}
                     subTitle={intl.formatMessage({id: "labels.announcement_type_" + this.props.data.type})}
                     extra={sidePricePerMonth}
-                    footer={this.createSearchResultLabel(this.props.data)}
+                    footer={<div><Icon type="environment" /> {this.createSearchResultLabel(this.props.data)}</div>}
                 >
                     {/*<Content extra={extraContent}>{renderContent()}</Content>*/}
                 </PageHeader>
@@ -421,6 +392,35 @@ class AnnouncementView extends Component {
                 </div>
                 <br/>
                 {announcementByType.get(this.props.data.type)}
+                {this.props.data.id &&
+                <div>
+                    <Divider />
+                    <Descriptions title={intl.formatMessage({id: "labels.about_offer"})} column={1}>
+                        {createdBy}
+                        {phoneNumber}
+                        {createdAt}
+                        {updatedAt}
+                    </Descriptions>
+                    <Row style={{maxWidth: '300px'}}>
+                        <Col span={6}>
+                            <IconText type="star-o" text="156" key="list-vertical-star-o" />
+                        </Col>
+                        <Col span={6}>
+                            <IconText type="eye" text="156" key="list-vertical-eye-o" />
+                        </Col>
+                        <Col span={6}>
+                            <IconText type="like-o" text="156" key="list-vertical-like-o" />
+                        </Col>
+                        <Col span={6}>
+                            <IconText type="message" text="2" key="list-vertical-message" />
+                        </Col>
+                    </Row>
+                    <Divider/>
+                    <Card title={intl.formatMessage({id: "labels.comments"})}>
+                        <CommentsSection announcementId={this.props.data.id} currentUser={this.props.currentUser}/>
+                    </Card>
+
+                </div>}
             </div>
         );
     }
