@@ -12,6 +12,7 @@ import com.flatrental.domain.announcement.simpleattributes.neighbourhood.Neighbo
 import com.flatrental.domain.file.File;
 import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType;
 import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType;
+import com.flatrental.domain.statistics.Statistics;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -152,4 +154,26 @@ public class Announcement extends ManagedObject {
 
     @PositiveOrZero
     private Integer numberOfFlatmates;
+
+    Statistics statistics;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Announcement)) {
+            return false;
+        }
+
+        Announcement otherAnnouncement = (Announcement) obj;
+        return Objects.equals(otherAnnouncement.id, id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

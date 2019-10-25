@@ -20,6 +20,7 @@ import com.flatrental.domain.locations.commune.Commune_;
 import com.flatrental.domain.locations.district.District_;
 import com.flatrental.domain.locations.street.Street_;
 import com.flatrental.domain.locations.voivodeship.Voivodeship_;
+import com.flatrental.domain.user.User_;
 import org.springframework.data.domain.Page;
 
 import javax.persistence.EntityManager;
@@ -32,7 +33,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.SetJoin;
 import javax.persistence.criteria.Subquery;
 import java.util.Arrays;
 import java.util.Collections;
@@ -91,7 +91,8 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getRequiredAttributesPredicate(a.get(Announcement_.bathroom).get(Bathroom_.furnishing), getAttributesFromIds(searchCriteria.getRequiredBathroomFurnishing(), FurnishingItem::fromId), criteriaBuilder),
                 getRequiredAttributesPredicate(a.get(Announcement_.preferences), getAttributesFromIds(searchCriteria.getRequiredPreferences(), Preference::fromId), criteriaBuilder),
                 getRequiredAttributesPredicate(a.get(Announcement_.neighbourhood), getAttributesFromIds(searchCriteria.getRequiredNeighbourhoodItems(), NeighbourhoodItem::fromId), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.numberOfFlatmates), searchCriteria.getMinNumberOfFlatmates(), searchCriteria.getMaxNumberOfFlatmates(), criteriaBuilder)
+                getNumberMinMaxPredicate(a.get(Announcement_.numberOfFlatmates), searchCriteria.getMinNumberOfFlatmates(), searchCriteria.getMaxNumberOfFlatmates(), criteriaBuilder),
+                getEqualsPredicate(a.get(Announcement_.createdBy).get(User_.id), searchCriteria.getAuthor(), criteriaBuilder)
 
         );
 

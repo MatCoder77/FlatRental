@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
 
 @Data
 @AllArgsConstructor
@@ -15,8 +16,7 @@ public class FileUploadDTO {
     private String fileName;
 
     @NotNull
-    @NotBlank
-    private String fileDownloadUri;
+    private URI fileDownloadUri;
 
     @NotNull
     @NotBlank

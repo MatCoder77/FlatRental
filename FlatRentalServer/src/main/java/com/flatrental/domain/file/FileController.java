@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class FileController {
     @HasAnyRole
     public FileUploadDTO uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileService.storeFile(file);
-        String fileDownloadUri = fileService.getDownloadUri(fileName);
+        URI fileDownloadUri = fileService.getDownloadUri(fileName);
         return new FileUploadDTO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 

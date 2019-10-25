@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,12 +71,13 @@ public class FileService {
         }
     }
 
-    public String getDownloadUri(String filename) {
+    public URI getDownloadUri(String filename) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api")
                 .path("/file")
                 .path("/download/")
                 .path(filename)
-                .toUriString();
+                .build()
+                .toUri();
     }
 }

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.net.URI;
 import java.util.Set;
 
 @Data
@@ -42,7 +43,7 @@ public class UserDTO {
     @NotBlank
     private String phoneNumber;
 
-    private String avatarUrl;
+    private URI avatarUrl;
 
     private Set<String> roles;
 

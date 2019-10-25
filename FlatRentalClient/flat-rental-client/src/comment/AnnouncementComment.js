@@ -6,6 +6,7 @@ import Editor from "./Editor";
 import {hasRole, MODERATOR} from "../infrastructure/PermissionsUtils";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import {deleteComment} from "../infrastructure/RestApiHandler";
+import {getSurrogateAvatar} from "../profile/ProfileUtils";
 
 
 class AnnouncementComment extends Component {
@@ -36,7 +37,9 @@ class AnnouncementComment extends Component {
         }
         promise
             .then(response => {
+                let numberOfDeletedComments = response.message;
                 this.props.onReply();
+                this.props.onCommentRemoved(numberOfDeletedComments);
             }).catch(error => {});
     }
 
@@ -90,12 +93,7 @@ class AnnouncementComment extends Component {
             <Comment
                 actions={actions}
                 author={<a>{this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']}</a>}
-                avatar={
-                    <Avatar
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                        alt= {""}
-                    />
-                }
+                avatar={ this.props.data['info.createdBy.avatarUrl'] ? <Avatar src={this.props.data['info.createdBy.avatarUrl']}/> : getSurrogateAvatar(this.props.data['info.createdBy.name'])}
                 content={
                     <p>
                         {this.props.data.content}
@@ -110,8 +108,12 @@ class AnnouncementComment extends Component {
                 {this.props.data.subcomments.map(subcomment => <AnnouncementComment data={subcomment}
                                                                                     currentUser={this.props.currentUser}
                                                                                     nestingLevel={this.props.nestingLevel + 1}
-                                                                                    onReply={this.props.onReply} intl={this.props.intl}/>)}
+                                                                                    onReply={this.props.onReply} intl={this.props.intl}
+                                                                                    onCommentAdded={this.props.onCommentAdded}
+                                                                                    onCommentRemoved={this.props.onCommentRemoved}
+                />)}
                 {this.state.isCommentEditorShown && <Editor
+                    onCommentAdded={this.props.onCommentAdded}
                     repliedCommentId={this.props.data.id}
                     announcementId={this.props.data.announcementId}
                     onSubmit={this.props.onReply}

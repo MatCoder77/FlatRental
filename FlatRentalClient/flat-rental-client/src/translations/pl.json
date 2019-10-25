@@ -194,6 +194,23 @@
     "labels.reply": "Odpowiedz",
     "labels.delete": "Usuń",
     "labels.add_comment": "Dodaj komentarz",
+    "labels.favourite": "Wyróżnione ogłosznia",
+    "labels.settings": "Ustawienia konta",
+    "labels.profile": "Profil",
+    "labels.opinions": "Opinie",
+    "labels.announcements": "Dodane ogłoszenia",
+
+    "labels.successful_logout": "Wylogowano z aplikacji",
+    "labels.successful_login": "Zalogowano pomyślnie",
+    "labels.change_avatar": "Zmień avatar",
+    "labels.edit": "Zmień",
+    "labels.reset": "Resetuj",
+    "labels.cancel": "Anuluj",
+    "labels.phone_number_change": "Zmiana numeru telefonu",
+    "labels.email_change": "Zmiana adresu email",
+    "placeholders.confirm_change_with_password": "Potwierdź zmianę hasłem",
+    "labels.new_password": "Nowe hasło",
+    "labels.password_changed_successfully": "Hasło zostało zmienione, za chwilę nastąpi przekierowanie do strony logowania",
 
 
     "BUILDING_TYPE_FLAT": "Blok",

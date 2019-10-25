@@ -65,7 +65,10 @@ public class CommentService {
         comment.setObjectState(ManagedObjectState.ACTIVE);
         comment.setLikesCounter(0);
         comment.setDislikesCounter(0);
-        return commentRepository.save(comment);
+        Comment createdComment = commentRepository.save(comment);
+        Announcement affectedAnnouncement = createdComment.getAnnouncement();
+        announcementService.incrementCommentsCounter(affectedAnnouncement);
+        return createdComment;
     }
 
     private Comment mapToComment(CommentDTO commentDTO) {
@@ -82,11 +85,16 @@ public class CommentService {
                 .build();
     }
 
-    public void deleteComment(Long id) {
-        List<Comment> commentsToDelete = commentRepository.getCommentsByIdOrParentCommentId(id, id);
+    public List<Comment> deleteComment(Long id) {
+        List<Comment> commentsToDelete = commentRepository.getCommentsHierarchy(id);
         commentsToDelete.stream()
                 .forEach(comment -> comment.setObjectState(ManagedObjectState.REMOVED));
         commentRepository.saveAll(commentsToDelete);
+        int numberOfRemovedComments = commentsToDelete.size();
+        if (numberOfRemovedComments > 0) {
+            announcementService.decrementCommentsCounter(commentsToDelete.get(0).getAnnouncement(), numberOfRemovedComments);
+        }
+        return commentsToDelete;
     }
 
     private Comment getExistingComment(Long id) {

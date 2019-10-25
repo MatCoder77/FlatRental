@@ -4,9 +4,9 @@ import com.flatrental.api.AnnouncementDTO;
 import com.flatrental.api.BathroomDTO;
 import com.flatrental.api.FileDTO;
 import com.flatrental.api.KitchenDTO;
-import com.flatrental.api.ManagedObjectDTO;
 import com.flatrental.api.RoomDTO;
 import com.flatrental.api.SimpleResourceDTO;
+import com.flatrental.api.UserSpecificInfoDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.managedobject.ManagedObjectService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
@@ -28,7 +28,11 @@ import com.flatrental.domain.announcement.simpleattributes.neighbourhood.Neighbo
 import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingTypeService;
 import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowTypeService;
 import com.flatrental.domain.file.File;
+import com.flatrental.domain.statistics.StatisticsService;
+import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
+import com.flatrental.infrastructure.security.LoggedUser;
+import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -97,6 +101,9 @@ public class AnnouncementService {
 
     @Autowired
     private ManagedObjectService managedObjectService;
+
+    @Autowired
+    private StatisticsService statisticsService;
 
     public static final String NOT_FOUND = "There is no announcement with id {0}";
 
@@ -271,7 +278,11 @@ public class AnnouncementService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NOT_FOUND, id)));
     }
 
-    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement) {
+    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement, User user) {
+        return mapToAnnouncementDTO(announcement, Optional.ofNullable(user));
+    }
+
+    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement, Optional<User> user) {
         var builder = AnnouncementDTO.builder()
                 .id(announcement.getId())
                 .type(announcement.getType().toString().toLowerCase())
@@ -297,7 +308,8 @@ public class AnnouncementService {
                 .announcementImages(getAnnouncementImagesDTOs(announcement))
                 .aboutFlatmates(announcement.getAboutRoommates())
                 .numberOfFlatmates(announcement.getNumberOfFlatmates())
-                .info(managedObjectService.mapToManagedObjectDTO(announcement));
+                .info(managedObjectService.mapToManagedObjectDTO(announcement))
+                .statistics(statisticsService.mapToStatisticsDTO(announcement.getStatistics()));
 
         Optional.ofNullable(announcement.getBuildingType())
                 .map(buildingTypeService::mapToSimpleResourceDTO)
@@ -317,6 +329,9 @@ public class AnnouncementService {
         Optional.ofNullable(announcement.getApartmentState())
                 .map(apartmentStateService::mapToSimpleResourceDTO)
                 .ifPresent(builder::apartmentState);
+
+        user.map(u -> getUserSpecificInfo(announcement, u))
+                .ifPresent(builder::userSpecificInfo);
 
         return builder.build();
     }
@@ -418,6 +433,12 @@ public class AnnouncementService {
         return new FileDTO(file.getFilename());
     }
 
+    private UserSpecificInfoDTO getUserSpecificInfo(Announcement announcement, User user) {
+        boolean isMarkedAsFavourite = user.getFavourites().contains(announcement);
+        return UserSpecificInfoDTO.builder()
+                .isMarkedAsFavourite(isMarkedAsFavourite)
+                .build();
+    }
 
     public Announcement updateAnnouncement(Announcement existingAnnouncement, AnnouncementDTO updatedAnnouncementDTO) {
         Announcement updatedAnnouncement = mapToExistingAnnouncement(updatedAnnouncementDTO, existingAnnouncement);
@@ -435,10 +456,48 @@ public class AnnouncementService {
         return true;
     }
 
-    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable) {
+    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable, Optional<User> user) {
         return announcementRepository.searchAnnouncementsByCriteria(searchCriteria, pageable).get()
-                .map(this::mapToAnnouncementDTO)
+                .map(announcement -> mapToAnnouncementDTO(announcement, user))
                 .collect(Collectors.toList());
+    }
+
+    public void incrementCommentsCounter(Announcement announcement) {
+        announcement.getStatistics().incrementCommentsCounter();
+        announcementRepository.save(announcement);
+    }
+
+    public void decrementCommentsCounter(Announcement announcement, int numberOfRemovedComments) {
+        announcement.getStatistics().decrementCommentsCounterBy(numberOfRemovedComments);
+        announcementRepository.save(announcement);
+    }
+
+    public void incrementViewsCounter(Announcement announcement, Optional<User> user) {
+        if (!currentUserIsAuthorOfAnnouncement(announcement.getCreatedBy(), user)) {
+            announcement.getStatistics().incrementViewsCounter();
+            announcementRepository.save(announcement);
+        }
+    }
+
+    private boolean currentUserIsAuthorOfAnnouncement(User author, Optional<User> user) {
+        return user.map(usr -> usr.equals(author))
+                .orElse(false);
+    }
+
+    public void addAnnouncementsToFavourites(Announcement announcement, User user) {
+        if (!user.getFavourites().contains(announcement)) {
+            user.addAnnouncementToFavourites(announcement);
+            announcement.getStatistics().incrementFavouritesCounter();
+            announcementRepository.save(announcement);
+        }
+    }
+
+    public void removeAnnouncementsFromFavourites(Announcement announcement, User user) {
+        if (user.getFavourites().contains(announcement)) {
+            user.removeAnnouncementFromFavourites(announcement);
+            announcement.getStatistics().decrementFavouritesCounter();
+            announcementRepository.save(announcement);
+        }
     }
 
 }

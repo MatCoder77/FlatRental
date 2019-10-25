@@ -8,6 +8,7 @@ import LoadingIcon from "../commons/LoadingIcon";
 import Editor from "./Editor";
 import AnnouncementComment from "./AnnouncementComment";
 import CommentList from "./CommentList";
+import {getSurrogateAvatar} from "../profile/ProfileUtils";
 
 const { TextArea } = Input;
 
@@ -65,27 +66,35 @@ class CommentsSection extends Component {
     }
 
     render() {
-        if (this.state.isLoading) {
-            return (<LoadingIcon/>);
-        }
-        return (
+
+        const addCommentFrom = (
             <div>
-                {this.state.comments.length > 0 && <CommentList comments={this.state.comments} onReply={this.updateComments} currentUser={this.props.currentUser}/>}
+                {this.props.currentUser &&
                 <Comment
-                    avatar={
-                        <Avatar
-                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                            alt="Han Solo"
-                        />
-                    }
+                    avatar={ this.props.currentUser.avatarUrl ? <Avatar src={this.props.currentUser.avatarUrl}/> : getSurrogateAvatar(this.props.currentUser.name)}
                     content={
                         <Editor
                             repliedCommentId={null}
                             announcementId={this.props.announcementId}
                             onSubmit={this.updateComments}
+                            onCommentAdded={this.props.onCommentAdded}
                         />
                     }
-                />
+                />}
+            </div>
+        );
+
+        if (this.state.isLoading) {
+            return (<LoadingIcon/>);
+        }
+        return (
+            <div>
+                {this.state.comments.length > 0 && <CommentList comments={this.state.comments}
+                                                                onReply={this.updateComments}
+                                                                currentUser={this.props.currentUser}
+                                                                onCommentAdded={this.props.onCommentAdded}
+                                                                onCommentRemoved={this.props.onCommentRemoved}/>}
+                {this.props.currentUser ? addCommentFrom : ""}
             </div>
         );
     }

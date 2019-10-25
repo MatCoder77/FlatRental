@@ -7,18 +7,13 @@ import moment from "moment";
 import { Typography, Divider } from 'antd';
 import './AnnouncementView.css'
 import CommentsSection from "../comment/CommentsSection";
+import {addToFavourites, removeFromFavourites} from "../infrastructure/RestApiHandler";
+import * as DTOUtils from "../infrastructure/DTOUtils";
 
 const { Title, Paragraph, Text } = Typography;
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
-
-const IconText = ({ type, text }) => (
-    <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-        {text}
-  </span>
-);
 
 class AnnouncementView extends Component {
 
@@ -32,8 +27,18 @@ class AnnouncementView extends Component {
         this.getImages = this.getImages.bind(this);
         this.attachLocalityData = this.attachLocalityData.bind(this);
         this.createSearchResultLabel = this.createSearchResultLabel.bind(this);
+        this.onCommentAdded = this.onCommentAdded.bind(this);
+        this.onCommentRemoved = this.onCommentRemoved.bind(this);
+        this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
 
         this.attachLocalityData();
+
+        this.state = {
+            commentsCounter: this.props.data['statistics.commentsCounter'],
+            favouritesCounter: this.props.data['statistics.favouritesCounter'],
+            isMarkedAsFavourite: this.props.data['userSpecificInfo.isMarkedAsFavourite'],
+            viewsCounter: this.props.data['statistics.viewsCounter']
+        }
 
         this.voivodeshipAbbreviation = this.props.intl.formatMessage({ id: 'labels.voivodeship_abbreviation' });
         this.districtAbbreviation = this.props.intl.formatMessage({ id: 'labels.district_abbreviation' });
@@ -87,7 +92,7 @@ class AnnouncementView extends Component {
     }
 
     getDescriptionListForCheckedItems(items) {
-        return items ? items.map(item => item.value ? (<Descriptions.Item>&#8226; {this.props.intl.formatMessage({id: item.value})}</Descriptions.Item>) : "") : "";
+        return items ? items.map((item, index) => item.value ? (<Descriptions.Item key={index}>&#8226; {this.props.intl.formatMessage({id: item.value})}</Descriptions.Item>) : "") : "";
     }
 
     getImages() {
@@ -125,6 +130,42 @@ class AnnouncementView extends Component {
         if (type == 'CAPITAL_COMMUNE')
             return this.capitalCommuneAbbreviation;
         return "";
+    }
+
+    onCommentAdded() {
+        const currentCommentsCounter = this.state.commentsCounter
+        this.setState({
+            commentsCounter: currentCommentsCounter + 1
+        });
+    }
+
+    onCommentRemoved(numberOfDeletedComments) {
+        const currentCommentsCounter = this.state.commentsCounter
+        this.setState({
+            commentsCounter: currentCommentsCounter - numberOfDeletedComments
+        });
+    }
+
+    onFavouriteClicked() {
+        let promise;
+        if (!this.state.isMarkedAsFavourite) {
+            promise = addToFavourites(this.props.data.id);
+        } else {
+            promise = removeFromFavourites(this.props.data.id);
+        }
+        if (!promise) {
+            return;
+        }
+        promise
+            .then(response => {
+                let updatedIsMarkedAsFavourite = !this.state.isMarkedAsFavourite;
+                let updatedFavouritesCounter = updatedIsMarkedAsFavourite ? this.state.favouritesCounter + 1 : this.state.favouritesCounter - 1;
+                this.setState({
+                    isMarkedAsFavourite: updatedIsMarkedAsFavourite,
+                    favouritesCounter: updatedFavouritesCounter
+                });
+            }).catch(error => {
+        });
     }
 
     render() {
@@ -375,6 +416,23 @@ class AnnouncementView extends Component {
 
         const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement]]);
 
+        const IconText = ({ type, text, theme, onClick }) => (
+            <span><Icon type={type} theme={theme} style={{ marginRight: 8, fontSize: '24px' }} onClick={onClick}/>{text}</span>
+        );
+
+        const statsPanel = (
+            <Row style={{maxWidth: '350px'}}>
+                <Col span={6}>
+                    <IconText type="heart" theme={this.state.isMarkedAsFavourite ? "filled" : "outlined"} text={this.state.favouritesCounter}  onClick={this.onFavouriteClicked} key="list-vertical-star-o" />
+                </Col>
+                <Col span={6}>
+                    <IconText type="eye" text={this.state.viewsCounter} key="list-vertical-eye-o" />
+                </Col>
+                <Col span={6}>
+                    <IconText type="message" text={this.state.commentsCounter} key="list-vertical-message" />
+                </Col>
+            </Row>
+        );
         return (
             <div>
                 <PageHeader
@@ -401,23 +459,10 @@ class AnnouncementView extends Component {
                         {createdAt}
                         {updatedAt}
                     </Descriptions>
-                    <Row style={{maxWidth: '300px'}}>
-                        <Col span={6}>
-                            <IconText type="star-o" text="156" key="list-vertical-star-o" />
-                        </Col>
-                        <Col span={6}>
-                            <IconText type="eye" text="156" key="list-vertical-eye-o" />
-                        </Col>
-                        <Col span={6}>
-                            <IconText type="like-o" text="156" key="list-vertical-like-o" />
-                        </Col>
-                        <Col span={6}>
-                            <IconText type="message" text="2" key="list-vertical-message" />
-                        </Col>
-                    </Row>
+                    {statsPanel}
                     <Divider/>
                     <Card title={intl.formatMessage({id: "labels.comments"})}>
-                        <CommentsSection announcementId={this.props.data.id} currentUser={this.props.currentUser}/>
+                        <CommentsSection announcementId={this.props.data.id} currentUser={this.props.currentUser} onCommentAdded={this.onCommentAdded} onCommentRemoved={this.onCommentRemoved}/>
                     </Card>
 
                 </div>}

@@ -12,6 +12,7 @@ import java.net.URI;
 public class ResourceDTO {
 
     private Long id;
+    private String identifier;
     private URI uri;
 
 }

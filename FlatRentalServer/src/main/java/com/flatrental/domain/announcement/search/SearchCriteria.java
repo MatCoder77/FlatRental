@@ -1,11 +1,17 @@
 package com.flatrental.domain.announcement.search;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SearchCriteria {
 
     private Long id;
@@ -62,5 +68,6 @@ public class SearchCriteria {
     private Integer minNumberOfFlatmates;
     private Integer maxNumberOfFlatmates;
 
+    private Long author;
 
 }

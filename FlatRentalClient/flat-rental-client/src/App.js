@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import { getCurrentUser} from "./infrastructure/RestApiHandler";
-import { ACCESS_TOKEN} from "./infrastructure/Constants";
+import {ACCESS_TOKEN, CURRENT_USER, default as CONS} from "./infrastructure/Constants";
 import { Layout, notification } from 'antd';
 import './App.css';
 import LoadingIcon from "./commons/LoadingIcon";
 import RegistrationFrom from "./registration/RegistrationFrom";
 import Login from "./login/Login";
-import CreateAnnouncementStepWizard from "./announcement/AnnouncementStepWizard";
 import PageHeader from "./pageheader/PageHeader";
 import MainPage from "./mainpage/MainPage";
 import CreateAnnouncement from "./announcement/CreateAnnouncement";
 import EditAnnouncement from "./announcement/EditAnnouncement";
 import DeleteAnnouncement from "./announcement/DeleteAnnouncement";
 import AnnouncementList from "./announcementlist/AnnouncementList";
-import AnnouncementView from "./announcement/AnnouncementView";
 import AnnouncementViewHandler from "./announcement/AnnouncementViewHandler";
+import Profile from "./profile/Profile";
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 const { Content } = Layout;
 
@@ -23,8 +23,9 @@ const { Content } = Layout;
 class App extends Component {
     constructor(props) {
         super(props);
+        let currentUser = localStorage.getItem(CURRENT_USER);
         this.state = {
-            currentUser: null,
+            currentUser: currentUser ? JSON.parse(currentUser) : null,
             isAuthenticated: false,
             isLoading: false
         }
@@ -50,6 +51,7 @@ class App extends Component {
                     isAuthenticated: true,
                     isLoading: false
                 });
+                localStorage.setItem(CURRENT_USER, JSON.stringify(response));
             }).catch(error => {
             this.setState({
                 isLoading: false
@@ -61,7 +63,7 @@ class App extends Component {
         this.loadCurrentUser();
     }
 
-    handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+    handleLogout(redirectTo="/", notificationType="success", description=this.props.intl.formatMessage({id: "labels.successful_logout"})) {
         localStorage.removeItem(ACCESS_TOKEN);
 
         this.setState({
@@ -80,7 +82,7 @@ class App extends Component {
     handleLogin() {
         notification.success({
             message: 'Flat Rental',
-            description: "You're successfully logged in.",
+            description: this.props.intl.formatMessage({ id: 'labels.successful_login' })
         });
         this.loadCurrentUser();
         this.props.history.push("/");
@@ -110,6 +112,7 @@ class App extends Component {
                             <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
                             <Route exact path="/announcement/list" render={(props) => <AnnouncementList {...props}/>}/>
                             <Route exact path="/announcement/view/:id" render={(props) => <AnnouncementViewHandler currentUser={this.state.currentUser} {...props}/>}/>
+                            <Route exact path="/profile/:user" render={(props) => <Profile currentUser={this.state.currentUser} {...props}/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}
@@ -123,4 +126,4 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+export default injectIntl(withRouter(App));

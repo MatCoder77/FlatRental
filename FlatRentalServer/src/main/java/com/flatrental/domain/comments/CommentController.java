@@ -43,9 +43,10 @@ public class CommentController {
     @DeleteMapping(ID_PATH)
     @HasModeratorRole
     public ResponseDTO deleteComment(@PathVariable(ID) Long id) {
-        commentService.deleteComment(id);
+        int numberOfDeletedComments = commentService.deleteComment(id).size();
         return ResponseDTO.builder()
                 .success(true)
+                .message(String.valueOf(numberOfDeletedComments))
                 .build();
     }
 

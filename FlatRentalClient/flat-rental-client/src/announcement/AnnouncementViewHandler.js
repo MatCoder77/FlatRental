@@ -16,7 +16,6 @@ class AnnouncementViewHandler extends Component{
             isLoading: true
         };
         this.loadAnnouncement = this.loadAnnouncement.bind(this);
-        this.loadAnnouncement(this.state.announcementId);
     }
 
     loadAnnouncement(id) {
@@ -43,6 +42,10 @@ class AnnouncementViewHandler extends Component{
                 isLoading: false
             })
         });
+    }
+
+    componentDidMount() {
+        this.loadAnnouncement(this.state.announcementId);
     }
 
     render() {

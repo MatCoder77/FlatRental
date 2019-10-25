@@ -1,5 +1,6 @@
 package com.flatrental.domain.user;
 
+import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.managedobject.ManagedObject;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -60,6 +62,12 @@ public class User extends ManagedObject {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRole> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_X_favourites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "announcement_id"))
+    private Set<Announcement> favourites = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -131,6 +139,37 @@ public class User extends ManagedObject {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Set<Announcement> getFavourites() {
+        return favourites;
+    }
+
+    public void addAnnouncementToFavourites(Announcement announcement) {
+        this.favourites.add(announcement);
+    }
+
+    public void removeAnnouncementFromFavourites(Announcement announcement) {
+        this.favourites.remove(announcement);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof User)) {
+            return false;
+        }
+
+        User otherUser = (User) obj;
+        return Objects.equals(otherUser.id, id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

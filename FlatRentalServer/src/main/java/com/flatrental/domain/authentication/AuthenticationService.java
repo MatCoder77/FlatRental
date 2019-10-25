@@ -27,6 +27,10 @@ public class AuthenticationService {
         return new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword());
     }
 
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(String username, String password) {
+        return new UsernamePasswordAuthenticationToken(username, password);
+    }
+
     public TokenDTO mapToTokenDTO(String token) {
         return new TokenDTO(token);
     }
@@ -41,7 +45,8 @@ public class AuthenticationService {
                 registrationFormDTO.getEmail(),
                 registrationFormDTO.getPhoneNumber(),
                 null,
-                Collections.singleton(userRole));
+                Collections.singleton(userRole),
+                null);
         return userService.registerUser(newUser);
     }
 

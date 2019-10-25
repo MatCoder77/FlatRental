@@ -262,3 +262,54 @@ export function deleteComment(id) {
         method: 'DELETE'
     });
 }
+
+export function getUserAnnouncements(userId) {
+    return request({
+        url: API_BASE_URL + "/announcements/user/" + userId,
+        method: 'GET'
+    });
+}
+
+export function addToFavourites(announcementId) {
+    return request({
+        url: API_BASE_URL + "/announcements/add-to-favourites/" + announcementId,
+        method: 'POST'
+    });
+}
+
+export function removeFromFavourites(announcementId) {
+    return request({
+        url: API_BASE_URL + "/announcements/remove-from-favourites/" + announcementId,
+        method: 'DELETE'
+    });
+}
+
+export function getFavourites() {
+    return request({
+        url: API_BASE_URL + "/announcements/favourites",
+        method: 'GET'
+    });
+}
+
+export function changeAvatar(filename) {
+    return request({
+        url: API_BASE_URL + "/user/set-avatar/" + filename,
+        method: 'POST'
+    });
+}
+
+export function changePhoneNumber(phoneNumber) {
+    return request({
+        url: API_BASE_URL + "/user/set-avatar/" ,
+        method: 'POST'
+    });
+}
+
+export function changePassword(oldPassword, newPassword) {
+    let dto = {password: oldPassword, value: newPassword};
+    return request({
+        url: API_BASE_URL + "/auth/change-password" ,
+        method: 'POST',
+        body: JSON.stringify(dto)
+    });
+}

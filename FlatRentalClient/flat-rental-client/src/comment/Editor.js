@@ -48,6 +48,7 @@ class Editor extends Comment {
                     editorContent: ""
                 });
                 this.props.onSubmit(flattenData[""]);
+                this.props.onCommentAdded();
             }).catch(error => {
             this.setState({
                 submitting: false

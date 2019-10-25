@@ -5,6 +5,7 @@ import {List, Avatar, Icon, Descriptions} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
 import './AnnouncementList.css'
 import moment from "moment";
+import {getSurrogateAvatar} from "../profile/ProfileUtils";
 
 
 const IconText = ({ type, text }) => (
@@ -19,10 +20,12 @@ class AnnouncementList extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            formData: {}
+            formData: this.props.announcementsList ? {announcementsList: this.props.announcementsList} : {}
         };
         this.updateFormData = this.updateFormData.bind(this);
-        this.updateFormData('announcementsList', this.props.location.state.announcementsList);
+        if (!this.state.formData.announcementsList) {
+            this.updateFormData('announcementsList', this.props.location.state.announcementsList);
+        }
         this.navigateToAnnouncement = this.navigateToAnnouncement.bind(this);
         this.createSearchResultLabel = this.createSearchResultLabel.bind(this);
         this.voivodeshipAbbreviation = this.props.intl.formatMessage({ id: 'labels.voivodeship_abbreviation' });
@@ -120,6 +123,7 @@ class AnnouncementList extends Component{
         const {intl} = this.props;
         return (
             <List
+                className="announcements-list"
                 itemLayout="vertical"
                 size="large"
                 pagination={{
@@ -135,9 +139,9 @@ class AnnouncementList extends Component{
                         onClick={() => {this.navigateToAnnouncement(item.id)}}
                         key={item.id}
                         actions={[
-                            <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-                            <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                            <IconText type="message" text="2" key="list-vertical-message" />,
+                            <IconText type="heart-o" text={item.statistics.favouritesCounter} key="list-vertical-heart-o" />,
+                            <IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" />,
+                            <IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" />,
                             <span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>
                         ]}
                         extra={
@@ -152,7 +156,7 @@ class AnnouncementList extends Component{
                         }
                     >
                         <List.Item.Meta
-                            avatar={<Avatar src={item.avatar} />}
+                            avatar={item.info.createdBy.avatarUrl ? <Avatar src={item.info.createdBy.avatarUrl}/> : getSurrogateAvatar(item.info.createdBy.name)}
                             title={<div>{item.title}<span className="ant-descriptions-item-content" style={{fontSize: '0.8em'}}>   {intl.formatMessage({id: 'labels.announcement_type_' + item.type.toLowerCase()})}</span></div> }
                             description={
                                 <div><span>{this.createSearchResultLabel(item)}</span>

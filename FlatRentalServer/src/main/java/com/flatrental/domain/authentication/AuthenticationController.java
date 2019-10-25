@@ -1,16 +1,21 @@
 package com.flatrental.domain.authentication;
 
+import com.flatrental.api.ChangeWithPasswordConfirmation;
 import com.flatrental.api.LoginDTO;
 import com.flatrental.api.RegistrationFormDTO;
 import com.flatrental.api.ResourceDTO;
+import com.flatrental.api.ResponseDTO;
 import com.flatrental.api.TokenDTO;
 import com.flatrental.domain.user.User;
+import com.flatrental.domain.user.UserService;
+import com.flatrental.infrastructure.security.HasAnyRole;
+import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.TokenHandler;
+import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +38,9 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/signin")
     public TokenDTO authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(authenticationService.getAuthenticationToken(loginDTO));
@@ -51,6 +59,17 @@ public class AuthenticationController {
         return ResourceDTO.builder()
                 .id(newUser.getId())
                 .uri(uri)
+                .build();
+    }
+
+    @PostMapping("/change-password")
+    @HasAnyRole
+    public ResponseDTO changePassword(@Valid @RequestBody ChangeWithPasswordConfirmation passwordChange, @LoggedUser UserInfo userInfo) {
+        authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), passwordChange.getPassword()));
+        User user = userService.getExistingUser(userInfo.getId());
+        userService.setNewPassword(user, passwordChange.getValue());
+        return ResponseDTO.builder()
+                .success(true)
                 .build();
     }
 
