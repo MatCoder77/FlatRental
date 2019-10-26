@@ -97,7 +97,7 @@ class Profile extends React.Component {
         const userFavouritesList = (this.state.formData.userFavourites ? <AnnouncementList key="2" announcementsList={this.state.formData.userFavourites}/> : <LoadingIcon/>);
         const avatarUploader = (
             <div>
-                <AvatarUploader loadCurrentUser={this.props.loadCurrentUser} currentUser={this.props.currentUser}/>
+                <AvatarUploader loadCurrentUser={this.props.loadCurrentUser} updateCurrentUser={this.props.updateCurrentUser} currentUser={this.props.currentUser}/>
             </div>
         );
         const userAnnouncementPanel = (
@@ -144,6 +144,7 @@ class Profile extends React.Component {
                                                 value={this.props.currentUser.email}
                                                 handleCancel={this.handleCancel}
                                                 handleOk={this.handleCancel}
+                                                updateCurrentUser={this.props.updateCurrentUser}
                                     />
                                 </List.Item>
                                 <List.Item

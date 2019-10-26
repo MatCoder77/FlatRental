@@ -32,6 +32,7 @@ class App extends Component {
         this.handleLogout = this.handleLogout.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+        this.updateCurrentUserProperty = this.updateCurrentUserProperty.bind(this);
 
         notification.config({
             placement: 'topRight',
@@ -57,6 +58,16 @@ class App extends Component {
                 isLoading: false
             });
         });
+    }
+
+    updateCurrentUserProperty(propertyName, value) {
+        console.log(this.state.currentUser);
+        let {currentUser} = this.state;
+        currentUser[propertyName] = value;
+        this.setState({
+            currentUser
+        });
+        console.log(this.state.currentUser);
     }
 
     componentDidMount() {
@@ -112,7 +123,7 @@ class App extends Component {
                             <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
                             <Route exact path="/announcement/list" render={(props) => <AnnouncementList {...props}/>}/>
                             <Route exact path="/announcement/view/:id" render={(props) => <AnnouncementViewHandler currentUser={this.state.currentUser} {...props}/>}/>
-                            <Route exact path="/profile/:user" render={(props) => <Profile currentUser={this.state.currentUser} {...props}/>}/>
+                            <Route exact path="/profile/:user" render={(props) => <Profile updateCurrentUser={this.updateCurrentUserProperty} currentUser={this.state.currentUser} {...props} handleLogout={this.handleLogout}/>}/>
                             {/*<Route path="/users/:username"*/}
                             {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
                             {/*</Route>*/}

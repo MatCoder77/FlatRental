@@ -215,6 +215,8 @@
     "placeholders.confirm_change_with_password": "Confirm change with password",
     "labels.new_password": "New password",
     "labels.password_changed_successfully": "Password was changes successfully. You will be redirected to login page.",
+    "labels.email_changed_successfully": "Email was changed successfully",
+    "phone_number_changed_successfully": "Phone number was changed successfully",
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",

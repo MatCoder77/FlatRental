@@ -1,7 +1,8 @@
-import {Modal, Card, Col, List, Row, Button, Input, Form} from "antd";
+import {Modal, Card, Col, List, Row, Button, Input, Form, notification} from "antd";
 import React from "react";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import './Profile.css';
+import {changePhoneNumber} from "../infrastructure/RestApiHandler";
 
 const FormItem = Form.Item;
 
@@ -18,6 +19,8 @@ class PhoneNumberModal extends React.Component {
         };
 
         this.isFormValid = this.isFormValid.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
 
         this.phoneNumberIsIncorrect = this.props.intl.formatMessage({ id: 'text.phone_number_incorrect_msg' });
     }
@@ -50,18 +53,42 @@ class PhoneNumberModal extends React.Component {
         return this.state.validateStatus === 'success';
     }
 
+    handleSubmit() {
+        let promise = changePhoneNumber(this.state.phoneNumber);
+        if (!promise) {
+            return;
+        }
+        promise.then(response => {
+            notification.success({
+                message: 'Flat Rental',
+                description: this.props.intl.formatMessage({id: "labels.phone_number_changed_successfully"}),
+            });
+            this.props.updateCurrentUser('phoneNumber', this.state.phoneNumber);
+        }).catch(error => {
+            notification.error({
+                message: 'Flat Rental',
+                description: error.message || this.somethingWentWrongMessage
+            });
+        });
+        this.props.handleCancel('isPhoneNumberModalVisible');
+    }
+
+    handleCancel() {
+        this.props.handleCancel('isPhoneNumberModalVisible');
+    }
+
     render() {
         return (
             <Modal
                 visible={this.props.visible}
                 title={this.props.intl.formatMessage({id: "labels.phone_number_change"})}
-                onOk={() => {this.props.handleOk('isPhoneNumberModalVisible')}}
-                onCancel={() => {this.props.handleCancel('isPhoneNumberModalVisible')}}
+                onOk={this.handleSubmit}
+                onCancel={this.handleCancel}
                 footer={[
-                    <Button key="back" onClick={() => {this.props.handleCancel('isPhoneNumberModalVisible')}}>
+                    <Button key="back" onClick={this.handleCancel}>
                         <FormattedMessage id="labels.cancel"/>
                     </Button>,
-                    <Button key="submit" type="primary" onClick={() => this.props.handleOk(this.state.phoneNumber)} disabled={!this.isFormValid()}>
+                    <Button key="submit" type="primary" onClick={this.handleSubmit} disabled={!this.isFormValid()}>
                         <FormattedMessage id="labels.edit"/>
                     </Button>,
                 ]}

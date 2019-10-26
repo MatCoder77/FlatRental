@@ -4,6 +4,7 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import './Profile.css';
 import * as CONS from "../infrastructure/Constants";
 import {changePassword} from "../infrastructure/RestApiHandler";
+import { withRouter } from 'react-router-dom';
 
 const FormItem = Form.Item;
 
@@ -17,6 +18,7 @@ class PasswordModal extends React.Component {
         this.validatePassword = this.validatePassword.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
+        this.changePassword = this.changePassword.bind(this);
 
         this.state = {
             password: {value: undefined, errorMsg: null, validateStatus: undefined},
@@ -79,33 +81,41 @@ class PasswordModal extends React.Component {
     }
 
     onSubmit() {
-        this.state.password = {value: undefined, errorMsg: null, validateStatus: undefined};
-        this.props.handleOk(this.state.password.value);
-    }
-
-    onCancel() {
-        this.state.password = {value: undefined, errorMsg: null, validateStatus: undefined};
+        this.changePassword();
+        this.setState({
+            password: {value: undefined, errorMsg: null, validateStatus: undefined}
+        });
         this.props.handleCancel('isPasswordModalVisible');
     }
 
-    // changePassword() {
-    //     let promise = changePassword(this.state.password, this.state.newPassword);
-    //     if (!promise) {
-    //         return;
-    //     }
-    //     promise.then(response => {
-    //         notification.success({
-    //             message: 'Flat Rental',
-    //             description: this.props.intl.formatMessage({id: "labels.password_changed_successfully"}),
-    //         });
-    //         this.props.handleLogout();
-    //         }).catch(error => {
-    //         notification.error({
-    //             message: 'Flat Rental',
-    //             description: error.message || this.somethingWentWrongMessage
-    //         });
-    //     });
-    // }
+    onCancel() {
+        this.setState({
+            password: {value: undefined, errorMsg: null, validateStatus: undefined}
+        });
+        this.props.handleCancel('isPasswordModalVisible');
+    }
+
+    changePassword() {
+        let promise = changePassword(this.state.password.value, this.state.newPassword.value);
+        if (!promise) {
+            return;
+        }
+        promise.then(response => {
+            notification.success({
+                message: 'Flat Rental',
+                description: this.props.intl.formatMessage({id: "labels.password_changed_successfully"}),
+            });
+            setTimeout(() => {
+                this.props.history.push("/login");
+                this.props.handleLogout('/login');
+            }, 3000);
+            }).catch(error => {
+            notification.error({
+                message: 'Flat Rental',
+                description: error.message || this.somethingWentWrongMessage
+            });
+        });
+    }
 
     render() {
         return (
@@ -155,4 +165,4 @@ class PasswordModal extends React.Component {
     }
 }
 
-export default injectIntl(PasswordModal);
+export default injectIntl(withRouter(PasswordModal));

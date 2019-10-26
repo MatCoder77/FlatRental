@@ -298,17 +298,28 @@ export function changeAvatar(filename) {
     });
 }
 
-export function changePhoneNumber(phoneNumber) {
+export function changePassword(oldPassword, newPassword) {
+    let dto = new Object({password: oldPassword, value: newPassword});
     return request({
-        url: API_BASE_URL + "/user/set-avatar/" ,
-        method: 'POST'
+        url: API_BASE_URL + "/auth/change-password" ,
+        method: 'POST',
+        body: JSON.stringify(dto)
     });
 }
 
-export function changePassword(oldPassword, newPassword) {
-    let dto = {password: oldPassword, value: newPassword};
+export function changeEmail(password, email) {
+    let dto = new Object({password: password, value: email});
     return request({
-        url: API_BASE_URL + "/auth/change-password" ,
+        url: API_BASE_URL + "/auth/change-email" ,
+        method: 'POST',
+        body: JSON.stringify(dto)
+    });
+}
+
+export function changePhoneNumber(phoneNumber) {
+    let dto = new Object({value: phoneNumber});
+    return request({
+        url: API_BASE_URL + "/user/change-phone" ,
         method: 'POST',
         body: JSON.stringify(dto)
     });

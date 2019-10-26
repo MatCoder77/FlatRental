@@ -1,9 +1,9 @@
-import {Modal, Card, Col, List, Row, Button, Input, Form} from "antd";
+import {Modal, Card, Col, List, Row, Button, Input, Form, notification} from "antd";
 import React from "react";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import './Profile.css';
 import * as CONS from "../infrastructure/Constants";
-import {checkEmailAvailability} from "../infrastructure/RestApiHandler";
+import {changeEmail, checkEmailAvailability} from "../infrastructure/RestApiHandler";
 
 const FormItem = Form.Item;
 
@@ -22,6 +22,7 @@ class EmailModal extends React.Component {
         this.validateIfNotEmpty = this.validateIfNotEmpty.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
+        this.changeEmail = this.changeEmail.bind(this);
 
         this.emailIsTooShortMessage = this.props.intl.formatMessage({ id: 'text.email_too_short_msg' }, { min: CONS.EMAIL_MIN_LENGTH });
         this.emailIsTooLongMessage = this.props.intl.formatMessage({ id: 'text.email_too_long_msg' }, { max: CONS.EMAIL_MAX_LENGTH });
@@ -144,12 +145,38 @@ class EmailModal extends React.Component {
     }
 
     onSubmit() {
-        this.state.password = {value: undefined, errorMsg: null, validateStatus: undefined};
+        this.changeEmail();
+        this.setState({
+            password: {value: undefined, errorMsg: null, validateStatus: undefined}
+        });
         this.props.handleOk(this.state.email.value);
+        this.props.handleCancel('isEmailModalVisible');
+    }
+
+    changeEmail() {
+        let newEmail = this.state.email.value;
+        let promise = changeEmail(this.state.password.value, newEmail);
+        if (!promise) {
+            return;
+        }
+        promise.then(response => {
+            notification.success({
+                message: 'Flat Rental',
+                description: this.props.intl.formatMessage({id: "labels.email_changed_successfully"}),
+            });
+            this.props.updateCurrentUser('email', newEmail);
+        }).catch(error => {
+            notification.error({
+                message: 'Flat Rental',
+                description: error.message || this.somethingWentWrongMessage
+            });
+        });
     }
 
     onCancel() {
-        this.state.password = {value: undefined, errorMsg: null, validateStatus: undefined};
+        this.setState({
+            password: {value: undefined, errorMsg: null, validateStatus: undefined}
+        });
         this.props.handleCancel('isEmailModalVisible');
     }
 

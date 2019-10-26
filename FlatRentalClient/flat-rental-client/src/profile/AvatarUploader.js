@@ -71,7 +71,7 @@ class AvatarUploader extends React.Component {
                         avatarUrl: avatarUrl
                         // isLoading: false
                     });
-                    this.props.loadCurrentUser();
+                    this.props.updateCurrentUser('avatarUrl', avatarUrl);
                 }).catch(error => {});
             }).catch(error => {});
         };
