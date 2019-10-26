@@ -131,6 +131,7 @@ class Profile extends React.Component {
                                                       value={this.props.currentUser.phoneNumber}
                                                       handleCancel={this.handleCancel}
                                                       handleOk={this.handleCancel}
+                                                      updateCurrentUser={this.props.updateCurrentUser}
                                     />
                                 </List.Item>
                                 <List.Item
