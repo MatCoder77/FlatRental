@@ -73,6 +73,17 @@ public class AuthenticationController {
                 .build();
     }
 
+    @PostMapping("/change-email")
+    @HasAnyRole
+    public ResponseDTO changeEmail(@Valid @RequestBody ChangeWithPasswordConfirmation emailChange, @LoggedUser UserInfo userInfo) {
+        authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), emailChange.getPassword()));
+        User user = userService.getExistingUser(userInfo.getId());
+        userService.setNewEmail(user, emailChange.getValue());
+        return ResponseDTO.builder()
+                .success(true)
+                .build();
+    }
+
 }
 
 

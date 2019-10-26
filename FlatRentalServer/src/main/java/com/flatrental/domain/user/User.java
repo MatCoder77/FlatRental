@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class User extends ManagedObject {
     @Size(max = 100)
     private String password;
 
-    @NaturalId
+    @Column(unique=true)
     @NotBlank
     @Size(max = 40)
     @Email

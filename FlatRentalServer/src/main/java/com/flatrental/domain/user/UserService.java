@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +22,8 @@ public class UserService {
     private static final String EMAIL_ALREADY_TAKEN_MSG = "User with email {0} already exists!";
     private static final String NO_SUCH_USER = "There is no user with id {0}";
     private static final String PASSWORD_NOT_PASSED_VALIDATION_RULES = "Password not passed validation rules";
+    private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
+    private static final String EMAIL_INCORECT = "Supplied email is incorrect";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -33,7 +36,8 @@ public class UserService {
 
     public User registerUser(User newUser) {
         validateUsernameUniqueness(newUser);
-        validateEmailUniqueness(newUser);
+        validateEmail(newUser.getEmail());
+        validateEmailUniqueness(newUser.getEmail());
         validatePasswordRules(newUser.getPassword());
 
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
@@ -47,9 +51,15 @@ public class UserService {
         }
     }
 
-    private void validateEmailUniqueness(User user) {
-        if(userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException(MessageFormat.format(EMAIL_ALREADY_TAKEN_MSG, user.getEmail()));
+    private void validateEmailUniqueness(String email) {
+        if(userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException(MessageFormat.format(EMAIL_ALREADY_TAKEN_MSG, email));
+        }
+    }
+
+    private void validateEmail(String email) {
+        if (!EMAIL_REGEX.matcher(email).matches()) {
+            throw new IllegalArgumentException(EMAIL_INCORECT);
         }
     }
 
@@ -102,7 +112,19 @@ public class UserService {
 
     public void setNewPassword(User user, String newPassword) {
         validatePasswordRules(newPassword);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    public void setNewEmail(User user, String email) {
+        validateEmail(email);
+        validateEmailUniqueness(email);
+        user.setEmail(email);
+        userRepository.save(user);
+    }
+
+    public void setNewPhoneNumber(User user, String phoneNumber) {
+        user.setPhoneNumber(phoneNumber);
         userRepository.save(user);
     }
 

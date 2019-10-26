@@ -1,7 +1,10 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.AvailableDTO;
+import com.flatrental.api.ChangeDTO;
+import com.flatrental.api.ChangeWithPasswordConfirmation;
 import com.flatrental.api.ResourceDTO;
+import com.flatrental.api.ResponseDTO;
 import com.flatrental.api.UserDTO;
 import com.flatrental.domain.file.FileService;
 import com.flatrental.infrastructure.security.HasAnyRole;
@@ -11,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -58,6 +64,16 @@ public class UserController {
         return ResourceDTO.builder()
                 .uri(fileService.getDownloadUri(filename))
                 .identifier(filename)
+                .build();
+    }
+
+    @PostMapping("/change-phone")
+    @HasAnyRole
+    public ResponseDTO changePhoneNumber(@Valid @RequestBody ChangeDTO phoneNumberChange, @LoggedUser UserInfo userInfo) {
+        User user = userService.getExistingUser(userInfo.getId());
+        userService.setNewPhoneNumber(user, phoneNumberChange.getValue());
+        return ResponseDTO.builder()
+                .success(true)
                 .build();
     }
 
