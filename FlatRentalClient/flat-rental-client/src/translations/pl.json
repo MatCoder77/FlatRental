@@ -211,9 +211,14 @@
     "placeholders.confirm_change_with_password": "Potwierdź zmianę hasłem",
     "labels.new_password": "Nowe hasło",
     "labels.password_changed_successfully": "Hasło zostało zmienione, za chwilę nastąpi przekierowanie do strony logowania",
+    "labels.password_change": "Zmiana hasła",
     "labels.email_changed_successfully": "Adres email został zmieniony",
     "labels.phone_number_changed_successfully": "Numer telefonu został zmieniony",
-
+    "labels.show": "Pokaż",
+    "labels.about_user": "O użytkowniku",
+    "labels.rate": "Ocena",
+    "labels.contact_details": "Dane kontaktowe",
+    "labels.no_opinions": "Brak ocen",
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",

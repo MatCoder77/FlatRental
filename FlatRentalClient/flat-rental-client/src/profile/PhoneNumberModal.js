@@ -1,7 +1,7 @@
 import {Modal, Card, Col, List, Row, Button, Input, Form, notification} from "antd";
 import React from "react";
 import {FormattedMessage, injectIntl} from 'react-intl';
-import './Profile.css';
+import './AccountCenter.css';
 import {changePhoneNumber} from "../infrastructure/RestApiHandler";
 
 const FormItem = Form.Item;

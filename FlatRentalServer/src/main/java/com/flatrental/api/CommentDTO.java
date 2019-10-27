@@ -20,8 +20,9 @@ public class CommentDTO {
     private List<CommentDTO> subcomments;
     private Integer likesCounter;
     private Integer dislikesCounter;
-    @NotNull
+    private Integer rate;
     Long announcementId;
+    Long userId;
     private ManagedObjectDTO info;
 
 }

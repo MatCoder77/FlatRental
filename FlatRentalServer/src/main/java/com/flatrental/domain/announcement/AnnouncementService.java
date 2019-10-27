@@ -31,8 +31,6 @@ import com.flatrental.domain.file.File;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
-import com.flatrental.infrastructure.security.LoggedUser;
-import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -309,7 +307,7 @@ public class AnnouncementService {
                 .aboutFlatmates(announcement.getAboutRoommates())
                 .numberOfFlatmates(announcement.getNumberOfFlatmates())
                 .info(managedObjectService.mapToManagedObjectDTO(announcement))
-                .statistics(statisticsService.mapToStatisticsDTO(announcement.getStatistics()));
+                .statistics(statisticsService.mapToAnnouncementStatisticsDTO(announcement.getStatistics()));
 
         Optional.ofNullable(announcement.getBuildingType())
                 .map(buildingTypeService::mapToSimpleResourceDTO)

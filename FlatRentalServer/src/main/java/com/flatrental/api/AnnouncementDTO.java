@@ -89,7 +89,7 @@ public class AnnouncementDTO {
 
     ManagedObjectDTO info;
 
-    StatisticsDTO statistics;
+    AnnouncementStatisticsDTO statistics;
 
     UserSpecificInfoDTO userSpecificInfo;
 

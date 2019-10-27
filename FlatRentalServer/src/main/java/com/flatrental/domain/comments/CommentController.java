@@ -1,6 +1,7 @@
 package com.flatrental.domain.comments;
 
 import com.flatrental.api.CommentDTO;
+import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.HasModeratorRole;
@@ -33,12 +34,20 @@ public class CommentController {
         return commentService.getCommentsForAnnouncement(announcementId);
     }
 
+    @GetMapping("/for-profile" + ID_PATH)
+    public List<CommentDTO> getCommentsForProfile(@PathVariable(ID) Long userId) {
+        return commentService.getCommentsForUser(userId);
+    }
+
     @PostMapping
     @HasAnyRole
-    public List<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO, @LoggedUser UserInfo userInfo) {
-        commentService.createComment(commentDTO);
-        return commentService.getCommentsForAnnouncement(commentDTO.getAnnouncementId());
+    public ResourceDTO createComment(@Valid @RequestBody CommentDTO commentDTO, @LoggedUser UserInfo userInfo) {
+        Comment createdComment = commentService.createComment(commentDTO);
+        return ResourceDTO.builder()
+                .id(createdComment.getId())
+                .build();
     }
+
 
     @DeleteMapping(ID_PATH)
     @HasModeratorRole

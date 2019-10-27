@@ -37,6 +37,8 @@ public class UserController {
     private static final String CHECK_EMAIL_PATH = "/check/email/{" + EMAIL + "}";
     private static final String FILENAME = "filename";
     private static final String SET_AVATAR_PATH = "/set-avatar/{" + FILENAME + "}";
+    private static final String ID = "id";
+    private static final String ID_PATH = "/{" + ID + "}";
 
     @GetMapping(CHECK_USERNAME_PATH)
     public AvailableDTO checkUsernameAvailable(@PathVariable(USERNAME) String username) {
@@ -54,6 +56,13 @@ public class UserController {
     @HasAnyRole
     public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
         User user = userService.getExistingUser(currentUserInfo.getId());
+        return userService.mapToUserDTO(user);
+    }
+
+    @GetMapping(ID_PATH)
+    @HasAnyRole
+    public UserDTO getUser(@PathVariable(ID) Long id) {
+        User user = userService.getExistingUser(id);
         return userService.mapToUserDTO(user);
     }
 

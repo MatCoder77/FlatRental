@@ -46,7 +46,6 @@ class AnnouncementView extends Component {
         this.ruralCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.rural_commune_abbreviation' });
         this.mixedCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.mixed_abbreviation' });
         this.capitalCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.capital_commune_abbreviation' });
-        console.log(this.props.data);
     }
 
     attachLocalityData() {
@@ -436,13 +435,12 @@ class AnnouncementView extends Component {
         return (
             <div>
                 <PageHeader
-                    //onBack={() => window.history.back()}
+                    style={{marginBottom: '12px'}}
                     title={this.props.data.title}
                     subTitle={intl.formatMessage({id: "labels.announcement_type_" + this.props.data.type})}
                     extra={sidePricePerMonth}
-                    footer={<div><Icon type="environment" /> {this.createSearchResultLabel(this.props.data)}</div>}
+                    footer={<div style={{marginTop: '-10px'}}><Icon type="environment" /> {this.createSearchResultLabel(this.props.data)}</div>}
                 >
-                    {/*<Content extra={extraContent}>{renderContent()}</Content>*/}
                 </PageHeader>
 
                 <div>
@@ -462,7 +460,12 @@ class AnnouncementView extends Component {
                     {statsPanel}
                     <Divider/>
                     <Card title={intl.formatMessage({id: "labels.comments"})}>
-                        <CommentsSection announcementId={this.props.data.id} currentUser={this.props.currentUser} onCommentAdded={this.onCommentAdded} onCommentRemoved={this.onCommentRemoved}/>
+                        <CommentsSection announcementId={this.props.data.id}
+                                         currentUser={this.props.currentUser}
+                                         onCommentAdded={this.onCommentAdded}
+                                         onCommentRemoved={this.onCommentRemoved}
+                                         displayRate={false}
+                        />
                     </Card>
 
                 </div>}

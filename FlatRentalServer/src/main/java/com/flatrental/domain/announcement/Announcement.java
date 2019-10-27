@@ -12,7 +12,6 @@ import com.flatrental.domain.announcement.simpleattributes.neighbourhood.Neighbo
 import com.flatrental.domain.file.File;
 import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType;
 import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType;
-import com.flatrental.domain.statistics.Statistics;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -148,14 +147,12 @@ public class Announcement extends ManagedObject {
     @MapKeyColumn(name = "IMAGE_NUMBER")
     private Map<Integer, File> announcementImages = new HashMap<>();
 
-    private AnnouncementStatistics announcementStatistics;
-
     private String aboutRoommates;
 
     @PositiveOrZero
     private Integer numberOfFlatmates;
 
-    Statistics statistics;
+    com.flatrental.domain.statistics.AnnouncementStatistics statistics;
 
     @Override
     public boolean equals(Object obj) {

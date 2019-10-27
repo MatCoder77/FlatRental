@@ -47,4 +47,6 @@ public class UserDTO {
 
     private Set<String> roles;
 
+    private UserStatisticsDTO statistics;
+
 }

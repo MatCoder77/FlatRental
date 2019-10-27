@@ -13,6 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> getCommentsByAnnouncementIdAndObjectState(Long announcementId, ManagedObjectState objectState);
 
+    List<Comment> getCommentsByUserIdAndObjectState(Long userId, ManagedObjectState objectState);
+
     Optional<Comment> findCommentByIdAndObjectStateNot(Long id, ManagedObjectState objectState);
 
     @Query("SELECT c FROM Comment c WHERE (c.id = ?1 OR c.parentComment = ?1) AND c.objectState =  com.flatrental.domain.managedobject.ManagedObjectState.ACTIVE")

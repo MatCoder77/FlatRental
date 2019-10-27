@@ -249,9 +249,24 @@ export function createComment(commentDTO) {
     });
 }
 
+export function createCommentForProfile(commentDTO) {
+    return request({
+        url: API_BASE_URL + "/comments/for-profile",
+        method: 'POST',
+        body: JSON.stringify(commentDTO)
+    });
+}
+
 export function getComments(announcementId) {
     return request({
         url: API_BASE_URL + "/comments/" + announcementId,
+        method: 'GET'
+    });
+}
+
+export function getCommentsForProfile(userId) {
+    return request({
+        url: API_BASE_URL + "/comments/for-profile/" + userId,
         method: 'GET'
     });
 }
@@ -323,4 +338,11 @@ export function changePhoneNumber(phoneNumber) {
         method: 'POST',
         body: JSON.stringify(dto)
     });
+}
+
+export function getUser(id) {
+    return request({
+        url: API_BASE_URL + "/user/" + id,
+        method: 'GET',
+    })
 }

@@ -6,15 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class StatisticsDTO {
+public class UserStatisticsDTO {
 
-    long likesCounter;
-    long dislikesCounter;
-    long commentsCounter;
-    long viewsCounter;
-    long favouritesCounter;
+    private long opinionsCounter;
+    private double rating;
 
 }

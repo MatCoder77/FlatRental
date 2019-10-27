@@ -34,12 +34,18 @@ public class Comment extends ManagedObject {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="announcement_id", nullable=false)
+    @JoinColumn(name= "announcement_id")
     private Announcement announcement;
 
     @ManyToOne
-    @JoinColumn(name="parent_comment_id")
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name= "parent_comment_id")
     private Comment parentComment;
+
+    private Integer rate;
 
     private Integer likesCounter;
 

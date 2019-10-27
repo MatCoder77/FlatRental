@@ -14,8 +14,9 @@ import EditAnnouncement from "./announcement/EditAnnouncement";
 import DeleteAnnouncement from "./announcement/DeleteAnnouncement";
 import AnnouncementList from "./announcementlist/AnnouncementList";
 import AnnouncementViewHandler from "./announcement/AnnouncementViewHandler";
-import Profile from "./profile/Profile";
+import AccountCenter from "./profile/AccountCenter";
 import {FormattedMessage, injectIntl} from 'react-intl';
+import ProfileViewHandler from "./profile/ProfileViewHandler";
 
 const { Content } = Layout;
 
@@ -123,12 +124,8 @@ class App extends Component {
                             <Route exact path="/announcement/delete/:announcementId" render={(props) => <DeleteAnnouncement/>}/>
                             <Route exact path="/announcement/list" render={(props) => <AnnouncementList {...props}/>}/>
                             <Route exact path="/announcement/view/:id" render={(props) => <AnnouncementViewHandler currentUser={this.state.currentUser} {...props}/>}/>
-                            <Route exact path="/profile/:user" render={(props) => <Profile updateCurrentUser={this.updateCurrentUserProperty} currentUser={this.state.currentUser} {...props} handleLogout={this.handleLogout}/>}/>
-                            {/*<Route path="/users/:username"*/}
-                            {/*       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>*/}
-                            {/*</Route>*/}
-                            {/*<PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>*/}
-                            {/*<Route component={NotFound}></Route>*/}
+                            <Route exact path="/account" render={(props) => <AccountCenter updateCurrentUser={this.updateCurrentUserProperty} currentUser={this.state.currentUser} {...props} handleLogout={this.handleLogout}/>}/>
+                            <Route exact path="/profile/:user" render={(props) => <ProfileViewHandler currentUser={this.state.currentUser} {...props}/>}/>
                         </Switch>
                     </div>
                 </Content>

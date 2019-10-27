@@ -1,16 +1,12 @@
 import React, {Component} from "react";
-import moment from 'moment';
-import {FormattedMessage, injectIntl} from "react-intl";
-import { Comment, Avatar, Form, Button, List, Input } from 'antd';
-import {createComment, getComments} from "../infrastructure/RestApiHandler";
+import {injectIntl} from "react-intl";
+import { Comment, Avatar, Input } from 'antd';
+import {getComments, getCommentsForProfile} from "../infrastructure/RestApiHandler";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import LoadingIcon from "../commons/LoadingIcon";
 import Editor from "./Editor";
-import AnnouncementComment from "./AnnouncementComment";
 import CommentList from "./CommentList";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
-
-const { TextArea } = Input;
 
 class CommentsSection extends Component {
     constructor(props) {
@@ -23,11 +19,11 @@ class CommentsSection extends Component {
             isLoading: true,
         };
 
-        this.loadComments(this.props.announcementId);
+        this.loadComments(this.props.announcementId ? this.props.announcementId : this.props.userId);
     }
 
     loadComments(id, noLoading) {
-        let promise = getComments(id);
+        let promise = this.props.announcementId ? getComments(id) : getCommentsForProfile(this.props.userId);
 
         if (!promise) {
             return;
@@ -39,8 +35,7 @@ class CommentsSection extends Component {
             });
         }
 
-        promise
-            .then(response => {
+        promise.then(response => {
                 let comments = response;
                 let flattenData = DTOUtils.flatten(comments);
                 this.setState({
@@ -54,15 +49,8 @@ class CommentsSection extends Component {
         });
     }
 
-    updateComments(comments) {
-        if (comments) {
-            this.setState({
-                comments: comments
-            });
-        } else {
-            this.loadComments(this.props.announcementId, true);
-        }
-
+    updateComments() {
+        this.loadComments(this.props.announcementId ? this.props.announcementId : this.props.userId,  true);
     }
 
     render() {
@@ -75,9 +63,11 @@ class CommentsSection extends Component {
                     content={
                         <Editor
                             repliedCommentId={null}
+                            userId={this.props.userId}
                             announcementId={this.props.announcementId}
                             onSubmit={this.updateComments}
                             onCommentAdded={this.props.onCommentAdded}
+                            displayRate={this.props.displayRate}
                         />
                     }
                 />}
@@ -93,8 +83,9 @@ class CommentsSection extends Component {
                                                                 onReply={this.updateComments}
                                                                 currentUser={this.props.currentUser}
                                                                 onCommentAdded={this.props.onCommentAdded}
-                                                                onCommentRemoved={this.props.onCommentRemoved}/>}
-                {this.props.currentUser ? addCommentFrom : ""}
+                                                                onCommentRemoved={this.props.onCommentRemoved}
+                                                                displayRate={this.props.displayRate}/>}
+                {this.props.currentUser && (this.props.userId ? this.props.userId !== this.props.currentUser.id : true) ? addCommentFrom : ""}
             </div>
         );
     }

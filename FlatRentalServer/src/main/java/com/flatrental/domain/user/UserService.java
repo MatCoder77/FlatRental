@@ -1,13 +1,14 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.UserDTO;
+import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.file.FileService;
+import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.userrole.UserRole;
 import com.flatrental.domain.userrole.UserRoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -33,6 +34,9 @@ public class UserService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private StatisticsService statisticsService;
 
     public User registerUser(User newUser) {
         validateUsernameUniqueness(newUser);
@@ -101,6 +105,7 @@ public class UserService {
                         .map(UserRole::getName)
                         .map(UserRoleName::name)
                         .collect(Collectors.toSet()))
+                .statistics(statisticsService.mapToUserStatisticsDTO(user.getUserStatistics()))
                 .build();
     }
 
@@ -125,6 +130,11 @@ public class UserService {
 
     public void setNewPhoneNumber(User user, String phoneNumber) {
         user.setPhoneNumber(phoneNumber);
+        userRepository.save(user);
+    }
+
+    public void updateUserStatistics(User user) {
+        statisticsService.updateUserStatistics(user);
         userRepository.save(user);
     }
 

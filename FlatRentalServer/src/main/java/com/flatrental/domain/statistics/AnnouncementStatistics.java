@@ -6,18 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Statistics {
+public class AnnouncementStatistics {
 
+    @NotNull
     private long likesCounter;
+    @NotNull
     private long dislikesCounter;
+    @NotNull
     private long commentsCounter;
+    @NotNull
     private long favouritesCounter;
+    @NotNull
     private long viewsCounter;
 
     public void decrementCommentsCounterBy(int value) {

@@ -1,4 +1,4 @@
-import {Comment, Icon, Tooltip, Avatar, Rate, Row, Col} from 'antd';
+import {Comment, Icon, Tooltip, Avatar, Rate} from 'antd';
 import React, {Component} from "react";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
@@ -9,7 +9,7 @@ import {deleteComment} from "../infrastructure/RestApiHandler";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
 
 
-class AnnouncementComment extends Component {
+class Opinion extends Component {
     constructor(props) {
         super(props);
 
@@ -64,9 +64,9 @@ class AnnouncementComment extends Component {
             <span key=' key="comment-basic-dislike"'>
             <Tooltip title={intl.formatMessage({id: 'labels.dislike'})}>
             <Icon
-              type="dislike"
-              theme={action === 'disliked' ? 'filled' : 'outlined'}
-              onClick={this.dislike}
+                type="dislike"
+                theme={action === 'disliked' ? 'filled' : 'outlined'}
+                onClick={this.dislike}
             />
             </Tooltip>
             <span style={{ paddingLeft: 8, cursor: 'auto' }}>{dislikes}</span>
@@ -95,35 +95,31 @@ class AnnouncementComment extends Component {
                 author={<a>{this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']}</a>}
                 avatar={ this.props.data['info.createdBy.avatarUrl'] ? <Avatar src={this.props.data['info.createdBy.avatarUrl']}/> : getSurrogateAvatar(this.props.data['info.createdBy.name'])}
                 content={
-                    <div>
-                        {this.props.nestingLevel === 0 && this.props.displayRate && <Rate value={this.props.data.rate} disabled style={{marginBottom: '8px', marginTop: '-5px'}}/>}
                     <p>
                         {this.props.data.content}
                     </p>
-                    </div>
                 }
                 datetime={
+                    <div>
                     <Tooltip title={moment(this.props.data['info.createdAt']).format('YYYY-MM-DD HH:mm:ss')}>
                         <span>{moment(this.props.data['info.createdAt']).fromNow()}</span>
                     </Tooltip>
+                    <Rate/>
+                    </div>
                 }
             >
-                {this.props.data.subcomments.map(subcomment => <AnnouncementComment data={subcomment}
+                {this.props.data.subcomments.map(subcomment => <Opinion data={subcomment}
                                                                                     currentUser={this.props.currentUser}
                                                                                     nestingLevel={this.props.nestingLevel + 1}
                                                                                     onReply={this.props.onReply} intl={this.props.intl}
                                                                                     onCommentAdded={this.props.onCommentAdded}
                                                                                     onCommentRemoved={this.props.onCommentRemoved}
-                                                                                    displayRate={false}
                 />)}
-                {this.state.isCommentEditorShown &&
-                <Editor
+                {this.state.isCommentEditorShown && <Editor
                     onCommentAdded={this.props.onCommentAdded}
                     repliedCommentId={this.props.data.id}
-                    userId={this.props.data.userId}
                     announcementId={this.props.data.announcementId}
                     onSubmit={this.props.onReply}
-                    displayRate={false}
                 />}
             </Comment>
 
@@ -133,4 +129,4 @@ class AnnouncementComment extends Component {
 
 }
 
-export default injectIntl(AnnouncementComment);
+export default injectIntl(Opinion);

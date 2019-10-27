@@ -1,7 +1,7 @@
 import {Modal, Card, Col, List, Row, Button, Input, Form, notification} from "antd";
 import React from "react";
 import {FormattedMessage, injectIntl} from 'react-intl';
-import './Profile.css';
+import './AccountCenter.css';
 import * as CONS from "../infrastructure/Constants";
 import {changePassword} from "../infrastructure/RestApiHandler";
 import { withRouter } from 'react-router-dom';
@@ -121,7 +121,7 @@ class PasswordModal extends React.Component {
         return (
             <Modal
                 visible={this.props.visible}
-                title={this.props.intl.formatMessage({id: "labels.email_change"})}
+                title={this.props.intl.formatMessage({id: "labels.password_change"})}
                 onOk={this.onSubmit}
                 onCancel={this.onCancel}
                 footer={[

@@ -3,6 +3,7 @@ package com.flatrental.domain.authentication;
 import com.flatrental.api.LoginDTO;
 import com.flatrental.api.RegistrationFormDTO;
 import com.flatrental.api.TokenDTO;
+import com.flatrental.domain.statistics.UserStatistics;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
 import com.flatrental.domain.userrole.UserRole;
@@ -45,6 +46,8 @@ public class AuthenticationService {
                 registrationFormDTO.getEmail(),
                 registrationFormDTO.getPhoneNumber(),
                 null,
+                null,
+                new UserStatistics(),
                 Collections.singleton(userRole),
                 null);
         return userService.registerUser(newUser);

@@ -2,6 +2,7 @@ package com.flatrental.domain.user;
 
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.managedobject.ManagedObject;
+import com.flatrental.domain.statistics.UserStatistics;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -57,6 +58,11 @@ public class User extends ManagedObject {
     private String phoneNumber;
 
     private String avatar;
+
+    @Size(max = 10000)
+    private String about;
+
+    UserStatistics userStatistics;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Users_X_UserRoles",
@@ -152,6 +158,14 @@ public class User extends ManagedObject {
 
     public void removeAnnouncementFromFavourites(Announcement announcement) {
         this.favourites.remove(announcement);
+    }
+
+    public UserStatistics getUserStatistics() {
+        return userStatistics;
+    }
+
+    public String getAbout() {
+        return about;
     }
 
     @Override

@@ -1,7 +1,7 @@
-import {Button, Comment, Form, Input} from "antd";
+import {Button, Comment, Form, Input, Rate} from "antd";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import React from "react";
-import {createComment} from "../infrastructure/RestApiHandler";
+import {createComment, createCommentForProfile} from "../infrastructure/RestApiHandler";
 import {FormattedMessage, injectIntl} from "react-intl";
 
 const { TextArea } = Input;
@@ -12,11 +12,13 @@ class Editor extends Comment {
         this.state = {
             submitting: false,
             editorContent: "",
-            repliedCommentId: null
+            repliedCommentId: null,
+            rate: undefined
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.createComment = this.createComment.bind(this);
+        this.onRateChange = this.onRateChange.bind(this);
     }
 
     handleChange = event => {
@@ -29,7 +31,9 @@ class Editor extends Comment {
         let commentDTO = {
             content: this.state.editorContent,
             parentCommentId: this.props.repliedCommentId,
-            announcementId: this.props.announcementId
+            announcementId: this.props.announcementId,
+            userId: this.props.userId,
+            rate: this.state.rate
         };
         let promise = createComment(commentDTO);
 
@@ -39,15 +43,13 @@ class Editor extends Comment {
         this.setState({
             submitting: true,
         });
-        promise
-            .then(response => {
-                let comments = response;
-                let flattenData = DTOUtils.flatten(comments);
+        promise.then(response => {
                 this.setState({
                     submitting: false,
-                    editorContent: ""
+                    editorContent: "",
+                    rate: null
                 });
-                this.props.onSubmit(flattenData[""]);
+                this.props.onSubmit();
                 this.props.onCommentAdded();
             }).catch(error => {
             this.setState({
@@ -60,14 +62,24 @@ class Editor extends Comment {
         if (!this.state.editorContent) {
             return;
         }
+        if(this.props.displayRate !== false && !this.state.rate) {
+            return;
+        }
         this.createComment();
     };
+
+    onRateChange(number) {
+        this.setState({
+            rate: number
+        })
+    }
 
     render() {
         const {intl} = this.props;
         return (
             <div>
                 <Form.Item>
+                    {this.props.displayRate && <span><FormattedMessage id={"labels.rate"}/>: <Rate value={this.state.rate} onChange={this.onRateChange}/></span>}
                     <TextArea rows={4} onChange={this.handleChange} value={this.state.editorContent} />
                 </Form.Item>
                 <Form.Item>

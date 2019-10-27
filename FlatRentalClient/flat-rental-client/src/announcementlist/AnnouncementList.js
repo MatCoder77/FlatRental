@@ -34,6 +34,7 @@ class AnnouncementList extends Component{
         this.ruralCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.rural_commune_abbreviation' });
         this.mixedCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.mixed_abbreviation' });
         this.capitalCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.capital_commune_abbreviation' });
+        this.handleScroll = this.handleScroll.bind(this);
     }
 
     updateFormData(fieldName, fieldValue) {
@@ -117,9 +118,16 @@ class AnnouncementList extends Component{
         return "";
     }
 
+    handleScroll = () => {
+        const { index, selected } = this.props
+        if (index === selected) {
+            setTimeout(() => {
+                window.scroll({top: 0, left: 0, behavior: 'smooth' })
+            }, 200)
+        }
+    }
+
     render() {
-        console.log("INSIDE");
-        console.log(this.props);
         const {intl} = this.props;
         return (
             <List
@@ -128,9 +136,9 @@ class AnnouncementList extends Component{
                 size="large"
                 pagination={{
                     onChange: page => {
-                        console.log(page);
+                        this.handleScroll();
                     },
-                    pageSize: 3,
+                    pageSize: 10,
                 }}
                 dataSource={this.state.formData.announcementsList}
                 footer={""}
