@@ -21,7 +21,7 @@ import java.util.Objects;
 public class District {
 
     @Id
-    @GeneratedValue(generator = "ID_GENERATOR")
+    @GeneratedValue(generator = "TERYT_ID_GENERATOR")
     private Long id;
 
     @NotNull

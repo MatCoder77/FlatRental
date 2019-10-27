@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Commune {
 
     @Id
-    @GeneratedValue(generator = "ID_GENERATOR")
+    @GeneratedValue(generator = "TERYT_ID_GENERATOR")
     Long id;
 
     @NotNull

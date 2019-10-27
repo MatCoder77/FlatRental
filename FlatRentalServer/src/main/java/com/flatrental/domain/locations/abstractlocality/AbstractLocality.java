@@ -30,7 +30,7 @@ import java.util.Set;
 public class AbstractLocality {
 
     @Id
-    @GeneratedValue(generator = "ID_GENERATOR")
+    @GeneratedValue(generator = "TERYT_ID_GENERATOR")
     private Long id;
 
     @NotNull

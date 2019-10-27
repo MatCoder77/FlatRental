@@ -4,8 +4,7 @@ import {
     withRouter
 } from 'react-router-dom';
 import './PageHeader.css';
-import pollIcon from '../real-estate.png';
-import { Layout, Menu, Dropdown, Icon } from 'antd';
+import {Layout, Menu, Dropdown, Icon, Button} from 'antd';
 import {FormattedMessage, injectIntl} from 'react-intl';
 
 const Header = Layout.Header;
@@ -31,12 +30,11 @@ class AppHeader extends Component {
                         <Icon type="home" className="nav-icon" />
                     </Link>
                 </Menu.Item>,
-                <Menu.Item key="/poll/new">
-                    <Link to="/poll/new">
-                        <img src={pollIcon} alt="poll" className="poll-icon" />
-                    </Link>
+                <Menu.Item key="create-announcement">
+                        <CreateAnnouncementDropDownMenu
+                            currentUser={this.props.currentUser}/>
                 </Menu.Item>,
-                <Menu.Item key="/profile" className="profile-menu">
+                <Menu.Item key="profile" className="profile-menu">
                     <ProfileDropdownMenu
                         currentUser={this.props.currentUser}
                         handleMenuClick={this.handleMenuClick}/>
@@ -84,8 +82,8 @@ function ProfileDropdownMenu(props) {
                 </div>
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item key="profile" className="dropdown-item">
-                <Link to={`/users/${props.currentUser.username}`}><FormattedMessage id="labels.profile"/></Link>
+            <Menu.Item key="account" className="dropdown-item">
+                <Link to={"/account"}><FormattedMessage id="labels.account"/></Link>
             </Menu.Item>
             <Menu.Item key="logout" className="dropdown-item">
                 <FormattedMessage id="labels.logout"/>
@@ -100,6 +98,49 @@ function ProfileDropdownMenu(props) {
             getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
             <a className="ant-dropdown-link">
                 <Icon type="user" className="nav-icon" style={{marginRight: 0}} /> <Icon type="down" />
+            </a>
+        </Dropdown>
+    );
+}
+
+function CreateAnnouncementDropDownMenu(props) {
+    const dropdownMenu = (
+        <Menu className="profile-dropdown-menu">
+            <Menu.Item key="user-info" className="dropdown-item" disabled>
+                <div className="username-info">
+                    <FormattedMessage id="labels.choose_announcement_type"/>
+                </div>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="flat" className="dropdown-item">
+                <Link to={"/announcement/create/flat"}><FormattedMessage id="labels.announcement_type_flat"/></Link>
+            </Menu.Item>
+            <Menu.Item key="room" className="dropdown-item">
+                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_room"/></Link>
+            </Menu.Item>
+            <Menu.Item key="place_in_room" className="dropdown-item">
+                <Link to={"/announcement/create/place_in_room"}><FormattedMessage id="labels.announcement_type_place_in_room"/></Link>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="looking_for_flat" className="dropdown-item">
+                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_flat"/></Link>
+            </Menu.Item>
+            <Menu.Item key="room" className="dropdown-item">
+                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_room"/></Link>
+            </Menu.Item>
+            <Menu.Item key="room" className="dropdown-item">
+                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_place_in_room"/></Link>
+            </Menu.Item>
+        </Menu>
+    );
+
+    return (
+        <Dropdown
+            overlay={dropdownMenu}
+            trigger={['click']}
+            getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
+            <a className="ant-dropdown-link">
+                <span><Icon type="plus" className="nav-icon" style={{marginRight: 0}} /> <FormattedMessage id="labels.add_announcement"/></span>
             </a>
         </Dropdown>
     );

@@ -79,7 +79,8 @@ class CommentsSection extends Component {
         }
         return (
             <div>
-                {this.state.comments.length > 0 && <CommentList comments={this.state.comments}
+                {<CommentList comments={this.state.comments}
+                                                                placeholder={this.props.placeholder}
                                                                 onReply={this.updateComments}
                                                                 currentUser={this.props.currentUser}
                                                                 onCommentAdded={this.props.onCommentAdded}

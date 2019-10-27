@@ -7,7 +7,7 @@ import {getSurrogateAvatar} from "./ProfileUtils";
 import CommentsSection from "../comment/CommentsSection";
 import { Typography } from 'antd';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 
 class ProfileView extends React.Component {
@@ -89,17 +89,20 @@ class ProfileView extends React.Component {
 
         const noRates = (
             <div>
-                <Statistic title={this.props.intl.formatMessage({ id: 'labels.rate' })} value={this.props.intl.formatMessage({ id: 'labels.no_opinions' })}/>
+                <Statistic title={this.props.intl.formatMessage({ id: 'labels.rate' })} value={this.props.intl.formatMessage({ id: 'labels.no_rates' })}/>
             </div>
         );
 
         return (
-            <div>
+            <div style={{marginLeft: '60px', marginRight: '60px'}}>
                     <div>
-                        <Row gutter={40}type="flex" justify="space-around">
+                        <Row gutter={30}type="flex" justify="space-between">
                             <Col span={14}>
                                 <Title>{this.state.user.name + " " + this.state.user.surname}</Title>
-
+                                <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.about_user' })}</div>
+                                <Paragraph>
+                                    {this.state.user.about ? this.state.user.about : this.props.intl.formatMessage({ id: 'labels.no_about' })}
+                                </Paragraph>
                                 <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.contact_details' })}</div>
                                 <List>
                                     <List.Item
@@ -129,6 +132,7 @@ class ProfileView extends React.Component {
                                          currentUser={this.props.currentUser}
                                          onCommentAdded={this.onCommentAdded}
                                          onCommentRemoved={this.onCommentRemoved}
+                                         placeholder={this.props.intl.formatMessage({ id: 'labels.no_opinion' })}
                                          displayRate={true}
                         />
                     </div>

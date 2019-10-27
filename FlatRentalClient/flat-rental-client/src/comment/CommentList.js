@@ -10,7 +10,11 @@ class CommentList extends Component {
     }
 
     render() {
+        console.log(this.props.placeholder);
         const comments = this.props.comments;
+        if (!comments || !comments.length) {
+            return <div>{this.props.placeholder}</div>
+        }
         return (
             <List
                 dataSource={comments}

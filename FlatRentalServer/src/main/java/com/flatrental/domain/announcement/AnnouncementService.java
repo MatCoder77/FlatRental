@@ -28,6 +28,7 @@ import com.flatrental.domain.announcement.simpleattributes.neighbourhood.Neighbo
 import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingTypeService;
 import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowTypeService;
 import com.flatrental.domain.file.File;
+import com.flatrental.domain.statistics.AnnouncementStatistics;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
@@ -133,7 +134,8 @@ public class AnnouncementService {
                 .neighbourhood(getNeighbourhoodItems(announcementDTO))
                 .announcementImages(getAnnouncementImages(announcementDTO))
                 .aboutRoommates(announcementDTO.getAboutFlatmates())
-                .numberOfFlatmates(announcementDTO.getNumberOfFlatmates());
+                .numberOfFlatmates(announcementDTO.getNumberOfFlatmates())
+                .statistics(new AnnouncementStatistics());
 
         Optional.ofNullable(announcementDTO.getBuildingType())
                 .map(SimpleResourceDTO::getId)

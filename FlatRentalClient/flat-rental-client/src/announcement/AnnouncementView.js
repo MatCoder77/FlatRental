@@ -461,6 +461,7 @@ class AnnouncementView extends Component {
                     <Divider/>
                     <Card title={intl.formatMessage({id: "labels.comments"})}>
                         <CommentsSection announcementId={this.props.data.id}
+                                         placeholder={intl.formatMessage({id: "labels.no_comment"})}
                                          currentUser={this.props.currentUser}
                                          onCommentAdded={this.onCommentAdded}
                                          onCommentRemoved={this.onCommentRemoved}
