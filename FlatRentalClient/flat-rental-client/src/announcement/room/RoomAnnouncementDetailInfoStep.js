@@ -47,7 +47,6 @@ class FlatAnnouncementDetailInfoStep extends Component {
         this.loadCookerTypes = this.loadCookerTypes.bind(this);
         this.loadKitchenFurnishing = this.loadKitchenFurnishing.bind(this);
         this.loadBathroomFurnishing = this.loadBathroomFurnishing.bind(this);
-        //this.loadMedia = this.loadMedia.bind(this);
         this.loadNeighbourhoodItems = this.loadNeighbourhoodItems.bind(this);
         this.loadPreferences = this.loadPreferences.bind(this);
         this.loadRoomFurnishing = this.loadRoomFurnishing.bind(this);
@@ -104,10 +103,6 @@ class FlatAnnouncementDetailInfoStep extends Component {
     loadBathroomFurnishing() {
         this.props.loadData(getFurnishing, 'bathroomFurnishing', 'BATHROOM');
     }
-
-    // loadMedia() {
-    //     this.loadData(get)
-    // }
 
     loadNeighbourhoodItems() {
         this.props.loadData(getNeighborhoodItems, 'neighbourhoodItems');
@@ -409,11 +404,6 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                     value={this.props.formData.aboutFlatmates}
                                     placeholder={intl.formatMessage({ id: 'placeholders.about_flatmates' })}
                                 />
-                            </FormItem>
-                        </Card>
-                        <Card title={intl.formatMessage({ id: 'labels.media' })} bordered={false}>
-                            <FormItem layout="horizontal" help="">
-                                <CheckBoxGrid itemList={this.props.appData.media} span={8}/>
                             </FormItem>
                         </Card>
                         <Card title={intl.formatMessage({ id: 'labels.preferences' })} bordered={false}>

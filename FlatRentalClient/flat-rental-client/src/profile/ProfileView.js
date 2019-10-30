@@ -104,7 +104,7 @@ class ProfileView extends React.Component {
                                     {this.state.user.about ? this.state.user.about : this.props.intl.formatMessage({ id: 'labels.no_about' })}
                                 </Paragraph>
                                 <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.contact_details' })}</div>
-                                <List>
+                                <List split={false}>
                                     <List.Item
                                         actions={[<a key="list-loadmore-show" onClick={this.showNumber}><FormattedMessage id="labels.show"/></a>]}
                                     >

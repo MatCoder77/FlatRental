@@ -26,9 +26,17 @@ export function flatten(data) {
     let result = {};
     function recurse (cur, prop) {
         if (Object(cur) !== cur) {
-            result[prop] = cur;
+            if (prop === "") {
+                result = cur;
+            } else {
+                result[prop] = cur;
+            }
         } else if (Array.isArray(cur)) {
-            result[prop] = cur.map(element => flatten(element));
+            if(prop === "") {
+                result = cur.map(element => flatten(element));
+            } else {
+                result[prop] = cur.map(element => flatten(element));
+            }
             // for(var i=0, l=cur.length; i<l; i++)
             //     recurse(cur[i], "");
             // if (l == 0)

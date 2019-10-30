@@ -340,9 +340,25 @@ export function changePhoneNumber(phoneNumber) {
     });
 }
 
+export function changeAboutUser(description) {
+    let dto = new Object({value: description});
+    return request({
+        url: API_BASE_URL + "/user/change-profile-description" ,
+        method: 'POST',
+        body: JSON.stringify(dto)
+    });
+}
+
 export function getUser(id) {
     return request({
         url: API_BASE_URL + "/user/" + id,
         method: 'GET',
+    })
+}
+
+export function changeAnnouncementState(id, objectState) {
+    return request({
+        url: API_BASE_URL + "/announcements/" + id + "/change-state?state=" + objectState,
+        method: 'PUT',
     })
 }

@@ -6,6 +6,7 @@ import AvatarUploader from "./AvatarUploader";
 import PhoneNumberModal from "./PhoneNumberModal";
 import EmailModal from "./EmailModal";
 import PasswordModal from "./PasswordModal";
+import AboutUserModal from "./AboutUserModal";
 
 class AccountSettingsPanel extends React.Component {
 
@@ -18,7 +19,8 @@ class AccountSettingsPanel extends React.Component {
         this.state = {
             isPhoneNumberModalVisible: false,
             isEmailModalVisible: false,
-            isPasswordModalVisible: false
+            isPasswordModalVisible: false,
+            isAboutUserModalVisible: false
         }
     }
 
@@ -38,9 +40,23 @@ class AccountSettingsPanel extends React.Component {
         return (
             <div>
                 <Card title={this.props.intl.formatMessage({id: "labels.settings"})}>
-                    <Row gutter={40} type="flex" justify="space-between">
+                    <Row gutter={30} type="flex" justify="space-between">
                         <Col span={14}>
                             <List>
+                                <List.Item
+                                    actions={[<a key="list-loadmore-edit" onClick={() => this.showModal('isAboutUserModalVisible')}><FormattedMessage id="labels.edit"/></a>]}
+                                >
+                                    <List.Item.Meta
+                                        title={this.props.intl.formatMessage({id: "labels.about_user"})}
+                                        description={this.props.currentUser.about ? this.props.currentUser.about : this.props.intl.formatMessage({ id: 'labels.no_about' })}
+                                    />
+                                    <AboutUserModal visible={this.state.isAboutUserModalVisible}
+                                                      value={this.props.currentUser.about}
+                                                      handleCancel={this.handleCancel}
+                                                      handleOk={this.handleCancel}
+                                                      updateCurrentUser={this.props.updateCurrentUser}
+                                    />
+                                </List.Item>
                                 <List.Item
                                     actions={[<a key="list-loadmore-edit" onClick={() => this.showModal('isPhoneNumberModalVisible')}><FormattedMessage id="labels.edit"/></a>]}
                                 >

@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import {FormattedMessage, injectIntl} from "react-intl";
 import { withRouter } from 'react-router-dom';
-import {List, Avatar, Icon, Descriptions} from 'antd';
+import {List, Avatar, Icon, Descriptions, Button, Row, Col, notification} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
 import './AnnouncementList.css'
 import moment from "moment";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
+import {changeAnnouncementState} from "../infrastructure/RestApiHandler";
+import {hasRole, MODERATOR, userEquals} from "../infrastructure/PermissionsUtils";
 
 
 const IconText = ({ type, text }) => (
@@ -35,6 +37,11 @@ class AnnouncementList extends Component{
         this.mixedCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.mixed_abbreviation' });
         this.capitalCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.capital_commune_abbreviation' });
         this.handleScroll = this.handleScroll.bind(this);
+        this.handleEditClicked = this.handleEditClicked.bind(this);
+        this.handleDeactivateClicked = this.handleDeactivateClicked.bind(this);
+        this.handleDeleteClicked = this.handleDeleteClicked.bind(this);
+        this.isCurrentUserCreatorOrModerator = this.isCurrentUserCreatorOrModerator.bind(this);
+        this.isCurrentUserModerator = this.isCurrentUserModerator.bind(this);
     }
 
     updateFormData(fieldName, fieldValue) {
@@ -125,6 +132,83 @@ class AnnouncementList extends Component{
                 window.scroll({top: 0, left: 0, behavior: 'smooth' })
             }, 200)
         }
+    };
+
+    handleEditClicked(e, id) {
+        e.stopPropagation();
+        this.props.history.push({
+            pathname: '/announcement/edit/' + id,
+            // search: '?query=abc',
+            //state: { announcementsList: data }
+        });
+    }
+
+    handleDeactivateClicked(e, item) {
+        e.stopPropagation();
+        if (item.info.objectState === 'ACTIVE') {
+            let promise = changeAnnouncementState(item.id, 'INACTIVE');
+            if (!promise) {
+                return;
+            }
+            promise.then(response => {
+                notification.success({
+                    message: 'Flat Rental',
+                    description: this.props.intl.formatMessage({id: "labels.announcement_closed"}),
+                    duration: 5
+                });
+                const announcementsList = this.state.formData.announcementsList;
+                item.info.objectState = "INACTIVE";
+                this.setState({
+                    formData: {announcementsList: announcementsList}
+                })
+            }).catch(error => {});
+        } else if (item.info.objectState === 'INACTIVE') {
+            let promise = changeAnnouncementState(item.id, 'ACTIVE');
+            if (!promise) {
+                return;
+            }
+            promise.then(response => {
+                notification.success({
+                    message: 'Flat Rental',
+                    description: this.props.intl.formatMessage({id: "labels.announcement_opened"}),
+                    duration: 5
+                });
+                const announcementsList = this.state.formData.announcementsList;
+                item.info.objectState = "ACTIVE";
+                this.setState({
+                    formData: {announcementsList: announcementsList}
+                })
+            }).catch(error => {});
+        }
+    }
+
+    handleDeleteClicked(e, item) {
+        e.stopPropagation();
+        let promise = changeAnnouncementState(item.id, "REMOVED");
+        if (!promise) {
+            return;
+        }
+        promise.then(response => {
+            notification.success({
+                message: 'Flat Rental',
+                description: this.props.intl.formatMessage({id: "labels.announcement_removed"}),
+                duration: 5
+            });
+            const announcementsList = this.state.formData.announcementsList;
+            let index = announcementsList.map(announcement => announcement.id).indexOf(item.id);
+            if (index !== -1) announcementsList.splice(index, 1);
+            this.setState({
+                formData: {announcementsList: announcementsList}
+            })
+        }).catch(error => {});
+    }
+
+    isCurrentUserCreatorOrModerator(user) {
+        return userEquals(user, this.props.currentUser) || this.isCurrentUserModerator();
+    }
+
+    isCurrentUserModerator() {
+        return hasRole(MODERATOR, this.props.currentUser);
     }
 
     render() {
@@ -153,14 +237,33 @@ class AnnouncementList extends Component{
                             <span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>
                         ]}
                         extra={
-                            <div>
-                                {item.announcementImages && item.announcementImages[0] &&
-                            <img
-                                width={272}
-                                alt=" "
-                                src={API_BASE_URL + "/file/download/" + item.announcementImages[0].filename}
-                            />}
-                            </div>
+                            <Row>
+                                <Col>
+                                    <div>
+                                        {item.announcementImages && item.announcementImages[0] &&
+                                        <img
+                                            width={272}
+                                            alt=" "
+                                            src={API_BASE_URL + "/file/download/" + item.announcementImages[0].filename}
+                                        />}
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div style={{marginTop: '24px'}}>
+                                        <Row gutter={5} type="flex" justify="end">
+                                            <Col span={8}>
+                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleEditClicked(event, item.id)}}><FormattedMessage id={"labels.edit"}/></Button>}
+                                            </Col>
+                                            <Col span={8}>
+                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleDeactivateClicked(event, item)}}>{item.info.objectState === "ACTIVE" ? intl.formatMessage({id: 'labels.close_announcement'}) : intl.formatMessage({id: 'labels.open_announcement'})}</Button>}
+                                            </Col>
+                                            <Col span={8}>
+                                                {this.isCurrentUserModerator() && <Button style={{width: '100%'}} onClick={(event) => {this.handleDeleteClicked(event, item)}}><FormattedMessage id={"labels.delete"}/></Button>}
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Col>
+                            </Row>
                         }
                     >
                         <List.Item.Meta

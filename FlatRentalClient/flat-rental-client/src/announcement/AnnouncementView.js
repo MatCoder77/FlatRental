@@ -9,6 +9,7 @@ import './AnnouncementView.css'
 import CommentsSection from "../comment/CommentsSection";
 import {addToFavourites, removeFromFavourites} from "../infrastructure/RestApiHandler";
 import * as DTOUtils from "../infrastructure/DTOUtils";
+import {Link} from "react-router-dom";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -30,6 +31,8 @@ class AnnouncementView extends Component {
         this.onCommentAdded = this.onCommentAdded.bind(this);
         this.onCommentRemoved = this.onCommentRemoved.bind(this);
         this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
+        this.showNumber = this.showNumber.bind(this);
+
 
         this.attachLocalityData();
 
@@ -37,7 +40,8 @@ class AnnouncementView extends Component {
             commentsCounter: this.props.data['statistics.commentsCounter'],
             favouritesCounter: this.props.data['statistics.favouritesCounter'],
             isMarkedAsFavourite: this.props.data['userSpecificInfo.isMarkedAsFavourite'],
-            viewsCounter: this.props.data['statistics.viewsCounter']
+            viewsCounter: this.props.data['statistics.viewsCounter'],
+            isNumberVisible:false
         }
 
         this.voivodeshipAbbreviation = this.props.intl.formatMessage({ id: 'labels.voivodeship_abbreviation' });
@@ -46,6 +50,12 @@ class AnnouncementView extends Component {
         this.ruralCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.rural_commune_abbreviation' });
         this.mixedCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.mixed_abbreviation' });
         this.capitalCommuneAbbreviation = this.props.intl.formatMessage({ id: 'labels.capital_commune_abbreviation' });
+    }
+
+    showNumber() {
+        this.setState({
+            isNumberVisible: true
+        })
     }
 
     attachLocalityData() {
@@ -224,10 +234,10 @@ class AnnouncementView extends Component {
         };
 
         const numberOfFlatmates = this.getTextValueOptionalDescriptionItem('labels.flatmates_number', this.props.data.numberOfFlatmates);
-        const createdBy = this.getTextValueOptionalDescriptionItem('labels.announcement_author', this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']);
-        const createdAt = this.getTextValueOptionalDescriptionItem('labels.created_at', moment(this.props.data['info.createdAt']).format('YYYY-MM-DD'));
-        const updatedAt = this.getTextValueOptionalDescriptionItem('labels.updated_at', moment(this.props.data['info.updatedAt']).format('YYYY-MM-DD'));
-        const phoneNumber = this.getTextValueOptionalDescriptionItem('labels.phoneNumber', this.props.data['info.createdBy.phoneNumber']);
+        const createdBy = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.announcement_author', this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']) : undefined;
+        const createdAt = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.created_at', moment(this.props.data['info.createdAt']).format('YYYY-MM-DD')) : undefined;
+        const updatedAt = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.updated_at', moment(this.props.data['info.updatedAt']).format('YYYY-MM-DD')) : undefined;
+        const phoneNumber = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.phoneNumber', this.state.isNumberVisible ? this.props.data['info.createdBy.phoneNumber'].match(/.{1,3}/g).join(' ') : this.props.data['info.createdBy.phoneNumber'].substr(0, 3) + " XXX XXX") : undefined;
 
         const flatAnnouncement = (
             <div>
@@ -451,10 +461,16 @@ class AnnouncementView extends Component {
                 {this.props.data.id &&
                 <div>
                     <Divider />
-                    <Descriptions title={intl.formatMessage({id: "labels.about_offer"})} column={1}>
+                    <Descriptions title={intl.formatMessage({id: "labels.about_offer"})} column={3}>
                         {createdBy}
+                        <Descriptions.Item>{<Link to={"/profile/" + this.props.data['info.createdBy.id']}><FormattedMessage id={"labels.show_profile"}/></Link>}</Descriptions.Item>
+                        <Descriptions.Item/>
                         {phoneNumber}
+                        <Descriptions.Item><Button type={"link"} onClick={this.showNumber}><FormattedMessage id="labels.show"/></Button></Descriptions.Item>
+                        <Descriptions.Item/>
                         {createdAt}
+                        <Descriptions.Item/>
+                        <Descriptions.Item/>
                         {updatedAt}
                     </Descriptions>
                     {statsPanel}

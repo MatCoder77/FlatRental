@@ -28,8 +28,7 @@ class AnnouncementViewHandler extends Component{
         this.setState({
             isLoading: true
         });
-        promise
-            .then(response => {
+        promise.then(response => {
                 let announcementData = response;
                 let flattenData = DTOUtils.flatten(announcementData);
                 this.setState({

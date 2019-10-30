@@ -39,7 +39,7 @@ class CommentsSection extends Component {
                 let comments = response;
                 let flattenData = DTOUtils.flatten(comments);
                 this.setState({
-                    comments: flattenData[""],
+                    comments: flattenData,
                     isLoading: false
                 });
             }).catch(error => {
