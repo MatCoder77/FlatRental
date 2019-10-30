@@ -396,7 +396,8 @@ class SearchBox extends Component {
         return true;
     }
 
-    performSearchByCriteria() {
+    performSearchByCriteria(event) {
+        event.stopPropagation();
         let criteria = unflatten(this.state.formData);
         this.loadData(searchAnnouncementsByCriteria, 'foundAnnouncements', criteria, this.navigateToAnnouncementsList);
         console.log(this.state.appData.foundAnnouncements);
@@ -1315,7 +1316,7 @@ class SearchBox extends Component {
                                                 size="large"
                                                 type="primary"
                                                 disabled={!this.areSearchCriteriaValid() || !this.state.isLocalitySelected}
-                                                onClick={this.performSearchByCriteria}
+                                                onClick={(event) => {this.performSearchByCriteria(event)}}
                                             >
                                                 <Icon type="search" />
                                             </Button>
