@@ -443,7 +443,7 @@ class AnnouncementView extends Component {
             </Row>
         );
         return (
-            <div>
+            <div style={this.props.data['info.objectState'] === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(8%)'} : {}}>
                 <PageHeader
                     style={{marginBottom: '12px'}}
                     title={this.props.data.title}

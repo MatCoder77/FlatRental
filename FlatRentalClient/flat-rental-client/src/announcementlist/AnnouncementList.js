@@ -228,6 +228,7 @@ class AnnouncementList extends Component{
                 footer={""}
                 renderItem={item => (
                     <List.Item
+                        style={item.info.objectState === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(11%)'} : {}}
                         onClick={() => {this.navigateToAnnouncement(item.id)}}
                         key={item.id}
                         actions={[
@@ -252,7 +253,7 @@ class AnnouncementList extends Component{
                                     <div style={{marginTop: '24px'}}>
                                         <Row gutter={5} type="flex" justify="end">
                                             <Col span={8}>
-                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleEditClicked(event, item.id)}}><FormattedMessage id={"labels.edit"}/></Button>}
+                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleEditClicked(event, item.id)}}><FormattedMessage id={"labels.edit2"}/></Button>}
                                             </Col>
                                             <Col span={8}>
                                                 {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleDeactivateClicked(event, item)}}>{item.info.objectState === "ACTIVE" ? intl.formatMessage({id: 'labels.close_announcement'}) : intl.formatMessage({id: 'labels.open_announcement'})}</Button>}
