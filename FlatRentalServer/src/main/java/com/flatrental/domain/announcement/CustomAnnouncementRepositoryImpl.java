@@ -72,19 +72,19 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getNumberMinMaxPredicate(a.get(Announcement_.maxFloorInBuilding), searchCriteria.getMinMaxFloorInBuilding(), searchCriteria.getMaxMaxFloorInBuilding(), criteriaBuilder),
                 //availableFrom
                 getAddressPredicate(a, searchCriteria, criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.buildingType).get(BuildingType_.id), searchCriteria.getAllowedBuildingTypes(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id), searchCriteria.getAllowedBuildingMaterials(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.heatingType).get(HeatingType_.id), searchCriteria.getAllowedHeatingTypes(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.windowType).get(WindowType_.id), searchCriteria.getAllowedWindowTypes(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.parkingType).get(ParkingType_.id), searchCriteria.getAllowedParkingTypes(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.apartmentState).get(ApartmentState_.id), searchCriteria.getAllowedApartmentStates(), criteriaBuilder),
+                getAttributeInSetPredicate(a.get(Announcement_.buildingType).get(BuildingType_.id), searchCriteria.getAllowedBuildingTypes()),
+                getAttributeInSetPredicate(a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id), searchCriteria.getAllowedBuildingMaterials()),
+                getAttributeInSetPredicate(a.get(Announcement_.heatingType).get(HeatingType_.id), searchCriteria.getAllowedHeatingTypes()),
+                getAttributeInSetPredicate(a.get(Announcement_.windowType).get(WindowType_.id), searchCriteria.getAllowedWindowTypes()),
+                getAttributeInSetPredicate(a.get(Announcement_.parkingType).get(ParkingType_.id), searchCriteria.getAllowedParkingTypes()),
+                getAttributeInSetPredicate(a.get(Announcement_.apartmentState).get(ApartmentState_.id), searchCriteria.getAllowedApartmentStates()),
                 getNumberMinMaxPredicate(a.get(Announcement_.yearBuilt), searchCriteria.getMinYearBuilt(), searchCriteria.getMaxYearBuilt(), criteriaBuilder),
                 getEqualsPredicate(a.get(Announcement_.wellPlanned), searchCriteria.getIsWellPlanned(), criteriaBuilder),
                 getRequiredAttributesPredicate(a.get(Announcement_.apartmentAmenities), getAttributesFromIds(searchCriteria.getRequiredApartmentAmenities(), ApartmentAmenity::fromId), criteriaBuilder),
                 getRoomsPredicates(a, criteriaQuery, searchCriteria, criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id), searchCriteria.getAllowedKitchenTypes(), criteriaBuilder),
+                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id), searchCriteria.getAllowedKitchenTypes()),
                 getNumberMinMaxPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea), searchCriteria.getMinKitchenArea(), searchCriteria.getMaxKitchenArea(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id), searchCriteria.getAllowedCookerTypes(), criteriaBuilder),
+                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id), searchCriteria.getAllowedCookerTypes()),
                 getRequiredAttributesPredicate(a.get(Announcement_.kitchen).get(Kitchen_.furnishing), getAttributesFromIds(searchCriteria.getRequiredKitchenFurnishing(), FurnishingItem::fromId), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms), searchCriteria.getMinNumberOfBathrooms(), searchCriteria.getMaxNumberOfBathrooms(), criteriaBuilder),
                 getEqualsPredicate(a.get(Announcement_.bathroom).get(Bathroom_.separateWC), searchCriteria.getHasSeparatedWC(), criteriaBuilder),
@@ -92,7 +92,8 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getRequiredAttributesPredicate(a.get(Announcement_.preferences), getAttributesFromIds(searchCriteria.getRequiredPreferences(), Preference::fromId), criteriaBuilder),
                 getRequiredAttributesPredicate(a.get(Announcement_.neighbourhood), getAttributesFromIds(searchCriteria.getRequiredNeighbourhoodItems(), NeighbourhoodItem::fromId), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.numberOfFlatmates), searchCriteria.getMinNumberOfFlatmates(), searchCriteria.getMaxNumberOfFlatmates(), criteriaBuilder),
-                getEqualsPredicate(a.get(Announcement_.createdBy).get(User_.id), searchCriteria.getAuthor(), criteriaBuilder)
+                getEqualsPredicate(a.get(Announcement_.createdBy).get(User_.id), searchCriteria.getAuthor(), criteriaBuilder),
+                getAttributeInSetPredicate(a.get(Announcement_.objectState), searchCriteria.getAllowedManagedObjectStates())
 
         );
 
@@ -181,7 +182,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     }
 
 
-    private Optional<Predicate> getAttributeInSetPredicate(Path<Long> attribute, Set<Long> allowedValues, CriteriaBuilder criteriaBuilder) {
+    private <T> Optional<Predicate> getAttributeInSetPredicate(Path<T> attribute, Set<T> allowedValues) {
         if (CollectionUtils.isEmpty(allowedValues)) {
             return Optional.empty();
         }

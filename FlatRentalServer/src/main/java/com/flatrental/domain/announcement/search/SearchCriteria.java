@@ -1,5 +1,6 @@
 package com.flatrental.domain.announcement.search;
 
+import com.flatrental.domain.managedobject.ManagedObjectState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -69,5 +70,6 @@ public class SearchCriteria {
     private Integer maxNumberOfFlatmates;
 
     private Long author;
+    private Set<ManagedObjectState> allowedManagedObjectStates;
 
 }

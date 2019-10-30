@@ -168,6 +168,10 @@ public class User extends ManagedObject {
         return about;
     }
 
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

@@ -106,6 +106,7 @@ public class UserService {
                         .map(UserRoleName::name)
                         .collect(Collectors.toSet()))
                 .statistics(statisticsService.mapToUserStatisticsDTO(user.getUserStatistics()))
+                .about(user.getAbout())
                 .build();
     }
 
@@ -130,6 +131,11 @@ public class UserService {
 
     public void setNewPhoneNumber(User user, String phoneNumber) {
         user.setPhoneNumber(phoneNumber);
+        userRepository.save(user);
+    }
+
+    public void setUserProfileDescription(User user, String description) {
+        user.setAbout(description);
         userRepository.save(user);
     }
 

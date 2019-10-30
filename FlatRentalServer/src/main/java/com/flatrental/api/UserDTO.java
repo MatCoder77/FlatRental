@@ -49,4 +49,6 @@ public class UserDTO {
 
     private UserStatisticsDTO statistics;
 
+    private String about;
+
 }

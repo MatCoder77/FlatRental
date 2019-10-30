@@ -4,10 +4,12 @@ import com.flatrental.api.AnnouncementDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
+import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
 import com.flatrental.infrastructure.security.HasAnyRole;
+import com.flatrental.infrastructure.security.HasModeratorRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -46,6 +49,8 @@ public class AnnouncementController {
 
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";
+    private static final String STATE = "state";
+    private static final String CHANGE_STATE_PATH = "/change-state";
 
     @GetMapping(ID_PATH)
     public AnnouncementDTO getAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
@@ -84,7 +89,7 @@ public class AnnouncementController {
     }
 
     @DeleteMapping(ID_PATH)
-    @HasAnyRole
+    @HasModeratorRole
     public ResponseDTO deleteAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
         Announcement announcement = announcementService.getExistingAnnouncement(id);
         permissionsValidationService.validatePermissionToEditAnnouncement(userInfo, announcement);
@@ -151,8 +156,20 @@ public class AnnouncementController {
         Optional<User> user = Optional.ofNullable(userInfo).map(info -> userService.getExistingUser(info.getId()));
         SearchCriteria searchCriteria = SearchCriteria.builder()
                 .author(userInfo.getId())
+                .allowedManagedObjectStates(Set.of(ManagedObjectState.ACTIVE, ManagedObjectState.INACTIVE))
                 .build();
         return announcementService.searchAnnouncements(searchCriteria, pageable, user);
+    }
+
+    @PutMapping(ID_PATH + CHANGE_STATE_PATH)
+    @HasAnyRole
+    public ResponseDTO changeAnnouncementState(@PathVariable(ID) Long announcementId, @RequestParam(STATE) ManagedObjectState objectState, @LoggedUser UserInfo userInfo) {
+        Announcement announcement = announcementService.getExistingAnnouncement(announcementId);
+        permissionsValidationService.validatePermissionsToChangeAnnouncementState(userInfo, objectState, announcement);
+        announcementService.changeAnnouncementState(announcement, objectState);
+        return ResponseDTO.builder()
+                .success(true)
+                .build();
     }
 
 

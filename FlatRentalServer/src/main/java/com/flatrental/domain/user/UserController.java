@@ -86,4 +86,14 @@ public class UserController {
                 .build();
     }
 
+    @PostMapping("/change-profile-description")
+    @HasAnyRole
+    public ResponseDTO changeProfileDescription(@Valid @RequestBody ChangeDTO profileDescriptionChanged, @LoggedUser UserInfo userInfo) {
+        User user = userService.getExistingUser(userInfo.getId());
+        userService.setUserProfileDescription(user, profileDescriptionChanged.getValue());
+        return ResponseDTO.builder()
+                .success(true)
+                .build();
+    }
+
 }

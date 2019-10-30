@@ -1,6 +1,7 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.api.AnnouncementDTO;
+import com.flatrental.api.AnnouncementStatisticsDTO;
 import com.flatrental.api.BathroomDTO;
 import com.flatrental.api.FileDTO;
 import com.flatrental.api.KitchenDTO;
@@ -31,12 +32,14 @@ import com.flatrental.domain.file.File;
 import com.flatrental.domain.statistics.AnnouncementStatistics;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.user.User;
-import com.flatrental.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -96,9 +99,6 @@ public class AnnouncementService {
     private AnnouncementRepository announcementRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private ManagedObjectService managedObjectService;
 
     @Autowired
@@ -135,7 +135,7 @@ public class AnnouncementService {
                 .announcementImages(getAnnouncementImages(announcementDTO))
                 .aboutRoommates(announcementDTO.getAboutFlatmates())
                 .numberOfFlatmates(announcementDTO.getNumberOfFlatmates())
-                .statistics(new AnnouncementStatistics());
+                .statistics(Optional.ofNullable(announcement).map(Announcement::getStatistics).orElse(new AnnouncementStatistics()));
 
         Optional.ofNullable(announcementDTO.getBuildingType())
                 .map(SimpleResourceDTO::getId)
@@ -451,7 +451,11 @@ public class AnnouncementService {
     }
 
     public boolean removeAnnouncement(Announcement announcement) {
-        announcement.setObjectState(ManagedObjectState.REMOVED);
+        return changeAnnouncementState(announcement, ManagedObjectState.REMOVED);
+    }
+
+    public boolean changeAnnouncementState(Announcement announcement, ManagedObjectState managedObjectState) {
+        announcement.setObjectState(managedObjectState);
         announcementRepository.save(announcement);
         return true;
     }
@@ -498,6 +502,17 @@ public class AnnouncementService {
             announcement.getStatistics().decrementFavouritesCounter();
             announcementRepository.save(announcement);
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void setAllAnnouncementsOlderThanMonthAsInactive() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, -1);
+        Instant monthAgo = cal.getTime().toInstant();
+        List<Announcement> announcementsToDeactivate = announcementRepository.getAllByUpdatedAtBeforeAndObjectState(monthAgo, ManagedObjectState.ACTIVE);
+        announcementsToDeactivate.stream()
+                .forEach(announcement -> announcement.setObjectState(ManagedObjectState.INACTIVE));
+        announcementRepository.saveAll(announcementsToDeactivate);
     }
 
 }
