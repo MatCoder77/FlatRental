@@ -1,7 +1,7 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.api.AnnouncementDTO;
-import com.flatrental.api.AnnouncementStatisticsDTO;
+import com.flatrental.api.AnnouncementSearchResultDTO;
 import com.flatrental.api.BathroomDTO;
 import com.flatrental.api.FileDTO;
 import com.flatrental.api.KitchenDTO;
@@ -33,10 +33,17 @@ import com.flatrental.domain.statistics.AnnouncementStatistics;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Calendar;
@@ -460,10 +467,74 @@ public class AnnouncementService {
         return true;
     }
 
-    public List<AnnouncementDTO> searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable, Optional<User> user) {
-        return announcementRepository.searchAnnouncementsByCriteria(searchCriteria, pageable).get()
+    public AnnouncementSearchResultDTO searchAnnouncements(SearchCriteria searchCriteria, Pageable pageable, Optional<User> user) {
+        Page<Announcement> announcementPage = announcementRepository.searchAnnouncementsByCriteria(searchCriteria, pageable);
+        List<AnnouncementDTO> announcements = announcementPage.stream()
                 .map(announcement -> mapToAnnouncementDTO(announcement, user))
                 .collect(Collectors.toList());
+
+        URI firstPageUri = generatePageUri(announcementPage.getPageable().first());
+        URI previousPageUri = generatePageUri(announcementPage.getPageable().previousOrFirst());
+        URI nextPageUri = generatePageUri(getNextOrLastPageable(announcementPage));
+        URI lastPageUri = generatePageUri(getLastPageable(announcementPage));
+
+        return AnnouncementSearchResultDTO.builder()
+                .announcements(announcements)
+                .pageNumber(Long.valueOf(announcementPage.getNumber()))
+                .pageSize(Long.valueOf(announcementPage.getSize()))
+                .firstPage(firstPageUri)
+                .previousPage(previousPageUri)
+                .nextPage(nextPageUri)
+                .lastPage(lastPageUri)
+                .pageWithSelectedNumber(generateUriTemplateForPageWithSelectedNumber(pageable.getPageSize(), pageable.getSort()))
+                .criteria(searchCriteria)
+                .build();
+    }
+
+    private URI generatePageUri(Pageable pageable) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/announcements/search")
+                .queryParam(getQueryParamsForPageable(pageable))
+                .build()
+                .toUri();
+    }
+
+    private String getQueryParamsForPageable(Pageable pageable) {
+        return getPaginationQueryParams(String.valueOf(pageable.getPageNumber()), pageable.getPageSize(), pageable.getSort());
+    }
+
+    private String getPaginationQueryParams(String pageNumber, int pageSize, Sort sort) {
+        String pageNumberParam = "page=" + pageNumber;
+        String pageSizeParam = "size=" + pageSize;
+        String sortQueryParams = sort.stream()
+                .map(this::mapOrderToQueryParam)
+                .collect(Collectors.joining("&"));
+        return pageNumberParam + "&" + pageSizeParam + "&" + sortQueryParams;
+    }
+
+    private String mapOrderToQueryParam(Sort.Order order) {
+        return "sort=" + order.getProperty() + "," + order.getDirection().name();
+    }
+
+    private <T> Pageable getNextOrLastPageable(Page<T> page) {
+        Pageable lastPageable = getLastPageable(page);
+        Pageable nextPageable = page.getPageable().next();
+        if (nextPageable.getPageNumber() > lastPageable.getPageNumber()) {
+            return lastPageable;
+        }
+        return nextPageable;
+    }
+
+    private <T> Pageable getLastPageable(Page<T> page) {
+        int maxPageNumber = Integer.max(page.getTotalPages() - 1, 0);
+        return PageRequest.of(maxPageNumber, page.getPageable().getPageSize(), page.getSort());
+    }
+
+    private String generateUriTemplateForPageWithSelectedNumber(int pageSize, Sort sort) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/announcements/search")
+                .toUriString() + "?" + getPaginationQueryParams("{pageNumber}", pageSize, sort);
+
     }
 
     public void incrementCommentsCounter(Announcement announcement) {

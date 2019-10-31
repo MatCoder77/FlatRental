@@ -1,6 +1,7 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.api.AnnouncementDTO;
+import com.flatrental.api.AnnouncementSearchResultDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
@@ -100,7 +101,7 @@ public class AnnouncementController {
     }
 
     @PostMapping("/search")
-    public List<AnnouncementDTO> searchAnnouncements(@Valid @RequestBody SearchCriteria searchCriteria, Pageable pageable, @LoggedUser UserInfo userInfo) {
+    public AnnouncementSearchResultDTO searchAnnouncements(@Valid @RequestBody SearchCriteria searchCriteria, Pageable pageable, @LoggedUser UserInfo userInfo) {
         Optional<User> user = Optional.ofNullable(userInfo).map(info -> userService.getExistingUser(info.getId()));
         return announcementService.searchAnnouncements(searchCriteria, pageable, user);
     }
@@ -158,7 +159,7 @@ public class AnnouncementController {
                 .author(userInfo.getId())
                 .allowedManagedObjectStates(Set.of(ManagedObjectState.ACTIVE, ManagedObjectState.INACTIVE))
                 .build();
-        return announcementService.searchAnnouncements(searchCriteria, pageable, user);
+        return announcementService.searchAnnouncements(searchCriteria, pageable, user).getAnnouncements();
     }
 
     @PutMapping(ID_PATH + CHANGE_STATE_PATH)

@@ -30,6 +30,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -45,12 +46,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 
 public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private static final Set allowedSoringAttributes = Set.of(Announcement_.CREATED_AT, Announcement_.PRICE_PER_MONTH);
 
     @Override
     public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria searchCriteria, Pageable pageable) {
@@ -60,6 +64,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         criteriaQuery.select(a);
         Expression<Set<ApartmentAmenity>> setExpression = a.get(Announcement_.apartmentAmenities);
         criteriaBuilder.isMember(ApartmentAmenity.fromId(2L), setExpression);
+
         List<Optional<Predicate>> predicates = Arrays.asList(
                 getEqualsPredicate(a.get(Announcement_.id), searchCriteria.getId(), criteriaBuilder),
                 getTypePredicate(a.get(Announcement_.type), searchCriteria.getAnnouncementType(), criteriaBuilder),
@@ -102,6 +107,10 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 .collect(Collectors.collectingAndThen(Collectors.toList(), predicatesList -> criteriaBuilder.and(predicatesList.toArray(new Predicate[0]))));
 
         criteriaQuery.where(predicate);
+
+        List<Order> sortingOrders = getSortingOrders(a, pageable.getSort(), criteriaBuilder);
+
+        criteriaQuery.orderBy(sortingOrders);
 
         TypedQuery<Announcement> query = entityManager.createQuery(criteriaQuery);
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
@@ -210,7 +219,6 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Subquery<Room> roomSubquery = criteriaQuery.subquery(Room.class);
         Root<Announcement> subRoot = roomSubquery.correlate(a);
         Join<Announcement, Room> announcementXroom = subRoot.join(Announcement_.rooms);
-        //Join<Room, FurnishingItem> announcementXroomXfurnishing = announcementXrooms.join(Room_.furnishings);
         roomSubquery.select(announcementXroom);
         List<Optional<Predicate>> roomPredicates = Arrays.asList(
                 getNumberMinMaxPredicate(announcementXroom.get(Room_.area), roomCriteria.getMinArea(), roomCriteria.getMaxArea(), criteriaBuilder),
@@ -242,6 +250,22 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
+    private List<Order> getSortingOrders(Root<Announcement> a, Sort sort, CriteriaBuilder criteriaBuilder) {
+        return sort.get()
+                .filter(order -> isAllowedSortingAttribute(order.getProperty()))
+                .map(order -> mapToCriteriaOrder(a, order, criteriaBuilder))
+                .collect(Collectors.toList());
+    }
 
+    private boolean isAllowedSortingAttribute(String attributeName) {
+        return allowedSoringAttributes.contains(attributeName);
+    }
+
+    private Order mapToCriteriaOrder(Root<Announcement> a, Sort.Order order, CriteriaBuilder criteriaBuilder) {
+        if (order.isAscending()) {
+            return criteriaBuilder.asc(a.get(order.getProperty()));
+        }
+        return criteriaBuilder.desc(a.get(order.getProperty()));
+    }
 
 }
