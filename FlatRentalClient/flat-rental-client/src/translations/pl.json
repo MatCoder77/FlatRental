@@ -235,6 +235,17 @@
     "labels.close_announcement": "Zakończ",
     "labels.open_announcement": "Aktywuj",
     "labels.announcement_removed": "Usunięto ogłoszenie.",
+    "labels.found_announcements": "Znaleziono {number} ogłoszeń",
+    "labels.sort_by_createdAt": "Sortuj według daty dodania",
+    "labels.sort_by_pricePerMonth": "Sortuj według ceny",
+    "labels.sort_by_announcementRate": "Sortuj według jakości ogłoszenia",
+    "labels.sort_order_asc_createdAt": "Od najstarszych",
+    "labels.sort_order_desc_createdAt": "Od najnowszych",
+    "labels.sort_order_asc_pricePerMonth": "Od najniszej",
+    "labels.sort_order_desc_pricePerMonth": "Od najwyższej",
+    "labels.sort_order_asc_rate": "Od najwyższej",
+    "labels.sort_order_desc_rate": "Od najniższej",
+
 
     "BUILDING_TYPE_FLAT": "Blok",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartamentowiec",

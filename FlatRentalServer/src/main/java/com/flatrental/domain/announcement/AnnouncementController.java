@@ -1,10 +1,12 @@
 package com.flatrental.domain.announcement;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.flatrental.api.AnnouncementDTO;
 import com.flatrental.api.AnnouncementSearchResultDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
+import com.flatrental.domain.announcement.search.SearchCriteriaService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.user.User;
@@ -47,6 +49,9 @@ public class AnnouncementController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SearchCriteriaService searchCriteriaService;
 
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";
@@ -100,9 +105,11 @@ public class AnnouncementController {
                 .build();
     }
 
-    @PostMapping("/search")
-    public AnnouncementSearchResultDTO searchAnnouncements(@Valid @RequestBody SearchCriteria searchCriteria, Pageable pageable, @LoggedUser UserInfo userInfo) {
+    @GetMapping("/search")
+    public AnnouncementSearchResultDTO searchAnnouncements(@RequestParam("searchCriteria") Optional<String> searchCriteriaParam, Pageable pageable, @LoggedUser UserInfo userInfo) {
         Optional<User> user = Optional.ofNullable(userInfo).map(info -> userService.getExistingUser(info.getId()));
+        SearchCriteria searchCriteria = searchCriteriaParam.map(searchCriteriaService::getSearchCriteria)
+                .orElseGet(SearchCriteria::new);
         return announcementService.searchAnnouncements(searchCriteria, pageable, user);
     }
 

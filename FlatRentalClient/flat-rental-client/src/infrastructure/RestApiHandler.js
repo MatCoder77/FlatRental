@@ -233,12 +233,16 @@ export function getLocations(searchText) {
     });
 }
 
-export function searchAnnouncementsByCriteria(searchCriteria) {
+export function searchAnnouncementsByCriteria(searchCriteriaParam, pageNumber, pageSize, sorting) {
+    console.log(API_BASE_URL + "/announcements/search?searchCriteria=" + searchCriteriaParam + "&page=" + pageNumber + "&size=" + pageSize + "&sort=" + sorting);
     return request({
-        url: API_BASE_URL + "/announcements/search",
-        method: 'POST',
-        body: JSON.stringify(searchCriteria)
+        url: API_BASE_URL + "/announcements/search?searchCriteria=" + searchCriteriaParam + "&page=" + pageNumber + "&size=" + pageSize + "&sort=" + sorting,
+        method: 'GET'
     });
+}
+
+export function getSearchCriteriaQueryParam(searchCriteria) {
+    return encodeURIComponent(btoa(JSON.stringify(searchCriteria)));
 }
 
 export function createComment(commentDTO) {

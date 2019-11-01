@@ -10,9 +10,18 @@ import {
     getApartmentAmenitiesTypes,
     getApartmentStateTypes,
     getBuildingMaterialTypes,
-    getBuildingTypes, getCookerTypes, getFurnishing,
-    getHeatingTypes, getKitchenTypes,
-    getLocations, getNeighborhoodItems, getParkingTypes, getPreferences, getWindowTypes, searchAnnouncementsByCriteria
+    getBuildingTypes,
+    getCookerTypes,
+    getFurnishing,
+    getHeatingTypes,
+    getKitchenTypes,
+    getLocations,
+    getNeighborhoodItems,
+    getParkingTypes,
+    getPreferences,
+    getSearchCriteriaQueryParam,
+    getWindowTypes,
+    searchAnnouncementsByCriteria
 } from "../infrastructure/RestApiHandler";
 import MultiSelect from "../commons/MultiSelect";
 import { Tabs } from 'antd';
@@ -28,7 +37,7 @@ class SearchBox extends Component {
         this.state = {
             dataSource: [],
             appData: {},
-            formData: {},
+            formData: this.props.searchCriteria ? {...this.props.searchCriteria} : {},
             isExpanded: false,
             validationStatus: {},
             errorMessages: {},
@@ -53,7 +62,6 @@ class SearchBox extends Component {
         this.onPositiveWithZeroRangeEndChanged = this.onPositiveWithZeroRangeEndChanged.bind(this);
         this.validatePositiveOrZeroIntegerRange = this.validatePositiveOrZeroIntegerRange.bind(this);
         this.areSearchCriteriaValid = this.areSearchCriteriaValid.bind(this);
-        this.performSearchByCriteria = this.performSearchByCriteria.bind(this);
         this.navigateToAnnouncementsList = this.navigateToAnnouncementsList.bind(this);
         this.onSelect = this.onSelect.bind(this);
         this.onPositiveRangeBeginChangedForRoom = this.onPositiveRangeBeginChangedForRoom.bind(this);
@@ -396,19 +404,12 @@ class SearchBox extends Component {
         return true;
     }
 
-    performSearchByCriteria(event) {
+    navigateToAnnouncementsList(event) {
         event.stopPropagation();
         let criteria = unflatten(this.state.formData);
-        this.loadData(searchAnnouncementsByCriteria, 'foundAnnouncements', criteria, this.navigateToAnnouncementsList);
-        console.log(this.state.appData.foundAnnouncements);
-
-    }
-
-    navigateToAnnouncementsList(data) {
         this.props.history.push({
             pathname: '/announcement/list',
-            // search: '?query=abc',
-            state: { announcementsList: data }
+            search: "?page=0&size=15&sort=createdAt,desc&searchCriteria=" + getSearchCriteriaQueryParam(criteria)
         });
     }
 
@@ -1304,6 +1305,7 @@ class SearchBox extends Component {
                                     size="large"
                                     dataSource={this.state.dataSource}
                                     onSelect={this.onSelect}
+                                    defaultValue={this.props.location.search.selectedLocation}
                                     onSearch={this.handleSearch}
                                     placeholder={intl.formatMessage({ id: 'labels.sb_placeholder' })}
                                     optionLabelProp="text"
@@ -1316,7 +1318,7 @@ class SearchBox extends Component {
                                                 size="large"
                                                 type="primary"
                                                 disabled={!this.areSearchCriteriaValid() || !this.state.isLocalitySelected}
-                                                onClick={(event) => {this.performSearchByCriteria(event)}}
+                                                onClick={(event) => {this.navigateToAnnouncementsList(event)}}
                                             >
                                                 <Icon type="search" />
                                             </Button>

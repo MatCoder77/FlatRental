@@ -487,6 +487,7 @@ public class AnnouncementService {
                 .nextPage(nextPageUri)
                 .lastPage(lastPageUri)
                 .pageWithSelectedNumber(generateUriTemplateForPageWithSelectedNumber(pageable.getPageSize(), pageable.getSort()))
+                .totalSize(announcementPage.getTotalElements())
                 .criteria(searchCriteria)
                 .build();
     }

@@ -81,7 +81,6 @@ class AnnouncementStepWizard extends Component {
         const {formData} = this.state;
         formData[fieldName] = fieldValue;
         this.setState({formData});
-        console.log(formData);
         this.updateValidation(customValidationName ? customValidationName : fieldName, validationResult)
     }
 
@@ -95,7 +94,6 @@ class AnnouncementStepWizard extends Component {
             this.setState({validationStatus});
             this.setState({errorMessages});
         }
-        console.log(this.state.validationStatus);
     }
 
     getErrorMessage(filedName) {
@@ -145,10 +143,11 @@ class AnnouncementStepWizard extends Component {
                 this.setState({
                     appData
                     // isLoading: false
-                });
-                if (onDataLoadedCallbackFunction) {
-                    onDataLoadedCallbackFunction(fieldName, callbackFunctionParam);
-                }
+                }, () => {
+                    if (onDataLoadedCallbackFunction) {
+                        onDataLoadedCallbackFunction(fieldName, callbackFunctionParam);
+                    }
+                })
             }).catch(error => {
             // this.setState({
             //     isLoading: false

@@ -1,6 +1,7 @@
 export const API_BASE_URL = 'http://localhost:5000/api';
 export const ACCESS_TOKEN = 'accessToken';
 export const CURRENT_USER = 'currentUser';
+export const SERACH_CRITERIA = 'search_criteria';
 
 export const NAME_MIN_LENGTH = 1;
 export const NAME_MAX_LENGTH = 40;

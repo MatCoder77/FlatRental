@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {FormattedMessage, injectIntl} from "react-intl";
 import { withRouter } from 'react-router-dom';
-import {List, Avatar, Icon, Descriptions, Button, Row, Col, notification} from 'antd';
+import {List, Avatar, Icon, Descriptions, Button, Row, Col, notification, Divider} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
 import './AnnouncementList.css'
 import moment from "moment";
@@ -26,7 +26,7 @@ class AnnouncementList extends Component{
         };
         this.updateFormData = this.updateFormData.bind(this);
         if (!this.state.formData.announcementsList) {
-            this.updateFormData('announcementsList', this.props.location.state.announcementsList);
+            this.updateFormData('announcementsList', this.props.location.state.announcementSearchResult.announcements);
         }
         this.navigateToAnnouncement = this.navigateToAnnouncement.bind(this);
         this.createSearchResultLabel = this.createSearchResultLabel.bind(this);
@@ -212,17 +212,23 @@ class AnnouncementList extends Component{
     }
 
     render() {
+        console.log("IN LIST: " + this.props.paginationCurrentPage);
         const {intl} = this.props;
         return (
             <List
+                key={this.props.paginationCurrentPage}
                 className="announcements-list"
                 itemLayout="vertical"
                 size="large"
                 pagination={{
                     onChange: page => {
                         this.handleScroll();
+                        console.log("IN CHANGE: " + page);
+                        this.props.onPageChange(page);
                     },
-                    pageSize: 10,
+                    pageSize: this.props.paginationPageSize,
+                    total: this.props.paginationTotalSize,
+                    current: this.props.paginationCurrentPage
                 }}
                 dataSource={this.state.formData.announcementsList}
                 footer={""}
