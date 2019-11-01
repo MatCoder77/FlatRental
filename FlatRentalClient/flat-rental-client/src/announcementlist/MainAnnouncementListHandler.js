@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {
-    getSearchCriteriaQueryParam,
+    getEncodedQueryParam,
     searchAnnouncementsByCriteria
 } from "../infrastructure/RestApiHandler";
 import { withRouter } from 'react-router-dom';
@@ -39,13 +39,21 @@ class MainAnnouncementListHandler extends Component{
         this.onSortBySelected = this.onSortBySelected.bind(this);
         this.getSortingFromQueryParams = this.getSortingFromQueryParams.bind(this);
         this.getSortByAndOrder = this.getSortByAndOrder.bind(this);
-
-
-
     }
 
     componentDidMount() {
         this.loadAnnouncements();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let criteria = queryString.parse(this.props.location.search).searchCriteria;
+        if (criteria && criteria != prevState.searchCriteriaParam) {
+            let criteria = queryString.parse(this.props.location.search).searchCriteria;
+            this.setState({
+                searchCriteriaParam: criteria ? criteria : "",
+                searchCriteria: criteria
+            }, () => {this.loadAnnouncements()})
+        }
     }
 
     loadAnnouncements(noLoading) {
@@ -79,7 +87,7 @@ class MainAnnouncementListHandler extends Component{
     }
 
     performSearchByCriteria(event) {
-        let criteria = this.state.searchCriteria ? getSearchCriteriaQueryParam(this.state.searchCriteria) : this.state.searchCriteriaParam;
+        let criteria = this.state.searchCriteria ? getEncodedQueryParam(this.state.searchCriteria) : this.state.searchCriteriaParam;
         this.loadAnnouncements(searchAnnouncementsByCriteria, 'announcementSearchResult', criteria);
     }
 
@@ -89,23 +97,47 @@ class MainAnnouncementListHandler extends Component{
         },() => {
             this.loadAnnouncements(true);
         });
+        let queryParams = queryString.parse(this.props.history.location.search);
+        this.props.history.push({
+            search:
+                "?page=" + (number - 1) +
+                "&size=" + queryParams["size"] +
+                "&sort=" + queryParams["sort"] +
+                "&searchCriteria=" + queryParams["searchCriteria"] +
+                "&q=" + queryParams["q"]
+        });
     }
 
     changeSortingOrder() {
         let currentOrder = this.state.sortingOrder;
-        if (currentOrder === 'asc') {
-            this.setState({sortingOrder: 'desc'
-                }, () => {this.loadAnnouncements(true)})
-        } else {
-            this.setState({sortingOrder: 'asc'
-                }, () => {this.loadAnnouncements(true)})
-        }
+        let newSortingOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+        this.setState({
+            sortingOrder: newSortingOrder
+        }, () => {this.loadAnnouncements(true)})
+        let queryParams = queryString.parse(this.props.history.location.search);
+        this.props.history.push({
+            search:
+                "?page=" + queryParams["page"] +
+                "&size=" + queryParams["size"] +
+                "&sort=" + this.state.sortBy + "," + newSortingOrder +
+                "&searchCriteria=" + queryParams["searchCriteria"] +
+                "&q=" + queryParams["q"]
+        });
     }
 
     onSortBySelected(value) {
         this.setState({
             sortBy: value
-        }, () => {this.loadAnnouncements(true)})
+        }, () => {this.loadAnnouncements(true);});
+        let queryParams = queryString.parse(this.props.history.location.search);
+        this.props.history.push({
+            search:
+                "?page=" + queryParams["page"] +
+                "&size=" + queryParams["size"] +
+                "&sort=" + value + "," + this.state.sortingOrder +
+                "&searchCriteria=" + queryParams["searchCriteria"] +
+                "&q=" + queryParams["q"]
+        });
     }
 
     getSortingFromQueryParams(sortingParams) {
@@ -156,7 +188,7 @@ class MainAnnouncementListHandler extends Component{
 
         return (
             <div>
-                <SearchBox searchCriteria={this.state.searchCriteria}/>
+                <SearchBox searchCriteria={this.state.searchCriteria} sortBy={this.state.sortBy} sortingOrder={this.state.sortingOrder}/>
                 <div style={{marginBottom: '-15px'}}><Row type="flex" justify="space-between"><Col span={16}><FormattedMessage id={"labels.found_announcements"} values={{number : this.state.totalSize}}/></Col><Col span={7}>{sortCombobox}</Col></Row></div>
                 <Divider/>
             <AnnouncementList

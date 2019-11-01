@@ -19,13 +19,14 @@ import {
     getNeighborhoodItems,
     getParkingTypes,
     getPreferences,
-    getSearchCriteriaQueryParam,
+    getEncodedQueryParam,
     getWindowTypes,
     searchAnnouncementsByCriteria
 } from "../infrastructure/RestApiHandler";
 import MultiSelect from "../commons/MultiSelect";
 import { Tabs } from 'antd';
 import {unflatten} from "../infrastructure/DTOUtils";
+import queryString from "query-string";
 
 const { TabPane } = Tabs;
 const { Option } = AutoComplete;
@@ -34,6 +35,7 @@ const FormItem = Form.Item;
 class SearchBox extends Component {
     constructor(props) {
         super(props);
+        let searchTextValue = this.getSearchTextParam();
         this.state = {
             dataSource: [],
             appData: {},
@@ -41,7 +43,8 @@ class SearchBox extends Component {
             isExpanded: false,
             validationStatus: {},
             errorMessages: {},
-            isLocalitySelected: false
+            isLocalitySelected: searchTextValue && this.props.searchCriteria ? true : false,
+            searchText: searchTextValue
         };
 
         this.searchResult = this.searchResult.bind(this);
@@ -67,6 +70,8 @@ class SearchBox extends Component {
         this.onPositiveRangeBeginChangedForRoom = this.onPositiveRangeBeginChangedForRoom.bind(this);
         this.onPositiveRangeEndChangedForRoom = this.onPositiveRangeEndChangedForRoom.bind(this);
         this.updateFormDataForSingleRoom = this.updateFormDataForSingleRoom.bind(this);
+        this.prepareSearchTextParam = this.prepareSearchTextParam.bind(this);
+        this.getSearchTextParam = this.getSearchTextParam.bind(this);
 
         this.onlyPositiveInteger = this.props.intl.formatMessage({ id: 'text.only_positive_integer_msg' });
         this.onlyPositiveIntegerOrZero = this.props.intl.formatMessage({ id: 'text.only_positive_integer_or_zero_msg' });
@@ -84,7 +89,10 @@ class SearchBox extends Component {
         this.estateAbbreviation = this.props.intl.formatMessage({ id: 'ESTATE' });
         this.coastAbbreviation = this.props.intl.formatMessage({ id: 'COAST' });
         this.announcementTypes = ["FLAT", "ROOM", "PLACE_IN_ROOM", "LOOK_FOR_FLAT", "LOOK_FOR_ROOM", "LOOK_FOR_PLACE_IN_ROOM"];
-        this.updateFormData('announcementType', "FLAT");
+
+        if (!this.state.formData.announcementType) {
+            this.updateFormData('announcementType', "FLAT");
+        }
 
     }
 
@@ -214,7 +222,7 @@ class SearchBox extends Component {
             .replace(this.estateAbbreviation, "")
             .replace(this.coastAbbreviation, "");
         this.searchResult(value);
-        this.setState({isLocalitySelected: false});
+        this.setState({isLocalitySelected: false, searchText: undefined});
     };
 
     onPositiveRangeBeginChanged(value, beginName, endName, rangeName) {
@@ -409,12 +417,22 @@ class SearchBox extends Component {
         let criteria = unflatten(this.state.formData);
         this.props.history.push({
             pathname: '/announcement/list',
-            search: "?page=0&size=15&sort=createdAt,desc&searchCriteria=" + getSearchCriteriaQueryParam(criteria)
+            search: "?page=0&size=15&sort=" + (this.props.sortBy ? this.props.sortBy : "createdAt") + "," + (this.props.sortingOrder ? this.props.sortingOrder : "desc") + "&searchCriteria=" + getEncodedQueryParam(criteria) + this.prepareSearchTextParam()
         });
+    }
+
+    prepareSearchTextParam() {
+        return "&q=" + encodeURIComponent(this.state.searchText)
+    }
+
+    getSearchTextParam() {
+        let searchText = queryString.parse(this.props.location.search).q;
+        return searchText ? decodeURIComponent(searchText) : undefined;
     }
 
     onSelect(value, option) {
         console.log(option);
+        console.log(option.props.text);
         let address = JSON.parse(value);
         this.updateFormData('voivodeshipId', address.voivodeship ? address.voivodeship.id : undefined);
         this.updateFormData('districtId', address.district ? address.district.id : undefined);
@@ -423,7 +441,10 @@ class SearchBox extends Component {
         this.updateFormData('localityDistrictId', address.localityDistrict ? address.localityDistrict.id : undefined);
         this.updateFormData('localityPartId', address.localityPart ? address.localityPart.id : undefined);
         this.updateFormData('streetId', address.street ? address.street.id : undefined);
-        this.setState({isLocalitySelected: true});
+        this.setState({
+            isLocalitySelected: true,
+            searchText: option.props.text,
+        });
     }
 
     render() {
@@ -1305,7 +1326,7 @@ class SearchBox extends Component {
                                     size="large"
                                     dataSource={this.state.dataSource}
                                     onSelect={this.onSelect}
-                                    defaultValue={this.props.location.search.selectedLocation}
+                                    defaultValue={this.state.searchText}
                                     onSearch={this.handleSearch}
                                     placeholder={intl.formatMessage({ id: 'labels.sb_placeholder' })}
                                     optionLabelProp="text"

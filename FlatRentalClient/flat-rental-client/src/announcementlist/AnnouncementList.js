@@ -212,7 +212,6 @@ class AnnouncementList extends Component{
     }
 
     render() {
-        console.log("IN LIST: " + this.props.paginationCurrentPage);
         const {intl} = this.props;
         return (
             <List
@@ -223,7 +222,6 @@ class AnnouncementList extends Component{
                 pagination={{
                     onChange: page => {
                         this.handleScroll();
-                        console.log("IN CHANGE: " + page);
                         this.props.onPageChange(page);
                     },
                     pageSize: this.props.paginationPageSize,

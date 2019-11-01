@@ -241,8 +241,12 @@ export function searchAnnouncementsByCriteria(searchCriteriaParam, pageNumber, p
     });
 }
 
-export function getSearchCriteriaQueryParam(searchCriteria) {
-    return encodeURIComponent(btoa(JSON.stringify(searchCriteria)));
+export function getEncodedQueryParam(queryParam) {
+    return encodeURIComponent(btoa(JSON.stringify(queryParam)));
+}
+
+export function getDecodedQueryParam(queryParam) {
+    return JSON.parse(atob(decodeURIComponent(queryParam)));
 }
 
 export function createComment(commentDTO) {
