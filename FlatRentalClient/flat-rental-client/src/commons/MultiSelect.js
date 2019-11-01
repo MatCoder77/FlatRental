@@ -39,6 +39,7 @@ class MultiSelect extends Component {
                 onSelect={this.updateOnSelect(this.props.name)}
                 onDeselect={this.updateOnDeselect(this.props.name)}
                 maxTagCount={this.props.maxTagCount ? this.props.maxTagCount : 1}
+                value={this.props.selectedItems && this.props.selectedItems.length > 0 ? this.props.selectedItems : undefined}
                 // maxTagTextLength="10"
                 //optionFilterProp="children"
                 // onChange={onChange}
