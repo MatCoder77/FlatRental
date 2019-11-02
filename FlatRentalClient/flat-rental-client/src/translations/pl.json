@@ -243,8 +243,11 @@
     "labels.sort_order_desc_createdAt": "Od najnowszych",
     "labels.sort_order_asc_pricePerMonth": "Od najniszej",
     "labels.sort_order_desc_pricePerMonth": "Od najwyższej",
-    "labels.sort_order_asc_rate": "Od najwyższej",
-    "labels.sort_order_desc_rate": "Od najniższej",
+    "labels.sort_order_asc_quality": "Od najniższej",
+    "labels.sort_order_desc_quality": "Od najwyższej",
+    "labels.show_active": "Pokaż aktywne",
+    "labels.show_inactive": "Pokaż nieaktywne",
+    "labels.show_all": "Pokaż wszystkie",
 
 
     "BUILDING_TYPE_FLAT": "Blok",

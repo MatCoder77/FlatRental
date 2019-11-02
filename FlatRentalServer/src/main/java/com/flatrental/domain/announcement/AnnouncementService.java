@@ -40,8 +40,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.text.MessageFormat;
@@ -110,6 +108,9 @@ public class AnnouncementService {
 
     @Autowired
     private StatisticsService statisticsService;
+
+    @Autowired
+    private AnnouncementQualityCalculator announcementQualityCalculator;
 
     public static final String NOT_FOUND = "There is no announcement with id {0}";
 
@@ -276,6 +277,8 @@ public class AnnouncementService {
 
     public Announcement createAnnouncement(AnnouncementDTO announcementDTO) {
         Announcement announcement = mapToAnnouncement(announcementDTO);
+        long quality = announcementQualityCalculator.calculateAnnouncementQuality(announcement);
+        announcement.setQuality(quality);
         announcement.setObjectState(ManagedObjectState.ACTIVE);
         return announcementRepository.save(announcement);
     }
@@ -449,6 +452,8 @@ public class AnnouncementService {
 
     public Announcement updateAnnouncement(Announcement existingAnnouncement, AnnouncementDTO updatedAnnouncementDTO) {
         Announcement updatedAnnouncement = mapToExistingAnnouncement(updatedAnnouncementDTO, existingAnnouncement);
+        long quality = announcementQualityCalculator.calculateAnnouncementQuality(updatedAnnouncement);
+        updatedAnnouncement.setQuality(quality);
         return announcementRepository.save(updatedAnnouncement);
     }
 
@@ -579,7 +584,7 @@ public class AnnouncementService {
     @Scheduled(cron = "0 0 0 * * *")
     public void setAllAnnouncementsOlderThanMonthAsInactive() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -1);
+        cal.add(Calendar.MONTH, -1);
         Instant monthAgo = cal.getTime().toInstant();
         List<Announcement> announcementsToDeactivate = announcementRepository.getAllByUpdatedAtBeforeAndObjectState(monthAgo, ManagedObjectState.ACTIVE);
         announcementsToDeactivate.stream()

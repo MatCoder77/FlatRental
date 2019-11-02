@@ -9,6 +9,7 @@ import AnnouncementList from "../announcementlist/AnnouncementList";
 import LoadingIcon from "../commons/LoadingIcon";
 import AccountSettingsPanel from "./AccountSettingsPanel";
 import ProfileView from "./ProfileView";
+import UserAnnouncementListHandler from "./UserAnnouncementsListHandler";
 
 const { Content, Sider } = Layout;
 
@@ -66,8 +67,15 @@ class AccountCenter extends React.Component {
     }
 
     render() {
-        const userAnnouncementsList = (this.state.formData.userAnnouncements ? <AnnouncementList currentUser={this.props.currentUser} key="3" announcementsList={this.state.formData.userAnnouncements}/> : <LoadingIcon/>);
-        const userFavouritesList = (this.state.formData.userFavourites ? <AnnouncementList currentUser={this.props.currentUser} key="2" announcementsList={this.state.formData.userFavourites}/> : <LoadingIcon/>);
+        const userAnnouncementsList = (this.state.formData.userAnnouncements ?
+            <UserAnnouncementListHandler currentUser={this.props.currentUser} key="3"/> : <LoadingIcon/>);
+        const userFavouritesList = (this.state.formData.userFavourites ?
+            <AnnouncementList
+                currentUser={this.props.currentUser} key="2"
+                announcementsList={this.state.formData.userFavourites}
+                customPaginationHandling={false}
+                paginationPageSize={15}
+            /> : <LoadingIcon/>);
         const profilePanel = (
             <Card title={this.props.intl.formatMessage({id: "labels.profile"})}>
                 <ProfileView user={this.props.currentUser} currentUser={this.props.currentUser}/>

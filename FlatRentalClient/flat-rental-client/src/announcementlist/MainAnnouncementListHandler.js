@@ -176,7 +176,7 @@ class MainAnnouncementListHandler extends Component{
                 <Select style={{width: '100%'}} size={"default"} value={this.state.sortBy} onSelect={this.onSortBySelected}>
                     <Option value="createdAt">{this.props.intl.formatMessage({id: 'labels.sort_by_createdAt'})}</Option>
                     <Option value="pricePerMonth">{this.props.intl.formatMessage({id: 'labels.sort_by_pricePerMonth'})}</Option>
-                    <Option value="rate">{this.props.intl.formatMessage({id: 'labels.sort_by_announcementRate'})}</Option>
+                    <Option value="quality">{this.props.intl.formatMessage({id: 'labels.sort_by_announcementRate'})}</Option>
                 </Select>
                     </Col>
                     <Col span={3}>
@@ -195,6 +195,7 @@ class MainAnnouncementListHandler extends Component{
                               key={Math.random()}
                               currentUser={this.props.currentUser}
                               announcementsList={this.state.announcements}
+                              customPaginationHandling={true}
                               paginationTotalSize={this.state.totalSize}
                               paginationPageSize={this.state.pageSize}
                               paginationCurrentPage={parseInt(this.state.pageNumber) + 1}

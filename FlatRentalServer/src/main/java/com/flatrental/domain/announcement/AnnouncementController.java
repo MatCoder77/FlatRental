@@ -7,6 +7,7 @@ import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.announcement.search.SearchCriteriaService;
+import com.flatrental.domain.managedobject.ManagedObject;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.user.User;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

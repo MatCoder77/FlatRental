@@ -219,7 +219,7 @@ class AnnouncementList extends Component{
                 className="announcements-list"
                 itemLayout="vertical"
                 size="large"
-                pagination={{
+                pagination={ this.props.customPaginationHandling ? {
                     onChange: page => {
                         this.handleScroll();
                         this.props.onPageChange(page);
@@ -227,7 +227,7 @@ class AnnouncementList extends Component{
                     pageSize: this.props.paginationPageSize,
                     total: this.props.paginationTotalSize,
                     current: this.props.paginationCurrentPage
-                }}
+                } : {pageSize: this.props.paginationPageSize}}
                 dataSource={this.state.formData.announcementsList}
                 footer={""}
                 renderItem={item => (

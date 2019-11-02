@@ -152,7 +152,13 @@ public class Announcement extends ManagedObject {
     @PositiveOrZero
     private Integer numberOfFlatmates;
 
-    com.flatrental.domain.statistics.AnnouncementStatistics statistics;
+    private com.flatrental.domain.statistics.AnnouncementStatistics statistics;
+
+    private long quality;
+
+    public void setQuality(long quality) {
+        this.quality = quality;
+    }
 
     @Override
     public boolean equals(Object obj) {

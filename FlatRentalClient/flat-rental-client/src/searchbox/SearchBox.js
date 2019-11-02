@@ -90,9 +90,11 @@ class SearchBox extends Component {
         this.coastAbbreviation = this.props.intl.formatMessage({ id: 'COAST' });
         this.announcementTypes = ["FLAT", "ROOM", "PLACE_IN_ROOM", "LOOK_FOR_FLAT", "LOOK_FOR_ROOM", "LOOK_FOR_PLACE_IN_ROOM"];
 
+        this.updateFormData('allowedManagedObjectStates', ['ACTIVE']);
         if (!this.state.formData.announcementType) {
             this.updateFormData('announcementType', "FLAT");
         }
+
 
     }
 
