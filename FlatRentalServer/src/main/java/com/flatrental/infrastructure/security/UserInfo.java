@@ -27,14 +27,17 @@ public class UserInfo implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private boolean enabled;
+
     private Collection<? extends GrantedAuthority> userRoles;
 
-    public UserInfo(Long id, String name, String username, String email, String password, Collection<? extends GrantedAuthority> userRoles) {
+    public UserInfo(Long id, String name, String username, String email, String password, boolean enabled, Collection<? extends GrantedAuthority> userRoles) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.enabled = enabled;
         this.userRoles = userRoles;
     }
 
@@ -43,8 +46,7 @@ public class UserInfo implements UserDetails {
                 .stream()
                 .map(UserInfo::mapToSimpleGrantedAuthority)
                 .collect(Collectors.toList());
-
-        return new UserInfo(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), userRoles);
+        return new UserInfo(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), user.isEnabled(), userRoles);
     }
 
     private static SimpleGrantedAuthority mapToSimpleGrantedAuthority(UserRole userRole) {
@@ -95,7 +97,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override

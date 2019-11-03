@@ -65,6 +65,8 @@ public class User extends ManagedObject {
 
     UserStatistics userStatistics;
 
+    private boolean enabled = false;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Users_X_UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -172,6 +174,14 @@ public class User extends ManagedObject {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

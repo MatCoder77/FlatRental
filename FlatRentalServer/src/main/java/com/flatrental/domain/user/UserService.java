@@ -1,7 +1,6 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.UserDTO;
-import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.file.FileService;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.userrole.UserRole;
@@ -24,7 +23,7 @@ public class UserService {
     private static final String NO_SUCH_USER = "There is no user with id {0}";
     private static final String PASSWORD_NOT_PASSED_VALIDATION_RULES = "Password not passed validation rules";
     private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
-    private static final String EMAIL_INCORECT = "Supplied email is incorrect";
+    private static final String EMAIL_INCORRECT = "Supplied email is incorrect";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -63,7 +62,7 @@ public class UserService {
 
     private void validateEmail(String email) {
         if (!EMAIL_REGEX.matcher(email).matches()) {
-            throw new IllegalArgumentException(EMAIL_INCORECT);
+            throw new IllegalArgumentException(EMAIL_INCORRECT);
         }
     }
 
@@ -144,4 +143,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void activateUserAccount(User user) {
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 }
