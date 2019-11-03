@@ -1297,7 +1297,8 @@ class SearchBox extends Component {
             </div>
         );
 
-        const criteriaContainerByType = new Map([['FLAT', flatCriteriaContainer], ['ROOM', roomCriteriaContainer], ['PLACE_IN_ROOM', placeInRoomCriteriaContainer]]);
+        const criteriaContainerByType = new Map([['FLAT', flatCriteriaContainer], ['ROOM', roomCriteriaContainer], ['PLACE_IN_ROOM', placeInRoomCriteriaContainer]
+        ,['LOOK_FOR_FLAT', flatCriteriaContainer], ['LOOK_FOR_ROOM', roomCriteriaContainer], ['LOOK_FOR_PLACE_IN_ROOM', placeInRoomCriteriaContainer]]);
 
 
         return (

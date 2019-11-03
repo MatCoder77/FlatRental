@@ -15,7 +15,6 @@ import RoomAnnouncementDetailInfoStep from "./room/RoomAnnouncementDetailInfoSte
 import PlaceInRoomAnnouncementGeneralInfoStep from "./placeinroom/PlaceInRoomAnnouncementGeneralInfoStep";
 import PlaceInRoomAnnouncementDetailInfoStep from "./placeinroom/PlaceInRoomAnnouncementDetailInfoStep";
 import AnnouncementView from "./AnnouncementView";
-import * as CONS from "../infrastructure/Constants";
 
 const Step = Steps.Step;
 
@@ -331,7 +330,9 @@ class AnnouncementStepWizard extends Component {
                 <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
             )
         }];
-        const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps]]);
+
+
+        const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps], ['look_for_flat', flatSteps], ['look_for_room', roomSteps], ['look_for_place_in_room', placeInRoomSteps]]);
         const steps = stepsByAnnouncementType.get(this.state.formData.type);
 
         const {current} = this.state;

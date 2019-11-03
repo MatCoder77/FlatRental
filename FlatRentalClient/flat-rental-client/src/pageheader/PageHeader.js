@@ -123,13 +123,13 @@ function CreateAnnouncementDropDownMenu(props) {
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="looking_for_flat" className="dropdown-item">
-                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_flat"/></Link>
+                <Link to={"/announcement/create/look_for_flat"}><FormattedMessage id="labels.announcement_type_looking_for_flat"/></Link>
             </Menu.Item>
             <Menu.Item key="room" className="dropdown-item">
-                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_room"/></Link>
+                <Link to={"/announcement/create/look_for_room"}><FormattedMessage id="labels.announcement_type_looking_for_room"/></Link>
             </Menu.Item>
             <Menu.Item key="room" className="dropdown-item">
-                <Link to={"/announcement/create/room"}><FormattedMessage id="labels.announcement_type_looking_for_place_in_room"/></Link>
+                <Link to={"/announcement/create/look_for_place_in_room"}><FormattedMessage id="labels.announcement_type_looking_for_place_in_room"/></Link>
             </Menu.Item>
         </Menu>
     );
