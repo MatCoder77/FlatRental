@@ -28,7 +28,8 @@ class RegistrationFrom extends Component {
             },
             phoneNumber: {
                 value: ''
-            }
+            },
+            isLoading: false
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,18 +79,27 @@ class RegistrationFrom extends Component {
             email: this.state.email.value,
             phoneNumber: this.state.phoneNumber.value
         };
+        this.setState({
+            isLoading: true
+        })
         signup(signupRequest)
             .then(response => {
                 notification.success({
                     message: 'Flat Rental',
                     description: this.succesfullyRegisteredMessage,
                 });
+                this.setState({
+                    isLoading: false
+                })
                 this.props.history.push("/login");
             }).catch(error => {
             notification.error({
                 message: 'Flat Rental',
                 description: error.message || this.somethingWentWrongMessage
             });
+            this.setState({
+                isLoading: false
+            })
         });
     }
 
@@ -195,7 +205,7 @@ class RegistrationFrom extends Component {
                                     htmlType="submit"
                                     size="large"
                                     className="signup-form-button"
-                                    disabled={this.isFormInvalid()}><FormattedMessage id="buttons.signup"/></Button>
+                                    disabled={this.isFormInvalid()} loading={this.state.isLoading}><FormattedMessage id="buttons.signup"/></Button>
                             <FormattedMessage id="text.already_registered"/> <Link to="/login"><FormattedMessage id="text.login_now"/></Link>
                         </FormItem>
                     </Form>
