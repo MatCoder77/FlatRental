@@ -54,7 +54,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final Set allowedSoringAttributes = Set.of(Announcement_.CREATED_AT, Announcement_.PRICE_PER_MONTH);
+    private static final Set allowedSoringAttributes = Set.of(Announcement_.CREATED_AT, Announcement_.PRICE_PER_MONTH, Announcement_.QUALITY);
 
     @Override
     public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria searchCriteria, Pageable pageable) {
@@ -75,7 +75,6 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getNumberMinMaxPredicate(a.get(Announcement_.securityDeposit), searchCriteria.getMinSecurityDeposit(), searchCriteria.getMaxSecurityDeposit(), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.floor), searchCriteria.getMinFloor(), searchCriteria.getMaxFloor(), criteriaBuilder),
                 getNumberMinMaxPredicate(a.get(Announcement_.maxFloorInBuilding), searchCriteria.getMinMaxFloorInBuilding(), searchCriteria.getMaxMaxFloorInBuilding(), criteriaBuilder),
-                //availableFrom
                 getAddressPredicate(a, searchCriteria, criteriaBuilder),
                 getAttributeInSetPredicate(a.get(Announcement_.buildingType).get(BuildingType_.id), searchCriteria.getAllowedBuildingTypes()),
                 getAttributeInSetPredicate(a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id), searchCriteria.getAllowedBuildingMaterials()),
