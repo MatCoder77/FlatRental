@@ -248,6 +248,9 @@
     "labels.show_active": "Pokaż aktywne",
     "labels.show_inactive": "Pokaż nieaktywne",
     "labels.show_all": "Pokaż wszystkie",
+    "labels.language_pl": "polski",
+    "labels.language_en": "angielski",
+    "labels.choose_language": "Wybierz język",
 
 
     "BUILDING_TYPE_FLAT": "Blok",

@@ -78,7 +78,7 @@ class App extends Component {
 
     handleLogout(redirectTo="/", notificationType="success", description=this.props.intl.formatMessage({id: "labels.successful_logout"})) {
         localStorage.removeItem(ACCESS_TOKEN);
-
+        localStorage.removeItem(CURRENT_USER);
         this.setState({
             currentUser: null,
             isAuthenticated: false

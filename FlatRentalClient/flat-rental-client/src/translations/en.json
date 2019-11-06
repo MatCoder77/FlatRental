@@ -73,7 +73,7 @@
     "labels.max_floor": "Max Floor",
     "labels.available_from": "Available from",
     "placeholders.title": "Title of announcement",
-    "labels.estimated_additional_costs": "Approximate additional costs per month:",
+    "labels.estimated_additional_costs": "Additional costs",
     "placeholders.total_area": "Total area of flat",
     "placeholders.number_of_rooms": "Number of rooms in flat",
     "placeholders.price_per_month": "Monthly cost of flat rental",
@@ -83,7 +83,7 @@
 
 
 
-  "labels.localization": "Localization",
+   "labels.localization": "Localization",
     "labels.voivodeship": "Voivodeship",
     "placeholders.voivodeship": "Select voivodeship",
     "labels.district": "District",
@@ -252,6 +252,9 @@
     "labels.show_active": "Show active",
     "labels.show_inactive": "Show inactive",
     "labels.show_all": "Show all",
+    "labels.language_pl": "polish",
+    "labels.language_en": "english",
+    "labels.choose_language": "Select language",
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",

@@ -6,6 +6,7 @@ import {
 import './PageHeader.css';
 import {Layout, Menu, Dropdown, Icon, Button} from 'antd';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import LanguageChooser from "./LanguageChooser";
 
 const Header = Layout.Header;
 
@@ -27,7 +28,7 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon" />
+                        <Icon type="home" className="nav-icon" style={{fontSize: '19px'}}/>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item key="create-announcement">
@@ -38,6 +39,9 @@ class AppHeader extends Component {
                     <ProfileDropdownMenu
                         currentUser={this.props.currentUser}
                         handleMenuClick={this.handleMenuClick}/>
+                </Menu.Item>,
+                <Menu.Item key="language" className="language-menu">
+                    <LanguageChooser/>
                 </Menu.Item>
             ];
         } else {
@@ -47,6 +51,9 @@ class AppHeader extends Component {
                 </Menu.Item>,
                 <Menu.Item key="/signup">
                     <Link to="/signup"><FormattedMessage id="buttons.signup"/></Link>
+                </Menu.Item>,
+                <Menu.Item key="language" className="language-menu">
+                    <LanguageChooser/>
                 </Menu.Item>
             ];
         }
@@ -97,7 +104,7 @@ function ProfileDropdownMenu(props) {
             trigger={['click']}
             getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
             <a className="ant-dropdown-link">
-                <Icon type="user" className="nav-icon" style={{marginRight: 0}} /> <Icon type="down" />
+                <Icon type="user" className="nav-icon" style={{marginRight: 0, fontSize: '19px'}} /> <Icon type="down" style={{fontSize: '19px'}}/>
             </a>
         </Dropdown>
     );
@@ -140,7 +147,7 @@ function CreateAnnouncementDropDownMenu(props) {
             trigger={['click']}
             getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
             <a className="ant-dropdown-link">
-                <span><Icon type="plus" className="nav-icon" style={{marginRight: 0}} /> <FormattedMessage id="labels.add_announcement"/></span>
+                <span><Icon type="plus" className="nav-icon" style={{marginRight: 0, fontSize:  '19px'}} /><span style={{fontSize: '17px'}}> <FormattedMessage id="labels.add_announcement"/></span></span>
             </a>
         </Dropdown>
     );
