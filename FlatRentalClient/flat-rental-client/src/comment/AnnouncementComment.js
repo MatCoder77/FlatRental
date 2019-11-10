@@ -7,6 +7,7 @@ import {hasRole, MODERATOR} from "../infrastructure/PermissionsUtils";
 import * as DTOUtils from "../infrastructure/DTOUtils";
 import {deleteComment} from "../infrastructure/RestApiHandler";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
+import { Link, withRouter } from 'react-router-dom';
 
 
 class AnnouncementComment extends Component {
@@ -92,7 +93,7 @@ class AnnouncementComment extends Component {
         return (
             <Comment
                 actions={actions}
-                author={<a>{this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']}</a>}
+                author={<a><Link style={{color: 'rgba(0, 0, 0, 0.45)'}} to={"/profile/" + this.props.data['info.createdBy.id']}>{this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']}</Link></a>}
                 avatar={ this.props.data['info.createdBy.avatarUrl'] ? <Avatar src={this.props.data['info.createdBy.avatarUrl']}/> : getSurrogateAvatar(this.props.data['info.createdBy.name'])}
                 content={
                     <div>
@@ -133,4 +134,4 @@ class AnnouncementComment extends Component {
 
 }
 
-export default injectIntl(AnnouncementComment);
+export default withRouter(injectIntl(AnnouncementComment));

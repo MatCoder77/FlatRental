@@ -42,12 +42,23 @@ class ProfileViewHandler extends Component{
         this.loadUser(this.state.userId);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let previousUserId = prevState.userId;
+        let currentUserId = this.props.match.params.user;
+        if (previousUserId != currentUserId) {
+            this.setState({
+                userId: currentUserId,
+                isLoading: true
+            }, () => {this.loadUser(this.state.userId)})
+        }
+    }
+
     render() {
         if (this.state.isLoading) {
             return (<LoadingIcon/>);
         }
         return (
-            <ProfileView user={this.state.user} currentUser={this.props.currentUser}/>
+            <ProfileView key={this.state.userId} user={this.state.user} currentUser={this.props.currentUser}/>
         );
     }
 }
