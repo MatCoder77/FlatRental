@@ -82,7 +82,7 @@ class AnnouncementComment extends Component {
             <span key="comment-basic-delete" onClick={this.deleteComment}>{intl.formatMessage({id: 'labels.delete'})}</span>
         );
 
-        let actions = [likeAction, dislikeAction];
+        let actions = [];
         if (this.props.nestingLevel < 2 ) {
             actions.push(replyToAction);
         }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Upload, Icon, Modal } from 'antd';
 import './ImageGalleryUploader.css';
 import {uploadFile} from "../infrastructure/RestApiHandler";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {API_BASE_URL} from "../infrastructure/Constants";
 
 function getBase64(file) {
@@ -61,7 +62,7 @@ class ImageGalleryUploader extends Component {
         const uploadButton = (
             <div>
                 <Icon type="plus" />
-                <div className="ant-upload-text">Upload</div>
+                <div className="ant-upload-text">{this.props.intl.formatMessage({ id: "labels.add_image" })}</div>
             </div>
         );
         return (
@@ -83,4 +84,4 @@ class ImageGalleryUploader extends Component {
     }
 }
 
-export default ImageGalleryUploader;
+export default injectIntl(ImageGalleryUploader);

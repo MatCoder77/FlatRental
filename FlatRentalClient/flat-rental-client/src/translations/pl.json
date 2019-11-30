@@ -194,7 +194,7 @@
     "labels.reply": "Odpowiedz",
     "labels.delete": "Usuń",
     "labels.add_comment": "Dodaj komentarz",
-    "labels.favourite": "Wyróżnione ogłosznia",
+    "labels.favourite": "Wyróżnione ogłoszenia",
     "labels.settings": "Ustawienia konta",
     "labels.profile": "Profil",
     "labels.opinions": "Opinie",
@@ -202,7 +202,7 @@
 
     "labels.successful_logout": "Wylogowano z aplikacji",
     "labels.successful_login": "Zalogowano pomyślnie",
-    "labels.change_avatar": "Zmień avatar",
+    "labels.change_avatar": "Zmień zdjęcie",
     "labels.edit": "Zmień",
     "labels.edit2": "Edytuj",
     "labels.reset": "Resetuj",
@@ -251,6 +251,9 @@
     "labels.language_pl": "polski",
     "labels.language_en": "angielski",
     "labels.choose_language": "Wybierz język",
+    "labels.add_image": "Dodaj",
+    "labels.add_to_favourites": "Dodaj do ulubionych",
+    "labels.views": "Wyświetlenia",
 
 
     "BUILDING_TYPE_FLAT": "Blok",

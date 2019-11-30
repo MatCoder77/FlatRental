@@ -156,7 +156,7 @@
     "labels.previous": "Previous",
     "labels.next": "Next",
     "labels.add_announcement": "Add announcement",
-  "labels.update_announcement": "Accept changes",
+    "labels.update_announcement": "Accept changes",
 
     "labels.room_area" : "Room area",
     "placeholders.room_area": "Type in area of room",
@@ -255,6 +255,10 @@
     "labels.language_pl": "polish",
     "labels.language_en": "english",
     "labels.choose_language": "Select language",
+    "labels.add_image": "Add",
+    "labels.add_to_favourites": "Add to favourites",
+    "labels.views": "Views",
+
 
     "BUILDING_TYPE_FLAT": "Flat",
     "BUILDING_TYPE_APARTMENT_COMPLEX": "Apartment complex",

@@ -33,7 +33,7 @@ const LanguageChooser = () => {
             trigger={['click']}
             getPopupContainer = { () => document.getElementsByClassName('language-menu')[0]}>
             <a className="ant-dropdown-link">
-                <Icon type="global" className="nav-icon" style={{fontSize: '20px'}}/>
+                <Icon type="global" className="nav-icon"/>
             </a>
         </Dropdown>
     );
