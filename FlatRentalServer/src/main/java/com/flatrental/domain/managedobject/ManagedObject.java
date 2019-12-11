@@ -24,7 +24,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class ManagedObject {
+public abstract class ManagedObject {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
