@@ -253,6 +253,8 @@
     "labels.choose_language": "Wybierz język",
     "labels.add_image": "Dodaj",
     "labels.add_to_favourites": "Dodaj do ulubionych",
+    "labels.remove_from_favourites": "Usuń z ulubionych",
+    "labels.favourites": "Ulubione",
     "labels.views": "Wyświetlenia",
 
 

@@ -400,8 +400,8 @@ class FlatAnnouncementDetailInfoStep extends Component {
                                 <TextArea
                                     name="aboutFlatmates"
                                     rows={6}
-                                    onChange={this.updateOnChange}
-                                    value={this.props.formData.aboutFlatmates}
+                                    onBlur={this.updateOnChange}
+                                    //value={this.props.formData.aboutFlatmates}
                                     placeholder={intl.formatMessage({ id: 'placeholders.about_flatmates' })}
                                 />
                             </FormItem>
@@ -432,8 +432,8 @@ class FlatAnnouncementDetailInfoStep extends Component {
                             <TextArea
                                 name="description"
                                 rows={15}
-                                onChange={this.updateOnChange}
-                                value={this.props.formData.description}
+                                onBlur={this.updateOnChange}
+                                //value={this.props.formData.description}
                                 placeholder={intl.formatMessage({ id: 'placeholders.flat_description' })}
                             />
                         </Card>

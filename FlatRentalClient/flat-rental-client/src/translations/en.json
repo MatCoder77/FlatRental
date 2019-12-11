@@ -257,6 +257,8 @@
     "labels.choose_language": "Select language",
     "labels.add_image": "Add",
     "labels.add_to_favourites": "Add to favourites",
+    "labels.remove_from_favourites": "Remove from favourites",
+    "labels.favourites": "Favourites",
     "labels.views": "Views",
 
 

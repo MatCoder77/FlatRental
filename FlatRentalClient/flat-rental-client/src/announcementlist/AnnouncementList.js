@@ -1,19 +1,20 @@
 import React, {Component} from "react";
 import {FormattedMessage, injectIntl} from "react-intl";
 import { withRouter } from 'react-router-dom';
-import {List, Avatar, Icon, Descriptions, Button, Row, Col, notification, Divider} from 'antd';
+import {List, Avatar, Icon, Descriptions, Button, Row, Col, notification, Divider, Tooltip} from 'antd';
 import {API_BASE_URL} from "../infrastructure/Constants";
 import './AnnouncementList.css'
 import moment from "moment";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
-import {changeAnnouncementState} from "../infrastructure/RestApiHandler";
+import {addToFavourites, changeAnnouncementState, removeFromFavourites} from "../infrastructure/RestApiHandler";
 import {hasRole, MODERATOR, userEquals} from "../infrastructure/PermissionsUtils";
 
 
-const IconText = ({ type, text }) => (
+const IconText = ({ type, text, tooltipText, theme, onClick }) => (
     <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
+        <Tooltip title={tooltipText}><Icon type={type} theme={theme} style={{ marginRight: 8 }} onClick={onClick}/>
         {text}
+        </Tooltip>
   </span>
 );
 
@@ -42,6 +43,7 @@ class AnnouncementList extends Component{
         this.handleDeleteClicked = this.handleDeleteClicked.bind(this);
         this.isCurrentUserCreatorOrModerator = this.isCurrentUserCreatorOrModerator.bind(this);
         this.isCurrentUserModerator = this.isCurrentUserModerator.bind(this);
+        this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
     }
 
     updateFormData(fieldName, fieldValue) {
@@ -211,6 +213,36 @@ class AnnouncementList extends Component{
         return hasRole(MODERATOR, this.props.currentUser);
     }
 
+    onFavouriteClicked(e, item) {
+        e.stopPropagation();
+
+        if (!item.userSpecificInfo) {
+            return;
+        }
+
+        let promise;
+        if (!item.userSpecificInfo.isMarkedAsFavourite) {
+            promise = addToFavourites(item.id);
+        } else {
+            promise = removeFromFavourites(item.id);
+        }
+        if (!promise) {
+            return;
+        }
+        promise
+            .then(response => {
+                let updatedIsMarkedAsFavourite = !item.userSpecificInfo.isMarkedAsFavourite;
+                let updatedFavouritesCounter = updatedIsMarkedAsFavourite ? item.statistics.favouritesCounter + 1 : item.statistics.favouritesCounter - 1;
+                const announcementsList = this.state.formData.announcementsList;
+                item.statistics.favouritesCounter = updatedFavouritesCounter;
+                item.userSpecificInfo.isMarkedAsFavourite = updatedIsMarkedAsFavourite;
+                this.setState({
+                    formData: {announcementsList: announcementsList}
+                });
+            }).catch(error => {
+        });
+    }
+
     render() {
         const {intl} = this.props;
         return (
@@ -236,9 +268,10 @@ class AnnouncementList extends Component{
                         onClick={() => {this.navigateToAnnouncement(item.id)}}
                         key={item.id}
                         actions={[
-                            <IconText type="heart-o" text={item.statistics.favouritesCounter} key="list-vertical-heart-o" />,
-                            <IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" />,
-                            <IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" />,
+                            <IconText type="heart" theme={item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "filled" : "outlined") : "outlined"} tooltipText={this.props.intl.formatMessage({id: (item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "labels.remove_from_favourites" : "labels.add_to_favourites") : "labels.favourites")})}
+                                      text={item.statistics.favouritesCounter} key="list-vertical-heart-o" onClick={((event) => {this.onFavouriteClicked(event, item)})}/>,
+                            <IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" tooltipText={intl.formatMessage({id: "labels.views"})}/>,
+                            <IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" tooltipText={intl.formatMessage({id: "labels.comments"})}/>,
                             <span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>
                         ]}
                         extra={

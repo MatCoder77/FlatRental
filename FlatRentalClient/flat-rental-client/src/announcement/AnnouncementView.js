@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {PageHeader, Tabs, Button, Statistic, Descriptions, Input, Card, Icon, Row, Col} from 'antd';
+import {PageHeader, Tabs, Button, Statistic, Descriptions, Input, Card, Icon, Row, Col, Tooltip} from 'antd';
 import {FormattedMessage, injectIntl} from "react-intl";
 import ImagesGallery2 from "./ImagesGallery";
 import {API_BASE_URL} from "../infrastructure/Constants";
@@ -425,20 +425,20 @@ class AnnouncementView extends Component {
 
         const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement]]);
 
-        const IconText = ({ type, text, theme, onClick }) => (
-            <span><Icon type={type} theme={theme} style={{ marginRight: 8, fontSize: '24px' }} onClick={onClick}/>{text}</span>
+        const IconText = ({ type, text, tooltipText, theme, onClick }) => (
+            <span><Tooltip title={tooltipText}><Icon type={type} theme={theme} style={{ marginRight: 8, fontSize: '24px' }} onClick={onClick}/>{text}</Tooltip></span>
         );
 
         const statsPanel = (
             <Row style={{maxWidth: '350px'}}>
                 <Col span={6}>
-                    <IconText type="heart" theme={this.state.isMarkedAsFavourite ? "filled" : "outlined"} text={this.state.favouritesCounter}  onClick={this.onFavouriteClicked} key="list-vertical-star-o" />
+                    <IconText type="heart" tooltipText={intl.formatMessage({id: this.state.isMarkedAsFavourite ? "labels.remove_from_favourites" : "labels.add_to_favourites"})} theme={this.state.isMarkedAsFavourite ? "filled" : "outlined"} text={this.state.favouritesCounter}  onClick={this.onFavouriteClicked} key="list-vertical-star-o" />
                 </Col>
                 <Col span={6}>
-                    <IconText type="eye" text={this.state.viewsCounter} key="list-vertical-eye-o" />
+                    <IconText type="eye" tooltipText={intl.formatMessage({id: "labels.views"})} text={this.state.viewsCounter} key="list-vertical-eye-o" />
                 </Col>
                 <Col span={6}>
-                    <IconText type="message" text={this.state.commentsCounter} key="list-vertical-message" />
+                    <IconText type="message" tooltipText={intl.formatMessage({id: "labels.comments"})} text={this.state.commentsCounter} key="list-vertical-message" />
                 </Col>
             </Row>
         );

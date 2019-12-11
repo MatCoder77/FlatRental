@@ -352,8 +352,8 @@ class FlatAnnouncementDetailInfoStep extends Component {
                             <TextArea
                                 name="description"
                                 rows={15}
-                                onChange={this.updateOnChange}
-                                value={this.props.formData.description}
+                                onBlur={this.updateOnChange}
+                                //value={this.props.formData.description}
                                 placeholder={intl.formatMessage({ id: 'placeholders.flat_description' })}
                             />
                         </Card>
