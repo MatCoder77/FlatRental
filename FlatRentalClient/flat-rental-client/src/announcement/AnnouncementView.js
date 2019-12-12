@@ -32,7 +32,8 @@ class AnnouncementView extends Component {
         this.onCommentRemoved = this.onCommentRemoved.bind(this);
         this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
         this.showNumber = this.showNumber.bind(this);
-
+        this.getImagesGallery = this.getImagesGallery.bind(this);
+        this.getDescription = this.getDescription.bind(this);
 
         this.attachLocalityData();
 
@@ -177,8 +178,33 @@ class AnnouncementView extends Component {
         });
     }
 
+    getImagesGallery() {
+        if (Array.isArray(this.props.data.announcementImages) &&  this.props.data.announcementImages.length) {
+            return <ImagesGallery2 imagesList={this.getImages()}/>;
+        }
+        return "";
+    }
+
+    getDescription() {
+        if (this.props.data.description) {
+            return (
+                <div>
+                    <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.flat_description' })}</div>
+                    <Typography>
+                        <Paragraph>
+                            {this.props.data.description}
+                        </Paragraph>
+                    </Typography>
+                </div>
+            )
+        }
+        return "";
+    }
+
     render() {
         const {intl} = this.props;
+        const imagesGallery = this.getImagesGallery();
+        const description = this.getDescription();
         const squareMeterSuffix = (<span>m<sup>2</sup></span>);
         const totalArea = this.getTextValueOptionalDescriptionItem('labels.area', this.props.data.totalArea, squareMeterSuffix);
         const numberOfRooms = this.getTextValueOptionalDescriptionItem('labels.number_of_rooms', this.props.data.numberOfRooms);
@@ -314,12 +340,7 @@ class AnnouncementView extends Component {
                         </Descriptions>
                     </TabPane>
                 </Tabs>
-                <div className="ant-descriptions-title">{intl.formatMessage({ id: 'labels.flat_description' })}</div>
-                <Typography>
-                    <Paragraph>
-                        {this.props.data.description}
-                    </Paragraph>
-                </Typography>
+                {description}
             </div>
         );
 
@@ -414,12 +435,7 @@ class AnnouncementView extends Component {
                         </Descriptions>
                     </TabPane>
                 </Tabs>
-                <div className="ant-descriptions-title">{intl.formatMessage({ id: 'labels.flat_description' })}</div>
-                <Typography>
-                    <Paragraph>
-                        {this.props.data.description}
-                    </Paragraph>
-                </Typography>
+                {description}
             </div>
         );
 
@@ -442,6 +458,7 @@ class AnnouncementView extends Component {
                 </Col>
             </Row>
         );
+
         return (
             <div style={this.props.data['info.objectState'] === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(8%)'} : {}}>
                 <PageHeader
@@ -454,7 +471,7 @@ class AnnouncementView extends Component {
                 </PageHeader>
 
                 <div>
-                    <ImagesGallery2 imagesList={this.getImages()}/>
+                    {imagesGallery}
                 </div>
                 <br/>
                 {announcementByType.get(this.props.data.type)}

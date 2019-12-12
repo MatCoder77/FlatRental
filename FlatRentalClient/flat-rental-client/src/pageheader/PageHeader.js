@@ -129,14 +129,14 @@ function CreateAnnouncementDropDownMenu(props) {
                 <Link to={"/announcement/create/place_in_room"}><FormattedMessage id="labels.announcement_type_place_in_room"/></Link>
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item key="looking_for_flat" className="dropdown-item">
-                <Link to={"/announcement/create/look_for_flat"}><FormattedMessage id="labels.announcement_type_looking_for_flat"/></Link>
+            <Menu.Item key="look_for_flat" className="dropdown-item">
+                <Link to={"/announcement/create/look_for_flat"}><FormattedMessage id="labels.announcement_type_look_for_flat"/></Link>
             </Menu.Item>
-            <Menu.Item key="room" className="dropdown-item">
-                <Link to={"/announcement/create/look_for_room"}><FormattedMessage id="labels.announcement_type_looking_for_room"/></Link>
+            <Menu.Item key="look_for_room" className="dropdown-item">
+                <Link to={"/announcement/create/look_for_room"}><FormattedMessage id="labels.announcement_type_look_for_room"/></Link>
             </Menu.Item>
-            <Menu.Item key="room" className="dropdown-item">
-                <Link to={"/announcement/create/look_for_place_in_room"}><FormattedMessage id="labels.announcement_type_looking_for_place_in_room"/></Link>
+            <Menu.Item key="look_for_place_in_room" className="dropdown-item">
+                <Link to={"/announcement/create/look_for_place_in_room"}><FormattedMessage id="labels.announcement_type_look_for_place_in_room"/></Link>
             </Menu.Item>
         </Menu>
     );

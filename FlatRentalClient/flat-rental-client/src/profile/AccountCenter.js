@@ -74,6 +74,7 @@ class AccountCenter extends React.Component {
                 currentUser={this.props.currentUser} key="2"
                 announcementsList={this.state.formData.userFavourites}
                 customPaginationHandling={false}
+                verticalLayout={true}
                 paginationPageSize={15}
             /> : <LoadingIcon/>);
         const profilePanel = (

@@ -133,6 +133,7 @@ class UserAnnouncementListHandler extends Component{
                     currentUser={this.props.currentUser}
                     announcementsList={this.state.announcements}
                     customPaginationHandling={true}
+                    verticalLayout={true}
                     paginationTotalSize={this.state.totalSize}
                     paginationPageSize={this.state.pageSize}
                     paginationCurrentPage={parseInt(this.state.pageNumber) + 1}

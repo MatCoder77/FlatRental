@@ -44,6 +44,7 @@ class AnnouncementList extends Component{
         this.isCurrentUserCreatorOrModerator = this.isCurrentUserCreatorOrModerator.bind(this);
         this.isCurrentUserModerator = this.isCurrentUserModerator.bind(this);
         this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
+        this.getListElementActions = this.getListElementActions.bind(this);
     }
 
     updateFormData(fieldName, fieldValue) {
@@ -94,21 +95,21 @@ class AnnouncementList extends Component{
     }
 
     getFlatDescription(item) {
-        return (<Descriptions style={{marginTop: '10px'}} column={3}>
+        return (<Descriptions style={{marginTop: '10px'}} column={3} layout={this.props.verticalLayout ? "vertical" : "horizontal"}>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.price_per_month'})}>{item.pricePerMonth} PLN</Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.area'})}>{item.totalArea} <span>m<sup>2</sup></span></Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.number_of_rooms'})}>{item.numberOfRooms}</Descriptions.Item></Descriptions>);
     };
 
     getRoomDescription(item) {
-        return (<Descriptions style={{marginTop: '10px'}} column={3}>
+        return (<Descriptions style={{marginTop: '10px'}} column={3} layout={this.props.verticalLayout ? "vertical" : "horizontal"}>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.price_per_month'})}>{item.pricePerMonth} PLN</Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.area'})}>{item.rooms[0].area} <span>m<sup>2</sup></span></Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.number_of_persons'})}>{item.rooms[0].numberOfPersons}</Descriptions.Item></Descriptions>);
     }
 
     getPlaceInRoomDescription(item) {
-        return (<Descriptions style={{marginTop: '10px'}} column={3}>
+        return (<Descriptions style={{marginTop: '10px'}} column={3} layout={this.props.verticalLayout ? "vertical" : "horizontal"}>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.price_per_month'})}>{item.pricePerMonth} PLN</Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.area'})}>{item.rooms[0].area} <span>m<sup>2</sup></span></Descriptions.Item>
             <Descriptions.Item label={this.props.intl.formatMessage({id: 'labels.number_of_persons'})}>{item.rooms[0].numberOfPersons}</Descriptions.Item></Descriptions>);
@@ -122,6 +123,15 @@ class AnnouncementList extends Component{
             return this.getRoomDescription(item);
         }
         if (item.type.toLowerCase()  == 'PLACE_IN_ROOM'.toLowerCase() ) {
+            return this.getPlaceInRoomDescription(item);
+        }
+        if (item.type.toLowerCase() == 'LOOK_FOR_FLAT'.toLowerCase()) {
+            return this.getFlatDescription(item);
+        }
+        if (item.type.toLowerCase() == 'LOOK_FOR_ROOM'.toLowerCase()) {
+            return this.getRoomDescription(item);
+        }
+        if (item.type.toLowerCase() == 'LOOK_FOR_PLACE_IN_ROOM'.toLowerCase()) {
             return this.getPlaceInRoomDescription(item);
         }
         return "";
@@ -243,6 +253,30 @@ class AnnouncementList extends Component{
         });
     }
 
+    getListElementActions(item) {
+        let actionsArray = [];
+        actionsArray.push(<IconText type="heart" theme={item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "filled" : "outlined") : "outlined"} tooltipText={this.props.intl.formatMessage({id: (item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "labels.remove_from_favourites" : "labels.add_to_favourites") : "labels.favourites")})} text={item.statistics.favouritesCounter} key="list-vertical-heart-o" onClick={((event) => {this.onFavouriteClicked(event, item)})}/>);
+        actionsArray.push(<IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" tooltipText={this.props.intl.formatMessage({id: "labels.views"})}/>);
+        actionsArray.push(<IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" tooltipText={this.props.intl.formatMessage({id: "labels.comments"})}/>);
+        actionsArray.push(<span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>);
+        if (this.isCurrentUserCreatorOrModerator(item.info.createdBy)) {
+            actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
+                this.handleEditClicked(event, item.id)
+            }}><FormattedMessage id={"labels.edit2"}/></Button></span>);
+        }
+        if (this.isCurrentUserCreatorOrModerator(item.info.createdBy)) {
+            actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
+                this.handleDeactivateClicked(event, item)
+            }}>{item.info.objectState === "ACTIVE" ? this.props.intl.formatMessage({id: 'labels.close_announcement'}) : this.props.intl.formatMessage({id: 'labels.open_announcement'})}</Button></span>);
+        }
+        if (this.isCurrentUserModerator()) {
+            actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
+                this.handleDeleteClicked(event, item)
+            }}><FormattedMessage id={"labels.delete"}/></Button></span>);
+        }
+        return actionsArray;
+    }
+
     render() {
         const {intl} = this.props;
         return (
@@ -264,16 +298,10 @@ class AnnouncementList extends Component{
                 footer={""}
                 renderItem={item => (
                     <List.Item
-                        style={item.info.objectState === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(11%)'} : {}}
+                        style={item.info.objectState === "INACTIVE" ? (this.props.verticalLayout ? {opacity: '0.58', filter: 'grayscale(11%)', paddingBottom: '50px', className: "verticalItem"} : {opacity: '0.58', filter: 'grayscale(11%)'}) : (this.props.verticalLayout ? {paddingBottom: '50px', className: "verticalItem"} : {})}
                         onClick={() => {this.navigateToAnnouncement(item.id)}}
                         key={item.id}
-                        actions={[
-                            <IconText type="heart" theme={item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "filled" : "outlined") : "outlined"} tooltipText={this.props.intl.formatMessage({id: (item.userSpecificInfo ? (item.userSpecificInfo.isMarkedAsFavourite ? "labels.remove_from_favourites" : "labels.add_to_favourites") : "labels.favourites")})}
-                                      text={item.statistics.favouritesCounter} key="list-vertical-heart-o" onClick={((event) => {this.onFavouriteClicked(event, item)})}/>,
-                            <IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" tooltipText={intl.formatMessage({id: "labels.views"})}/>,
-                            <IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" tooltipText={intl.formatMessage({id: "labels.comments"})}/>,
-                            <span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>
-                        ]}
+                        actions={this.getListElementActions(item)}
                         extra={
                             <Row>
                                 <Col>
@@ -281,24 +309,13 @@ class AnnouncementList extends Component{
                                         {item.announcementImages && item.announcementImages[0] &&
                                         <img
                                             width={272}
+                                            height={169.817}
                                             alt=" "
                                             src={API_BASE_URL + "/file/download/" + item.announcementImages[0].filename}
                                         />}
-                                    </div>
-                                </Col>
-                                <Col>
-                                    <div style={{marginTop: '24px'}}>
-                                        <Row gutter={5} type="flex" justify="end">
-                                            <Col span={8}>
-                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleEditClicked(event, item.id)}}><FormattedMessage id={"labels.edit2"}/></Button>}
-                                            </Col>
-                                            <Col span={8}>
-                                                {this.isCurrentUserCreatorOrModerator(item.info.createdBy) && <Button style={{width: '100%'}} onClick={(event) => {this.handleDeactivateClicked(event, item)}}>{item.info.objectState === "ACTIVE" ? intl.formatMessage({id: 'labels.close_announcement'}) : intl.formatMessage({id: 'labels.open_announcement'})}</Button>}
-                                            </Col>
-                                            <Col span={8}>
-                                                {this.isCurrentUserModerator() && <Button style={{width: '100%'}} onClick={(event) => {this.handleDeleteClicked(event, item)}}><FormattedMessage id={"labels.delete"}/></Button>}
-                                            </Col>
-                                        </Row>
+                                        {!item.announcementImages || !item.announcementImages[0] &&
+                                            <div style={{width: 272, height:169.817}}/>
+                                        }
                                     </div>
                                 </Col>
                             </Row>
