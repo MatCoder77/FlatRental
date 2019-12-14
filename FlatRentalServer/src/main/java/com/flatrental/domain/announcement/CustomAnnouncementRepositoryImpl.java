@@ -20,6 +20,7 @@ import com.flatrental.domain.locations.commune.Commune_;
 import com.flatrental.domain.locations.district.District_;
 import com.flatrental.domain.locations.street.Street_;
 import com.flatrental.domain.locations.voivodeship.Voivodeship_;
+import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User_;
 import org.springframework.data.domain.Page;
 
@@ -57,65 +58,97 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     private static final Set allowedSoringAttributes = Set.of(Announcement_.CREATED_AT, Announcement_.PRICE_PER_MONTH, Announcement_.QUALITY);
 
     @Override
-    public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria searchCriteria, Pageable pageable) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Announcement> criteriaQuery = criteriaBuilder.createQuery(Announcement.class);
+    public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria sc, Pageable pageable) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Announcement> criteriaQuery = cb.createQuery(Announcement.class);
         Root<Announcement> a = criteriaQuery.from(Announcement.class);
         criteriaQuery.select(a);
-        Expression<Set<ApartmentAmenity>> setExpression = a.get(Announcement_.apartmentAmenities);
-        criteriaBuilder.isMember(ApartmentAmenity.fromId(2L), setExpression);
 
-        List<Optional<Predicate>> predicates = Arrays.asList(
-                getEqualsPredicate(a.get(Announcement_.id), searchCriteria.getId(), criteriaBuilder),
-                getTypePredicate(a.get(Announcement_.type), searchCriteria.getAnnouncementType(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.totalArea), searchCriteria.getMinTotalArea(), searchCriteria.getMaxTotalArea(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.numberOfRooms), searchCriteria.getMinNumberOfRooms(), searchCriteria.getMaxNumberOfRooms(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.pricePerMonth), searchCriteria.getMinPricePerMonth(), searchCriteria.getMaxPricePerMonth(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.additionalCostsPerMonth), searchCriteria.getMinAdditionalCostsPerMonth(), searchCriteria.getMaxAdditionalCostsPerMonth(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.securityDeposit), searchCriteria.getMinSecurityDeposit(), searchCriteria.getMaxSecurityDeposit(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.floor), searchCriteria.getMinFloor(), searchCriteria.getMaxFloor(), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.maxFloorInBuilding), searchCriteria.getMinMaxFloorInBuilding(), searchCriteria.getMaxMaxFloorInBuilding(), criteriaBuilder),
-                getAddressPredicate(a, searchCriteria, criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.buildingType).get(BuildingType_.id), searchCriteria.getAllowedBuildingTypes()),
-                getAttributeInSetPredicate(a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id), searchCriteria.getAllowedBuildingMaterials()),
-                getAttributeInSetPredicate(a.get(Announcement_.heatingType).get(HeatingType_.id), searchCriteria.getAllowedHeatingTypes()),
-                getAttributeInSetPredicate(a.get(Announcement_.windowType).get(WindowType_.id), searchCriteria.getAllowedWindowTypes()),
-                getAttributeInSetPredicate(a.get(Announcement_.parkingType).get(ParkingType_.id), searchCriteria.getAllowedParkingTypes()),
-                getAttributeInSetPredicate(a.get(Announcement_.apartmentState).get(ApartmentState_.id), searchCriteria.getAllowedApartmentStates()),
-                getNumberMinMaxPredicate(a.get(Announcement_.yearBuilt), searchCriteria.getMinYearBuilt(), searchCriteria.getMaxYearBuilt(), criteriaBuilder),
-                getEqualsPredicate(a.get(Announcement_.wellPlanned), searchCriteria.getIsWellPlanned(), criteriaBuilder),
-                getRequiredAttributesPredicate(a.get(Announcement_.apartmentAmenities), getAttributesFromIds(searchCriteria.getRequiredApartmentAmenities(), ApartmentAmenity::fromId), criteriaBuilder),
-                getRoomsPredicates(a, criteriaQuery, searchCriteria, criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id), searchCriteria.getAllowedKitchenTypes()),
-                getNumberMinMaxPredicate(a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea), searchCriteria.getMinKitchenArea(), searchCriteria.getMaxKitchenArea(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id), searchCriteria.getAllowedCookerTypes()),
-                getRequiredAttributesPredicate(a.get(Announcement_.kitchen).get(Kitchen_.furnishing), getAttributesFromIds(searchCriteria.getRequiredKitchenFurnishing(), FurnishingItem::fromId), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms), searchCriteria.getMinNumberOfBathrooms(), searchCriteria.getMaxNumberOfBathrooms(), criteriaBuilder),
-                getEqualsPredicate(a.get(Announcement_.bathroom).get(Bathroom_.separateWC), searchCriteria.getHasSeparatedWC(), criteriaBuilder),
-                getRequiredAttributesPredicate(a.get(Announcement_.bathroom).get(Bathroom_.furnishing), getAttributesFromIds(searchCriteria.getRequiredBathroomFurnishing(), FurnishingItem::fromId), criteriaBuilder),
-                getRequiredAttributesPredicate(a.get(Announcement_.preferences), getAttributesFromIds(searchCriteria.getRequiredPreferences(), Preference::fromId), criteriaBuilder),
-                getRequiredAttributesPredicate(a.get(Announcement_.neighbourhood), getAttributesFromIds(searchCriteria.getRequiredNeighbourhoodItems(), NeighbourhoodItem::fromId), criteriaBuilder),
-                getNumberMinMaxPredicate(a.get(Announcement_.numberOfFlatmates), searchCriteria.getMinNumberOfFlatmates(), searchCriteria.getMaxNumberOfFlatmates(), criteriaBuilder),
-                getEqualsPredicate(a.get(Announcement_.createdBy).get(User_.id), searchCriteria.getAuthor(), criteriaBuilder),
-                getAttributeInSetPredicate(a.get(Announcement_.objectState), searchCriteria.getAllowedManagedObjectStates())
-
-        );
-
-        Predicate predicate = predicates.stream()
-                .flatMap(Optional::stream)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), predicatesList -> criteriaBuilder.and(predicatesList.toArray(new Predicate[0]))));
-
+        Predicate predicate = createPredicateBasedOnSearchCriteria(a, sc, cb, criteriaQuery);
         criteriaQuery.where(predicate);
 
-        List<Order> sortingOrders = getSortingOrders(a, pageable.getSort(), criteriaBuilder);
-
+        List<Order> sortingOrders = getSortingOrders(a, pageable.getSort(), cb);
         criteriaQuery.orderBy(sortingOrders);
 
         TypedQuery<Announcement> query = entityManager.createQuery(criteriaQuery);
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
         query.setMaxResults(pageable.getPageSize());
-        return new PageImpl<>(query.getResultList(), pageable, getTotalCount(predicate));
 
+        return new PageImpl<>(query.getResultList(), pageable, getTotalCount(predicate));
+    }
+
+    private Predicate createPredicateBasedOnSearchCriteria(Root<Announcement> a, SearchCriteria sc, CriteriaBuilder cb, CriteriaQuery<Announcement> criteriaQuery) {
+        Path<Long> id = a.get(Announcement_.id);
+        Path<AnnouncementType> type = a.get(Announcement_.type);
+        Path<Integer> totalArea = a.get(Announcement_.totalArea);
+        Path<Integer> numberOfRooms = a.get(Announcement_.numberOfRooms);
+        Path<Integer> pricePerMonth = a.get(Announcement_.pricePerMonth);
+        Path<Integer> additionalCosts = a.get(Announcement_.additionalCostsPerMonth);
+        Path<Integer> securityDeposit = a.get(Announcement_.securityDeposit);
+        Path<Integer> floor = a.get(Announcement_.floor);
+        Path<Integer> maxFloorInBuilding = a.get(Announcement_.maxFloorInBuilding);
+        Path<Long> buildingType = a.get(Announcement_.buildingType).get(BuildingType_.id);
+        Path<Long> buildingMaterial = a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id);
+        Path<Long> heatingType = a.get(Announcement_.heatingType).get(HeatingType_.id);
+        Path<Long> windowType = a.get(Announcement_.windowType).get(WindowType_.id);
+        Path<Long> parkingType = a.get(Announcement_.parkingType).get(ParkingType_.id);
+        Path<Long> apartmentState = a.get(Announcement_.apartmentState).get(ApartmentState_.id);
+        Path<Integer> yearBuilt = a.get(Announcement_.yearBuilt);
+        Path<Boolean> wellPlanned = a.get(Announcement_.wellPlanned);
+        Expression<Set<ApartmentAmenity>> apartmentAmenities = a.get(Announcement_.apartmentAmenities);
+        Path<Long> kitchenType = a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id);
+        Path<Integer> kitchenArea = a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea);
+        Path<Long> cookerType = a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id);
+        Expression<Set<FurnishingItem>> kitchenFurnishing = a.get(Announcement_.kitchen).get(Kitchen_.furnishing);
+        Path<Integer> numberOfBathrooms = a.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms);
+        Path<Boolean> separatedWC = a.get(Announcement_.bathroom).get(Bathroom_.separateWC);
+        Expression<Set<FurnishingItem>> bathroomFurnishing = a.get(Announcement_.bathroom).get(Bathroom_.furnishing);
+        Expression<Set<Preference>> preferences = a.get(Announcement_.preferences);
+        Expression<Set<NeighbourhoodItem>> neighbourhood = a.get(Announcement_.neighbourhood);
+        Path<Integer> numberOfFlatmates = a.get(Announcement_.numberOfFlatmates);
+        Path<Long> author = a.get(Announcement_.createdBy).get(User_.id);
+        Path<ManagedObjectState> managedObjectState = a.get(Announcement_.objectState);
+
+        var requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::fromId);
+
+        List<Optional<Predicate>> predicates = Arrays.asList(
+                getEqualsPredicate(id, sc.getId(), cb),
+                getTypePredicate(type, sc.getAnnouncementType(), cb),
+                getMinMaxPredicate(totalArea, sc.getMinTotalArea(), sc.getMaxTotalArea(), cb),
+                getMinMaxPredicate(numberOfRooms, sc.getMinNumberOfRooms(), sc.getMaxNumberOfRooms(), cb),
+                getMinMaxPredicate(pricePerMonth, sc.getMinPricePerMonth(), sc.getMaxPricePerMonth(), cb),
+                getMinMaxPredicate(additionalCosts, sc.getMinAdditionalCostsPerMonth(), sc.getMaxAdditionalCostsPerMonth(), cb),
+                getMinMaxPredicate(securityDeposit, sc.getMinSecurityDeposit(), sc.getMaxSecurityDeposit(), cb),
+                getMinMaxPredicate(floor, sc.getMinFloor(), sc.getMaxFloor(), cb),
+                getMinMaxPredicate(maxFloorInBuilding, sc.getMinMaxFloorInBuilding(), sc.getMaxMaxFloorInBuilding(), cb),
+                getAddressPredicate(a, sc, cb),
+                getAllowedAttrPredicate(buildingType, sc.getAllowedBuildingTypes()),
+                getAllowedAttrPredicate(buildingMaterial, sc.getAllowedBuildingMaterials()),
+                getAllowedAttrPredicate(heatingType, sc.getAllowedHeatingTypes()),
+                getAllowedAttrPredicate(windowType, sc.getAllowedWindowTypes()),
+                getAllowedAttrPredicate(parkingType, sc.getAllowedParkingTypes()),
+                getAllowedAttrPredicate(apartmentState, sc.getAllowedApartmentStates()),
+                getMinMaxPredicate(yearBuilt, sc.getMinYearBuilt(), sc.getMaxYearBuilt(), cb),
+                getEqualsPredicate(wellPlanned, sc.getIsWellPlanned(), cb),
+                getRequiredAttrPredicate(apartmentAmenities, requiredApartmentAmenities, cb),
+                getRoomsPredicates(a, criteriaQuery, sc, cb),
+                getAllowedAttrPredicate(kitchenType, sc.getAllowedKitchenTypes()),
+                getMinMaxPredicate(kitchenArea, sc.getMinKitchenArea(), sc.getMaxKitchenArea(), cb),
+                getAllowedAttrPredicate(cookerType, sc.getAllowedCookerTypes()),
+                getRequiredAttrPredicate(kitchenFurnishing, getAttrFromIds(sc.getRequiredKitchenFurnishing(), FurnishingItem::fromId), cb),
+                getMinMaxPredicate(numberOfBathrooms, sc.getMinNumberOfBathrooms(), sc.getMaxNumberOfBathrooms(), cb),
+                getEqualsPredicate(separatedWC, sc.getHasSeparatedWC(), cb),
+                getRequiredAttrPredicate(bathroomFurnishing, getAttrFromIds(sc.getRequiredBathroomFurnishing(), FurnishingItem::fromId), cb),
+                getRequiredAttrPredicate(preferences, getAttrFromIds(sc.getRequiredPreferences(), Preference::fromId), cb),
+                getRequiredAttrPredicate(neighbourhood, getAttrFromIds(sc.getRequiredNeighbourhoodItems(), NeighbourhoodItem::fromId), cb),
+                getMinMaxPredicate(numberOfFlatmates, sc.getMinNumberOfFlatmates(), sc.getMaxNumberOfFlatmates(), cb),
+                getEqualsPredicate(author, sc.getAuthor(), cb),
+                getAllowedAttrPredicate(managedObjectState, sc.getAllowedManagedObjectStates())
+        );
+
+        return predicates.stream()
+                .flatMap(Optional::stream)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), predicatesList -> cb.and(predicatesList.toArray(new Predicate[0]))));
     }
 
     private Optional<Predicate> getTypePredicate(Path<AnnouncementType> typeAttribute, String announcementType, CriteriaBuilder criteriaBuilder) {
@@ -124,7 +157,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 .map(type -> criteriaBuilder.equal(typeAttribute, type));
     }
 
-    private <T extends Number> Optional<Predicate> getNumberMinMaxPredicate(Path<T> attribute, T min, T max, CriteriaBuilder criteriaBuilder) {
+    private <T extends Number> Optional<Predicate> getMinMaxPredicate(Path<T> attribute, T min, T max, CriteriaBuilder criteriaBuilder) {
         if (Objects.equals(min, max)) {
             return getEqualsPredicate(attribute, min, criteriaBuilder);
         }
@@ -149,7 +182,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 .map(val -> criteriaBuilder.equal(attribute, val));
     }
 
-    private <T> List<T> getAttributesFromIds(Set<Long> ids, Function<Long, T> mapper) {
+    private <T> List<T> getAttrFromIds(Set<Long> ids, Function<Long, T> mapper) {
         return Optional.ofNullable(ids)
                 .orElse(Collections.emptySet())
                 .stream()
@@ -157,7 +190,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 .collect(Collectors.toList());
     }
 
-    private <T> Optional<Predicate> getRequiredAttributesPredicate(Expression<Set<T>> attributes, List<T> requiredAttributes, CriteriaBuilder criteriaBuilder) {
+    private <T> Optional<Predicate> getRequiredAttrPredicate(Expression<Set<T>> attributes, List<T> requiredAttributes, CriteriaBuilder criteriaBuilder) {
         if (requiredAttributes.isEmpty()) {
             return Optional.empty();
         }
@@ -190,7 +223,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     }
 
 
-    private <T> Optional<Predicate> getAttributeInSetPredicate(Path<T> attribute, Set<T> allowedValues) {
+    private <T> Optional<Predicate> getAllowedAttrPredicate(Path<T> attribute, Set<T> allowedValues) {
         if (CollectionUtils.isEmpty(allowedValues)) {
             return Optional.empty();
         }
@@ -220,10 +253,10 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Join<Announcement, Room> announcementXroom = subRoot.join(Announcement_.rooms);
         roomSubquery.select(announcementXroom);
         List<Optional<Predicate>> roomPredicates = Arrays.asList(
-                getNumberMinMaxPredicate(announcementXroom.get(Room_.area), roomCriteria.getMinArea(), roomCriteria.getMaxArea(), criteriaBuilder),
-                getNumberMinMaxPredicate(announcementXroom.get(Room_.numberOfPersons), roomCriteria.getMinNumberOfPersons(), roomCriteria.getMaxNumberOfPersons(), criteriaBuilder),
-                getNumberMinMaxPredicate(announcementXroom.get(Room_.personsOccupied), roomCriteria.getMinPersonsOccupied(), roomCriteria.getMaxPersonsOccupied(), criteriaBuilder),
-                getRequiredAttributesPredicate(announcementXroom.get(Room_.furnishings), getAttributesFromIds(roomCriteria.getRequiredFurnishing(), FurnishingItem::fromId), criteriaBuilder)
+                getMinMaxPredicate(announcementXroom.get(Room_.area), roomCriteria.getMinArea(), roomCriteria.getMaxArea(), criteriaBuilder),
+                getMinMaxPredicate(announcementXroom.get(Room_.numberOfPersons), roomCriteria.getMinNumberOfPersons(), roomCriteria.getMaxNumberOfPersons(), criteriaBuilder),
+                getMinMaxPredicate(announcementXroom.get(Room_.personsOccupied), roomCriteria.getMinPersonsOccupied(), roomCriteria.getMaxPersonsOccupied(), criteriaBuilder),
+                getRequiredAttrPredicate(announcementXroom.get(Room_.furnishings), getAttrFromIds(roomCriteria.getRequiredFurnishing(), FurnishingItem::fromId), criteriaBuilder)
         );
         List<Predicate> specifiedRoomPredicates = roomPredicates.stream()
                 .flatMap(Optional::stream)
