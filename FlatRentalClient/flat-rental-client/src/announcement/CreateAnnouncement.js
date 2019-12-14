@@ -7,12 +7,23 @@ import { withRouter } from 'react-router-dom';
 class CreateAnnouncement extends Component{
     constructor(props) {
         super(props);
-        this.announcementType = this.props.match.params.announcementType;
+        this.state = {
+            announcementType: this.props.match.params.announcementType
+        };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let currentType = this.props.match.params.announcementType;
+        if (currentType && currentType != prevState.announcementType) {
+            this.setState({
+                announcementType: currentType
+            });
+        }
     }
 
     render() {
         return (
-          <AnnouncementStepWizard announcementType={this.announcementType}/>
+          <AnnouncementStepWizard key={this.state.announcementType} announcementType={this.state.announcementType}/>
         );
     }
 }

@@ -34,6 +34,10 @@ class AnnouncementView extends Component {
         this.showNumber = this.showNumber.bind(this);
         this.getImagesGallery = this.getImagesGallery.bind(this);
         this.getDescription = this.getDescription.bind(this);
+        this.isValueNotSupplied = this.isValueNotSupplied.bind(this);
+        this.getListOptionalDescriptionItem = this.getListOptionalDescriptionItem.bind(this);
+        this.areAllValuesNotSupplied = this.areAllValuesNotSupplied.bind(this);
+        this.getAboutFlatmates = this.getAboutFlatmates.bind(this);
 
         this.attachLocalityData();
 
@@ -102,7 +106,20 @@ class AnnouncementView extends Component {
     }
 
     getDescriptionListForCheckedItems(items) {
-        return items ? items.map((item, index) => item.value ? (<Descriptions.Item key={index}>&#8226; {this.props.intl.formatMessage({id: item.value})}</Descriptions.Item>) : "") : "";
+        return (Array.isArray(items) && items.length > 0) ? items.map((item, index) => item.value ? (<Descriptions.Item key={index}>&#8226; {this.props.intl.formatMessage({id: item.value})}</Descriptions.Item>) : "") : "";
+    }
+
+    getListOptionalDescriptionItem(label, list) {
+        if (this.isValueNotSupplied(list)) {
+            return "";
+        }
+        return (
+            <Descriptions.Item label={this.props.intl.formatMessage({id: label})}><br/>
+                <Descriptions column={3}>
+                    {list}
+                </Descriptions>
+            </Descriptions.Item>
+        )
     }
 
     getImages() {
@@ -201,6 +218,32 @@ class AnnouncementView extends Component {
         return "";
     }
 
+    getAboutFlatmates(aboutFlatmates) {
+        if ((this.isValueNotSupplied(aboutFlatmates))) {
+            return "";
+        }
+        return  (
+            <Typography>
+                <Paragraph>
+                    {aboutFlatmates}
+                </Paragraph>
+            </Typography>
+        );
+    }
+
+    isValueNotSupplied(value) {
+        return !value || value === "";
+    }
+
+    areAllValuesNotSupplied(...values) {
+        for (let v of values) {
+            if (!this.isValueNotSupplied(v)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     render() {
         const {intl} = this.props;
         const imagesGallery = this.getImagesGallery();
@@ -241,25 +284,34 @@ class AnnouncementView extends Component {
         const roomFurnishing = room => {
             return this.getDescriptionListForCheckedItems(room.furnishing);
         };
+        const roomAccessories = room => {
+            let furnishing = roomFurnishing(room);
+            return this.getListOptionalDescriptionItem("labels.accessories", furnishing);
+        };
         const roomDescription = (room, roomNumber) => {
+            let roomAreaValue = roomArea(room);
+            let numberOfPersonsValue = numberOfPersons(room);
+            let roomAccessoriesValue = roomAccessories(room);
+            if (this.isValueNotSupplied(roomAreaValue) && this.isValueNotSupplied(numberOfPersonsValue) && this.isValueNotSupplied(roomAccessoriesValue)) {
+                return "";
+            }
             return (
                 <Card title={intl.formatMessage({ id: 'labels.room_name' }, { num: roomNumber + 1})} bordered={false} style={{width: '90%'}}>
                     <Descriptions size={"small"} column={3}>
-                        {roomArea(room)}
-                        {numberOfPersons(room)}
+                        {roomAreaValue}
+                        {numberOfPersonsValue}
                     </Descriptions>
                     <Descriptions>
-                        <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                            <Descriptions column={3}>
-                                {roomFurnishing(room)}
-                            </Descriptions>
-                        </Descriptions.Item>
+                        {roomAccessoriesValue}
                     </Descriptions>
                 </Card>
             );
         };
 
+        const rooms = this.props.data.rooms ? this.props.data.rooms.map((room, index) => (roomDescription(room, index))) : "";
+
         const numberOfFlatmates = this.getTextValueOptionalDescriptionItem('labels.flatmates_number', this.props.data.numberOfFlatmates);
+        const aboutFlatmates = this.getAboutFlatmates(this.props.data.aboutFlatmates);
         const createdBy = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.announcement_author', this.props.data['info.createdBy.name'] + " " + this.props.data['info.createdBy.surname']) : undefined;
         const createdAt = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.created_at', moment(this.props.data['info.createdAt']).format('YYYY-MM-DD')) : undefined;
         const updatedAt = this.props.data.id ? this.getTextValueOptionalDescriptionItem('labels.updated_at', moment(this.props.data['info.updatedAt']).format('YYYY-MM-DD')) : undefined;
@@ -276,7 +328,7 @@ class AnnouncementView extends Component {
                     {deposit}
                     {availableFrom}
                 </Descriptions>
-                <div className="ant-descriptions-title">{intl.formatMessage({ id: "labels.detail_info" })}</div>
+                <div className="ant-descriptions-title">{intl.formatMessage({id: "labels.detail_info"})}</div>
                 <Tabs defaultActiveKey="1">
                     <TabPane tab={intl.formatMessage({id: "labels.apartment"})} key="1">
                         <Descriptions size={"default"} column={3}>
@@ -290,17 +342,19 @@ class AnnouncementView extends Component {
                             {wellPlanned}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.amenities"})}><br/>
-                                <Descriptions column={3}>
-                                    {apartmentAmenities}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.amenities", apartmentAmenities)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(buildingType, buildingMaterial, heatingType, windowType, parkingType, apartmentState, yearBuilt, wellPlanned, apartmentAmenities) &&
+                            <FormattedMessage id="labels.no_apartment_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.rooms"})} key="2">
                         <div className="rooms-description-container">
-                            {this.props.data.rooms ? this.props.data.rooms.map((room, index) => (roomDescription(room, index))) : ""}
+                            {rooms}
                         </div>
+                        {this.areAllValuesNotSupplied(...rooms) &&
+                            <FormattedMessage id="labels.no_rooms_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.kitchen"})} key="3">
                         <Descriptions size={"default"} column={3}>
@@ -309,12 +363,11 @@ class AnnouncementView extends Component {
                             {cookerType}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                                <Descriptions column={3}>
-                                    {kitchenFurnishing}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.accessories", kitchenFurnishing)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(kitchenType, kitchenArea, cookerType, kitchenFurnishing) &&
+                            <FormattedMessage id="labels.no_kitchen_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.bathroom"})} key="4">
                         <Descriptions size={"default"} column={3}>
@@ -322,22 +375,27 @@ class AnnouncementView extends Component {
                             {separateWc}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                                <Descriptions column={3}>
-                                    {bathroomFurnishing}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.accessories", bathroomFurnishing)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(numberOfBathrooms, separateWc, bathroomFurnishing) &&
+                            <FormattedMessage id="labels.no_bathroom_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.preferences"})} key="5">
                         <Descriptions column={3}>
                             {preferences}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(preferences) &&
+                            <FormattedMessage id="labels.no_preferences_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.neighbourhood"})} key="6">
                         <Descriptions column={3}>
                             {neighbourhood}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(neighbourhood) &&
+                            <FormattedMessage id="labels.no_neighbourhood_details"/>
+                        }
                     </TabPane>
                 </Tabs>
                 {description}
@@ -371,21 +429,19 @@ class AnnouncementView extends Component {
                             {wellPlanned}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.amenities"})}><br/>
-                                <Descriptions column={3}>
-                                    {apartmentAmenities}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.amenities", apartmentAmenities)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(totalArea, numberOfRooms, buildingType, buildingMaterial, heatingType, windowType, parkingType, apartmentState, yearBuilt, wellPlanned, apartmentAmenities) &&
+                            <FormattedMessage id="labels.no_apartment_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.room"})} key="2">
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                                <Descriptions column={3}>
-                                    {roomFurnishing(this.props.data.rooms[0])}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.accessories", roomFurnishing(this.props.data.rooms[0]))}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(roomFurnishing(this.props.data.rooms[0])) &&
+                            <FormattedMessage id="labels.no_rooms_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.kitchen"})} key="3">
                         <Descriptions size={"default"} column={3}>
@@ -394,12 +450,11 @@ class AnnouncementView extends Component {
                             {cookerType}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                                <Descriptions column={3}>
-                                    {kitchenFurnishing}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.accessories", kitchenFurnishing)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(kitchenType, kitchenArea, cookerType, kitchenFurnishing) &&
+                            <FormattedMessage id="labels.no_kitchen_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.bathroom"})} key="4">
                         <Descriptions size={"default"} column={3}>
@@ -407,39 +462,44 @@ class AnnouncementView extends Component {
                             {separateWc}
                         </Descriptions>
                         <Descriptions>
-                            <Descriptions.Item label={intl.formatMessage({id: "labels.accessories"})}><br/>
-                                <Descriptions column={3}>
-                                    {bathroomFurnishing}
-                                </Descriptions>
-                            </Descriptions.Item>
+                            {this.getListOptionalDescriptionItem("labels.accessories", bathroomFurnishing)}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(numberOfBathrooms, separateWc, bathroomFurnishing) &&
+                            <FormattedMessage id="labels.no_bathroom_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.flatmates"})} key="5">
                         <Descriptions size={"default"} column={1}>
                             {numberOfFlatmates}
-                            <Typography>
-                                <Paragraph>
-                                    {this.props.data.aboutFlatmates}
-                                </Paragraph>
-                            </Typography>
+                            {aboutFlatmates}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(numberOfFlatmates, aboutFlatmates) &&
+                            <FormattedMessage id="labels.no_flatmates_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.preferences"})} key="6">
                         <Descriptions column={3}>
                             {preferences}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(preferences) &&
+                            <FormattedMessage id="labels.no_preferences_details"/>
+                        }
                     </TabPane>
                     <TabPane tab={intl.formatMessage({id: "labels.neighbourhood"})} key="7">
                         <Descriptions column={3}>
                             {neighbourhood}
                         </Descriptions>
+                        {this.areAllValuesNotSupplied(neighbourhood) &&
+                            <FormattedMessage id="labels.no_neighbourhood_details"/>
+                        }
                     </TabPane>
                 </Tabs>
                 {description}
             </div>
         );
 
-        const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement]]);
+        const announcementByType = new Map([['flat', flatAnnouncement], ['room', roomAnnouncement], ['place_in_room', roomAnnouncement],
+            ['look_for_flat', flatAnnouncement], ['look_for_room', roomAnnouncement], ['look_for_place_in_room', roomAnnouncement]]);
 
         const IconText = ({ type, text, tooltipText, theme, onClick }) => (
             <span><Tooltip title={tooltipText}><Icon type={type} theme={theme} style={{ marginRight: 8, fontSize: '24px' }} onClick={onClick}/>{text}</Tooltip></span>
@@ -460,7 +520,7 @@ class AnnouncementView extends Component {
         );
 
         return (
-            <div style={this.props.data['info.objectState'] === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(8%)'} : {}}>
+            <div className="announcementContainer" style={this.props.data['info.objectState'] === "INACTIVE" ? {opacity: '0.58', filter: 'grayscale(8%)'} : {}}>
                 <PageHeader
                     style={{marginBottom: '12px'}}
                     title={this.props.data.title}

@@ -73,7 +73,7 @@
     "labels.max_floor": "Max Floor",
     "labels.available_from": "Available from",
     "placeholders.title": "Title of announcement",
-    "labels.estimated_additional_costs": "Additional costs",
+    "placeholders.estimated_additional_costs": "Additional costs per month (includes charge for water, heating, electricity, internet etc.)",
     "placeholders.total_area": "Total area of flat",
     "placeholders.number_of_rooms": "Number of rooms in flat",
     "placeholders.price_per_month": "Monthly cost of flat rental",
@@ -260,6 +260,14 @@
     "labels.remove_from_favourites": "Remove from favourites",
     "labels.favourites": "Favourites",
     "labels.views": "Views",
+    "labels.no_apartment_details": "No details for apartment.",
+    "labels.no_rooms_details": "No details for rooms.",
+    "labels.no_room_details": "No details for room.",
+    "labels.no_kitchen_details": "No details for kitchen.",
+    "labels.no_bathroom_details": "No details for bathroom.",
+    "labels.no_preferences_details": "No details for preferences.",
+    "labels.no_neighbourhood_details": "No details for neighbourhood.",
+    "labels.no_flatmates_details": "No details for flatmates.",
 
 
     "BUILDING_TYPE_FLAT": "Flat",

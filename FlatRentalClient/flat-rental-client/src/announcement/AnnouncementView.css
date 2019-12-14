@@ -7,3 +7,12 @@
     padding-bottom: 0px;
     margin-bottom: -5px;
 }
+
+.announcementContainer {
+    margin-bottom: 30px;
+}
+
+.announcementContainer .ant-tabs {
+    min-height: 110px;
+}
+/*announcementContainer**/

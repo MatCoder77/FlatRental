@@ -256,6 +256,14 @@
     "labels.remove_from_favourites": "Usuń z ulubionych",
     "labels.favourites": "Ulubione",
     "labels.views": "Wyświetlenia",
+    "labels.no_apartment_details": "Nie podano szczegółów dotyczących mieszkania.",
+    "labels.no_rooms_details": "Nie podano szczegółów dotyczących pokojów.",
+    "labels.no_room_details": "Nie podano szczegółów dotyczących pokoju.",
+    "labels.no_kitchen_details": "Nie podano szczegółów dotyczących kuchni.",
+    "labels.no_bathroom_details": "Nie podano szczegółów dotyczących łazienki.",
+    "labels.no_preferences_details": "Nie podano szczegółów dotyczących preferencji.",
+    "labels.no_neighbourhood_details": "Nie podano szczegółów dotyczących okolicy.",
+    "labels.no_flatmates_details": "Nie podano szegółów dotyczących współlokatorów.",
 
 
     "BUILDING_TYPE_FLAT": "Blok",
