@@ -5,6 +5,7 @@ import App from './App';
 import registerServiceWorker from './infrastructure/ServiceWorkerRegistration';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {LanguageHandler} from "./infrastructure/LanguageHandler";
+import './index.css'
 // import {IntlProvider} from "react-intl";
 // import { addLocaleData } from "react-intl";
 // import locale_en from 'react-intl/locale-data/en';

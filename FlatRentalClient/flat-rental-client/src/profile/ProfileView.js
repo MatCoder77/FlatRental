@@ -96,16 +96,17 @@ class ProfileView extends React.Component {
         return (
             <div style={{marginLeft: '60px', marginRight: '60px'}}>
                     <div>
-                        <Row gutter={30}type="flex" justify="space-between">
+                        <Row gutter={30} type="flex" justify="space-between">
                             <Col span={14}>
                                 <Title>{this.state.user.name + " " + this.state.user.surname}</Title>
-                                <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.about_user' })}</div>
+                                <div style={{marginBottom: '1.25em'}} className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.about_user' })}</div>
                                 <Paragraph>
                                     {this.state.user.about ? this.state.user.about : this.props.intl.formatMessage({ id: 'labels.no_about' })}
                                 </Paragraph>
-                                <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.contact_details' })}</div>
+                                <div style={{marginBottom: '0.75em'}} className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.contact_details' })}</div>
                                 <List split={false}>
                                     <List.Item
+                                        style={{padding: '0.5em 0'}}
                                         actions={this.state.isNumberVisible ? [] : [<a key="list-loadmore-show" onClick={this.showNumber}><FormattedMessage id="labels.show"/></a>]}
                                     >
                                         <List.Item.Meta
@@ -114,6 +115,7 @@ class ProfileView extends React.Component {
                                         />
                                     </List.Item>
                                     <List.Item
+                                        style={{padding: '0.5em 0'}}
                                     >
                                         <List.Item.Meta
                                             title={this.props.intl.formatMessage({id: "labels.email"})}
@@ -127,7 +129,7 @@ class ProfileView extends React.Component {
                                 {this.state.user.statistics.rating ? summaryRate : noRates}
                             </Col>
                         </Row>
-                        <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.opinions' })}</div>
+                        <div style={{marginTop: '0.5em'}} className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.opinions' })}</div>
                         <CommentsSection userId={this.state.user.id}
                                          currentUser={this.props.currentUser}
                                          onCommentAdded={this.onCommentAdded}

@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://localhost:8443/api';
+export const API_BASE_URL = '/api';
 export const ACCESS_TOKEN = 'accessToken';
 export const CURRENT_USER = 'currentUser';
 export const SERACH_CRITERIA = 'search_criteria';
