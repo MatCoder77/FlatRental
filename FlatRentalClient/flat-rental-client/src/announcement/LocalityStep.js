@@ -41,7 +41,8 @@ class LocalityStep extends Component {
         this.loadStreetsFromLocalityDistrictIfEmpty = this.loadStreetsFromLocalityDistrictIfEmpty.bind(this);
         this.validateAndMakeOptionalIfNecessary = this.validateAndMakeOptionalIfNecessary.bind(this);
 
-        this.props.registerRequiredFields(['address.voivodeship.id', 'address.district.id', 'address.commune.id', 'address.locality.id', 'address.localityDistrict.id', 'address.street.id']);
+        let mandatoryFields = this.props.cityPrecisionMode ? ['address.voivodeship.id', 'address.district.id', 'address.commune.id', 'address.locality.id'] : ['address.voivodeship.id', 'address.district.id', 'address.commune.id', 'address.locality.id', 'address.localityDistrict.id', 'address.street.id'];
+        this.props.registerRequiredFields(mandatoryFields);
     }
 
     autoselectIfOnlyOneElement(loadedData, callbackParam) {
@@ -173,7 +174,9 @@ class LocalityStep extends Component {
         this.props.appData.localityParts = [];
         this.props.formData["address.street.id"] = undefined;
         this.props.appData.streets = [];
-        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        if (!this.props.cityPrecisionMode) {
+            this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        }
         this.loadDistrictForVoivodeship(voivodeshipId);
     }
 
@@ -188,7 +191,9 @@ class LocalityStep extends Component {
         this.props.appData.localityParts = [];
         this.props.formData["address.street.id"] = undefined;
         this.props.appData.streets = [];
-        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        if (!this.props.cityPrecisionMode) {
+            this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        }
         this.loadCommunesForDistrict(districtId);
     }
 
@@ -201,7 +206,9 @@ class LocalityStep extends Component {
         this.props.appData.localityParts = [];
         this.props.formData["address.street.id"] = undefined;
         this.props.appData.streets = [];
-        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        if (!this.props.cityPrecisionMode) {
+            this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        }
         this.loadLocalitiesForCommune(communeId);
     }
 
@@ -212,7 +219,9 @@ class LocalityStep extends Component {
         this.props.appData.localityParts = [];
         this.props.formData["address.street.id"] = undefined;
         this.props.appData.streets = [];
-        this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        if (!this.props.cityPrecisionMode) {
+            this.props.registerRequiredFields(['address.localityDistrict.id', 'address.street.id'], true);
+        }
         this.loadLocalityDistrictsForLocality(localityId);
         this.loadLocalityPartsForParentLocality(localityId);
         this.loadStreetsForParentLocality(localityId);
@@ -223,7 +232,9 @@ class LocalityStep extends Component {
         this.props.appData.localityParts = [];
         this.props.formData["address.street.id"] = undefined;
         this.props.appData.streets = [];
-        this.props.registerRequiredFields(['address.street.id'], true);
+        if (!this.props.cityPrecisionMode) {
+            this.props.registerRequiredFields(['address.street.id'], true);
+        }
         this.loadLocalityPartsForParentLocalityDistrict(localityDistrictId);
         this.loadStreetsForParentLocality(localityDistrictId);
     }
@@ -318,7 +329,7 @@ class LocalityStep extends Component {
                         </FormItem>
                         }
                         {this.hasAnyLoadedData(this.props.appData.localityDistricts) &&
-                        <FormItem label={intl.formatMessage({id: 'labels.localityDistrict'})} required={true}>
+                        <FormItem label={intl.formatMessage({id: 'labels.localityDistrict'})} required={!this.props.cityPrecisionMode}>
                             <Select
                                 showSearch
                                 placeholder={intl.formatMessage({id: 'placeholders.localityDistrict'})}
@@ -355,7 +366,7 @@ class LocalityStep extends Component {
                         </FormItem>
                         }
                         {this.hasAnyLoadedData(this.props.appData.streets) &&
-                        <FormItem label={intl.formatMessage({id: 'labels.street'})} required={true}>
+                        <FormItem label={intl.formatMessage({id: 'labels.street'})} required={!this.props.cityPrecisionMode}>
                             <Select
                                 showSearch
                                 placeholder={intl.formatMessage({id: 'placeholders.street'})}

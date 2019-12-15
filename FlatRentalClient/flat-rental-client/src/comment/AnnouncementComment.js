@@ -83,7 +83,7 @@ class AnnouncementComment extends Component {
         );
 
         let actions = [];
-        if (this.props.nestingLevel < 2 ) {
+        if (this.props.currentUser && this.props.nestingLevel < 2 ) {
             actions.push(replyToAction);
         }
         if (hasRole(MODERATOR, this.props.currentUser)) {

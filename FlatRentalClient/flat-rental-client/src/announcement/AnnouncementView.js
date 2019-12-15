@@ -540,10 +540,10 @@ class AnnouncementView extends Component {
                     <Divider />
                     <Descriptions title={intl.formatMessage({id: "labels.about_offer"})} column={3}>
                         {createdBy}
-                        <Descriptions.Item>{<Link to={"/profile/" + this.props.data['info.createdBy.id']}><FormattedMessage id={"labels.show_profile"}/></Link>}</Descriptions.Item>
+                        {this.props.currentUser ? <Descriptions.Item>{<Link to={"/profile/" + this.props.data['info.createdBy.id']}><FormattedMessage id={"labels.show_profile"}/></Link>}</Descriptions.Item> : <Descriptions.Item/>}
                         <Descriptions.Item/>
                         {phoneNumber}
-                        <Descriptions.Item><Button type={"link"} onClick={this.showNumber}><FormattedMessage id="labels.show"/></Button></Descriptions.Item>
+                        {this.state.isNumberVisible ? <Descriptions.Item/> : <Descriptions.Item><Button style={{border: '0px', height: "1em"}} type={"link"} onClick={this.showNumber}><FormattedMessage id="labels.show"/></Button></Descriptions.Item>}
                         <Descriptions.Item/>
                         {createdAt}
                         <Descriptions.Item/>

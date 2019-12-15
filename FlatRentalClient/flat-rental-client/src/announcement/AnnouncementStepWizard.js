@@ -332,7 +332,135 @@ class AnnouncementStepWizard extends Component {
         }];
 
 
-        const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps], ['look_for_flat', flatSteps], ['look_for_room', roomSteps], ['look_for_place_in_room', placeInRoomSteps]]);
+        const lookForFlatSteps = [{
+            title: intl.formatMessage({id: "labels.general_info"}),
+            content: (
+                <FirstStepContainer
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                    updateValidation={this.updateValidation}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.localization"}),
+            content: (
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}
+                                     cityPrecisionMode={true}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.detail_info"}),
+            content: (
+                <ThirdStepContainer formData={this.state.formData} onUpdate={this.updateFormData}
+                                    loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                    getValidationStatus={this.getValidationStatus}
+                                    getErrorMessage={this.getErrorMessage}
+                                    updateValidation={this.updateValidation}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
+            ),
+        }];
+
+        const lookForRoomSteps = [{
+            title: intl.formatMessage({id: "labels.general_info"}),
+            content: (
+                <RoomAnnouncementGeneralInfoStep
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                    loadData={this.loadData}
+                    appData={this.state.appData} {...formItemLayout}
+                    updateValidation={this.updateValidation}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.localization"}),
+            content: (
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}
+                                     cityPrecisionMode={true}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.detail_info"}),
+            content: (
+                <RoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
+                                                loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                                getValidationStatus={this.getValidationStatus}
+                                                getErrorMessage={this.getErrorMessage} updateValidation={this.updateValidation}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
+            ),
+        }];
+        const lookForPlaceInRoomSteps =  [{
+            title: intl.formatMessage({id: "labels.general_info"}),
+            content: (
+                <PlaceInRoomAnnouncementGeneralInfoStep
+                    formData={this.state.formData}
+                    onUpdate={this.updateFormData} {...formItemLayout}
+                    getValidationStatus={this.getValidationStatus}
+                    getErrorMessage={this.getErrorMessage}
+                    registerRequiredFields={this.registerRequiredFields}
+                    loadData={this.loadData}
+                    appData={this.state.appData} {...formItemLayout}
+                    updateValidation={this.updateValidation}
+                />
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.localization"}),
+            content: (
+                <SecondStepContainer formData={this.state.formData}
+                                     onUpdate={this.updateFormData}
+                                     loadData={this.loadData}
+                                     appData={this.state.appData} {...formItemLayout}
+                                     getValidationStatus={this.getValidationStatus}
+                                     getErrorMessage={this.getErrorMessage}
+                                     registerRequiredFields={this.registerRequiredFields}
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     cityPrecisionMode={true}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.detail_info"}),
+            content: (
+                <PlaceInRoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
+                                                       loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
+                                                       getValidationStatus={this.getValidationStatus}
+                                                       getErrorMessage={this.getErrorMessage}/>
+            ),
+        }, {
+            title: intl.formatMessage({id: "labels.summary"}),
+            content: (
+                <AnnouncementView data={this.state.formData} loadData={this.loadData} setLocalityAttribute={this.setLocalityAttribute}/>
+            )
+        }];
+
+
+        const stepsByAnnouncementType = new Map([['flat', flatSteps], ['room', roomSteps], ['place_in_room', placeInRoomSteps], ['look_for_flat', lookForFlatSteps], ['look_for_room', lookForRoomSteps], ['look_for_place_in_room', lookForPlaceInRoomSteps]]);
         const steps = stepsByAnnouncementType.get(this.state.formData.type);
 
         const {current} = this.state;

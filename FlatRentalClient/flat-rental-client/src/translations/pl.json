@@ -264,6 +264,7 @@
     "labels.no_preferences_details": "Nie podano szczegółów dotyczących preferencji.",
     "labels.no_neighbourhood_details": "Nie podano szczegółów dotyczących okolicy.",
     "labels.no_flatmates_details": "Nie podano szegółów dotyczących współlokatorów.",
+    "labels.not_found": "Nie znaleziono pasujących wyników",
 
 
     "BUILDING_TYPE_FLAT": "Blok",

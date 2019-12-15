@@ -106,7 +106,7 @@ class ProfileView extends React.Component {
                                 <div className="ant-descriptions-title">{this.props.intl.formatMessage({ id: 'labels.contact_details' })}</div>
                                 <List split={false}>
                                     <List.Item
-                                        actions={[<a key="list-loadmore-show" onClick={this.showNumber}><FormattedMessage id="labels.show"/></a>]}
+                                        actions={this.state.isNumberVisible ? [] : [<a key="list-loadmore-show" onClick={this.showNumber}><FormattedMessage id="labels.show"/></a>]}
                                     >
                                         <List.Item.Meta
                                             title={this.props.intl.formatMessage({id: "labels.phoneNumber"})}

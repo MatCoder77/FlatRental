@@ -7,7 +7,7 @@ import './AnnouncementList.css'
 import moment from "moment";
 import {getSurrogateAvatar} from "../profile/ProfileUtils";
 import {addToFavourites, changeAnnouncementState, removeFromFavourites} from "../infrastructure/RestApiHandler";
-import {hasRole, MODERATOR, userEquals} from "../infrastructure/PermissionsUtils";
+import {ADMIN, hasRole, MODERATOR, userEquals} from "../infrastructure/PermissionsUtils";
 
 
 const IconText = ({ type, text, tooltipText, theme, onClick }) => (
@@ -41,8 +41,8 @@ class AnnouncementList extends Component{
         this.handleEditClicked = this.handleEditClicked.bind(this);
         this.handleDeactivateClicked = this.handleDeactivateClicked.bind(this);
         this.handleDeleteClicked = this.handleDeleteClicked.bind(this);
-        this.isCurrentUserCreatorOrModerator = this.isCurrentUserCreatorOrModerator.bind(this);
-        this.isCurrentUserModerator = this.isCurrentUserModerator.bind(this);
+        this.isCurrentUserCreatorOrModeratorOrAdmin = this.isCurrentUserCreatorOrModeratorOrAdmin.bind(this);
+        this.isCurrentUserModeratorOrAdmin = this.isCurrentUserModeratorOrAdmin.bind(this);
         this.onFavouriteClicked = this.onFavouriteClicked.bind(this);
         this.getListElementActions = this.getListElementActions.bind(this);
     }
@@ -215,12 +215,12 @@ class AnnouncementList extends Component{
         }).catch(error => {});
     }
 
-    isCurrentUserCreatorOrModerator(user) {
-        return userEquals(user, this.props.currentUser) || this.isCurrentUserModerator();
+    isCurrentUserCreatorOrModeratorOrAdmin(user) {
+        return userEquals(user, this.props.currentUser) || this.isCurrentUserModeratorOrAdmin();
     }
 
-    isCurrentUserModerator() {
-        return hasRole(MODERATOR, this.props.currentUser);
+    isCurrentUserModeratorOrAdmin() {
+        return hasRole(MODERATOR, this.props.currentUser) || hasRole(ADMIN, this.props.currentUser);
     }
 
     onFavouriteClicked(e, item) {
@@ -259,17 +259,17 @@ class AnnouncementList extends Component{
         actionsArray.push(<IconText type="eye-o" text={item.statistics.viewsCounter} key="list-vertical-eye-o" tooltipText={this.props.intl.formatMessage({id: "labels.views"})}/>);
         actionsArray.push(<IconText type="message" text={item.statistics.commentsCounter} key="list-vertical-message" tooltipText={this.props.intl.formatMessage({id: "labels.comments"})}/>);
         actionsArray.push(<span>{this.props.intl.formatMessage({id: "labels.created_at"})}: {moment(item.info.createdAt).format('YYYY-MM-DD')}</span>);
-        if (this.isCurrentUserCreatorOrModerator(item.info.createdBy)) {
+        if (this.isCurrentUserCreatorOrModeratorOrAdmin(item.info.createdBy)) {
             actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
                 this.handleEditClicked(event, item.id)
             }}><FormattedMessage id={"labels.edit2"}/></Button></span>);
         }
-        if (this.isCurrentUserCreatorOrModerator(item.info.createdBy)) {
+        if (this.isCurrentUserCreatorOrModeratorOrAdmin(item.info.createdBy)) {
             actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
                 this.handleDeactivateClicked(event, item)
             }}>{item.info.objectState === "ACTIVE" ? this.props.intl.formatMessage({id: 'labels.close_announcement'}) : this.props.intl.formatMessage({id: 'labels.open_announcement'})}</Button></span>);
         }
-        if (this.isCurrentUserModerator()) {
+        if (this.isCurrentUserModeratorOrAdmin()) {
             actionsArray.push(<span><Button style={{width: '100%'}} onClick={(event) => {
                 this.handleDeleteClicked(event, item)
             }}><FormattedMessage id={"labels.delete"}/></Button></span>);
