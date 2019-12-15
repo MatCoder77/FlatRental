@@ -97,11 +97,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/apartmentstate",
                         "/api/apartmentamenity",
                         "/api/preferences",
-                        "/api//neighbourhood",
+                        "/api/neighbourhood",
                         "/api/furnishing",
-                        "/api/announcements/**")
+                        "/api/file/download/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users/**")
+                .antMatchers(HttpMethod.GET, "/api/users/**", "/api/comments/**", "/api/announcements/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

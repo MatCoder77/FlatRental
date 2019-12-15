@@ -11,7 +11,7 @@ import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
 import com.flatrental.infrastructure.security.HasAnyRole;
-import com.flatrental.infrastructure.security.HasModeratorRole;
+import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,7 @@ public class AnnouncementController {
     }
 
     @DeleteMapping(ID_PATH)
-    @HasModeratorRole
+    @HasModeratorOrAdminRole
     public ResponseDTO deleteAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
         Announcement announcement = announcementService.getExistingAnnouncement(id);
         permissionsValidationService.validatePermissionToEditAnnouncement(userInfo, announcement);

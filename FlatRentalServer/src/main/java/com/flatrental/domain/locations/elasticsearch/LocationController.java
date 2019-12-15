@@ -29,7 +29,7 @@ public class LocationController {
     @PostMapping("/reindexation")
     @HasAdminRole
     public Boolean reindexAllLocations() throws IOException {
-        locationService.indexLocations();
+        locationService.reindexLocations();
         return true;
     }
 

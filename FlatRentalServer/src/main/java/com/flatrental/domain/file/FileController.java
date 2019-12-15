@@ -38,6 +38,7 @@ public class FileController {
     }
 
     @PostMapping("/upload-multiple")
+    @HasAnyRole
     public List<FileUploadDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()

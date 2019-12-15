@@ -18,6 +18,7 @@ import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
 import com.google.common.collect.Lists;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
@@ -26,6 +27,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
@@ -353,6 +355,24 @@ public class LocationService {
             exception.printStackTrace();
             throw new IllegalArgumentException("wrong");
         }
+    }
+
+    private boolean indexExists() throws IOException {
+        GetIndexRequest request = new GetIndexRequest(LOCATIONS_INDEX);
+        return elasticClient.indices().exists(request, RequestOptions.DEFAULT);
+    }
+
+    private void deleteIndex() throws IOException {
+        DeleteIndexRequest request = new DeleteIndexRequest(LOCATIONS_INDEX);
+        elasticClient.indices().delete(request, RequestOptions.DEFAULT);
+    }
+
+    public void reindexLocations() throws IOException {
+        if (indexExists()) {
+            deleteIndex();
+        }
+        createLocationIndex();
+        indexLocations();
     }
 
 }

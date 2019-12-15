@@ -2,6 +2,7 @@ package com.flatrental.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.tempuri.ITerytWs1;
 import org.tempuri.TerytWs1;
@@ -10,6 +11,7 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.AddressingFeature;
 import java.util.Map;
 
+@Lazy
 @Configuration
 @EnableScheduling
 public class AppConfig {

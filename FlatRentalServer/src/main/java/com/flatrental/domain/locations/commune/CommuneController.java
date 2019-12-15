@@ -26,7 +26,7 @@ public class CommuneController {
     private static final String DISTRICT_ID_PATH = "/{" + DISTRICT_ID + "}";
 
     @GetMapping(DISTRICT_ID_PATH)
-    private List<CommuneDTO> getCommunesForDistrict(@PathVariable(DISTRICT_ID) Long districtId) {
+    public List<CommuneDTO> getCommunesForDistrict(@PathVariable(DISTRICT_ID) Long districtId) {
         District district = districtService.getExistingDistrict(districtId);
         return communeService.getCommunesForDistrict(district).stream()
                 .map(communeService::mapToCommuneDTO)

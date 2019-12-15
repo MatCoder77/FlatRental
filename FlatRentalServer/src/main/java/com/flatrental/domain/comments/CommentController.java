@@ -4,6 +4,7 @@ import com.flatrental.api.CommentDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
+import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.HasModeratorRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
@@ -50,7 +51,7 @@ public class CommentController {
 
 
     @DeleteMapping(ID_PATH)
-    @HasModeratorRole
+    @HasModeratorOrAdminRole
     public ResponseDTO deleteComment(@PathVariable(ID) Long id) {
         int numberOfDeletedComments = commentService.deleteComment(id).size();
         return ResponseDTO.builder()
