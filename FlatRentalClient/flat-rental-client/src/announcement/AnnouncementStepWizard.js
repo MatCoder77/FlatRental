@@ -396,7 +396,7 @@ class AnnouncementStepWizard extends Component {
         }, {
             title: intl.formatMessage({id: "labels.localization"}),
             content: (
-                <SecondSitepContainer formData={this.state.formData}
+                <SecondStepContainer formData={this.state.formData}
                                      onUpdate={this.updateFormData}
                                      loadData={this.loadData}
                                      appData={this.state.appData} {...formItemLayout}
