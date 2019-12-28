@@ -34,7 +34,8 @@ class RoomAnnouncementGeneralInfoStep extends Component {
         this.smallerThanMinusOne = this.props.intl.formatMessage({ id: 'text.smaller_than_minus_one' });
         this.floorNumberGreaterThanMaxFloor = this.props.intl.formatMessage({ id: 'text.floor_number_grater_than_max_floor' });
 
-        this.props.registerRequiredFields(['title', 'rooms.0.area', 'rooms.0.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);        this.validateSuppliedValues();
+        this.props.registerRequiredFields(this.props.floorDisabled ? ['title', 'rooms.0.area', 'rooms.0.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'availableFrom'] : ['title', 'rooms.0.area', 'rooms.0.numberOfPersons', 'pricePerMonth', 'additionalCostsPerMonth', 'securityDeposit', 'floor', 'maxFloorInBuilding', 'availableFrom']);
+        this.validateSuppliedValues();
         this.onRoomChange('rooms', 1, undefined, 'roomNumber');
     }
 
@@ -190,6 +191,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                 placeholder={intl.formatMessage({id: 'placeholders.deposit'})}
                             />
                         </FormItem>
+                        {!this.props.floorDisabled &&
                         <FormItem
                             label={intl.formatMessage({id: 'labels.floor_max_floor'})}
                             validateStatus={this.props.getValidationStatus("floor") === 'error' ? this.props.getValidationStatus("floor") : this.props.getValidationStatus("maxFloorInBuilding")}
@@ -216,7 +218,7 @@ class RoomAnnouncementGeneralInfoStep extends Component {
                                     />
                                 </Col>
                             </Row>
-                        </FormItem>
+                        </FormItem>}
                         <FormItem
                             label={intl.formatMessage({id: 'labels.available_from'})}
                             validateStatus={this.props.getValidationStatus("availableFrom")}

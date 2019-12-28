@@ -314,7 +314,9 @@ class AnnouncementStepWizard extends Component {
                                      getValidationStatus={this.getValidationStatus}
                                      getErrorMessage={this.getErrorMessage}
                                      registerRequiredFields={this.registerRequiredFields}
-                                     unregisterRequiredFields={this.unregisterRequiredFields}/>
+                                     unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}
+                />
             ),
         }, {
             title: intl.formatMessage({id: "labels.detail_info"}),
@@ -322,7 +324,8 @@ class AnnouncementStepWizard extends Component {
                 <PlaceInRoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
                                                 loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
                                                 getValidationStatus={this.getValidationStatus}
-                                                getErrorMessage={this.getErrorMessage}/>
+                                                getErrorMessage={this.getErrorMessage} updateValidation={this.updateValidation}
+                />
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
@@ -342,6 +345,7 @@ class AnnouncementStepWizard extends Component {
                     getErrorMessage={this.getErrorMessage}
                     registerRequiredFields={this.registerRequiredFields}
                     updateValidation={this.updateValidation}
+                    floorDisabled={true}
                 />
             ),
         }, {
@@ -386,12 +390,13 @@ class AnnouncementStepWizard extends Component {
                     loadData={this.loadData}
                     appData={this.state.appData} {...formItemLayout}
                     updateValidation={this.updateValidation}
+                    floorDisabled={true}
                 />
             ),
         }, {
             title: intl.formatMessage({id: "labels.localization"}),
             content: (
-                <SecondStepContainer formData={this.state.formData}
+                <SecondSitepContainer formData={this.state.formData}
                                      onUpdate={this.updateFormData}
                                      loadData={this.loadData}
                                      appData={this.state.appData} {...formItemLayout}
@@ -429,6 +434,7 @@ class AnnouncementStepWizard extends Component {
                     loadData={this.loadData}
                     appData={this.state.appData} {...formItemLayout}
                     updateValidation={this.updateValidation}
+                    floorDisabled={true}
                 />
             ),
         }, {
@@ -442,6 +448,7 @@ class AnnouncementStepWizard extends Component {
                                      getErrorMessage={this.getErrorMessage}
                                      registerRequiredFields={this.registerRequiredFields}
                                      unregisterRequiredFields={this.unregisterRequiredFields}
+                                     updateValidation={this.updateValidation}
                                      cityPrecisionMode={true}/>
             ),
         }, {
@@ -450,7 +457,9 @@ class AnnouncementStepWizard extends Component {
                 <PlaceInRoomAnnouncementDetailInfoStep formData={this.state.formData} onUpdate={this.updateFormData}
                                                        loadData={this.loadData} appData={this.state.appData} {...formItemLayout}
                                                        getValidationStatus={this.getValidationStatus}
-                                                       getErrorMessage={this.getErrorMessage}/>
+                                                       getErrorMessage={this.getErrorMessage}
+                                                       updateValidation={this.updateValidation}
+                />
             ),
         }, {
             title: intl.formatMessage({id: "labels.summary"}),
