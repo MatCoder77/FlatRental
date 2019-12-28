@@ -11,7 +11,7 @@
 	<groupId>com.flatrental</groupId>
 	<artifactId>flatrental</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>FlatRental</name>
 	<description>Backend service for Flat Rental Platform</description>
 
