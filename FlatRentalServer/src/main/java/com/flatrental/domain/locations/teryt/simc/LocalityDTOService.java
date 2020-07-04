@@ -1,8 +1,8 @@
 package com.flatrental.domain.locations.teryt.simc;
 
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitTypeCode;
+import lombok.RequiredArgsConstructor;
 import org.datacontract.schemas._2004._07.terytuslugaws1.PlikKatalog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.tempuri.ITerytWs1;
@@ -30,11 +30,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityDTOService {
 
-    @Autowired
-    private ApplicationContext context;
-
+    private final ApplicationContext context;
 
     private static final String XML_EXTENSION = ".xml";
     private static final String XML_FILE_NOT_FOUND_MSG = "XML file with administration units was not found in catalog downloaded from TERYT";

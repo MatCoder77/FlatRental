@@ -1,16 +1,16 @@
 package com.flatrental.domain.announcement.simpleattributes.preferences;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PreferenceService {
 
-    @Autowired
-    private PreferenceRepository preferenceRepository;
+    private final PreferenceRepository preferenceRepository;
 
     public List<Preference> getAllPreferences() {
         return preferenceRepository.findAll();

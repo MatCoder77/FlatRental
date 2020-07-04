@@ -1,17 +1,17 @@
 package com.flatrental.domain.announcement.simpleattributes.buildingmaterial;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BuildingMaterialService {
 
-    @Autowired
-    private BuildingMaterialRepository buildingMaterialRepository;
+    private final BuildingMaterialRepository buildingMaterialRepository;
 
     private static final String NOT_FOUND = "There is no BuildingMaterial with id {0}";
 

@@ -9,20 +9,18 @@ import com.flatrental.domain.user.UserService;
 import com.flatrental.domain.userrole.UserRole;
 import com.flatrental.domain.userrole.UserRoleName;
 import com.flatrental.domain.userrole.UserRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRoleService userRoleService;
+    private final UserService userService;
+    private final UserRoleService userRoleService;
 
     public UsernamePasswordAuthenticationToken getAuthenticationToken(LoginDTO loginDTO) {
         return new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword());

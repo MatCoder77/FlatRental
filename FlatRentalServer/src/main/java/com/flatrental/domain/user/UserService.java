@@ -1,12 +1,11 @@
 package com.flatrental.domain.user;
 
 import com.flatrental.api.UserDTO;
-import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.file.FileService;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.userrole.UserRole;
 import com.flatrental.domain.userrole.UserRoleName;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private static final String USERNAME_ALREADY_TAKEN_MSG = "User with username {0} already exists!";
@@ -26,17 +26,10 @@ public class UserService {
     private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
     private static final String EMAIL_INCORECT = "Supplied email is incorrect";
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private FileService fileService;
-
-    @Autowired
-    private StatisticsService statisticsService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final FileService fileService;
+    private final StatisticsService statisticsService;
 
     public User registerUser(User newUser) {
         validateUsernameUniqueness(newUser);

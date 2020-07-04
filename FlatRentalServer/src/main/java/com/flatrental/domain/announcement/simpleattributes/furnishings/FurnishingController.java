@@ -1,7 +1,7 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/furnishing")
+@RequiredArgsConstructor
 public class FurnishingController {
 
-    @Autowired
-    private FurnishingService furnishingService;
+    private final FurnishingService furnishingService;
 
     private static final String FURNISHING_TYPE_PARAM = "type";
     private static final boolean TRUE_VALUE_WHEN_NO_TYPE_SUPPLIED = true;

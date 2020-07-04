@@ -1,16 +1,16 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FurnishingService {
 
-    @Autowired
-    private FurnishingRepository furnishingRepository;
+    private final FurnishingRepository furnishingRepository;
 
     public List<FurnishingItem> getFurnishingItems() {
         return furnishingRepository.findAll();

@@ -1,13 +1,11 @@
 package com.flatrental.domain.locations.localitypart;
 
 import com.flatrental.api.LocalityPartDTO;
-import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
-import com.flatrental.domain.locations.abstractlocality.AbstractLocalityService;
 import com.flatrental.domain.locations.locality.Locality;
 import com.flatrental.domain.locations.locality.LocalityService;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrictService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,16 +16,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/locality-part")
+@RequiredArgsConstructor
 public class LocalityPartController {
 
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityPartService localityPartService;
 
     private static final String ID = "id";
     private static final String LOCALITY_PARTS_FOR_PARENT_LOCALITY_PATH = "/for-parent-locality/{" + ID + "}";

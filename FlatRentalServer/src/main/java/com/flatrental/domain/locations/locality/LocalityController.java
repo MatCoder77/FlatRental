@@ -3,7 +3,7 @@ package com.flatrental.domain.locations.locality;
 import com.flatrental.api.LocalityDTO;
 import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.commune.CommuneService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/locality")
+@RequiredArgsConstructor
 public class LocalityController {
 
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private CommuneService communeService;
+    private final LocalityService localityService;
+    private final CommuneService communeService;
 
     private static final String COMMUNE_ID = "commune_id";
     private static final String COMMUNE_ID_PATH = "/{" + COMMUNE_ID + "}";

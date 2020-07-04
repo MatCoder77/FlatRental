@@ -2,7 +2,6 @@ package com.flatrental.domain.locations.elasticsearch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flatrental.domain.locations.abstractlocality.AbstractLocalityService;
 import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.commune.CommuneService;
 import com.flatrental.domain.locations.district.District;
@@ -14,10 +13,10 @@ import com.flatrental.domain.locations.localitydistrict.LocalityDistrictService;
 import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.street.Street;
-import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
 import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -33,7 +32,6 @@ import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -50,41 +48,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class LocationService {
 
-    @Autowired
-    private RestHighLevelClient elasticClient;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private VoivodeshipService voivodeshipService;
-
-    @Autowired
-    private DistrictService districtService;
-
-    @Autowired
-    private CommuneService communeService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
-    @Autowired
-    private StreetService streetService;
-
-    @Autowired
-    private LocationSerachMapper locationSearchMapper;
-
-    @Autowired
-    private AbstractLocalityService abstractLocalityService;
-
+    private final RestHighLevelClient elasticClient;
+    private final ObjectMapper objectMapper;
+    private final VoivodeshipService voivodeshipService;
+    private final DistrictService districtService;
+    private final CommuneService communeService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityPartService localityPartService;
+    private final LocationSerachMapper locationSearchMapper;
 
     private static final String LOCATIONS_INDEX = "locations";
     private static final String ANALYSIS = "analysis";

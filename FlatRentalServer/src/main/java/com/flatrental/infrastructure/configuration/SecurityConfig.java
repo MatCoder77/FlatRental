@@ -3,7 +3,7 @@ package com.flatrental.infrastructure.configuration;
 import com.flatrental.infrastructure.security.AuthenticationEntryPointImpl;
 import com.flatrental.infrastructure.security.AuthenticationFilter;
 import com.flatrental.infrastructure.security.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,13 +26,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private AuthenticationEntryPointImpl unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationEntryPointImpl unauthorizedHandler;
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
@@ -102,6 +100,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/file/download/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**", "/api/comments/**", "/api/announcements/**")
+                .permitAll()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

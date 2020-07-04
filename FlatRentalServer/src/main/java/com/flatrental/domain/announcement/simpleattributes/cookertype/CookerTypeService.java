@@ -1,17 +1,17 @@
 package com.flatrental.domain.announcement.simpleattributes.cookertype;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CookerTypeService {
 
-    @Autowired
-    private CookerTypeRepository cookerTypeRepository;
+    private final  CookerTypeRepository cookerTypeRepository;
 
     private static final String NOT_FOUND = "There is no CookerType with id {0}";
 

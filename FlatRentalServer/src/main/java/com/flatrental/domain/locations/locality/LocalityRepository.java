@@ -4,10 +4,9 @@ import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityRepository;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
 import com.flatrental.domain.locations.commune.Commune;
-import com.flatrental.domain.locations.district.District;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitypart.LocalityPart;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
@@ -17,10 +16,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
+@RequiredArgsConstructor
 public class LocalityRepository {
 
-    @Autowired
-    private AbstractLocalityRepository abstractLocalityRepository;
+    private final AbstractLocalityRepository abstractLocalityRepository;
 
     private static final String LOCALITY_WITH_CODE_DOESNT_EXIST = "Locality with code {0} doesn't exist";
 

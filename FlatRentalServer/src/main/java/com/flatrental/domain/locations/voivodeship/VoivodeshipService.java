@@ -4,7 +4,7 @@ import com.flatrental.api.VoivodeshipDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -12,14 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class VoivodeshipService {
 
-    @Autowired
-    private VoivodeshipRepository voivodeshipRepository;
-
-    @Autowired
-    private AdministrationUnitService administrationUnitService;
-
+    private final VoivodeshipRepository voivodeshipRepository;
+    private final AdministrationUnitService administrationUnitService;
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_VOIVODESHIP = "Supplied administration unit {0} is not of voivodeship type!";
     private static final String VOIVODESHIP_WITH_SUPPLIED_CODE_DOES_NOT_EXIST = "Voivodeship with supplied code {0} does not exist!";

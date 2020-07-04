@@ -1,20 +1,19 @@
 package com.flatrental.domain.locations.abstractlocality;
 
 import com.flatrental.domain.locations.street.Street;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
 @Service
+@RequiredArgsConstructor
 public class AbstractLocalityService {
 
-    @Autowired
-    private AbstractLocalityRepository abstractLocalityRepository;
+    private final AbstractLocalityRepository abstractLocalityRepository;
 
     private static final String NO_ABSTRACT_LOCALITY_WITH_SUPPLIED_CODE = "There is no AbstractLocality with code {0}";
     private static final String NO_ABSTRACT_LOCALITY_WITH_SUPPLIED_ID = "There is no AbstractLocality with id {0}";
-
 
     public AbstractLocality getExistingAbstractLocalityByCode(String code) {
         return abstractLocalityRepository.findAbstractLocalityByCode(code)

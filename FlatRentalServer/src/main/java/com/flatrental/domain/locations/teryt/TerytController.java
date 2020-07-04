@@ -34,8 +34,7 @@ import com.flatrental.domain.locations.teryt.ulic.StreetDTOService;
 import com.flatrental.domain.locations.teryt.ulic.StreetDTOUpdateService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
 import com.flatrental.infrastructure.security.HasAdminRole;
-import com.flatrental.infrastructure.security.HasAnyRole;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,53 +54,24 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/teryt")
+@RequiredArgsConstructor
 public class TerytController {
 
-    @Autowired
-    private AdministrationUnitService administrationUnitService;
-
-    @Autowired
-    private VoivodeshipService voivodeshipService;
-
-    @Autowired
-    private DistrictService districtService;
-
-    @Autowired
-    private CommuneService communeService;
-
-    @Autowired
-    private LocalityDTOService localityDTOService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityTypeService localityTypeService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private StreetDTOService streetDTOService;
-
-    @Autowired
-    private StreetService streetService;
-
-    @Autowired
-    private AdministrationUnitUpdateService administrationUnitUpdateService;
-
-    @Autowired
-    private SettingsService settingsService;
-
-    @Autowired
-    private LocalityUpdateService localityUpdateService;
-
-    @Autowired
-    private StreetDTOUpdateService streetDTOUpdateService;
-
+    private final AdministrationUnitService administrationUnitService;
+    private final VoivodeshipService voivodeshipService;
+    private final DistrictService districtService;
+    private final CommuneService communeService;
+    private final LocalityDTOService localityDTOService;
+    private final LocalityService localityService;
+    private final LocalityTypeService localityTypeService;
+    private final LocalityPartService localityPartService;
+    private final LocalityDistrictService localityDistrictService;
+    private final StreetDTOService streetDTOService;
+    private final StreetService streetService;
+    private final AdministrationUnitUpdateService administrationUnitUpdateService;
+    private final SettingsService settingsService;
+    private final LocalityUpdateService localityUpdateService;
+    private final StreetDTOUpdateService streetDTOUpdateService;
 
     @PostMapping("/load")
     @HasAdminRole

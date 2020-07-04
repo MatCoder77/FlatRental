@@ -1,16 +1,16 @@
 package com.flatrental.domain.announcement.simpleattributes.neighbourhood;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NeighbourhoodItemService {
 
-    @Autowired
-    private NeighbourhoodItemRepository neighbourhoodItemRepository;
+    private final NeighbourhoodItemRepository neighbourhoodItemRepository;
 
     public List<NeighbourhoodItem> getAllNeighbourItems() {
         return neighbourhoodItemRepository.findAll();

@@ -1,6 +1,6 @@
 package com.flatrental.domain.settings;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.tempuri.ITerytWs1;
@@ -16,14 +16,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 @Service
+@RequiredArgsConstructor
 public class SettingsService {
 
-    @Autowired
-    private SettingsRepository settingsRepository;
-
-    @Autowired
-    private ApplicationContext context;
-
+    private final SettingsRepository settingsRepository;
+    private final ApplicationContext context;
 
     private static final String SETTING_NOT_FOUND = "Setting {0} is not present";
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

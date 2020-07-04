@@ -32,7 +32,7 @@ import com.flatrental.domain.file.File;
 import com.flatrental.domain.statistics.AnnouncementStatistics;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.domain.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,58 +59,26 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@RequiredArgsConstructor
 public class AnnouncementService {
 
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    private BuildingTypeService buildingTypeService;
-
-    @Autowired
-    private BuildingMaterialService buildingMaterialService;
-
-    @Autowired
-    private HeatingTypeService heatingTypeService;
-
-    @Autowired
-    private WindowTypeService windowTypeService;
-
-    @Autowired
-    private ParkingTypeService parkingTypeService;
-
-    @Autowired
-    private ApartmentStateService apartmentStateService;
-
-    @Autowired
-    private ApartmentAmenityService apartmentAmenityService;
-
-    @Autowired
-    private KitchenTypeService kitchenTypeService;
-
-    @Autowired
-    private CookerTypeService cookerTypeService;
-
-    @Autowired
-    private FurnishingService furnishingService;
-
-    @Autowired
-    private PreferenceService preferenceService;
-
-    @Autowired
-    private NeighbourhoodItemService neighbourhoodItemService;
-
-    @Autowired
-    private AnnouncementRepository announcementRepository;
-
-    @Autowired
-    private ManagedObjectService managedObjectService;
-
-    @Autowired
-    private StatisticsService statisticsService;
-
-    @Autowired
-    private AnnouncementQualityCalculator announcementQualityCalculator;
+    private final AddressService addressService;
+    private final BuildingTypeService buildingTypeService;
+    private final BuildingMaterialService buildingMaterialService;
+    private final HeatingTypeService heatingTypeService;
+    private final WindowTypeService windowTypeService;
+    private final ParkingTypeService parkingTypeService;
+    private final ApartmentStateService apartmentStateService;
+    private final ApartmentAmenityService apartmentAmenityService;
+    private final KitchenTypeService kitchenTypeService;
+    private final CookerTypeService cookerTypeService;
+    private final FurnishingService furnishingService;
+    private final PreferenceService preferenceService;
+    private final NeighbourhoodItemService neighbourhoodItemService;
+    private final AnnouncementRepository announcementRepository;
+    private final ManagedObjectService managedObjectService;
+    private final StatisticsService statisticsService;
+    private final AnnouncementQualityCalculator announcementQualityCalculator;
 
     public static final String NOT_FOUND = "There is no announcement with id {0}";
 

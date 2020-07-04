@@ -6,7 +6,7 @@ import com.flatrental.domain.locations.district.DistrictService;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -15,16 +15,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CommuneService {
 
-    @Autowired
-    private CommuneRepository communeRepository;
-
-    @Autowired
-    private AdministrationUnitService administrationUnitService;
-
-    @Autowired
-    private DistrictService districtService;
+    private final CommuneRepository communeRepository;
+    private final AdministrationUnitService administrationUnitService;
+    private final DistrictService districtService;
 
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_COMMUNE = "Supplied unit {0} is not of commune type.";

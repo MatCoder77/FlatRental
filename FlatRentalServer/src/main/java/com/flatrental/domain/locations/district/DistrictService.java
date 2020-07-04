@@ -7,7 +7,7 @@ import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -16,16 +16,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DistrictService {
 
-    @Autowired
-    private DistrictRepository districtRepository;
-
-    @Autowired
-    private AdministrationUnitService administrationUnitService;
-
-    @Autowired
-    private VoivodeshipService voivodeshipService;
+    private final DistrictRepository districtRepository;
+    private final AdministrationUnitService administrationUnitService;
+    private final VoivodeshipService voivodeshipService;
 
     private static final String SUPPLIED_ADMINISTRATION_UNIT_IS_NOT_DISTRICT = "Supplied unit {0} is not of district type.";
     private static final String THERE_IS_NO_DISTRICT_WITH_SUPPLIED_CODES = "District with voivodeship code {0} and district code {1} does not exist";

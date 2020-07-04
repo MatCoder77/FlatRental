@@ -2,7 +2,6 @@ package com.flatrental.domain.user;
 
 import com.flatrental.api.AvailableDTO;
 import com.flatrental.api.ChangeDTO;
-import com.flatrental.api.ChangeWithPasswordConfirmation;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.api.UserDTO;
@@ -10,7 +9,7 @@ import com.flatrental.domain.file.FileService;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +22,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private FileService fileService;
+    private final UserService userService;
+    private final FileService fileService;
 
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";

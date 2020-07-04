@@ -12,7 +12,7 @@ import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.TokenHandler;
 import com.flatrental.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,19 +27,13 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    TokenHandler tokenHandler;
-
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final TokenHandler tokenHandler;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @PostMapping("/signin")
     public TokenDTO authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {

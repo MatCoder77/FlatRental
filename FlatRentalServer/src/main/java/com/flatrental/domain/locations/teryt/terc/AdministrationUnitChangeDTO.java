@@ -16,7 +16,6 @@ import java.util.Optional;
 public class AdministrationUnitChangeDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "TypKorekty")
     @XmlJavaTypeAdapter(AdministrationUnitCorrectionTypeAdapter.class)

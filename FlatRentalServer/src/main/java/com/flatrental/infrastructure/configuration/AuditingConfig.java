@@ -4,7 +4,7 @@ package com.flatrental.infrastructure.configuration;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
 import com.flatrental.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -17,10 +17,10 @@ import java.util.Optional;
 
 @Configuration
 @EnableJpaAuditing
+@RequiredArgsConstructor
 public class AuditingConfig {
 
-    @Autowired
-    private UserService userService;
+    private final  UserService userService;
 
     @Bean
     public AuditorAware<User> auditorProvider() {

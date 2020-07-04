@@ -8,7 +8,7 @@ import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.teryt.ulic.StreetDTO;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -21,17 +21,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class StreetService {
 
-    @Autowired
-    private StreetRepository streetRepository;
-
-    @Autowired
-    private AbstractLocalityService abstractLocalityService;
+    private final StreetRepository streetRepository;
+    private final AbstractLocalityService abstractLocalityService;
 
     private static final String STREET_NOT_FOUND = "Not found street with code {0}";
     private static final String THERE_IS_NO_STREET_WITH_ID = "There is no street with id {0}";
-
 
     public List<Street> createStreets(List<StreetDTO> streetDTOs,
                                       Map<String, Locality> autonomousLocalityByCode,

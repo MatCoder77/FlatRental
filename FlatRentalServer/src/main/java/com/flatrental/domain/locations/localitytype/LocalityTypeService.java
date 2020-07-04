@@ -1,7 +1,7 @@
 package com.flatrental.domain.locations.localitytype;
 
 import com.flatrental.domain.locations.teryt.simc.LocalityTypeDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityTypeService {
 
-    @Autowired
-    private LocalityTypeRepository localityTypeRepository;
+    private final LocalityTypeRepository localityTypeRepository;
 
     private static final String THERE_IS_NO_LOCALITY_TYPE_WITH_SUPPLIED_CODE = "Locality type with code {1} does not exist";
 

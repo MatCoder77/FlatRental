@@ -3,7 +3,7 @@ package com.flatrental.domain.locations.district;
 import com.flatrental.api.DistrictDTO;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/district")
+@RequiredArgsConstructor
 public class DistrictController {
 
-    @Autowired
-    private DistrictService districtService;
-
-    @Autowired
-    private VoivodeshipService voivodeshipService;
+    private final DistrictService districtService;
+    private final VoivodeshipService voivodeshipService;
 
     private static final String VOIVODESHIP_ID = "voivodeship_id";
     private static final String VOIVODESHIP_PATH = "/{" + VOIVODESHIP_ID + "}";

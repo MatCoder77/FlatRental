@@ -1,16 +1,16 @@
 package com.flatrental.domain.userrole;
 
 import com.flatrental.infrastructure.exceptions.AppException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
 @Service
+@RequiredArgsConstructor
 public class UserRoleService {
 
-    @Autowired
-    UserRoleRepository accountTypeRepository;
+    private final UserRoleRepository accountTypeRepository;
 
     private static final String NO_SUCH_ACCOUNT_TYPE = "User role with name {0} not found";
 

@@ -1,17 +1,17 @@
 package com.flatrental.domain.announcement.simpleattributes.parkingtype;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ParkingTypeService {
 
-    @Autowired
-    private ParkingTypeRepository parkingTypeRepository;
+    private final ParkingTypeRepository parkingTypeRepository;
 
     private static final String NOT_FOUND = "There is no ParkingType with id {0}";
 

@@ -19,34 +19,22 @@ import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AddressService {
 
-    @Autowired
-    private VoivodeshipService voivodeshipService;
-
-    @Autowired
-    private DistrictService districtService;
-
-    @Autowired
-    private CommuneService communeService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
-    @Autowired
-    private StreetService streetService;
+    private final VoivodeshipService voivodeshipService;
+    private final DistrictService districtService;
+    private final CommuneService communeService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityPartService localityPartService;
+    private final StreetService streetService;
 
     public Address mapToAddress(AddressDTO addressDTO) {
         var builder = Address.builder();
@@ -90,7 +78,7 @@ public class AddressService {
 
 
     private void validateAddressItemsHierarchy(Address address) {
-
+        // TODO: implement validation
     }
 
     public AddressDTO mapToAddressDTO(Address address) {

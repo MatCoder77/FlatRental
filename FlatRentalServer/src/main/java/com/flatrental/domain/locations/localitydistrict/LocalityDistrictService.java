@@ -13,7 +13,7 @@ import com.flatrental.domain.locations.localitytype.LocalityTypeService;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTO;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTOService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -24,23 +24,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityDistrictService {
 
-    @Autowired
-    private LocalityDistrictRepository localityDistrictRepository;
-
-    @Autowired
-    private LocalityDTOService localityDTOService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityTypeService localityTypeService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
+    private final LocalityDistrictRepository localityDistrictRepository;
+    private final LocalityDTOService localityDTOService;
+    private final LocalityService localityService;
+    private final LocalityTypeService localityTypeService;
+    private final LocalityPartService localityPartService;
 
     private static final String SUPPLIED_LOCALITY_IS_NOT_LOCALITY_DISTRICT = "Supplied locality {0} is locality district";
     private static final String THERE_IS_NO_LOCALITY_DISTRICT_WITH_SUPPLIED_CODE = "There is no locality district with code {0}";

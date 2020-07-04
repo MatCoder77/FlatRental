@@ -1,7 +1,7 @@
 package com.flatrental.domain.announcement.simpleattributes.heatingtype;
 
 import com.flatrental.api.SimpleResourceDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/heatingtype")
+@RequiredArgsConstructor
 public class HeatingTypeController {
 
-    @Autowired
-    private HeatingTypeService heatingTypeService;
+    private final HeatingTypeService heatingTypeService;
 
     @GetMapping
     public List<SimpleResourceDTO> getHeatingTypes() {

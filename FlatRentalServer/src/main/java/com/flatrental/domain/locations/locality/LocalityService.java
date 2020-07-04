@@ -13,7 +13,7 @@ import com.flatrental.domain.locations.localitytype.LocalityTypeService;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTO;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTOService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -24,32 +24,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityService {
 
-    @Autowired
-    private LocalityDTOService localityDTOService;
-
-    @Autowired
-    private LocalityRepository localityRepository;
-
-    @Autowired
-    private CommuneService communeService;
-
-    @Autowired
-    private LocalityTypeService localityTypeService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
+    private final LocalityDTOService localityDTOService;
+    private final LocalityRepository localityRepository;
+    private final CommuneService communeService;
+    private final LocalityTypeService localityTypeService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityPartService localityPartService;
 
     private static final int MAX_SAVED_AT_ONCE_SIZE = 1000;
     private static final String SUPPLIED_LOCALITY_IS_NOT_AUTONOMOUS = "Supplied locality {0} is not autonomous";
     private static final String THERE_IS_NO_LOCALITY_WITH_SUPPLIED_CODE = "There is no locality with code {0}";
     private static final String THERE_IS_NO_LOCALITY_WITH_ID = "There is no locality with id {0}";
-
 
     public List<Locality> createLocalities(List<LocalityDTO> localityDTOs,
                                            Map<String, Map<String, District>> districtByCodeGroupedByVoivodeshipCode,

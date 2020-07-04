@@ -2,7 +2,7 @@ package com.flatrental.domain.file;
 
 import com.flatrental.api.FileUploadDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/file")
+@RequiredArgsConstructor
 public class FileController {
 
-    @Autowired
-    private FileService fileService;
+    private final FileService fileService;
 
     @PostMapping("/upload")
     @HasAnyRole

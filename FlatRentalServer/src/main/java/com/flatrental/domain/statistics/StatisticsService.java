@@ -5,7 +5,7 @@ import com.flatrental.api.UserStatisticsDTO;
 import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.comments.CommentService;
 import com.flatrental.domain.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StatisticsService {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
     public AnnouncementStatisticsDTO mapToAnnouncementStatisticsDTO(AnnouncementStatistics statistics) {
         return AnnouncementStatisticsDTO.builder()

@@ -3,7 +3,7 @@ package com.flatrental.domain.locations.localitydistrict;
 import com.flatrental.api.LocalityDistrictDTO;
 import com.flatrental.domain.locations.locality.Locality;
 import com.flatrental.domain.locations.locality.LocalityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/localitydistrict")
+@RequiredArgsConstructor
 public class LocalityDistrictController {
 
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
 
     private static final String LOCALITY_ID = "locality_id";
     private static final String LOCALITY_ID_PATH = "/{" + LOCALITY_ID + "}";

@@ -7,7 +7,7 @@ import com.flatrental.domain.managedobject.ManagedObjectService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -19,19 +19,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
-    private ManagedObjectService managedObjectService;
-
-    @Autowired
-    private AnnouncementService announcementService;
-
-    @Autowired
-    private UserService userService;
+    private final CommentRepository commentRepository;
+    private final ManagedObjectService managedObjectService;
+    private final AnnouncementService announcementService;
+    private final UserService userService;
 
     public static final String NOT_FOUND = "There is no comment with id {0}";
 

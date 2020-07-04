@@ -3,7 +3,7 @@ package com.flatrental.domain.locations.commune;
 import com.flatrental.api.CommuneDTO;
 import com.flatrental.domain.locations.district.District;
 import com.flatrental.domain.locations.district.DistrictService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/commune")
+@RequiredArgsConstructor
 public class CommuneController {
 
-    @Autowired
-    private DistrictService districtService;
-
-    @Autowired
-    private CommuneService communeService;
+    private final DistrictService districtService;
+    private final CommuneService communeService;
 
     private static final String DISTRICT_ID = "district_id";
     private static final String DISTRICT_ID_PATH = "/{" + DISTRICT_ID + "}";

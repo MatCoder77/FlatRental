@@ -9,8 +9,8 @@ import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.settings.SettingsService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
+import lombok.RequiredArgsConstructor;
 import org.datacontract.schemas._2004._07.terytuslugaws1.PlikZmiany;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.tempuri.ITerytWs1;
@@ -41,32 +41,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityUpdateService {
 
-    @Autowired
-    private SettingsService settingsService;
-
-    @Autowired
-    private LocalityDTOService localityDTOService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityPartService localityPartService;
-
-    @Autowired
-    private ApplicationContext context;
-
+    private final SettingsService settingsService;
+    private final LocalityDTOService localityDTOService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityPartService localityPartService;
+    private final ApplicationContext context;
 
     private static final String XML_EXTENSION = ".xml";
     private static final String XML_FILE_NOT_FOUND_MSG = "XML file with localities changes was not found in catalog downloaded from SIMC";
     private static final String CATALOG_TAG = "zmiany";
     private static final String INVALID_XML_MESSAGE = "Invalid xml structure. Catalog tag not present in xml file.";
-
 
     public List<LocalityChangeDTO> getAllLocalityChangesFromSimcCatalog() throws IOException, ParserConfigurationException, SAXException, JAXBException, DatatypeConfigurationException, ParseException {
         InputStream localityChangesXMLFile = getLocalityChangesXMLFile();

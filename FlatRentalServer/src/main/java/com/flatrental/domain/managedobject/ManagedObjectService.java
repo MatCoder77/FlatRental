@@ -2,14 +2,14 @@ package com.flatrental.domain.managedobject;
 
 import com.flatrental.api.ManagedObjectDTO;
 import com.flatrental.domain.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ManagedObjectService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     public ManagedObjectDTO mapToManagedObjectDTO(ManagedObject managedObject) {
         return ManagedObjectDTO.builder()

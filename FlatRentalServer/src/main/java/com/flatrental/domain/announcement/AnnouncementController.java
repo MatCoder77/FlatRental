@@ -14,7 +14,7 @@ import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,19 +38,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/announcements")
+@RequiredArgsConstructor
 public class AnnouncementController {
 
-    @Autowired
-    private AnnouncementService announcementService;
-
-    @Autowired
-    private PermissionsValidationService permissionsValidationService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SearchCriteriaService searchCriteriaService;
+    private final AnnouncementService announcementService;
+    private final PermissionsValidationService permissionsValidationService;
+    private final UserService userService;
+    private final SearchCriteriaService searchCriteriaService;
 
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";

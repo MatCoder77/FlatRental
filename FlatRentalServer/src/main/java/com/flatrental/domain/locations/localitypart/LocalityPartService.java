@@ -13,7 +13,7 @@ import com.flatrental.domain.locations.localitytype.LocalityTypeService;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTO;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTOService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -24,29 +24,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocalityPartService {
 
-    @Autowired
-    private LocalityPartRepository localityPartRepository;
-
-    @Autowired
-    private LocalityDTOService localityDTOService;
-
-    @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private LocalityDistrictService localityDistrictService;
-
-    @Autowired
-    private LocalityTypeService localityTypeService;
-
+    private final LocalityPartRepository localityPartRepository;
+    private final LocalityDTOService localityDTOService;
+    private final LocalityService localityService;
+    private final LocalityDistrictService localityDistrictService;
+    private final LocalityTypeService localityTypeService;
 
     private static final int MAX_SAVED_AT_ONCE_SIZE = 1000;
     private static final String SUPPLIED_LOCALITY_IS_NOT_LOCALITY_PART = "Supplied locality {0} is locality part";
     private static final String THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_CODE = "There is no locality part with code {0}";
     private static final String THERE_IN_NO_LOCALITY_PART_WITH_SUPPLIED_ID = "There is no locality part with id {0}";
-
 
     public List<LocalityPart> createLocalityParts(List<LocalityDTO> localityPartDTOs,
                                                   Map<String, Locality> localityByCode,

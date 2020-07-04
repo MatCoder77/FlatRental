@@ -6,8 +6,8 @@ import com.flatrental.domain.locations.street.Street;
 import com.flatrental.domain.locations.street.StreetAndAssociatedLocality;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.settings.SettingsService;
+import lombok.RequiredArgsConstructor;
 import org.datacontract.schemas._2004._07.terytuslugaws1.PlikZmiany;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.tempuri.ITerytWs1;
@@ -37,19 +37,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
+@RequiredArgsConstructor
 public class StreetDTOUpdateService {
 
-    @Autowired
-    private SettingsService settingsService;
-
-    @Autowired
-    private StreetService streetService;
-
-    @Autowired
-    private AbstractLocalityService abstractLocalityService;
-
-    @Autowired
-    private ApplicationContext context;
+    private final SettingsService settingsService;
+    private final StreetService streetService;
+    private final AbstractLocalityService abstractLocalityService;
+    private final ApplicationContext context;
 
     private static final String XML_EXTENSION = ".xml";
     private static final String XML_FILE_NOT_FOUND_MSG = "XML file with administration unit changes was not found in catalog downloaded from TERYT";

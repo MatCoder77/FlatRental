@@ -7,7 +7,7 @@ import com.flatrental.domain.user.UserService;
 import com.flatrental.domain.userrole.UserRole;
 import com.flatrental.domain.userrole.UserRoleName;
 import com.flatrental.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -17,10 +17,10 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PermissionsValidationService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private static final String PERMISSION_DENIED_TO_EDIT_ANNOUNCEMENT = "You have no permission to edit announcement with id {0}";
     private static final String NO_PERMISSION_TO_CHANGE_ANNOUNCEMENT_STATE = "You have no permission to change announcement state to {0}";
