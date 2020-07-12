@@ -6,8 +6,6 @@ import com.flatrental.domain.statistics.UserStatistics;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.OrderBy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -2,6 +2,7 @@ package com.flatrental.infrastructure.configuration;
 
 import com.flatrental.infrastructure.security.AuthenticationEntryPointImpl;
 import com.flatrental.infrastructure.security.AuthenticationFilter;
+import com.flatrental.infrastructure.security.TokenHandler;
 import com.flatrental.infrastructure.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,10 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationEntryPointImpl unauthorizedHandler;
+    private final TokenHandler tokenHandler;
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
-        return new AuthenticationFilter();
+        return new AuthenticationFilter(tokenHandler, userDetailsService);
     }
 
     @Override

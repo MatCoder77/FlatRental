@@ -47,7 +47,7 @@ public class LocalityDTOService {
         JAXBContext jaxbContext = JAXBContext.newInstance(LocalityList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         LocalityList localityList = (LocalityList) jaxbUnmarshaller.unmarshal(localitiesCatalog);
-        return localityList.getLocalityList();
+        return localityList.getLocalities();
     }
 
     private InputStream getLocalitiesXMLFile() throws IOException {
@@ -73,7 +73,7 @@ public class LocalityDTOService {
         JAXBContext jaxbContext = JAXBContext.newInstance(LocalityTypeList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         LocalityTypeList localityTypeList = (LocalityTypeList) jaxbUnmarshaller.unmarshal(localityTypesCatalog);
-        return localityTypeList.getLocalityTypeList();
+        return localityTypeList.getLocalityTypes();
     }
 
     private InputStream getLocalityTypesXMLFile() throws IOException {

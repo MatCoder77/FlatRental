@@ -27,6 +27,4 @@ public class AddressDTO {
     private LocalityPartDTO localityPart;
     private StreetDTO street;
 
-
-
 }

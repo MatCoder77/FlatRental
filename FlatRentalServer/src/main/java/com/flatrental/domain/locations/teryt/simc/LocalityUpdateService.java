@@ -63,7 +63,7 @@ public class LocalityUpdateService {
         JAXBContext jaxbContext = JAXBContext.newInstance(LocalityChangeList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         LocalityChangeList localityChangeList = (LocalityChangeList) jaxbUnmarshaller.unmarshal(localityChangesCatalog);
-        return localityChangeList.getLocalityChangeList();
+        return localityChangeList.getChanges();
     }
 
     private InputStream getLocalityChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {
@@ -194,7 +194,7 @@ public class LocalityUpdateService {
                                                                              List<Update<LocalityDistrict, LocalityDTO>> localityDistrictUpdates,
                                                                              List<Update<LocalityPart, LocalityDTO>> localityPartUpdates) {
 
-        Predicate<LocalityDTO> isAutonomousLocalityPredicate = localityDTO -> localityDTOService.isAutonomousLocality(localityDTO);
+        Predicate<LocalityDTO> isAutonomousLocalityPredicate = localityDTOService::isAutonomousLocality;
         performForLocalitiesWithPredicate(autonomousLocalityUpdates, localityDistrictUpdates, localityPartUpdates, isAutonomousLocalityPredicate);
     }
 
@@ -202,7 +202,7 @@ public class LocalityUpdateService {
                                                                            List<Update<LocalityDistrict, LocalityDTO>> localityDistrictUpdates,
                                                                            List<Update<LocalityPart, LocalityDTO>> localityPartUpdates) {
 
-        Predicate<LocalityDTO> isLocalityDistrictPredicate = localityDTO -> localityDTOService.isLocalityDistrict(localityDTO);
+        Predicate<LocalityDTO> isLocalityDistrictPredicate = localityDTOService::isLocalityDistrict;
         performForLocalitiesWithPredicate(autonomousLocalityUpdates, localityDistrictUpdates, localityPartUpdates, isLocalityDistrictPredicate);
     }
 
@@ -210,7 +210,7 @@ public class LocalityUpdateService {
                                                                        List<Update<LocalityDistrict, LocalityDTO>> localityDistrictUpdates,
                                                                        List<Update<LocalityPart, LocalityDTO>> localityPartUpdates) {
 
-        Predicate<LocalityDTO> isLocalityPartPredicate = localityDTO -> localityDTOService.isLocalityPart(localityDTO);
+        Predicate<LocalityDTO> isLocalityPartPredicate = localityDTOService::isLocalityPart;
         performForLocalitiesWithPredicate(autonomousLocalityUpdates, localityDistrictUpdates, localityPartUpdates, isLocalityPartPredicate);
     }
 
@@ -220,15 +220,15 @@ public class LocalityUpdateService {
                                                    Predicate<LocalityDTO> condition) {
         autonomousLocalityUpdates.stream()
                 .filter(update -> condition.test(update.getStateAfterUpdate()))
-                .map(update -> new Update(AbstractLocality.fromLocality(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
+                .map(update -> new Update<>(AbstractLocality.fromLocality(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
                 .forEach(localityService::updateLocality);
         localityDistrictUpdates.stream()
                 .filter(update -> condition.test(update.getStateAfterUpdate()))
-                .map(update -> new Update(AbstractLocality.fromLocalityDistrict(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
+                .map(update -> new Update<>(AbstractLocality.fromLocalityDistrict(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
                 .forEach(localityDistrictService::updateLocalityDistrict);
         localityPartUpdates.stream()
                 .filter(update -> condition.test(update.getStateAfterUpdate()))
-                .map(update -> new Update(AbstractLocality.fromLocalityPart(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
+                .map(update -> new Update<>(AbstractLocality.fromLocalityPart(update.getEntityBeforeUpdate()), update.getStateAfterUpdate()))
                 .forEach(localityPartService::updateLocalityPart);
     }
 

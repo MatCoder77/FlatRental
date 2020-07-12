@@ -23,7 +23,7 @@ public class SettingsService {
     private final ApplicationContext context;
 
     private static final String SETTING_NOT_FOUND = "Setting {0} is not present";
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public XMLGregorianCalendar getTercCatalogDate() throws DatatypeConfigurationException, ParseException {
         String stringDate = getSetting(SettingName.TERC_CATALOG_DATE);
@@ -50,8 +50,7 @@ public class SettingsService {
         Date date = dateFormat.parse(stringDate);
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
-        XMLGregorianCalendar xmlGregCal =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        return  xmlGregCal;
+        return   DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
     }
 
     public void updateCatalogsDate() {

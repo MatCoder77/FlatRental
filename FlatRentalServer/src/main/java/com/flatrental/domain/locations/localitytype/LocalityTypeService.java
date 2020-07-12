@@ -27,11 +27,6 @@ public class LocalityTypeService {
         return new LocalityType(localityTypeDTO.getCode(), localityTypeDTO.getName());
     }
 
-    private LocalityType createLocalityType(LocalityTypeDTO localityTypeDTO) {
-        LocalityType localityType = mapToLocalityType(localityTypeDTO);
-        return localityTypeRepository.save(localityType);
-    }
-
     public LocalityType getExistingLocalityType(String typeCode) {
         return localityTypeRepository.getLocalityTypeByTypeCode(typeCode)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_LOCALITY_TYPE_WITH_SUPPLIED_CODE, typeCode)));

@@ -13,7 +13,7 @@ import com.flatrental.domain.locations.localitytype.LocalityTypeService;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTO;
 import com.flatrental.domain.locations.teryt.simc.LocalityDTOService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -24,7 +24,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class LocalityDistrictService {
 
     private final LocalityDistrictRepository localityDistrictRepository;
@@ -35,6 +34,18 @@ public class LocalityDistrictService {
 
     private static final String SUPPLIED_LOCALITY_IS_NOT_LOCALITY_DISTRICT = "Supplied locality {0} is locality district";
     private static final String THERE_IS_NO_LOCALITY_DISTRICT_WITH_SUPPLIED_CODE = "There is no locality district with code {0}";
+
+    public LocalityDistrictService(LocalityDistrictRepository localityDistrictRepository,
+                                   LocalityDTOService localityDTOService,
+                                   @Lazy LocalityService localityService,
+                                   LocalityTypeService localityTypeService,
+                                   LocalityPartService localityPartService) {
+        this.localityDistrictRepository = localityDistrictRepository;
+        this.localityDTOService = localityDTOService;
+        this.localityService = localityService;
+        this.localityTypeService = localityTypeService;
+        this.localityPartService = localityPartService;
+    }
 
 
     public List<LocalityDistrict> createLocalityDistricts(List<LocalityDTO> localityDistrictDTOs,

@@ -27,7 +27,7 @@ public class CommentController {
     private final CommentService commentService;
 
     private static final String ID = "id";
-    private static final String ID_PATH = "/{" + ID + "}";;
+    private static final String ID_PATH = "/{" + ID + "}";
 
     @GetMapping(ID_PATH)
     public List<CommentDTO> getCommentsForAnnouncement(@PathVariable(ID) Long announcementId) {

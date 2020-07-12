@@ -15,6 +15,7 @@ import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.street.Street;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
+import com.flatrental.infrastructure.security.TokenHandler;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -25,7 +26,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
-import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
@@ -33,6 +33,9 @@ import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -79,6 +82,7 @@ public class LocationService {
     private static final String DYNAMIC_PROPERTY = "dynamic";
     private static final String PROPERTIES = "properties";
     private static final String INDEX_PROPERTY = "index";
+    private static final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
     private static final Map<String, Float> searchFieldsWithBoost = Map.of(
             "voivodeship.name", 1.0f,
@@ -94,7 +98,7 @@ public class LocationService {
         CreateIndexRequest createIndexRequest = new CreateIndexRequest(LOCATIONS_INDEX);
         createIndexRequest.settings(createLocationsIndexSettings());
         createIndexRequest.mapping(createLocationsIndexMapping());
-        CreateIndexResponse createIndexResponse = elasticClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
+        elasticClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
     }
 
     private Map<String, Object> createLocationsIndexSettings() {
@@ -237,7 +241,7 @@ public class LocationService {
             indexRequest.source(jsonSource, XContentType.JSON);
             return indexRequest;
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error("Error during json processing", e);
             throw new IllegalArgumentException("wrong");
         }
     }
@@ -327,7 +331,7 @@ public class LocationService {
         try {
             return objectMapper.readValue(searchHit.getSourceAsString(), LocationSearchDTO.class);
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Error", exception);
             throw new IllegalArgumentException("wrong");
         }
     }

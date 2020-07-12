@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -20,7 +19,6 @@ import java.util.Optional;
 public class LocalityChangeDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "TypKorekty")
     @XmlJavaTypeAdapter(LocalityCorrectionTypeAdapter.class)

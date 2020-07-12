@@ -21,27 +21,14 @@ public class ElasticsearchConfig {
     @Value("${elasticsearch.port}")
     private int port;
 
-    @Value("${elasticsearch.username}")
-    private String userName;
-
-    @Value("${elasticsearch.password}")
-    private String password;
-
     @Bean(destroyMethod = "close")
     public RestHighLevelClient restClient() {
-
-//        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-//        credentialsProvider.setCredentials(AuthScope.ANY,
-//                new UsernamePasswordCredentials(userName, password));
-
         RestClientBuilder builder = RestClient.builder(new HttpHost(host, port))
                 .setRequestConfigCallback(
                         requestConfigBuilder -> requestConfigBuilder
                                 .setConnectTimeout(550000)
                                 .setSocketTimeout(550000));
-        RestHighLevelClient client = new RestHighLevelClient(builder);
-        return client;
-
+        return new RestHighLevelClient(builder);
     }
 
 }

@@ -48,7 +48,7 @@ public class LocalityService {
                 .collect(Collectors.toList());
 
         return Lists.partition(localities, MAX_SAVED_AT_ONCE_SIZE).stream()
-                .map(localitiesList -> localityRepository.saveAll(localitiesList))
+                .map(localityRepository::saveAll)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }

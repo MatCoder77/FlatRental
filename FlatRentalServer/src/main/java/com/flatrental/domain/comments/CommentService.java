@@ -7,10 +7,9 @@ import com.flatrental.domain.managedobject.ManagedObjectService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -28,6 +26,16 @@ public class CommentService {
     private final UserService userService;
 
     public static final String NOT_FOUND = "There is no comment with id {0}";
+
+    public CommentService(CommentRepository commentRepository,
+                          @Lazy ManagedObjectService managedObjectService,
+                          @Lazy AnnouncementService announcementService,
+                          @Lazy UserService userService) {
+        this.commentRepository = commentRepository;
+        this.managedObjectService = managedObjectService;
+        this.announcementService = announcementService;
+        this.userService = userService;
+    }
 
     public List<CommentDTO> getCommentsForAnnouncement(Long announcementId) {
         List<Comment> comments = commentRepository.getCommentsByAnnouncementIdAndObjectState(announcementId, ManagedObjectState.ACTIVE);
@@ -40,7 +48,7 @@ public class CommentService {
         List<Comment> rootComments = commentsByIsRoot.get(Boolean.TRUE);
         List<Comment> subComments = commentsByIsRoot.get(Boolean.FALSE);
         Map<Comment, List<Comment>> commentsByParentCommentId = subComments.stream()
-                .collect(Collectors.groupingBy(comment -> comment.getParentComment()));
+                .collect(Collectors.groupingBy(Comment::getParentComment));
         return rootComments.stream()
                 .map(comment -> mapToCommentDTO(comment, commentsByParentCommentId))
                 .collect(Collectors.toList());
@@ -113,11 +121,6 @@ public class CommentService {
                     .ifPresent(userService::updateUserStatistics);
         }
         return commentsToDelete;
-    }
-
-    private Comment getExistingComment(Long id) {
-        return commentRepository.findCommentByIdAndObjectStateNot(id, ManagedObjectState.REMOVED)
-                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NOT_FOUND, id)));
     }
 
     public List<CommentDTO> getCommentsForUser(Long userId) {

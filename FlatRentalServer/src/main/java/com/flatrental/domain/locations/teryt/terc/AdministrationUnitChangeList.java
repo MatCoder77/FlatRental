@@ -14,10 +14,10 @@ import java.util.Optional;
 public class AdministrationUnitChangeList {
 
     @XmlElement(name = "zmiana")
-    List<AdministrationUnitChangeDTO> administrationUnitChangeList;
+    List<AdministrationUnitChangeDTO> administrationUnitChanges;
 
-    public List<AdministrationUnitChangeDTO> getAdministrationUnitChangeList() {
-        return Optional.ofNullable(administrationUnitChangeList)
+    public List<AdministrationUnitChangeDTO> getAdministrationUnitChanges() {
+        return Optional.ofNullable(administrationUnitChanges)
                 .orElse(Collections.emptyList());
     }
 

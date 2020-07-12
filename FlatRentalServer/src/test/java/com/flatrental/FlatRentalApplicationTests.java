@@ -8,6 +8,7 @@ class FlatRentalApplicationTests {
 
 	@Test
 	void contextLoads() {
+		assert (true);
 	}
 
 }

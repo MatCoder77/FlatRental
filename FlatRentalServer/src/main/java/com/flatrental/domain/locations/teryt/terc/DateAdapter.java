@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DateAdapter extends XmlAdapter<String, Date> {
 
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public Date unmarshal(String xml) throws Exception {
@@ -15,7 +15,7 @@ public class DateAdapter extends XmlAdapter<String, Date> {
     }
 
     @Override
-    public String marshal(Date date) throws Exception {
+    public String marshal(Date date) {
         return dateFormat.format(date);
     }
 

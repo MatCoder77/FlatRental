@@ -267,11 +267,6 @@ public class AbstractLocality {
             return this;
         }
 
-        private Builder withStreets(Set<Street> streets) {
-            this.streets = streets;
-            return this;
-        }
-
         private AbstractLocality build() {
             return new AbstractLocality(this);
         }

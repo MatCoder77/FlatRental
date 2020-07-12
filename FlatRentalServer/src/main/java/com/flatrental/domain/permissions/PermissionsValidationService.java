@@ -38,15 +38,8 @@ public class PermissionsValidationService {
         }
 
         User user = userService.getExistingUser(userInfo.getId());
-        if (hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN)) {
-            return true;
-        }
-
-        if (hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement)) {
-            return true;
-        }
-
-        return false;
+        return hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN) ||
+                (hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement));
     }
 
     private boolean hasAnyOfRoles(User user, UserRoleName ...userRoles) {
@@ -72,13 +65,8 @@ public class PermissionsValidationService {
             return false;
         }
         User user = userService.getExistingUser(userInfo.getId());
-        if (hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN)) {
-            return true;
-        }
-        if (managedObjectState != ManagedObjectState.REMOVED && hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement)) {
-            return true;
-        }
-        return false;
+        return hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN) ||
+                (managedObjectState != ManagedObjectState.REMOVED && hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement));
     }
 
 }

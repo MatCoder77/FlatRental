@@ -42,7 +42,7 @@ public class FileController {
     public List<FileUploadDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file))
+                .map(this::uploadFile)
                 .collect(Collectors.toList());
     }
 
@@ -62,6 +62,7 @@ public class FileController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
+
         }
 
         if(contentType == null) {

@@ -61,7 +61,7 @@ public class AdministrationUnitUpdateService {
         JAXBContext jaxbContext = JAXBContext.newInstance(AdministrationUnitChangeList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         AdministrationUnitChangeList administrationUnitChangeList = (AdministrationUnitChangeList) jaxbUnmarshaller.unmarshal(administrationUnitChangesCatalog);
-        return administrationUnitChangeList.getAdministrationUnitChangeList();
+        return administrationUnitChangeList.getAdministrationUnitChanges();
     }
 
     private InputStream getAdministrationUnitChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {

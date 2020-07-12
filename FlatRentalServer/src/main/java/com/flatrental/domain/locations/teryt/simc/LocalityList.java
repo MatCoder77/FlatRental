@@ -13,10 +13,10 @@ import java.util.Optional;
 public class LocalityList {
 
     @XmlElement(name = "row")
-    private List<LocalityDTO> localityList;
+    private List<LocalityDTO> localities;
 
-    public List<LocalityDTO> getLocalityList() {
-        return Optional.ofNullable(localityList)
+    public List<LocalityDTO> getLocalities() {
+        return Optional.ofNullable(localities)
                 .orElse(Collections.emptyList());
     }
 

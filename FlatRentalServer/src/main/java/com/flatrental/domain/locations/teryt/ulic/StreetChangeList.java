@@ -14,10 +14,10 @@ import java.util.Optional;
 public class StreetChangeList {
 
     @XmlElement(name = "zmiana")
-    List<StreetChangeDTO> streetChangeList;
+    List<StreetChangeDTO> changes;
 
-    public List<StreetChangeDTO> getStreetChangeList() {
-        return Optional.ofNullable(streetChangeList)
+    public List<StreetChangeDTO> getChanges() {
+        return Optional.ofNullable(changes)
                 .orElse(Collections.emptyList());
     }
 }

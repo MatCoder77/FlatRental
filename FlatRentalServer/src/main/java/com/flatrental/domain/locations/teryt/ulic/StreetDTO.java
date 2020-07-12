@@ -20,7 +20,7 @@ import java.util.Optional;
 @NoArgsConstructor
 public class StreetDTO {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "WOJ")
     private String voivodeshipCode;

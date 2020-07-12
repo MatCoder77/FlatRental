@@ -13,11 +13,11 @@ import java.util.Optional;
 public class StreetList {
 
     @XmlElement(name = "row")
-    private List<StreetDTO> streetList;
+    private List<StreetDTO> streets;
 
 
-    public List<StreetDTO> getStreetList() {
-        return Optional.ofNullable(streetList)
+    public List<StreetDTO> getStreets() {
+        return Optional.ofNullable(streets)
                 .orElse(Collections.emptyList());
     }
 

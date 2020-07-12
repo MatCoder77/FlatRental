@@ -20,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class LocalityDTO implements Serializable {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "WOJ")
     private String voivodeshipCode;

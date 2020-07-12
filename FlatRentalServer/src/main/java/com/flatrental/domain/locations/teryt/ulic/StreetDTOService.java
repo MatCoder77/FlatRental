@@ -45,7 +45,7 @@ public class StreetDTOService {
         JAXBContext jaxbContext = JAXBContext.newInstance(StreetList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         StreetList streetList = (StreetList) jaxbUnmarshaller.unmarshal(streetsCatalog);
-        return streetList.getStreetList();
+        return streetList.getStreets();
     }
 
     private InputStream getStreetsXMLFile() throws IOException {

@@ -21,6 +21,7 @@ import com.flatrental.domain.locations.district.District_;
 import com.flatrental.domain.locations.street.Street_;
 import com.flatrental.domain.locations.voivodeship.Voivodeship_;
 import com.flatrental.domain.managedobject.ManagedObjectState;
+import com.flatrental.domain.managedobject.ManagedObject_;
 import com.flatrental.domain.user.User_;
 import org.springframework.data.domain.Page;
 
@@ -55,7 +56,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final Set allowedSoringAttributes = Set.of(Announcement_.CREATED_AT, Announcement_.PRICE_PER_MONTH, Announcement_.QUALITY);
+    private static final Set<String> allowedSoringAttributes = Set.of(ManagedObject_.CREATED_AT, Announcement_.PRICE_PER_MONTH, Announcement_.QUALITY);
 
     @Override
     public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria sc, Pageable pageable) {
@@ -106,8 +107,8 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Expression<Set<Preference>> preferences = a.get(Announcement_.preferences);
         Expression<Set<NeighbourhoodItem>> neighbourhood = a.get(Announcement_.neighbourhood);
         Path<Integer> numberOfFlatmates = a.get(Announcement_.numberOfFlatmates);
-        Path<Long> author = a.get(Announcement_.createdBy).get(User_.id);
-        Path<ManagedObjectState> managedObjectState = a.get(Announcement_.objectState);
+        Path<Long> author = a.get(ManagedObject_.createdBy).get(User_.id);
+        Path<ManagedObjectState> managedObjectState = a.get(ManagedObject_.objectState);
 
         var requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::fromId);
 
@@ -227,7 +228,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         if (CollectionUtils.isEmpty(allowedValues)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(allowedValues).map(values -> attribute.in(values));
+        return Optional.ofNullable(allowedValues).map(attribute::in);
     }
 
     private Optional<Predicate> getRoomsPredicates(Root<Announcement> a, CriteriaQuery<Announcement> criteriaQuery,

@@ -11,9 +11,9 @@ import java.util.List;
 public class LocalityTypeList {
 
     @XmlElement(name = "row")
-    private List<LocalityTypeDTO> localityTypeList;
+    private List<LocalityTypeDTO> localityTypes;
 
-    public List<LocalityTypeDTO> getLocalityTypeList() {
-        return localityTypeList;
+    public List<LocalityTypeDTO> getLocalityTypes() {
+        return localityTypes;
     }
 }

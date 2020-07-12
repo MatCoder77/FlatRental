@@ -58,7 +58,7 @@ public class StreetDTOUpdateService {
         JAXBContext jaxbContext = JAXBContext.newInstance(StreetChangeList.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         StreetChangeList streetChangeList = (StreetChangeList) jaxbUnmarshaller.unmarshal(streetChangesCatalog);
-        return streetChangeList.getStreetChangeList();
+        return streetChangeList.getChanges();
     }
 
     private InputStream getStreetChangesXMLFile() throws IOException, DatatypeConfigurationException, ParseException {

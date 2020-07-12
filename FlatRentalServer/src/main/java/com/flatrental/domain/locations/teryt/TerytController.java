@@ -13,7 +13,6 @@ import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.localitytype.LocalityType;
 import com.flatrental.domain.locations.localitytype.LocalityTypeService;
-import com.flatrental.domain.locations.street.Street;
 import com.flatrental.domain.locations.street.StreetAndAssociatedLocality;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
@@ -116,7 +115,7 @@ public class TerytController {
         Map<String, LocalityPart> localityPartByCode = localityParts.stream()
                 .collect(Collectors.toMap(LocalityPart::getCode, Function.identity()));
         List<StreetDTO> streetDTOs = streetDTOService.getAllStreetsFromUlicCatalog();
-        List<Street> streets = streetService.createStreets(streetDTOs, autonomousLocalityByCode, localityDistrictByCode, localityPartByCode);
+        streetService.createStreets(streetDTOs, autonomousLocalityByCode, localityDistrictByCode, localityPartByCode);
 
         settingsService.updateCatalogsDate();
 

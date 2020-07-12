@@ -15,7 +15,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LocalityTypeDTO {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "RM")
     private String code;
