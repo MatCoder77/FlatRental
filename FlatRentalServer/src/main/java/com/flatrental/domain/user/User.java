@@ -70,7 +70,7 @@ public class User extends ManagedObject {
 
     private UserStatistics userStatistics;
 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "userRolesCollectionCache")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Users_X_UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),

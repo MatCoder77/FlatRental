@@ -8,6 +8,12 @@
         </expiry>
         <heap unit="entries">100</heap>
     </cache-template>
+    <cache-template name="userCacheTemplate">
+        <expiry>
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <heap unit="entries">100</heap>
+    </cache-template>
     
     <cache alias="apartmentAmenityCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
     <cache alias="apartmentStateCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
@@ -23,17 +29,14 @@
     <cache alias="simpleAttributeQueryCache" uses-template="simpleReferenceAttributeCacheTemplate">
         <heap unit="entries">1000</heap>
     </cache>
-    <cache alias="userCache">
+    <cache alias="userCache" uses-template="userCacheTemplate"/>
+    <cache alias="userRolesCollectionCache" uses-template="userCacheTemplate"/>
+    <cache alias="userRoleCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="default-update-timestamps-region">
         <expiry>
-            <ttl unit="minutes">5</ttl>
+            <none/>
         </expiry>
-        <heap unit="entries">100</heap>
-    </cache>
-    <cache alias="userRoleCache">
-        <expiry>
-            <ttl unit="minutes">60</ttl>
-        </expiry>
-        <heap unit="entries">100</heap>
+        <heap unit="entries">1000</heap>
     </cache>
 
 </config>
