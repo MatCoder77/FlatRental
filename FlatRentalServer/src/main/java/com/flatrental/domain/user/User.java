@@ -6,7 +6,10 @@ import com.flatrental.domain.statistics.UserStatistics;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,6 +30,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "User")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "userCache")
 public class User extends ManagedObject {
 
     @Id
@@ -63,8 +68,9 @@ public class User extends ManagedObject {
     @Size(max = 10000)
     private String about;
 
-    UserStatistics userStatistics;
+    private UserStatistics userStatistics;
 
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Users_X_UserRoles",
             joinColumns = @JoinColumn(name = "user_id"),

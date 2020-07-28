@@ -1,9 +1,10 @@
 package com.flatrental.domain.announcement.simpleattributes.preferences;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PreferenceRepository extends JpaRepository<Preference, Long> {
+public interface PreferenceRepository extends SimpleAttributeCacheableJpaRepository<Preference, Long> {
+
 }

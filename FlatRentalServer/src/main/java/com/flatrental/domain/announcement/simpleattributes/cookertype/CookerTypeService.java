@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CookerTypeService {
 
-    private final  CookerTypeRepository cookerTypeRepository;
+    private final CookerTypeRepository cookerTypeRepository;
 
     private static final String NOT_FOUND = "There is no CookerType with id {0}";
 

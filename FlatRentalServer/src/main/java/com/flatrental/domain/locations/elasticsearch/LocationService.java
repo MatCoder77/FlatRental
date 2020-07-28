@@ -15,7 +15,6 @@ import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.street.Street;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
-import com.flatrental.infrastructure.security.TokenHandler;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;

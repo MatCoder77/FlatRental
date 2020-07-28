@@ -1,7 +1,11 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +18,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "FurnishingItems")
+@Immutable
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "furnishingItemCache")
 public class FurnishingItem {
 
     @Id

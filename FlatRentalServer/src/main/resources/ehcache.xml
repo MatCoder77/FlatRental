@@ -1,0 +1,39 @@
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache-template name="simpleReferenceAttributeCacheTemplate">
+        <expiry>
+            <ttl unit="minutes">60</ttl>
+        </expiry>
+        <heap unit="entries">100</heap>
+    </cache-template>
+    
+    <cache alias="apartmentAmenityCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="apartmentStateCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="buildingMaterialCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="cookerTypeCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="furnishingItemCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="heatingTypeCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="kitchenTypeCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="neighbourhoodItemCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="parkingTypeCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="preferenceCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="windowTypeCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
+    <cache alias="simpleAttributeQueryCache" uses-template="simpleReferenceAttributeCacheTemplate">
+        <heap unit="entries">1000</heap>
+    </cache>
+    <cache alias="userCache">
+        <expiry>
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <heap unit="entries">100</heap>
+    </cache>
+    <cache alias="userRoleCache">
+        <expiry>
+            <ttl unit="minutes">60</ttl>
+        </expiry>
+        <heap unit="entries">100</heap>
+    </cache>
+
+</config>

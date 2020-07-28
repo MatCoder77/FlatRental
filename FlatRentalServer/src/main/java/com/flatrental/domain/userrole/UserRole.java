@@ -1,7 +1,11 @@
 package com.flatrental.domain.userrole;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.NaturalId;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +16,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "UserRoles")
+@Immutable
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "userRoleCache")
 public class UserRole {
 
     @Id

@@ -1,5 +1,6 @@
 package com.flatrental.infrastructure.configuration;
 
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -14,6 +15,7 @@ import java.util.Map;
 @Lazy
 @Configuration
 @EnableScheduling
+@EnableCaching
 public class AppConfig {
 
     @Bean

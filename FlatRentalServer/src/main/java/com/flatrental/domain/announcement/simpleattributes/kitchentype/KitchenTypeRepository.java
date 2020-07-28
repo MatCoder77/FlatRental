@@ -1,9 +1,9 @@
 package com.flatrental.domain.announcement.simpleattributes.kitchentype;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface KitchenTypeRepository extends JpaRepository<KitchenType, Long> {
+public interface KitchenTypeRepository extends SimpleAttributeCacheableJpaRepository<KitchenType, Long> {
 
 }

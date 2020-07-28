@@ -1,8 +1,9 @@
 package com.flatrental.domain.announcement.simpleattributes.neighbourhood;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NeighbourhoodItemRepository extends JpaRepository<NeighbourhoodItem, Long> {
+public interface NeighbourhoodItemRepository extends SimpleAttributeCacheableJpaRepository<NeighbourhoodItem, Long> {
+
 }

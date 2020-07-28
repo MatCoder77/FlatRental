@@ -1,10 +1,10 @@
 package com.flatrental.domain.announcement.simpleattributes.buildingmaterial;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BuildingMaterialRepository extends JpaRepository<BuildingMaterial, Long> {
+public interface BuildingMaterialRepository extends SimpleAttributeCacheableJpaRepository<BuildingMaterial, Long> {
 
 }
 

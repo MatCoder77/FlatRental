@@ -1,8 +1,9 @@
 package com.flatrental.domain.announcement.simpleattributes.apartmentamenities;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApartmentAmenityRepository extends JpaRepository<ApartmentAmenity, Long> {
+public interface ApartmentAmenityRepository extends SimpleAttributeCacheableJpaRepository<ApartmentAmenity, Long> {
+
 }

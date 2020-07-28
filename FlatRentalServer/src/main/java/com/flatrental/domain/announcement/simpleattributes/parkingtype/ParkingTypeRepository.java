@@ -1,9 +1,9 @@
 package com.flatrental.domain.announcement.simpleattributes.parkingtype;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.flatrental.domain.announcement.simpleattributes.SimpleAttributeCacheableJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ParkingTypeRepository extends JpaRepository<ParkingType, Long> {
+public interface ParkingTypeRepository extends SimpleAttributeCacheableJpaRepository<ParkingType, Long> {
 
 }
