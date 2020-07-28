@@ -5,6 +5,7 @@ import com.flatrental.domain.locations.locality.Locality;
 import com.flatrental.domain.locations.locality.LocalityService;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrict;
 import com.flatrental.domain.locations.localitydistrict.LocalityDistrictService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api(tags = "Administrative units")
 @RestController
 @RequestMapping("/api/locality-part")
 @RequiredArgsConstructor

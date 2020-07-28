@@ -1,6 +1,7 @@
 package com.flatrental.domain.locations.elasticsearch;
 
 import com.flatrental.infrastructure.security.HasAdminRole;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 
+@Api(tags = "Elastic Search")
 @RestController
 @RequestMapping("/api/locations")
 @RequiredArgsConstructor

@@ -4,6 +4,7 @@ package com.flatrental.domain.locations.street;
 import com.flatrental.api.StreetDTO;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api(tags = "Administrative units")
 @RestController
 @RequestMapping("/api/street")
 @RequiredArgsConstructor

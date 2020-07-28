@@ -94,10 +94,10 @@ public class StreetService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(STREET_NOT_FOUND, code)));
     }
 
-    public void updateStreet(Update<StreetAndAssociatedLocality, StreetDTO> update) {
-        StreetAndAssociatedLocality streetAndAssociatedLocalityBeforeUpdate = update.getEntityBeforeUpdate();
-        Street street = streetAndAssociatedLocalityBeforeUpdate.getStreet();
-        AbstractLocality abstractLocalityBefore = streetAndAssociatedLocalityBeforeUpdate.getAbstractLocality();
+    public void updateStreet(Update<StreetDetails, StreetDTO> update) {
+        StreetDetails streetDetailsBeforeUpdate = update.getEntityBeforeUpdate();
+        Street street = streetDetailsBeforeUpdate.getStreet();
+        AbstractLocality abstractLocalityBefore = streetDetailsBeforeUpdate.getAbstractLocality();
         StreetDTO streetDTOAfterChange = update.getStateAfterUpdate();
         Street streetAfter = getExistingOrCreate(streetDTOAfterChange);
         abstractLocalityService.removeStreet(abstractLocalityBefore, street);
@@ -105,9 +105,9 @@ public class StreetService {
         abstractLocalityService.addStreet(abstractLocalityAfter, streetAfter);
     }
 
-    public void deleteStreet(StreetAndAssociatedLocality streetAndAssociatedLocality) {
-        Street street = streetAndAssociatedLocality.getStreet();
-        AbstractLocality abstractLocality = streetAndAssociatedLocality.getAbstractLocality();
+    public void deleteStreet(StreetDetails streetDetails) {
+        Street street = streetDetails.getStreet();
+        AbstractLocality abstractLocality = streetDetails.getAbstractLocality();
         abstractLocalityService.removeStreet(abstractLocality, street);
     }
 

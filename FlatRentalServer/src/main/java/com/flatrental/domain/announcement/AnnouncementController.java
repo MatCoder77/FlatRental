@@ -14,6 +14,7 @@ import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Api(tags = "Announcements")
 @RestController
 @RequestMapping("/api/announcements")
 @RequiredArgsConstructor

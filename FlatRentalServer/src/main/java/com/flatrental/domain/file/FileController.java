@@ -2,6 +2,7 @@ package com.flatrental.domain.file;
 
 import com.flatrental.api.FileUploadDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api(tags = "Files")
 @RestController
 @RequestMapping("/api/file")
 @RequiredArgsConstructor

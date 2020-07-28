@@ -13,7 +13,7 @@ import com.flatrental.domain.locations.localitypart.LocalityPart;
 import com.flatrental.domain.locations.localitypart.LocalityPartService;
 import com.flatrental.domain.locations.localitytype.LocalityType;
 import com.flatrental.domain.locations.localitytype.LocalityTypeService;
-import com.flatrental.domain.locations.street.StreetAndAssociatedLocality;
+import com.flatrental.domain.locations.street.StreetDetails;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
@@ -33,6 +33,7 @@ import com.flatrental.domain.locations.teryt.ulic.StreetDTOService;
 import com.flatrental.domain.locations.teryt.ulic.StreetDTOUpdateService;
 import com.flatrental.domain.locations.teryt.ulic.Update;
 import com.flatrental.infrastructure.security.HasAdminRole;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Api(tags = "Teryt API")
 @RestController
 @RequestMapping("/teryt")
 @RequiredArgsConstructor
@@ -144,7 +146,7 @@ public class TerytController {
         List<Update<Locality, LocalityDTO>> autonomousLocalityUpdates = localityUpdateService.getAutonomousLocalityUpdates(localityChangeDTOs);
         List<Update<LocalityDistrict, LocalityDTO>> localityDistrictUpdates = localityUpdateService.getLocalityDistrictUpdates(localityChangeDTOs);
         List<Update<LocalityPart, LocalityDTO>> localityPartUpdates = localityUpdateService.getLocalityPartUpdates(localityChangeDTOs);
-        List<Update<StreetAndAssociatedLocality, StreetDTO>> streetUpdates = streetDTOUpdateService.getStreetUpdates(streetChangeDTOs);
+        List<Update<StreetDetails, StreetDTO>> streetUpdates = streetDTOUpdateService.getStreetUpdates(streetChangeDTOs);
 
         List<Voivodeship> voivodeshipsToDelete = administrationUnitUpdateService.getVoivodeshipsToDelete(administrationUnitChangeDTOs);
         List<District> districtsToDelete = administrationUnitUpdateService.getDistrictsToDelete(administrationUnitChangeDTOs);
@@ -152,7 +154,7 @@ public class TerytController {
         List<Locality> autonomousLocalitiesToDelete = localityUpdateService.getAutonomousLocalitiesToDelete(localityChangeDTOs);
         List<LocalityDistrict> localityDistrictsToDelete = localityUpdateService.getLocalityDistrictsToDelete(localityChangeDTOs);
         List<LocalityPart> localityPartsToDelete = localityUpdateService.getLocalityPartsToDelete(localityChangeDTOs);
-        List<StreetAndAssociatedLocality> streetsToDelete = streetDTOUpdateService.getStreetsToDelete(streetChangeDTOs);
+        List<StreetDetails> streetsToDelete = streetDTOUpdateService.getStreetsToDelete(streetChangeDTOs);
 
         administrationUnitUpdateService.performAdministrationUnitUpdates(voivodeshipUpdates, districtUpdates, communeUpdates);
         localityUpdateService.performLocalityUpdates(autonomousLocalityUpdates, localityDistrictUpdates, localityPartUpdates);

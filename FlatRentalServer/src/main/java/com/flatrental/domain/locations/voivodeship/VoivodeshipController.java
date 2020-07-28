@@ -2,6 +2,7 @@ package com.flatrental.domain.locations.voivodeship;
 
 import com.flatrental.api.VoivodeshipDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api(tags = "Administrative units")
 @RestController
 @RequestMapping("/api/voivodeship")
 @RequiredArgsConstructor

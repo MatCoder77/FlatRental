@@ -1,6 +1,7 @@
 package com.flatrental.domain.announcement.simpleattributes.furnishings;
 
 import com.flatrental.api.SimpleResourceDTO;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Api(tags = "Reference Attributes")
 @RestController
 @RequestMapping("/api/furnishing")
 @RequiredArgsConstructor

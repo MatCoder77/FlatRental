@@ -63,7 +63,7 @@ public class SwaggerConfig {
                 "Api documentation for Flat Rental Service",
                 "1.0",
                 "TERMS OF SERVICE URL",
-                new Contact("Admin", "www.flat-rental.support.com", "admin@example.com"),
+                new Contact("Admin", "www.flat-rental.support.com", "admin@flat-rental.com"),
                 "Apache 2.0",
                 "http://www.apache.org/licenses/LICENSE-2.0",
                 Collections.emptyList()

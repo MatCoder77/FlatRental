@@ -3,7 +3,7 @@ package com.flatrental.domain.locations.teryt.ulic;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityService;
 import com.flatrental.domain.locations.street.Street;
-import com.flatrental.domain.locations.street.StreetAndAssociatedLocality;
+import com.flatrental.domain.locations.street.StreetDetails;
 import com.flatrental.domain.locations.street.StreetService;
 import com.flatrental.domain.settings.SettingsService;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +108,7 @@ public class StreetDTOUpdateService {
         return changeDTO.getCorrectionType() == StreetCorrectionType.ADDITION;
     }
 
-    public List<Update<StreetAndAssociatedLocality, StreetDTO>> getStreetUpdates(List<StreetChangeDTO> changeDTOs) {
+    public List<Update<StreetDetails, StreetDTO>> getStreetUpdates(List<StreetChangeDTO> changeDTOs) {
         return changeDTOs.stream()
                 .filter(this::isModification)
                 .map(this::mapToStreetUpdate)
@@ -120,24 +120,24 @@ public class StreetDTOUpdateService {
                 changeDTO.getCorrectionType() == StreetCorrectionType.NAME_MODIFICATION;
     }
 
-    private Update<StreetAndAssociatedLocality, StreetDTO> mapToStreetUpdate(StreetChangeDTO changeDTO) {
-        StreetAndAssociatedLocality streetAndAssociatedLocality = getStreetWithAssociatedAbstractLocality(changeDTO.getStreetDTOBeforeChange());
+    private Update<StreetDetails, StreetDTO> mapToStreetUpdate(StreetChangeDTO changeDTO) {
+        StreetDetails streetDetails = getStreetWithAssociatedAbstractLocality(changeDTO.getStreetDTOBeforeChange());
         StreetDTO streetStateAfterChange = changeDTO.getStreetDTOAfterChange();
-        return new Update<>(streetAndAssociatedLocality, streetStateAfterChange);
+        return new Update<>(streetDetails, streetStateAfterChange);
     }
 
-    private StreetAndAssociatedLocality getStreetWithAssociatedAbstractLocality(StreetDTO streetDTO) {
+    private StreetDetails getStreetWithAssociatedAbstractLocality(StreetDTO streetDTO) {
         Street street = streetService.getExistingStreetByCode(streetDTO.getStreetCode());
         AbstractLocality abstractLocality = abstractLocalityService.getExistingAbstractLocalityByCode(streetDTO.getDirectParentCode());
-        return new StreetAndAssociatedLocality(street, abstractLocality);
+        return new StreetDetails(street, abstractLocality);
     }
 
-    public void performStreetUpdates(List<Update<StreetAndAssociatedLocality, StreetDTO>> streetUpdates) {
+    public void performStreetUpdates(List<Update<StreetDetails, StreetDTO>> streetUpdates) {
         streetUpdates.stream()
                 .forEach(streetService::updateStreet);
     }
 
-    public List<StreetAndAssociatedLocality> getStreetsToDelete(List<StreetChangeDTO> changeDTOs) {
+    public List<StreetDetails> getStreetsToDelete(List<StreetChangeDTO> changeDTOs) {
         return changeDTOs.stream()
                 .filter(this::isDeletion)
                 .map(StreetChangeDTO::getStreetDTOBeforeChange)
@@ -149,7 +149,7 @@ public class StreetDTOUpdateService {
         return changeDTO.getCorrectionType() == StreetCorrectionType.DELETION;
     }
 
-    public void performStreetsDeletion(List<StreetAndAssociatedLocality> streetsToDelete) {
+    public void performStreetsDeletion(List<StreetDetails> streetsToDelete) {
         streetsToDelete.stream()
                 .forEach(streetService::deleteStreet);
     }
