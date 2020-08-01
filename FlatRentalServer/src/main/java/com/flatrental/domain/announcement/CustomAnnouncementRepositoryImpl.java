@@ -45,6 +45,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -168,7 +169,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Optional<Predicate> lessEqualPredicate = Optional.ofNullable(max)
                 .map(val -> criteriaBuilder.le(attribute, val));
 
-        List<Predicate> predicates = Arrays.asList(greaterEqualPredicate, lessEqualPredicate).stream()
+        List<Predicate> predicates = Stream.of(greaterEqualPredicate, lessEqualPredicate)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
 
