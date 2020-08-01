@@ -51,12 +51,13 @@ public class AnnouncementController {
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";
     private static final String STATE = "state";
-    private static final String CHANGE_STATE_PATH = "/change-state";
+    private static final String CHANGE_STATE_RESOURCE = "/change-state";
 
     @GetMapping(ID_PATH)
     public AnnouncementDTO getAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
         Announcement announcement = announcementService.getExistingAnnouncement(id);
-        Optional<User> user = Optional.ofNullable(userInfo).map(info -> userService.getExistingUser(userInfo.getId()));
+        Optional<User> user = Optional.ofNullable(userInfo).map(UserInfo::getId)
+                .map(userService::getExistingUser);
         announcementService.incrementViewsCounter(announcement, user);
         return announcementService.mapToAnnouncementDTO(announcement, user);
     }
@@ -164,7 +165,7 @@ public class AnnouncementController {
         return announcementService.searchAnnouncements(searchCriteria, pageable, user).getAnnouncements();
     }
 
-    @PutMapping(ID_PATH + CHANGE_STATE_PATH)
+    @PutMapping(ID_PATH + CHANGE_STATE_RESOURCE)
     @HasAnyRole
     public ResponseDTO changeAnnouncementState(@PathVariable(ID) Long announcementId, @RequestParam(STATE) ManagedObjectState objectState, @LoggedUser UserInfo userInfo) {
         Announcement announcement = announcementService.getExistingAnnouncement(announcementId);

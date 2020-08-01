@@ -15,7 +15,7 @@ import java.util.List;
 @NoRepositoryBean
 public interface SimpleAttributeCacheableJpaRepository<T, ID> extends JpaRepository<T, ID> {
 
-    static final String SIMPLE_ATTR_QUERY_CACHE = "simpleAttributeQueryCache";
+    String SIMPLE_ATTR_QUERY_CACHE = "simpleAttributeQueryCache";
 
     @Override
     @QueryHints({

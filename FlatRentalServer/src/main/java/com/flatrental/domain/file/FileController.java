@@ -68,7 +68,7 @@ public class FileController {
         }
 
         if(contentType == null) {
-            contentType = "application/octet-stream";
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
         return contentType;
     }

@@ -1,5 +1,6 @@
 package com.flatrental.domain.userrole;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 @Immutable
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "userRoleCache")
+@NoArgsConstructor
 public class UserRole {
 
     @Id
@@ -29,11 +31,6 @@ public class UserRole {
     @NaturalId
     @Column(length = 60)
     private UserRoleName name;
-
-
-    public UserRole() {
-
-    }
 
     public UserRole(UserRoleName name) {
         this.name = name;
