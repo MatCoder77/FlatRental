@@ -1,5 +1,7 @@
 package com.flatrental.domain.announcement;
 
+import com.flatrental.domain.announcement.bathroom.Bathroom;
+import com.flatrental.domain.announcement.kitchen.Kitchen;
 import com.flatrental.domain.file.File;
 import org.springframework.stereotype.Service;
 

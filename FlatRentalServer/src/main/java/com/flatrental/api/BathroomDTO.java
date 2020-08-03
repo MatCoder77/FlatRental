@@ -15,6 +15,6 @@ public class BathroomDTO {
 
     private Boolean separateWC;
 
-    private List<SimpleResourceDTO> furnishing;
+    private List<SimpleAttributeDTO> furnishing;
 
 }

@@ -1,20 +1,17 @@
 package com.flatrental.domain.announcement;
 
 import com.flatrental.domain.announcement.address.Address_;
+import com.flatrental.domain.announcement.bathroom.Bathroom_;
+import com.flatrental.domain.announcement.kitchen.Kitchen_;
+import com.flatrental.domain.announcement.room.Room;
+import com.flatrental.domain.announcement.room.Room_;
 import com.flatrental.domain.announcement.search.RoomCriteria;
 import com.flatrental.domain.announcement.search.SearchCriteria;
-import com.flatrental.domain.announcement.simpleattributes.apartmentamenities.ApartmentAmenity;
-import com.flatrental.domain.announcement.simpleattributes.apartmentstate.ApartmentState_;
-import com.flatrental.domain.announcement.simpleattributes.buildingmaterial.BuildingMaterial_;
-import com.flatrental.domain.announcement.simpleattributes.buildingtype.BuildingType_;
-import com.flatrental.domain.announcement.simpleattributes.cookertype.CookerType_;
-import com.flatrental.domain.announcement.simpleattributes.furnishings.FurnishingItem;
-import com.flatrental.domain.announcement.simpleattributes.heatingtype.HeatingType_;
-import com.flatrental.domain.announcement.simpleattributes.kitchentype.KitchenType_;
-import com.flatrental.domain.announcement.simpleattributes.neighbourhood.NeighbourhoodItem;
-import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType_;
-import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
-import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType_;
+import com.flatrental.domain.announcement.simpleattribute.SimpleAttribute_;
+import com.flatrental.domain.announcement.simpleattribute.apartmentamenity.ApartmentAmenity;
+import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingItem;
+import com.flatrental.domain.announcement.simpleattribute.neighbourhood.NeighbourhoodItem;
+import com.flatrental.domain.announcement.simpleattribute.preferences.Preference;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality_;
 import com.flatrental.domain.locations.commune.Commune_;
 import com.flatrental.domain.locations.district.District_;
@@ -89,18 +86,18 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Path<Integer> securityDeposit = a.get(Announcement_.securityDeposit);
         Path<Integer> floor = a.get(Announcement_.floor);
         Path<Integer> maxFloorInBuilding = a.get(Announcement_.maxFloorInBuilding);
-        Path<Long> buildingType = a.get(Announcement_.buildingType).get(BuildingType_.id);
-        Path<Long> buildingMaterial = a.get(Announcement_.buildingMaterial).get(BuildingMaterial_.id);
-        Path<Long> heatingType = a.get(Announcement_.heatingType).get(HeatingType_.id);
-        Path<Long> windowType = a.get(Announcement_.windowType).get(WindowType_.id);
-        Path<Long> parkingType = a.get(Announcement_.parkingType).get(ParkingType_.id);
-        Path<Long> apartmentState = a.get(Announcement_.apartmentState).get(ApartmentState_.id);
+        Path<Long> buildingType = a.get(Announcement_.buildingType).get(SimpleAttribute_.id);
+        Path<Long> buildingMaterial = a.get(Announcement_.buildingMaterial).get(SimpleAttribute_.id);
+        Path<Long> heatingType = a.get(Announcement_.heatingType).get(SimpleAttribute_.id);
+        Path<Long> windowType = a.get(Announcement_.windowType).get(SimpleAttribute_.id);
+        Path<Long> parkingType = a.get(Announcement_.parkingType).get(SimpleAttribute_.id);
+        Path<Long> apartmentState = a.get(Announcement_.apartmentState).get(SimpleAttribute_.id);
         Path<Integer> yearBuilt = a.get(Announcement_.yearBuilt);
         Path<Boolean> wellPlanned = a.get(Announcement_.wellPlanned);
         Expression<Set<ApartmentAmenity>> apartmentAmenities = a.get(Announcement_.apartmentAmenities);
-        Path<Long> kitchenType = a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(KitchenType_.id);
+        Path<Long> kitchenType = a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(SimpleAttribute_.id);
         Path<Integer> kitchenArea = a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea);
-        Path<Long> cookerType = a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(CookerType_.id);
+        Path<Long> cookerType = a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(SimpleAttribute_.id);
         Expression<Set<FurnishingItem>> kitchenFurnishing = a.get(Announcement_.kitchen).get(Kitchen_.furnishing);
         Path<Integer> numberOfBathrooms = a.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms);
         Path<Boolean> separatedWC = a.get(Announcement_.bathroom).get(Bathroom_.separateWC);
@@ -111,7 +108,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         Path<Long> author = a.get(ManagedObject_.createdBy).get(User_.id);
         Path<ManagedObjectState> managedObjectState = a.get(ManagedObject_.objectState);
 
-        var requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::fromId);
+        var requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::new);
 
         List<Optional<Predicate>> predicates = Arrays.asList(
                 getEqualsPredicate(id, sc.getId(), cb),
@@ -137,12 +134,12 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getAllowedAttrPredicate(kitchenType, sc.getAllowedKitchenTypes()),
                 getMinMaxPredicate(kitchenArea, sc.getMinKitchenArea(), sc.getMaxKitchenArea(), cb),
                 getAllowedAttrPredicate(cookerType, sc.getAllowedCookerTypes()),
-                getRequiredAttrPredicate(kitchenFurnishing, getAttrFromIds(sc.getRequiredKitchenFurnishing(), FurnishingItem::fromId), cb),
+                getRequiredAttrPredicate(kitchenFurnishing, getAttrFromIds(sc.getRequiredKitchenFurnishing(), FurnishingItem::new), cb),
                 getMinMaxPredicate(numberOfBathrooms, sc.getMinNumberOfBathrooms(), sc.getMaxNumberOfBathrooms(), cb),
                 getEqualsPredicate(separatedWC, sc.getHasSeparatedWC(), cb),
-                getRequiredAttrPredicate(bathroomFurnishing, getAttrFromIds(sc.getRequiredBathroomFurnishing(), FurnishingItem::fromId), cb),
-                getRequiredAttrPredicate(preferences, getAttrFromIds(sc.getRequiredPreferences(), Preference::fromId), cb),
-                getRequiredAttrPredicate(neighbourhood, getAttrFromIds(sc.getRequiredNeighbourhoodItems(), NeighbourhoodItem::fromId), cb),
+                getRequiredAttrPredicate(bathroomFurnishing, getAttrFromIds(sc.getRequiredBathroomFurnishing(), FurnishingItem::new), cb),
+                getRequiredAttrPredicate(preferences, getAttrFromIds(sc.getRequiredPreferences(), Preference::new), cb),
+                getRequiredAttrPredicate(neighbourhood, getAttrFromIds(sc.getRequiredNeighbourhoodItems(), NeighbourhoodItem::new), cb),
                 getMinMaxPredicate(numberOfFlatmates, sc.getMinNumberOfFlatmates(), sc.getMaxNumberOfFlatmates(), cb),
                 getEqualsPredicate(author, sc.getAuthor(), cb),
                 getAllowedAttrPredicate(managedObjectState, sc.getAllowedManagedObjectStates())
@@ -229,7 +226,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         if (CollectionUtils.isEmpty(allowedValues)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(allowedValues).map(attribute::in);
+        return Optional.of(allowedValues).map(attribute::in);
     }
 
     private Optional<Predicate> getRoomsPredicates(Root<Announcement> a, CriteriaQuery<Announcement> criteriaQuery,
@@ -258,7 +255,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getMinMaxPredicate(announcementXroom.get(Room_.area), roomCriteria.getMinArea(), roomCriteria.getMaxArea(), criteriaBuilder),
                 getMinMaxPredicate(announcementXroom.get(Room_.numberOfPersons), roomCriteria.getMinNumberOfPersons(), roomCriteria.getMaxNumberOfPersons(), criteriaBuilder),
                 getMinMaxPredicate(announcementXroom.get(Room_.personsOccupied), roomCriteria.getMinPersonsOccupied(), roomCriteria.getMaxPersonsOccupied(), criteriaBuilder),
-                getRequiredAttrPredicate(announcementXroom.get(Room_.furnishings), getAttrFromIds(roomCriteria.getRequiredFurnishing(), FurnishingItem::fromId), criteriaBuilder)
+                getRequiredAttrPredicate(announcementXroom.get(Room_.furnishings), getAttrFromIds(roomCriteria.getRequiredFurnishing(), FurnishingItem::new), criteriaBuilder)
         );
         List<Predicate> specifiedRoomPredicates = roomPredicates.stream()
                 .flatMap(Optional::stream)

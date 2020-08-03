@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AnnouncementStatisticsDTO {
 
-    long likesCounter;
-    long dislikesCounter;
-    long commentsCounter;
-    long viewsCounter;
-    long favouritesCounter;
+    private long likesCounter;
+    private long dislikesCounter;
+    private long commentsCounter;
+    private long viewsCounter;
+    private long favouritesCounter;
 
 }

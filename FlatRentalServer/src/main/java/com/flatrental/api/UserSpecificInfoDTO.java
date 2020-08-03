@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserSpecificInfoDTO {
 
-    Boolean doesUserLikeIt;
-    Boolean isMarkedAsFavourite;
+    private Boolean doesUserLikeIt;
+    private Boolean isMarkedAsFavourite;
 
 }

@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 public class File {
 
     @NotNull
-    String filename;
+    private String filename;
 
 }

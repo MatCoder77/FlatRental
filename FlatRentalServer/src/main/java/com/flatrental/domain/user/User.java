@@ -2,9 +2,10 @@ package com.flatrental.domain.user;
 
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.managedobject.ManagedObject;
-import com.flatrental.domain.statistics.UserStatistics;
+import com.flatrental.domain.statistics.user.UserStatistics;
 import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -27,11 +28,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "User")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "userCache")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class User extends ManagedObject {
 
     @Id
@@ -84,100 +86,12 @@ public class User extends ManagedObject {
             inverseJoinColumns = @JoinColumn(name = "announcement_id"))
     private Set<Announcement> favourites = new HashSet<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Set<Announcement> getFavourites() {
-        return favourites;
-    }
-
     public void addAnnouncementToFavourites(Announcement announcement) {
         this.favourites.add(announcement);
     }
 
     public void removeAnnouncementFromFavourites(Announcement announcement) {
         this.favourites.remove(announcement);
-    }
-
-    public UserStatistics getUserStatistics() {
-        return userStatistics;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
     }
 
     @Override

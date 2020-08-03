@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static com.flatrental.infrastructure.utils.ResourcePaths.ID;
+import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
+
 @Api(tags = "Users")
 @RestController
 @RequestMapping("/api/user")
@@ -35,8 +38,6 @@ public class UserController {
     private static final String CHECK_EMAIL_PATH = "/check/email/{" + EMAIL + "}";
     private static final String FILENAME = "filename";
     private static final String SET_AVATAR_PATH = "/set-avatar/{" + FILENAME + "}";
-    private static final String ID = "id";
-    private static final String ID_PATH = "/{" + ID + "}";
 
     @GetMapping(CHECK_USERNAME_PATH)
     public AvailableDTO checkUsernameAvailable(@PathVariable(USERNAME) String username) {

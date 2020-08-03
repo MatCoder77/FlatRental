@@ -20,8 +20,8 @@ public class CommentDTO {
     private Integer likesCounter;
     private Integer dislikesCounter;
     private Integer rate;
-    Long announcementId;
-    Long userId;
+    private Long announcementId;
+    private Long userId;
     private ManagedObjectDTO info;
 
 }

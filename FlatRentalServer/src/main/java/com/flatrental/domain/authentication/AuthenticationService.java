@@ -3,7 +3,7 @@ package com.flatrental.domain.authentication;
 import com.flatrental.api.LoginDTO;
 import com.flatrental.api.RegistrationFormDTO;
 import com.flatrental.api.TokenDTO;
-import com.flatrental.domain.statistics.UserStatistics;
+import com.flatrental.domain.statistics.user.UserStatistics;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
 import com.flatrental.domain.userrole.UserRole;
@@ -35,7 +35,7 @@ public class AuthenticationService {
     }
 
     public User createUserBasedOnRegistrationForm(RegistrationFormDTO registrationFormDTO) {
-        UserRole userRole = userRoleService.getUserRoleFromDatabase(UserRoleName.ROLE_USER);
+        UserRole userRole = userRoleService.getExistingUserRole(UserRoleName.ROLE_USER);
         User newUser = new User(null,
                 registrationFormDTO.getName(),
                 registrationFormDTO.getSurname(),

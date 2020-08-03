@@ -1,9 +1,9 @@
 package com.flatrental.domain.statistics;
 
-import com.flatrental.api.AnnouncementStatisticsDTO;
 import com.flatrental.api.UserStatisticsDTO;
 import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.comments.CommentService;
+import com.flatrental.domain.statistics.user.UserStatistics;
 import com.flatrental.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,16 +17,6 @@ import java.util.stream.Collectors;
 public class StatisticsService {
 
     private final CommentService commentService;
-
-    public AnnouncementStatisticsDTO mapToAnnouncementStatisticsDTO(AnnouncementStatistics statistics) {
-        return AnnouncementStatisticsDTO.builder()
-                .commentsCounter(statistics.getCommentsCounter())
-                .likesCounter(statistics.getLikesCounter())
-                .dislikesCounter(statistics.getDislikesCounter())
-                .favouritesCounter(statistics.getFavouritesCounter())
-                .viewsCounter(statistics.getViewsCounter())
-                .build();
-    }
 
     public UserStatisticsDTO mapToUserStatisticsDTO(UserStatistics userStatistics) {
         return UserStatisticsDTO.builder()

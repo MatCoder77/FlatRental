@@ -1,0 +1,19 @@
+package com.flatrental.domain.announcement.simpleattribute.buildingtype;
+
+import com.flatrental.domain.announcement.simpleattribute.SimpleAttribute;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
+
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "BuildingTypes")
+@Immutable
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "buildingTypeCache")
+public class BuildingType extends SimpleAttribute {
+
+}

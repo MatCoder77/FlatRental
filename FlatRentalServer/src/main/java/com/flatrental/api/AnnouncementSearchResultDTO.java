@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AnnouncementSearchResultDTO {
 
-    private List<AnnouncementDTO> announcements;
+    private List<AnnouncementBrowseDTO> announcements;
     private Long totalSize;
     private Long pageSize;
     private Long pageNumber;

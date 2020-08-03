@@ -28,7 +28,6 @@ public class PermissionsValidationService {
     public void validatePermissionToEditAnnouncement(UserInfo userInfo, Announcement announcement) {
         if (!hasPermissionToEditAnnouncement(userInfo, announcement)) {
             throw new IllegalArgumentException(MessageFormat.format(PERMISSION_DENIED_TO_EDIT_ANNOUNCEMENT, String.valueOf(announcement.getId())));
-
         }
     }
 

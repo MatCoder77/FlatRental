@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class KitchenDTO {
 
-    private SimpleResourceDTO kitchenType;
+    private SimpleAttributeDTO kitchenType;
     private Integer kitchenArea;
-    private SimpleResourceDTO cookerType;
-    private List<SimpleResourceDTO> furnishing;
+    private SimpleAttributeDTO cookerType;
+    private List<SimpleAttributeDTO> furnishing;
 
 }

@@ -44,11 +44,8 @@ public class UserDTO {
     private String phoneNumber;
 
     private URI avatarUrl;
-
     private Set<String> roles;
-
     private UserStatisticsDTO statistics;
-
     private String about;
 
 }

@@ -60,37 +60,36 @@ public class AnnouncementDTO {
     @NotNull
     private AddressDTO address;
 
-    SimpleResourceDTO buildingType;
-    SimpleResourceDTO buildingMaterial;
-    SimpleResourceDTO heatingType;
-    SimpleResourceDTO windowType;
-    SimpleResourceDTO parkingType;
-    SimpleResourceDTO apartmentState;
+    private SimpleAttributeDTO buildingType;
+    private SimpleAttributeDTO buildingMaterial;
+    private SimpleAttributeDTO heatingType;
+    private SimpleAttributeDTO windowType;
+    private SimpleAttributeDTO parkingType;
+    private SimpleAttributeDTO apartmentState;
 
     @Positive
     private Integer yearBuilt;
 
     private Boolean wellPlanned;
-    List<SimpleResourceDTO> apartmentAmenities;
-    List<RoomDTO> rooms;
-    KitchenDTO kitchen;
-    BathroomDTO bathroom;
-    List<SimpleResourceDTO> preferences;
-    List<SimpleResourceDTO> neighbourhood;
+    private List<SimpleAttributeDTO> apartmentAmenities;
+    private List<RoomDTO> rooms;
+    private KitchenDTO kitchen;
+    private BathroomDTO bathroom;
+    private List<SimpleAttributeDTO> preferences;
+    private List<SimpleAttributeDTO> neighbourhood;
 
     @Size(max = 10000)
     private String description;
 
-    List<FileDTO> announcementImages;
-    String aboutFlatmates;
+    private List<FileDTO> announcementImages;
+    private String aboutFlatmates;
 
     @PositiveOrZero
-    Integer numberOfFlatmates;
+    private Integer numberOfFlatmates;
 
-    ManagedObjectDTO info;
-
-    AnnouncementStatisticsDTO statistics;
-
-    UserSpecificInfoDTO userSpecificInfo;
+    private ManagedObjectDTO info;
+    private AnnouncementStatisticsDTO statistics;
+    private Long quality;
+    private UserSpecificInfoDTO userSpecificInfo;
 
 }

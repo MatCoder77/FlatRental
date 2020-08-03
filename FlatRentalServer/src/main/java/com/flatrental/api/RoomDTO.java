@@ -28,7 +28,7 @@ public class RoomDTO {
     @Positive
     private Integer pricePerMonth;
 
-    private List<SimpleResourceDTO> furnishing;
+    private List<SimpleAttributeDTO> furnishing;
 
     @Positive
     @NotNull

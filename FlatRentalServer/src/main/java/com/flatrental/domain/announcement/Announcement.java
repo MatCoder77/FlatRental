@@ -1,19 +1,23 @@
 package com.flatrental.domain.announcement;
 
+import com.flatrental.domain.announcement.bathroom.Bathroom;
+import com.flatrental.domain.announcement.kitchen.Kitchen;
+import com.flatrental.domain.announcement.room.Room;
 import com.flatrental.domain.managedobject.ManagedObject;
 import com.flatrental.domain.announcement.address.Address;
-import com.flatrental.domain.announcement.simpleattributes.preferences.Preference;
-import com.flatrental.domain.announcement.simpleattributes.apartmentamenities.ApartmentAmenity;
-import com.flatrental.domain.announcement.simpleattributes.apartmentstate.ApartmentState;
-import com.flatrental.domain.announcement.simpleattributes.buildingmaterial.BuildingMaterial;
-import com.flatrental.domain.announcement.simpleattributes.buildingtype.BuildingType;
-import com.flatrental.domain.announcement.simpleattributes.heatingtype.HeatingType;
-import com.flatrental.domain.announcement.simpleattributes.neighbourhood.NeighbourhoodItem;
+import com.flatrental.domain.announcement.simpleattribute.preferences.Preference;
+import com.flatrental.domain.announcement.simpleattribute.apartmentamenity.ApartmentAmenity;
+import com.flatrental.domain.announcement.simpleattribute.apartmentstate.ApartmentState;
+import com.flatrental.domain.announcement.simpleattribute.buildingmaterial.BuildingMaterial;
+import com.flatrental.domain.announcement.simpleattribute.buildingtype.BuildingType;
+import com.flatrental.domain.announcement.simpleattribute.heatingtype.HeatingType;
+import com.flatrental.domain.announcement.simpleattribute.neighbourhood.NeighbourhoodItem;
 import com.flatrental.domain.file.File;
-import com.flatrental.domain.announcement.simpleattributes.parkingtype.ParkingType;
-import com.flatrental.domain.announcement.simpleattributes.windowtype.WindowType;
+import com.flatrental.domain.announcement.simpleattribute.parkingtype.ParkingType;
+import com.flatrental.domain.announcement.simpleattribute.windowtype.WindowType;
+import com.flatrental.domain.statistics.announcement.AnnouncementStatistics;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -50,7 +54,7 @@ import java.util.Set;
 
 @Entity
 @SuperBuilder(toBuilder = true)
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcements")
@@ -152,13 +156,9 @@ public class Announcement extends ManagedObject {
     @PositiveOrZero
     private Integer numberOfFlatmates;
 
-    private com.flatrental.domain.statistics.AnnouncementStatistics statistics;
+    private AnnouncementStatistics statistics;
 
     private long quality;
-
-    public void setQuality(long quality) {
-        this.quality = quality;
-    }
 
     @Override
     public boolean equals(Object obj) {

@@ -3,7 +3,7 @@ package com.flatrental.domain.comments;
 import com.flatrental.api.CommentDTO;
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.announcement.AnnouncementService;
-import com.flatrental.domain.managedobject.ManagedObjectService;
+import com.flatrental.domain.managedobject.ManagedObjectMapper;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
@@ -21,18 +21,18 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final ManagedObjectService managedObjectService;
+    private final ManagedObjectMapper managedObjectMapper;
     private final AnnouncementService announcementService;
     private final UserService userService;
 
     public static final String NOT_FOUND = "There is no comment with id {0}";
 
     public CommentService(CommentRepository commentRepository,
-                          @Lazy ManagedObjectService managedObjectService,
+                          @Lazy ManagedObjectMapper managedObjectMapper,
                           @Lazy AnnouncementService announcementService,
                           @Lazy UserService userService) {
         this.commentRepository = commentRepository;
-        this.managedObjectService = managedObjectService;
+        this.managedObjectMapper = managedObjectMapper;
         this.announcementService = announcementService;
         this.userService = userService;
     }
@@ -67,7 +67,7 @@ public class CommentService {
                 .rate(comment.getRate())
                 .announcementId(Optional.ofNullable(comment.getAnnouncement()).map(Announcement::getId).orElse(null))
                 .userId(Optional.ofNullable(comment.getUser()).map(User::getId).orElse(null))
-                .info(managedObjectService.mapToManagedObjectDTO(comment))
+                .info(managedObjectMapper.mapToManagedObjectDTO(comment))
                 .parentCommentId(Optional.ofNullable(comment.getParentComment()).map(Comment::getId).orElse(null))
                 .subcomments(subCommentDTOs)
                 .build();
