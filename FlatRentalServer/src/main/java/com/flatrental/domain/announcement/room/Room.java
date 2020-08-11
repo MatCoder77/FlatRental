@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,6 +44,7 @@ public class Room {
     private Integer pricePerMonth;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "Rooms_X_FurnishingItems")
     private Set<FurnishingItem> furnishings;
 

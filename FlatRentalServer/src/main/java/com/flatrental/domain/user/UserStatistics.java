@@ -1,4 +1,4 @@
-package com.flatrental.domain.statistics.user;
+package com.flatrental.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

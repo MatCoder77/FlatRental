@@ -3,15 +3,14 @@ package com.flatrental.infrastructure.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flatrental.domain.user.User;
-import com.flatrental.domain.userrole.UserRole;
+import com.flatrental.domain.user.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class UserInfo implements UserDetails {
 
@@ -27,28 +26,24 @@ public class UserInfo implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> userRoles;
+    private GrantedAuthority userRole;
 
-    public UserInfo(Long id, String name, String username, String email, String password, Collection<? extends GrantedAuthority> userRoles) {
+    public UserInfo(Long id, String name, String username, String email, String password, GrantedAuthority userRole) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.userRoles = userRoles;
+        this.userRole = userRole;
     }
 
     public static UserInfo fromUser(User user) {
-        List<GrantedAuthority> userRoles = user.getRoles()
-                .stream()
-                .map(UserInfo::mapToSimpleGrantedAuthority)
-                .collect(Collectors.toList());
-
-        return new UserInfo(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), userRoles);
+        GrantedAuthority userRole = mapToSimpleGrantedAuthority(user.getRole());
+        return new UserInfo(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), userRole);
     }
 
     private static SimpleGrantedAuthority mapToSimpleGrantedAuthority(UserRole userRole) {
-        return new SimpleGrantedAuthority(userRole.getName().name());
+        return new SimpleGrantedAuthority(userRole.name());
     }
 
     public Long getId() {
@@ -75,7 +70,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRoles;
+        return Collections.singleton(userRole);
     }
 
     @Override
@@ -116,4 +111,5 @@ public class UserInfo implements UserDetails {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

@@ -60,13 +60,13 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
     public Page<Announcement> searchAnnouncementsByCriteria(SearchCriteria sc, Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Announcement> criteriaQuery = cb.createQuery(Announcement.class);
-        Root<Announcement> a = criteriaQuery.from(Announcement.class);
-        criteriaQuery.select(a);
+        Root<Announcement> announcement = criteriaQuery.from(Announcement.class);
+        criteriaQuery.select(announcement);
 
-        Predicate predicate = createPredicateBasedOnSearchCriteria(a, sc, cb, criteriaQuery);
+        Predicate predicate = createPredicateBasedOnSearchCriteria(announcement, sc, cb, criteriaQuery);
         criteriaQuery.where(predicate);
 
-        List<Order> sortingOrders = getSortingOrders(a, pageable.getSort(), cb);
+        List<Order> sortingOrders = getSortingOrders(announcement, pageable.getSort(), cb);
         criteriaQuery.orderBy(sortingOrders);
 
         TypedQuery<Announcement> query = entityManager.createQuery(criteriaQuery);
@@ -76,39 +76,39 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
         return new PageImpl<>(query.getResultList(), pageable, getTotalCount(predicate));
     }
 
-    private Predicate createPredicateBasedOnSearchCriteria(Root<Announcement> a, SearchCriteria sc, CriteriaBuilder cb, CriteriaQuery<Announcement> criteriaQuery) {
-        Path<Long> id = a.get(Announcement_.id);
-        Path<AnnouncementType> type = a.get(Announcement_.type);
-        Path<Integer> totalArea = a.get(Announcement_.totalArea);
-        Path<Integer> numberOfRooms = a.get(Announcement_.numberOfRooms);
-        Path<Integer> pricePerMonth = a.get(Announcement_.pricePerMonth);
-        Path<Integer> additionalCosts = a.get(Announcement_.additionalCostsPerMonth);
-        Path<Integer> securityDeposit = a.get(Announcement_.securityDeposit);
-        Path<Integer> floor = a.get(Announcement_.floor);
-        Path<Integer> maxFloorInBuilding = a.get(Announcement_.maxFloorInBuilding);
-        Path<Long> buildingType = a.get(Announcement_.buildingType).get(SimpleAttribute_.id);
-        Path<Long> buildingMaterial = a.get(Announcement_.buildingMaterial).get(SimpleAttribute_.id);
-        Path<Long> heatingType = a.get(Announcement_.heatingType).get(SimpleAttribute_.id);
-        Path<Long> windowType = a.get(Announcement_.windowType).get(SimpleAttribute_.id);
-        Path<Long> parkingType = a.get(Announcement_.parkingType).get(SimpleAttribute_.id);
-        Path<Long> apartmentState = a.get(Announcement_.apartmentState).get(SimpleAttribute_.id);
-        Path<Integer> yearBuilt = a.get(Announcement_.yearBuilt);
-        Path<Boolean> wellPlanned = a.get(Announcement_.wellPlanned);
-        Expression<Set<ApartmentAmenity>> apartmentAmenities = a.get(Announcement_.apartmentAmenities);
-        Path<Long> kitchenType = a.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(SimpleAttribute_.id);
-        Path<Integer> kitchenArea = a.get(Announcement_.kitchen).get(Kitchen_.kitchenArea);
-        Path<Long> cookerType = a.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(SimpleAttribute_.id);
-        Expression<Set<FurnishingItem>> kitchenFurnishing = a.get(Announcement_.kitchen).get(Kitchen_.furnishing);
-        Path<Integer> numberOfBathrooms = a.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms);
-        Path<Boolean> separatedWC = a.get(Announcement_.bathroom).get(Bathroom_.separateWC);
-        Expression<Set<FurnishingItem>> bathroomFurnishing = a.get(Announcement_.bathroom).get(Bathroom_.furnishing);
-        Expression<Set<Preference>> preferences = a.get(Announcement_.preferences);
-        Expression<Set<NeighbourhoodItem>> neighbourhood = a.get(Announcement_.neighbourhood);
-        Path<Integer> numberOfFlatmates = a.get(Announcement_.numberOfFlatmates);
-        Path<Long> author = a.get(ManagedObject_.createdBy).get(User_.id);
-        Path<ManagedObjectState> managedObjectState = a.get(ManagedObject_.objectState);
+    private Predicate createPredicateBasedOnSearchCriteria(Root<Announcement> announcement, SearchCriteria sc, CriteriaBuilder cb, CriteriaQuery<Announcement> criteriaQuery) {
+        Path<Long> id = announcement.get(Announcement_.id);
+        Path<AnnouncementType> type = announcement.get(Announcement_.type);
+        Path<Integer> totalArea = announcement.get(Announcement_.totalArea);
+        Path<Integer> numberOfRooms = announcement.get(Announcement_.numberOfRooms);
+        Path<Integer> pricePerMonth = announcement.get(Announcement_.pricePerMonth);
+        Path<Integer> additionalCosts = announcement.get(Announcement_.additionalCostsPerMonth);
+        Path<Integer> securityDeposit = announcement.get(Announcement_.securityDeposit);
+        Path<Integer> floor = announcement.get(Announcement_.floor);
+        Path<Integer> maxFloorInBuilding = announcement.get(Announcement_.maxFloorInBuilding);
+        Path<Long> buildingType = announcement.get(Announcement_.buildingType).get(SimpleAttribute_.id);
+        Path<Long> buildingMaterial = announcement.get(Announcement_.buildingMaterial).get(SimpleAttribute_.id);
+        Path<Long> heatingType = announcement.get(Announcement_.heatingType).get(SimpleAttribute_.id);
+        Path<Long> windowType = announcement.get(Announcement_.windowType).get(SimpleAttribute_.id);
+        Path<Long> parkingType = announcement.get(Announcement_.parkingType).get(SimpleAttribute_.id);
+        Path<Long> apartmentState = announcement.get(Announcement_.apartmentState).get(SimpleAttribute_.id);
+        Path<Integer> yearBuilt = announcement.get(Announcement_.yearBuilt);
+        Path<Boolean> wellPlanned = announcement.get(Announcement_.wellPlanned);
+        Expression<Set<ApartmentAmenity>> apartmentAmenities = announcement.get(Announcement_.apartmentAmenities);
+        Path<Long> kitchenType = announcement.get(Announcement_.kitchen).get(Kitchen_.kitchenType).get(SimpleAttribute_.id);
+        Path<Integer> kitchenArea = announcement.get(Announcement_.kitchen).get(Kitchen_.kitchenArea);
+        Path<Long> cookerType = announcement.get(Announcement_.kitchen).get(Kitchen_.cookerType).get(SimpleAttribute_.id);
+        Expression<Set<FurnishingItem>> kitchenFurnishing = announcement.get(Announcement_.kitchen).get(Kitchen_.furnishing);
+        Path<Integer> numberOfBathrooms = announcement.get(Announcement_.bathroom).get(Bathroom_.numberOfBathrooms);
+        Path<Boolean> separatedWC = announcement.get(Announcement_.bathroom).get(Bathroom_.separateWC);
+        Expression<Set<FurnishingItem>> bathroomFurnishing = announcement.get(Announcement_.bathroom).get(Bathroom_.furnishing);
+        Expression<Set<Preference>> preferences = announcement.get(Announcement_.preferences);
+        Expression<Set<NeighbourhoodItem>> neighbourhood = announcement.get(Announcement_.neighbourhood);
+        Path<Integer> numberOfFlatmates = announcement.get(Announcement_.numberOfFlatmates);
+        Path<Long> author = announcement.get(ManagedObject_.createdBy).get(User_.id);
+        Path<ManagedObjectState> managedObjectState = announcement.get(ManagedObject_.objectState);
 
-        var requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::new);
+        List<ApartmentAmenity> requiredApartmentAmenities = getAttrFromIds(sc.getRequiredApartmentAmenities(), ApartmentAmenity::new);
 
         List<Optional<Predicate>> predicates = Arrays.asList(
                 getEqualsPredicate(id, sc.getId(), cb),
@@ -120,7 +120,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getMinMaxPredicate(securityDeposit, sc.getMinSecurityDeposit(), sc.getMaxSecurityDeposit(), cb),
                 getMinMaxPredicate(floor, sc.getMinFloor(), sc.getMaxFloor(), cb),
                 getMinMaxPredicate(maxFloorInBuilding, sc.getMinMaxFloorInBuilding(), sc.getMaxMaxFloorInBuilding(), cb),
-                getAddressPredicate(a, sc, cb),
+                getAddressPredicate(announcement, sc, cb),
                 getAllowedAttrPredicate(buildingType, sc.getAllowedBuildingTypes()),
                 getAllowedAttrPredicate(buildingMaterial, sc.getAllowedBuildingMaterials()),
                 getAllowedAttrPredicate(heatingType, sc.getAllowedHeatingTypes()),
@@ -130,7 +130,7 @@ public class CustomAnnouncementRepositoryImpl implements CustomAnnouncementRepos
                 getMinMaxPredicate(yearBuilt, sc.getMinYearBuilt(), sc.getMaxYearBuilt(), cb),
                 getEqualsPredicate(wellPlanned, sc.getIsWellPlanned(), cb),
                 getRequiredAttrPredicate(apartmentAmenities, requiredApartmentAmenities, cb),
-                getRoomsPredicates(a, criteriaQuery, sc, cb),
+                getRoomsPredicates(announcement, criteriaQuery, sc, cb),
                 getAllowedAttrPredicate(kitchenType, sc.getAllowedKitchenTypes()),
                 getMinMaxPredicate(kitchenArea, sc.getMinKitchenArea(), sc.getMaxKitchenArea(), cb),
                 getAllowedAttrPredicate(cookerType, sc.getAllowedCookerTypes()),

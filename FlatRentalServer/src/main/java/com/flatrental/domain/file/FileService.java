@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,14 +40,11 @@ public class FileService {
     }
 
     public String storeFile(MultipartFile file) {
-
         String fileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-
         try {
             fileName = UUID.randomUUID().toString() + fileName;
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
             return fileName;
         } catch (IOException ex) {
             throw new ResourceStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -71,13 +66,4 @@ public class FileService {
         }
     }
 
-    public URI getDownloadUri(String filename) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api")
-                .path("/file")
-                .path("/download/")
-                .path(filename)
-                .build()
-                .toUri();
-    }
 }

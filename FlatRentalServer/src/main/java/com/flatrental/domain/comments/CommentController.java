@@ -27,29 +27,30 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";
 
     @GetMapping(ID_PATH)
     public List<CommentDTO> getCommentsForAnnouncement(@PathVariable(ID) Long announcementId) {
-        return commentService.getCommentsForAnnouncement(announcementId);
+        List<Comment> comments = commentService.getCommentsForAnnouncement(announcementId);
+        return commentMapper.mapToCommentDTOs(comments);
     }
 
     @GetMapping("/for-profile" + ID_PATH)
     public List<CommentDTO> getCommentsForProfile(@PathVariable(ID) Long userId) {
-        return commentService.getCommentsForUser(userId);
+        List<Comment> comments = commentService.getCommentsForUser(userId);
+        return commentMapper.mapToCommentDTOs(comments);
     }
 
     @PostMapping
     @HasAnyRole
     public ResourceDTO createComment(@Valid @RequestBody CommentDTO commentDTO, @LoggedUser UserInfo userInfo) {
-        Comment createdComment = commentService.createComment(commentDTO);
-        return ResourceDTO.builder()
-                .id(createdComment.getId())
-                .build();
+        Comment commentToCreate = commentMapper.mapToComment(commentDTO);
+        Comment createdComment = commentService.createComment(commentToCreate);
+        return commentMapper.mapToResourceDTO(createdComment);
     }
-
 
     @DeleteMapping(ID_PATH)
     @HasModeratorOrAdminRole

@@ -2,7 +2,9 @@ package com.flatrental.domain.file;
 
 import com.flatrental.api.FileDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,13 @@ public class FileMapper {
 
     public File mapToFiles(FileDTO fileDTO) {
         return new File(fileDTO.getFilename());
+    }
+
+    public URI mapToDownloadUri(String filename) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(FileController.MAIN_RESOURCE)
+                .path(FileController.DOWNLOAD_FILE_RESOURCE)
+                .build(filename);
     }
 
 }

@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AnnouncementBrowseDTO {
 
+    @NotNull
     private Long id;
 
     @NotNull
@@ -39,10 +40,16 @@ public class AnnouncementBrowseDTO {
     @NotNull
     private AddressDTO address;
 
+    @NotNull
     private List<RoomBrowseDTO> rooms;
+
+    @NotNull
     private List<FileDTO> announcementImages;
-    private ManagedObjectDTO info;
+
+    @NotNull
     private AnnouncementStatisticsDTO statistics;
-    private UserSpecificInfoDTO userSpecificInfo;
+
+    @NotNull
+    private ManagedObjectDTO info;
 
 }

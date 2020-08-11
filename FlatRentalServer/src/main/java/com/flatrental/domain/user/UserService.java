@@ -1,22 +1,20 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.api.UserDTO;
-import com.flatrental.domain.file.FileService;
 import com.flatrental.domain.statistics.StatisticsService;
-import com.flatrental.domain.userrole.UserRole;
-import com.flatrental.domain.userrole.UserRoleName;
 import com.flatrental.infrastructure.exceptions.IllegalArgumentAppException;
 import com.flatrental.infrastructure.security.UserInfo;
+import com.flatrental.infrastructure.utils.Exceptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
@@ -30,16 +28,19 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final FileService fileService;
     private final StatisticsService statisticsService;
 
-    public User registerUser(User newUser) {
-        validateUsernameUniqueness(newUser);
-        validateEmail(newUser.getEmail());
-        validateEmailUniqueness(newUser.getEmail());
-        validatePasswordRules(newUser.getPassword());
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        return userRepository.save(newUser);
+    public User createUser(User userToCreate) {
+        validateUserOnCreate(userToCreate);
+        prepareUserBeforeCreate(userToCreate);
+        return userRepository.save(userToCreate);
+    }
+
+    private void validateUserOnCreate(User user) {
+        validateUsernameUniqueness(user);
+        validateEmail(user.getEmail());
+        validateEmailUniqueness(user.getEmail());
+        validatePasswordRules(user.getPassword());
     }
 
     private void validateUsernameUniqueness(User user) {
@@ -66,10 +67,17 @@ public class UserService {
         }
     }
 
-    public Optional<User> findUser(UserInfo userInfo) {
+    private void prepareUserBeforeCreate(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserStatistics(new UserStatistics());
+        user.setRole(UserRole.ROLE_USER);
+    }
+
+    public User getExistingUser(UserInfo userInfo) {
         return Optional.ofNullable(userInfo)
                 .map(UserInfo::getId)
-                .map(this::getExistingUser);
+                .map(this::getExistingUser)
+                .orElseThrow(Exceptions::getCannotGetUserFromContextException);
     }
 
     public User getExistingUser(Long userId) {
@@ -85,53 +93,32 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public UserDTO mapToUserDTO(User user) {
-        return UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .phoneNumber(user.getPhoneNumber())
-                .avatarUrl(Optional.ofNullable(user.getAvatar())
-                        .map(fileService::getDownloadUri)
-                        .orElse(null))
-                .roles(user.getRoles().stream()
-                        .map(UserRole::getName)
-                        .map(UserRoleName::name)
-                        .collect(Collectors.toSet()))
-                .statistics(statisticsService.mapToUserStatisticsDTO(user.getUserStatistics()))
-                .about(user.getAbout())
-                .build();
-    }
-
-    public void setAvatar(String filename, Long userId) {
-        User user = getExistingUser(userId);
-        user.setAvatar(filename);
-        userRepository.save(user);
-    }
-
-    public void setNewPassword(User user, String newPassword) {
+    public void updatePassword(Long userId, String newPassword) {
         validatePasswordRules(newPassword);
+        User user = getExistingUser(userId);
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
     }
 
-    public void setNewEmail(User user, String email) {
+    public void updateEmail(Long userId, String email) {
         validateEmail(email);
         validateEmailUniqueness(email);
+        User user = getExistingUser(userId);
         user.setEmail(email);
-        userRepository.save(user);
     }
 
-    public void setNewPhoneNumber(User user, String phoneNumber) {
+    public void updateAvatar(Long userId, String filename) {
+        User user = getExistingUser(userId);
+        user.setAvatar(filename);
+    }
+
+    public void updatePhoneNumber(Long userId, String phoneNumber) {
+        User user = getExistingUser(userId);
         user.setPhoneNumber(phoneNumber);
-        userRepository.save(user);
     }
 
-    public void setUserProfileDescription(User user, String description) {
+    public void updateAbout(Long userId, String description) {
+        User user = getExistingUser(userId);
         user.setAbout(description);
-        userRepository.save(user);
     }
 
     public void updateUserStatistics(User user) {

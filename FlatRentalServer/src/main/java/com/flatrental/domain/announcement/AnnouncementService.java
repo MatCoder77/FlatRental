@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +35,7 @@ public class AnnouncementService {
 
     public Announcement getExistingAnnouncement(Long id) {
         return announcementRepository.findByIdAndObjectStateNot(id, ManagedObjectState.REMOVED)
-                .orElseThrow(() -> Exceptions.getObjectNotFoundException(Announcement.class, id,
-                        Set.of(ManagedObjectState.ACTIVE, ManagedObjectState.INACTIVE)));
+                .orElseThrow(() -> Exceptions.getObjectNotFoundException(Announcement.class, id, ManagedObjectState.getNotRemovedStates()));
     }
 
     public Announcement createAnnouncement(Announcement announcement) {
@@ -143,9 +141,9 @@ public class AnnouncementService {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void setAllAnnouncementsOlderThanMonthAsInactive() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, -1);
-        Instant monthAgo = cal.getTime().toInstant();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        Instant monthAgo = calendar.getTime().toInstant();
         List<Announcement> announcementsToDeactivate = announcementRepository.getAllByUpdatedAtBeforeAndObjectState(monthAgo, ManagedObjectState.ACTIVE);
         announcementsToDeactivate.forEach(announcement -> announcement.setObjectState(ManagedObjectState.INACTIVE));
         announcementRepository.saveAll(announcementsToDeactivate);

@@ -90,6 +90,5 @@ public class AnnouncementDTO {
     private ManagedObjectDTO info;
     private AnnouncementStatisticsDTO statistics;
     private Long quality;
-    private UserSpecificInfoDTO userSpecificInfo;
 
 }

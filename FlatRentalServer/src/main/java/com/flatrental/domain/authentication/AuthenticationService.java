@@ -1,54 +1,48 @@
 package com.flatrental.domain.authentication;
 
-import com.flatrental.api.LoginDTO;
-import com.flatrental.api.RegistrationFormDTO;
-import com.flatrental.api.TokenDTO;
-import com.flatrental.domain.statistics.user.UserStatistics;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
-import com.flatrental.domain.userrole.UserRole;
-import com.flatrental.domain.userrole.UserRoleName;
-import com.flatrental.domain.userrole.UserRoleService;
+import com.flatrental.infrastructure.security.TokenHandler;
+import com.flatrental.infrastructure.security.UserInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private final AuthenticationManager authenticationManager;
+    private final TokenHandler tokenHandler;
     private final UserService userService;
-    private final UserRoleService userRoleService;
 
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(LoginDTO loginDTO) {
-        return new UsernamePasswordAuthenticationToken(loginDTO.getUsernameOrEmail(), loginDTO.getPassword());
+    public User registerUser(User user) {
+        return userService.createUser(user);
     }
 
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(String username, String password) {
-        return new UsernamePasswordAuthenticationToken(username, password);
+    public String signInUser(String usernameOrEmail, String password) {
+        Authentication authentication = authenticateUser(usernameOrEmail, password);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return tokenHandler.generateToken(authentication);
     }
 
-    public TokenDTO mapToTokenDTO(String token) {
-        return new TokenDTO(token);
+    public Authentication authenticateUser(String usernameOrEmail, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(usernameOrEmail, password);
+        return authenticationManager.authenticate(token);
     }
 
-    public User createUserBasedOnRegistrationForm(RegistrationFormDTO registrationFormDTO) {
-        UserRole userRole = userRoleService.getExistingUserRole(UserRoleName.ROLE_USER);
-        User newUser = new User(null,
-                registrationFormDTO.getName(),
-                registrationFormDTO.getSurname(),
-                registrationFormDTO.getUsername(),
-                registrationFormDTO.getPassword(),
-                registrationFormDTO.getEmail(),
-                registrationFormDTO.getPhoneNumber(),
-                null,
-                null,
-                new UserStatistics(),
-                Collections.singleton(userRole),
-                null);
-        return userService.registerUser(newUser);
+    public void changeUserPassword(UserInfo userInfo, String newPassword, String password) {
+        authenticateUser(userInfo.getUsername(), password);
+        userService.updatePassword(userInfo.getId(), newPassword);
+    }
+
+    public void changeUserEmail(UserInfo userInfo, String newEmail, String password) {
+        authenticateUser(userInfo.getUsername(), password);
+        userService.updateEmail(userInfo.getId(), newEmail);
     }
 
 }

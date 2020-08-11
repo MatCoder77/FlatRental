@@ -15,11 +15,14 @@ import com.flatrental.domain.announcement.simpleattribute.neighbourhood.Neighbou
 import com.flatrental.domain.file.File;
 import com.flatrental.domain.announcement.simpleattribute.parkingtype.ParkingType;
 import com.flatrental.domain.announcement.simpleattribute.windowtype.WindowType;
+import com.flatrental.domain.managedobject.ManagedObject_;
 import com.flatrental.domain.statistics.announcement.AnnouncementStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -28,6 +31,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -35,6 +39,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -58,7 +65,25 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcements")
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = Announcement.MANY_TO_ONE_ASSOCIATIONS_GRAPH,
+                attributeNodes = {
+                        @NamedAttributeNode(Announcement_.BUILDING_TYPE),
+                        @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
+                        @NamedAttributeNode(Announcement_.HEATING_TYPE),
+                        @NamedAttributeNode(Announcement_.WINDOW_TYPE),
+                        @NamedAttributeNode(Announcement_.PARKING_TYPE),
+                        @NamedAttributeNode(Announcement_.APARTMENT_STATE),
+                        @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
+                        @NamedAttributeNode(ManagedObject_.CREATED_BY),
+                        @NamedAttributeNode(ManagedObject_.UPDATED_BY)
+                }
+        )
+})
 public class Announcement extends ManagedObject {
+
+    public static final String MANY_TO_ONE_ASSOCIATIONS_GRAPH = "Announcement.manyToOneAssociationsGraph";
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
@@ -101,22 +126,22 @@ public class Announcement extends ManagedObject {
     @NotNull
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private BuildingType buildingType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private BuildingMaterial buildingMaterial;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private HeatingType heatingType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private WindowType windowType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ParkingType parkingType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ApartmentState apartmentState;
 
     private Integer yearBuilt;
@@ -124,10 +149,12 @@ public class Announcement extends ManagedObject {
     private Boolean wellPlanned;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "Announcements_X_ApartmentAmenities")
     private Set<ApartmentAmenity> apartmentAmenities;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     @JoinColumn(name = "announcement_id")
     private Set<Room> rooms;
 
@@ -136,10 +163,12 @@ public class Announcement extends ManagedObject {
     private Bathroom bathroom;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "Announcements_X_Preferences")
     private Set<Preference> preferences;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "Announcements_X_NeighbourhoodItems")
     private Set<NeighbourhoodItem> neighbourhood;
 
@@ -147,6 +176,7 @@ public class Announcement extends ManagedObject {
     private String description;
 
     @ElementCollection
+    @Fetch(FetchMode.SUBSELECT)
     @CollectionTable(name = "Announcements_X_Images")
     @MapKeyColumn(name = "IMAGE_NUMBER")
     private Map<Integer, File> announcementImages = new HashMap<>();

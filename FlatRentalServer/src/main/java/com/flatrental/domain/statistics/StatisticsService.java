@@ -3,7 +3,7 @@ package com.flatrental.domain.statistics;
 import com.flatrental.api.UserStatisticsDTO;
 import com.flatrental.domain.comments.Comment;
 import com.flatrental.domain.comments.CommentService;
-import com.flatrental.domain.statistics.user.UserStatistics;
+import com.flatrental.domain.user.UserStatistics;
 import com.flatrental.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,7 @@ public class StatisticsService {
 
     private final CommentService commentService;
 
-    public UserStatisticsDTO mapToUserStatisticsDTO(UserStatistics userStatistics) {
-        return UserStatisticsDTO.builder()
-                .opinionsCounter(userStatistics.getOpinionsCounter())
-                .rating(userStatistics.getRating())
-                .build();
-    }
+
 
     public void updateUserStatistics(User user) {
         List<Comment> allCommentsForUser = commentService.getCommentsForUser(user);

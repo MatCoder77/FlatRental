@@ -8,6 +8,8 @@ import com.flatrental.domain.locations.localitytype.LocalityType;
 
 import com.flatrental.domain.locations.street.Street;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,6 +65,7 @@ public class AbstractLocality {
     private AbstractLocality localityDistrict;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "AbstractLocalities_X_Streets")
     private Set<Street> streets = new HashSet<>();
 

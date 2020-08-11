@@ -30,8 +30,6 @@
         <heap unit="entries">1000</heap>
     </cache>
     <cache alias="userCache" uses-template="userCacheTemplate"/>
-    <cache alias="userRolesCollectionCache" uses-template="userCacheTemplate"/>
-    <cache alias="userRoleCache" uses-template="simpleReferenceAttributeCacheTemplate"/>
     <cache alias="default-update-timestamps-region">
         <expiry>
             <none/>

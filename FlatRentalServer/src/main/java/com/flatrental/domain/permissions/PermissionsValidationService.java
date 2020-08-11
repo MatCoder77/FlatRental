@@ -4,17 +4,13 @@ import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserService;
-import com.flatrental.domain.userrole.UserRole;
-import com.flatrental.domain.userrole.UserRoleName;
+import com.flatrental.domain.user.UserRole;
 import com.flatrental.infrastructure.security.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,18 +31,13 @@ public class PermissionsValidationService {
         if (userInfo == null) {
             return false;
         }
-
         User user = userService.getExistingUser(userInfo.getId());
-        return hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN) ||
-                (hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement));
+        return hasAnyOfRoles(user, UserRole.ROLE_MODERATOR, UserRole.ROLE_ADMIN) ||
+                (hasAnyOfRoles(user, UserRole.ROLE_USER) && isAnnouncementCreator(user, announcement));
     }
 
-    private boolean hasAnyOfRoles(User user, UserRoleName ...userRoles) {
-        Collection<UserRoleName> grantedRoles = user.getRoles().stream()
-                .map(UserRole::getName)
-                .collect(Collectors.toList());
-        Collection<UserRoleName> desiredRoles = Arrays.asList(userRoles);
-        return !Collections.disjoint(grantedRoles, desiredRoles);
+    private boolean hasAnyOfRoles(User user, UserRole...allowedRoles) {
+        return Set.of(allowedRoles).contains(user.getRole());
     }
 
     private boolean isAnnouncementCreator(User user, Announcement announcement) {
@@ -64,8 +55,8 @@ public class PermissionsValidationService {
             return false;
         }
         User user = userService.getExistingUser(userInfo.getId());
-        return hasAnyOfRoles(user, UserRoleName.ROLE_MODERATOR, UserRoleName.ROLE_ADMIN) ||
-                (managedObjectState != ManagedObjectState.REMOVED && hasAnyOfRoles(user, UserRoleName.ROLE_USER) && isAnnouncementCreator(user, announcement));
+        return hasAnyOfRoles(user, UserRole.ROLE_MODERATOR, UserRole.ROLE_ADMIN) ||
+                (managedObjectState != ManagedObjectState.REMOVED && hasAnyOfRoles(user, UserRole.ROLE_USER) && isAnnouncementCreator(user, announcement));
     }
 
 }

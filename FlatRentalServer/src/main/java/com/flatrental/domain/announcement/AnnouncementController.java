@@ -14,7 +14,6 @@ import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
-import com.flatrental.infrastructure.utils.Exceptions;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,37 +28,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.flatrental.infrastructure.utils.ResourcePaths.ID;
 import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
 
 @Api(tags = "Announcements")
 @RestController
-@RequestMapping("/api/announcements")
+@RequestMapping(AnnouncementController.MAIN_RESOURCE)
+@Transactional
 @RequiredArgsConstructor
 public class AnnouncementController {
+
+    public static final String MAIN_RESOURCE = "/api/announcements";
+    private static final String STATE = "state";
+    private static final String CHANGE_STATE_RESOURCE = "/change-state";
+    public static final String SEARCH_RESOURCE = "/search";
 
     private final AnnouncementService announcementService;
     private final AnnouncementMapper announcementMapper;
     private final UserService userService;
     private final SearchCriteriaService searchCriteriaService;
 
-    private static final String STATE = "state";
-    private static final String CHANGE_STATE_RESOURCE = "/change-state";
-
     @GetMapping(ID_PATH)
-    public AnnouncementDTO getAnnouncement(@PathVariable(ID) Long id, @LoggedUser UserInfo userInfo) {
+    public AnnouncementDTO getAnnouncement(@PathVariable(ID) Long id) {
         Announcement announcement = announcementService.getExistingAnnouncementAndIncrementViewsCounter(id);
-        Optional<User> user = userService.findUser(userInfo);
-        return announcementMapper.mapToAnnouncementDTO(announcement, user);
+        return announcementMapper.mapToAnnouncementDTO(announcement);
     }
 
     @PostMapping
@@ -67,19 +64,7 @@ public class AnnouncementController {
     public ResourceDTO createNewAnnouncement(@Valid @RequestBody AnnouncementDTO announcementDTO) {
         Announcement announcementToCreate = announcementMapper.mapToAnnouncement(announcementDTO);
         Announcement createdAnnouncement = announcementService.createAnnouncement(announcementToCreate);
-        return generateResourceDTO(createdAnnouncement);
-    }
-
-    private ResourceDTO generateResourceDTO(Announcement announcement) {
-        String announcementId = String.valueOf(announcement.getId());
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/announcements/{id}")
-                .buildAndExpand(announcementId)
-                .toUri();
-        return ResourceDTO.builder()
-                .id(announcement.getId())
-                .uri(uri)
-                .build();
+        return announcementMapper.mapToResourceDTO(createdAnnouncement);
     }
 
     @PutMapping(ID_PATH)
@@ -87,7 +72,7 @@ public class AnnouncementController {
     public ResourceDTO updateAnnouncement(@PathVariable(ID) Long id, @Valid @RequestBody AnnouncementDTO updatedAnnouncementDTO, @LoggedUser UserInfo userInfo) {
         Announcement announcementToUpdate = announcementMapper.mapToAnnouncement(updatedAnnouncementDTO);
         Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcementToUpdate, userInfo);
-        return generateResourceDTO(updatedAnnouncement);
+        return announcementMapper.mapToResourceDTO(updatedAnnouncement);
     }
 
     @DeleteMapping(ID_PATH)
@@ -99,13 +84,12 @@ public class AnnouncementController {
                 .build();
     }
 
-    @GetMapping("/search")
+    @GetMapping(SEARCH_RESOURCE)
     public AnnouncementSearchResultDTO searchAnnouncements(@RequestParam("searchCriteria") Optional<String> searchCriteriaParam, Pageable pageable, @LoggedUser UserInfo userInfo) {
         SearchCriteria searchCriteria = searchCriteriaParam.map(searchCriteriaService::getSearchCriteria)
                 .orElseGet(SearchCriteria::new);
         Page<Announcement> announcementPage = announcementService.searchAnnouncements(searchCriteria, pageable);
-        Optional<User> user = userService.findUser(userInfo);
-        return announcementMapper.mapToAnnouncementSearchResultDTO(announcementPage, searchCriteria, user);
+        return announcementMapper.mapToAnnouncementSearchResultDTO(announcementPage, searchCriteria);
     }
 
     @GetMapping("/permissions" + ID_PATH)
@@ -120,8 +104,7 @@ public class AnnouncementController {
     @Transactional
     @HasAnyRole
     public ResponseDTO addAnnouncementsToFavourites(@PathVariable(ID) Long announcementId, @LoggedUser UserInfo userInfo) {
-        User user = userService.findUser(userInfo)
-                .orElseThrow(Exceptions::getCannotGetUserFromContextException);
+        User user = userService.getExistingUser(userInfo);
         announcementService.addAnnouncementsToFavourites(announcementId, user);
         return ResponseDTO.builder()
                 .success(true)
@@ -133,8 +116,7 @@ public class AnnouncementController {
     @Transactional
     @HasAnyRole
     public ResponseDTO removeAnnouncementsFromFavourites(@PathVariable(ID) Long announcementId, @LoggedUser UserInfo userInfo) {
-        User user = userService.findUser(userInfo)
-                .orElseThrow(Exceptions::getCannotGetUserFromContextException);
+        User user = userService.getExistingUser(userInfo);
         announcementService.removeAnnouncementsFromFavourites(announcementId, user);
         return ResponseDTO.builder()
                 .success(true)
@@ -145,24 +127,17 @@ public class AnnouncementController {
     @GetMapping("/favourites")
     @HasAnyRole
     public List<AnnouncementDTO> getFavouriteAnnouncements(@LoggedUser UserInfo userInfo) {
-        User user = userService.findUser(userInfo)
-                .orElseThrow(Exceptions::getCannotGetUserFromContextException);
-        return user.getFavourites().stream()
-                .map(announcement -> announcementMapper.mapToAnnouncementDTO(announcement, user))
-                .collect(Collectors.toList());
+        User user = userService.getExistingUser(userInfo);
+        return announcementMapper.mapToAnnouncementDTOs(user.getFavourites());
     }
 
     @GetMapping("/user" + ID_PATH)
     @HasAnyRole
     public List<AnnouncementBrowseDTO> getUserAnnouncements(Pageable pageable, @LoggedUser UserInfo userInfo) {
-        User user = userService.findUser(userInfo)
-                .orElseThrow(Exceptions::getCannotGetUserFromContextException);
-        SearchCriteria searchCriteria = SearchCriteria.builder()
-                .author(user.getId())
-                .allowedManagedObjectStates(Set.of(ManagedObjectState.ACTIVE, ManagedObjectState.INACTIVE))
-                .build();
+        User user = userService.getExistingUser(userInfo);
+        SearchCriteria searchCriteria = searchCriteriaService.getSearchCriteriaForAnnouncementNotRemovedAndCreatedByUser(user);
         Page<Announcement> announcementPage = announcementService.searchAnnouncements(searchCriteria, pageable);
-        return announcementMapper.mapToAnnouncementSearchResultDTO(announcementPage, searchCriteria, user).getAnnouncements();
+        return announcementMapper.mapToAnnouncementSearchResultDTO(announcementPage, searchCriteria).getAnnouncements();
     }
 
     @PutMapping(ID_PATH + CHANGE_STATE_RESOURCE)

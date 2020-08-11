@@ -7,9 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -22,15 +25,16 @@ import java.util.Set;
 @Getter
 public class Kitchen {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private KitchenType kitchenType;
 
     private Integer kitchenArea;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private CookerType cookerType;
 
     @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @Where(clause = "furnishing_type = 'KITCHEN'")
     @JoinTable(name = "Announcements_X_FurnishingItems")
     private Set<FurnishingItem> furnishing;

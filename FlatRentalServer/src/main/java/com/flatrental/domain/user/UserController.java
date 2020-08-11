@@ -5,7 +5,6 @@ import com.flatrental.api.ChangeDTO;
 import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.ResponseDTO;
 import com.flatrental.api.UserDTO;
-import com.flatrental.domain.file.FileService;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;
@@ -13,7 +12,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,28 +24,29 @@ import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
 
 @Api(tags = "Users")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(UserController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class UserController {
 
+    public static final String MAIN_RESOURCE = "/api/user";
+    private static final String USERNAME_PATH_PARAM = "username";
+    private static final String EMAIL_PATH_PARAM = "email";
+    private static final String CHECK_USERNAME_RESOURCE = "/check/username/{" + USERNAME_PATH_PARAM + "}";
+    private static final String CHECK_EMAIL_RESOURCE = "/check/email/{" + EMAIL_PATH_PARAM + "}";
+    private static final String FILENAME_PATH_PARAM = "filename";
+    private static final String SET_AVATAR_RESOURCE = "/set-avatar/{" + FILENAME_PATH_PARAM + "}";
+
     private final UserService userService;
-    private final FileService fileService;
+    private final UserMapper userMapper;
 
-    private static final String USERNAME = "username";
-    private static final String EMAIL = "email";
-    private static final String CHECK_USERNAME_PATH = "/check/username/{" + USERNAME + "}";
-    private static final String CHECK_EMAIL_PATH = "/check/email/{" + EMAIL + "}";
-    private static final String FILENAME = "filename";
-    private static final String SET_AVATAR_PATH = "/set-avatar/{" + FILENAME + "}";
-
-    @GetMapping(CHECK_USERNAME_PATH)
-    public AvailableDTO checkUsernameAvailable(@PathVariable(USERNAME) String username) {
+    @GetMapping(CHECK_USERNAME_RESOURCE)
+    public AvailableDTO checkUsernameAvailable(@PathVariable(USERNAME_PATH_PARAM) String username) {
         Boolean isAvailable = !userService.userExistsByUsername(username);
         return new AvailableDTO(isAvailable);
     }
 
-    @GetMapping(CHECK_EMAIL_PATH)
-    public AvailableDTO checkIfEmailAvailable(@PathVariable(EMAIL) String email) {
+    @GetMapping(CHECK_EMAIL_RESOURCE)
+    public AvailableDTO checkIfEmailAvailable(@PathVariable(EMAIL_PATH_PARAM) String email) {
         Boolean isAvailable = !userService.userExistsByEmail(email);
         return new AvailableDTO(isAvailable);
     }
@@ -55,41 +55,39 @@ public class UserController {
     @HasAnyRole
     public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
         User user = userService.getExistingUser(currentUserInfo.getId());
-        return userService.mapToUserDTO(user);
+        return userMapper.mapToUserDTO(user);
     }
 
     @GetMapping(ID_PATH)
     @HasAnyRole
     public UserDTO getUser(@PathVariable(ID) Long id) {
         User user = userService.getExistingUser(id);
-        return userService.mapToUserDTO(user);
+        return userMapper.mapToUserDTO(user);
     }
 
-    @PostMapping(SET_AVATAR_PATH)
+    @PutMapping(SET_AVATAR_RESOURCE)
     @HasAnyRole
-    public ResourceDTO setAvatar(@PathVariable(FILENAME) String filename, @LoggedUser UserInfo userInfo) {
-        userService.setAvatar(filename, userInfo.getId());
+    public ResourceDTO setAvatar(@PathVariable(FILENAME_PATH_PARAM) String filename, @LoggedUser UserInfo userInfo) {
+        userService.updateAvatar(userInfo.getId(), filename);
         return ResourceDTO.builder()
-                .uri(fileService.getDownloadUri(filename))
+                .uri(userMapper.mapToAvatarUrl(filename))
                 .identifier(filename)
                 .build();
     }
 
-    @PostMapping("/change-phone")
+    @PutMapping("/change-phone")
     @HasAnyRole
     public ResponseDTO changePhoneNumber(@Valid @RequestBody ChangeDTO phoneNumberChange, @LoggedUser UserInfo userInfo) {
-        User user = userService.getExistingUser(userInfo.getId());
-        userService.setNewPhoneNumber(user, phoneNumberChange.getValue());
+        userService.updatePhoneNumber(userInfo.getId(), phoneNumberChange.getValue());
         return ResponseDTO.builder()
                 .success(true)
                 .build();
     }
 
-    @PostMapping("/change-profile-description")
+    @PutMapping("/change-profile-description")
     @HasAnyRole
     public ResponseDTO changeProfileDescription(@Valid @RequestBody ChangeDTO profileDescriptionChanged, @LoggedUser UserInfo userInfo) {
-        User user = userService.getExistingUser(userInfo.getId());
-        userService.setUserProfileDescription(user, profileDescriptionChanged.getValue());
+        userService.updateAbout(userInfo.getId(), profileDescriptionChanged.getValue());
         return ResponseDTO.builder()
                 .success(true)
                 .build();

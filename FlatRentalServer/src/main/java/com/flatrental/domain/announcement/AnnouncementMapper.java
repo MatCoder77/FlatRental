@@ -4,8 +4,8 @@ import com.flatrental.api.AnnouncementBrowseDTO;
 import com.flatrental.api.AnnouncementDTO;
 import com.flatrental.api.AnnouncementSearchResultDTO;
 import com.flatrental.api.FileDTO;
+import com.flatrental.api.ResourceDTO;
 import com.flatrental.api.SimpleAttributeDTO;
-import com.flatrental.api.UserSpecificInfoDTO;
 import com.flatrental.domain.announcement.address.AddressMapper;
 import com.flatrental.domain.announcement.bathroom.BathroomMapper;
 import com.flatrental.domain.announcement.kitchen.KitchenMapper;
@@ -34,7 +34,7 @@ import com.flatrental.domain.file.File;
 import com.flatrental.domain.file.FileMapper;
 import com.flatrental.domain.managedobject.ManagedObjectMapper;
 import com.flatrental.domain.statistics.announcement.AnnouncementsStatisticsMapper;
-import com.flatrental.domain.user.User;
+import com.flatrental.domain.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +45,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -52,6 +53,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +68,7 @@ public class AnnouncementMapper {
     private final ManagedObjectMapper managedObjectMapper;
     private final SimpleAttributeMapper simpleAttributeMapper;
     private final FileMapper fileMapper;
+    private final UserMapper userMapper;
     private final BuildingTypeService buildingTypeService;
     private final BuildingMaterialService buildingMaterialService;
     private final HeatingTypeService heatingTypeService;
@@ -156,11 +160,15 @@ public class AnnouncementMapper {
         return simpleAttributeMapper.mapToSimpleAttribute(apartmentState, apartmentStateService::getExistingApartmentState);
     }
 
-    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement, User user) {
-        return mapToAnnouncementDTO(announcement, Optional.ofNullable(user));
+    public List<AnnouncementDTO> mapToAnnouncementDTOs(Collection<Announcement> announcements) {
+        return Optional.ofNullable(announcements)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(this::mapToAnnouncementDTO)
+                .collect(Collectors.toList());
     }
 
-    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement, Optional<User> user) {
+    public AnnouncementDTO mapToAnnouncementDTO(Announcement announcement) {
         if (announcement == null) {
             return null;
         }
@@ -197,7 +205,6 @@ public class AnnouncementMapper {
                 .windowType(simpleAttributeMapper.mapToSimpleAttributeDTO(announcement.getWindowType()))
                 .parkingType(simpleAttributeMapper.mapToSimpleAttributeDTO(announcement.getParkingType()))
                 .apartmentState(simpleAttributeMapper.mapToSimpleAttributeDTO(announcement.getApartmentState()))
-                .userSpecificInfo(getUserSpecificInfo(announcement, user))
                 .build();
     }
 
@@ -209,22 +216,9 @@ public class AnnouncementMapper {
                 .collect(Collectors.toList());
     }
 
-    private UserSpecificInfoDTO getUserSpecificInfo(Announcement announcement, Optional<User> user) {
-        boolean isMarkedAsFavourite = user.map(User::getFavourites)
-                .map(favourites -> favourites.contains(announcement))
-                .orElse(false);
-        return UserSpecificInfoDTO.builder()
-                .isMarkedAsFavourite(isMarkedAsFavourite)
-                .build();
-    }
-
-    public AnnouncementSearchResultDTO mapToAnnouncementSearchResultDTO(Page<Announcement> announcementPage, SearchCriteria searchCriteria, User user) {
-        return mapToAnnouncementSearchResultDTO(announcementPage, searchCriteria, Optional.ofNullable(user));
-    }
-
-    public AnnouncementSearchResultDTO mapToAnnouncementSearchResultDTO(Page<Announcement> announcementPage, SearchCriteria searchCriteria, Optional<User> user) {
+    public AnnouncementSearchResultDTO mapToAnnouncementSearchResultDTO(Page<Announcement> announcementPage, SearchCriteria searchCriteria) {
         List<AnnouncementBrowseDTO> announcements = announcementPage.stream()
-                .map(announcement -> mapToAnnouncementBrowseDTO(announcement, user))
+                .map(announcement -> mapToAnnouncementBrowseDTO(announcement))
                 .collect(Collectors.toList());
         URI firstPageUri = generatePageUri(announcementPage.getPageable().first());
         URI previousPageUri = generatePageUri(announcementPage.getPageable().previousOrFirst());
@@ -245,7 +239,7 @@ public class AnnouncementMapper {
                 .build();
     }
 
-    private AnnouncementBrowseDTO mapToAnnouncementBrowseDTO(Announcement announcement, Optional<User> user) {
+    private AnnouncementBrowseDTO mapToAnnouncementBrowseDTO(Announcement announcement) {
         return AnnouncementBrowseDTO.builder()
                 .id(announcement.getId())
                 .type(announcement.getType().toString().toLowerCase())
@@ -256,15 +250,15 @@ public class AnnouncementMapper {
                 .address(addressMapper.mapToAddressDTO(announcement.getAddress()))
                 .rooms(roomMapper.mapToRoomBrowseDTOs(announcement.getRooms()))
                 .announcementImages(mapToAnnouncementImageDTOs(announcement.getAnnouncementImages()))
-                .info(managedObjectMapper.mapToManagedObjectDTO(announcement))
                 .statistics(announcementsStatisticsMapper.mapToAnnouncementStatisticsDTO(announcement.getStatistics()))
-                .userSpecificInfo(getUserSpecificInfo(announcement, user))
+                .info(managedObjectMapper.mapToManagedObjectDTO(announcement))
                 .build();
     }
 
     private URI generatePageUri(Pageable pageable) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/announcements/search")
+                .path(AnnouncementController.MAIN_RESOURCE)
+                .path(AnnouncementController.SEARCH_RESOURCE)
                 .queryParam(getQueryParamsForPageable(pageable))
                 .build()
                 .toUri();
@@ -303,9 +297,27 @@ public class AnnouncementMapper {
 
     private String generateUriTemplateForPageWithSelectedNumber(Pageable pageable) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/announcements/search")
+                .path(AnnouncementController.MAIN_RESOURCE)
+                .path(AnnouncementController.SEARCH_RESOURCE)
                 .toUriString() + "?" + getPaginationQueryParams("{pageNumber}", pageable.getPageSize(), pageable.getSort());
 
+    }
+
+    public ResourceDTO mapToResourceDTO(Announcement announcement) {
+        if (announcement == null) {
+            return null;
+        }
+        return ResourceDTO.builder()
+                .id(announcement.getId())
+                .uri(getAnnouncementUri(announcement))
+                .build();
+    }
+
+    private URI getAnnouncementUri(Announcement announcement) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(AnnouncementController.MAIN_RESOURCE)
+                .path(ID_PATH)
+                .build(announcement.getId());
     }
 
 }

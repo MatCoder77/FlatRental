@@ -2,18 +2,20 @@ package com.flatrental.domain.user;
 
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.managedobject.ManagedObject;
-import com.flatrental.domain.statistics.user.UserStatistics;
-import com.flatrental.domain.userrole.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,6 +36,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class User extends ManagedObject {
 
     @Id
@@ -56,7 +59,7 @@ public class User extends ManagedObject {
     @Size(max = 100)
     private String password;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @NotBlank
     @Size(max = 40)
     @Email
@@ -72,15 +75,11 @@ public class User extends ManagedObject {
 
     private UserStatistics userStatistics;
 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "userRolesCollectionCache")
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "Users_X_UserRoles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<UserRole> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "users_X_favourites",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "announcement_id"))
