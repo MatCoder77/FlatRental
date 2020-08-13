@@ -98,7 +98,6 @@ public class CommentMapper {
         return applyMapperOrReturnNullIfArgumentIsNull(id, commentService::getExistingComment);
     }
 
-
     public ResourceDTO mapToResourceDTO(Comment comment) {
         return ResourceDTO.builder()
                 .id(comment.getId())

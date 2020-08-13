@@ -28,7 +28,7 @@ public class StreetController {
 
     @GetMapping(STREETS_FOR_PARENT_LOCALITY_PATH)
     public List<StreetDTO> getStreetsForParentLocality(@PathVariable(ID) Long parentLocationId) {
-        AbstractLocality parentLocality = abstractLocalityService.getExistingAbstratcLocality(parentLocationId);
+        AbstractLocality parentLocality = abstractLocalityService.getExistingAbstractLocality(parentLocationId);
         return parentLocality.getStreets().stream()
                 .map(streetService::mapToStreetDTO)
                 .collect(Collectors.toList());

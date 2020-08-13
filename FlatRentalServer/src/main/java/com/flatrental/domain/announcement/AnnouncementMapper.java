@@ -34,7 +34,6 @@ import com.flatrental.domain.file.File;
 import com.flatrental.domain.file.FileMapper;
 import com.flatrental.domain.managedobject.ManagedObjectMapper;
 import com.flatrental.domain.statistics.announcement.AnnouncementsStatisticsMapper;
-import com.flatrental.domain.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,7 +67,6 @@ public class AnnouncementMapper {
     private final ManagedObjectMapper managedObjectMapper;
     private final SimpleAttributeMapper simpleAttributeMapper;
     private final FileMapper fileMapper;
-    private final UserMapper userMapper;
     private final BuildingTypeService buildingTypeService;
     private final BuildingMaterialService buildingMaterialService;
     private final HeatingTypeService heatingTypeService;
@@ -218,7 +216,7 @@ public class AnnouncementMapper {
 
     public AnnouncementSearchResultDTO mapToAnnouncementSearchResultDTO(Page<Announcement> announcementPage, SearchCriteria searchCriteria) {
         List<AnnouncementBrowseDTO> announcements = announcementPage.stream()
-                .map(announcement -> mapToAnnouncementBrowseDTO(announcement))
+                .map(this::mapToAnnouncementBrowseDTO)
                 .collect(Collectors.toList());
         URI firstPageUri = generatePageUri(announcementPage.getPageable().first());
         URI previousPageUri = generatePageUri(announcementPage.getPageable().previousOrFirst());

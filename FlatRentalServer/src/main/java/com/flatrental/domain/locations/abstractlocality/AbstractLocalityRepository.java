@@ -2,7 +2,6 @@ package com.flatrental.domain.locations.abstractlocality;
 
 import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.street.Street;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

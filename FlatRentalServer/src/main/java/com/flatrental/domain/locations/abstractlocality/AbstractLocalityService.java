@@ -34,7 +34,7 @@ public class AbstractLocalityService {
         return abstractLocalityRepository.save(abstractLocality);
     }
 
-    public AbstractLocality getExistingAbstratcLocality(Long id) {
+    public AbstractLocality getExistingAbstractLocality(Long id) {
         return abstractLocalityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NO_ABSTRACT_LOCALITY_WITH_SUPPLIED_ID, id)));
     }

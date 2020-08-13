@@ -1,5 +1,8 @@
 package com.flatrental.domain.user;
 
+import com.flatrental.domain.event.comment.CommentAddedEvent;
+import com.flatrental.domain.event.comment.CommentRemovedEvent;
+import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.statistics.StatisticsService;
 import com.flatrental.infrastructure.exceptions.IllegalArgumentAppException;
 import com.flatrental.infrastructure.security.UserInfo;
@@ -8,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.text.MessageFormat;
 import java.util.Optional;
@@ -44,13 +49,13 @@ public class UserService {
     }
 
     private void validateUsernameUniqueness(User user) {
-        if(userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentAppException(MessageFormat.format(USERNAME_ALREADY_TAKEN_MSG, user.getUsername()));
         }
     }
 
     private void validateEmailUniqueness(String email) {
-        if(userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentAppException(MessageFormat.format(EMAIL_ALREADY_TAKEN_MSG, email));
         }
     }
@@ -71,6 +76,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserStatistics(new UserStatistics());
         user.setRole(UserRole.ROLE_USER);
+        user.setObjectState(ManagedObjectState.ACTIVE);
     }
 
     public User getExistingUser(UserInfo userInfo) {
@@ -124,6 +130,16 @@ public class UserService {
     public void updateUserStatistics(User user) {
         statisticsService.updateUserStatistics(user);
         userRepository.save(user);
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onOpinionAboutUserAdded(CommentAddedEvent<User> event) {
+        updateUserStatistics(event.getRelatedObject());
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onOpinionAboutUserRemoved(CommentRemovedEvent<User> event) {
+        updateUserStatistics(event.getRelatedObject());
     }
 
 }

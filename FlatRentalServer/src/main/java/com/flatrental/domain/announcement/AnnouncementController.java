@@ -85,7 +85,7 @@ public class AnnouncementController {
     }
 
     @GetMapping(SEARCH_RESOURCE)
-    public AnnouncementSearchResultDTO searchAnnouncements(@RequestParam("searchCriteria") Optional<String> searchCriteriaParam, Pageable pageable, @LoggedUser UserInfo userInfo) {
+    public AnnouncementSearchResultDTO searchAnnouncements(@RequestParam("searchCriteria") Optional<String> searchCriteriaParam, Pageable pageable) {
         SearchCriteria searchCriteria = searchCriteriaParam.map(searchCriteriaService::getSearchCriteria)
                 .orElseGet(SearchCriteria::new);
         Page<Announcement> announcementPage = announcementService.searchAnnouncements(searchCriteria, pageable);

@@ -201,7 +201,7 @@ public class Announcement extends ManagedObject {
         }
 
         Announcement otherAnnouncement = (Announcement) obj;
-        return Objects.equals(otherAnnouncement.id, id);
+        return Objects.equals(id, otherAnnouncement.getId());
     }
 
     @Override

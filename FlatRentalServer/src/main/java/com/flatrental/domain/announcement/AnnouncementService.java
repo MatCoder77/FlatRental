@@ -1,6 +1,9 @@
 package com.flatrental.domain.announcement;
 
+import com.flatrental.domain.announcement.rating.RatingCalculator;
 import com.flatrental.domain.announcement.search.SearchCriteria;
+import com.flatrental.domain.event.comment.CommentAddedEvent;
+import com.flatrental.domain.event.comment.CommentRemovedEvent;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.statistics.announcement.AnnouncementStatistics;
@@ -13,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.Instant;
 import java.util.Calendar;
@@ -24,7 +29,7 @@ import java.util.List;
 public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
-    private final AnnouncementQualityCalculator announcementQualityCalculator;
+    private final RatingCalculator announcementQualityCalculator;
     private final PermissionsValidationService permissionsValidationService;
 
     public Announcement getExistingAnnouncementAndIncrementViewsCounter(Long id) {
@@ -46,7 +51,7 @@ public class AnnouncementService {
     private void prepareAnnouncementBeforeCreate(Announcement announcement) {
         announcement.setId(null);
         announcement.setObjectState(ManagedObjectState.ACTIVE);
-        announcement.setQuality(announcementQualityCalculator.calculateAnnouncementQuality(announcement));
+        announcement.setQuality(announcementQualityCalculator.calculateRating(announcement));
         announcement.setStatistics(new AnnouncementStatistics());
     }
 
@@ -137,6 +142,16 @@ public class AnnouncementService {
             user.removeAnnouncementFromFavourites(announcement);
             announcement.getStatistics().decrementFavouritesCounter();
         }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onCommentAboutAnnouncementAdded(CommentAddedEvent<Announcement> event) {
+        incrementCommentsCounter(event.getRelatedObject());
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onCommentAboutAnnouncementRemoved(CommentRemovedEvent<Announcement> event) {
+        decrementCommentsCounter(event.getRelatedObject(), event.getRemovedComments().size());
     }
 
     @Scheduled(cron = "0 0 0 * * *")
