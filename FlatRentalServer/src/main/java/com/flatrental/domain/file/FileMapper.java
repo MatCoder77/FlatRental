@@ -1,6 +1,6 @@
 package com.flatrental.domain.file;
 
-import com.flatrental.api.FileDTO;
+import com.flatrental.api.file.FileDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

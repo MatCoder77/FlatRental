@@ -95,11 +95,11 @@ public class District {
         }
 
         District otherDistrict = (District) o;
-        return Objects.equals(otherDistrict.id, id) &&
-                otherDistrict.code.equals(code) &&
-                otherDistrict.name.equals(name) &&
-                otherDistrict.type.equals(type) &&
-                otherDistrict.voivodeship.equals(voivodeship);
+        return Objects.equals(otherDistrict.getId(), id) &&
+                otherDistrict.getCode().equals(code) &&
+                otherDistrict.getName().equals(name) &&
+                otherDistrict.getType().equals(type) &&
+                otherDistrict.getVoivodeship().equals(voivodeship);
     }
 
     @Override

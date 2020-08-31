@@ -1,6 +1,6 @@
 package com.flatrental.domain.file;
 
-import com.flatrental.api.FileUploadDTO;
+import com.flatrental.api.file.FileUploadDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +53,7 @@ public class FileController {
     @PostMapping(UPLOAD_MULTIPLE_RESOURCE)
     @HasAnyRole
     public List<FileUploadDTO> uploadMultipleFiles(@RequestParam(FILES_QUERY_PARAM) MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
+        return Arrays.stream(files)
                 .map(this::uploadFile)
                 .collect(Collectors.toList());
     }

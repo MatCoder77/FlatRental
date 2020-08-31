@@ -133,7 +133,7 @@ public class StreetDTOUpdateService {
     }
 
     public void performStreetUpdates(List<Update<StreetDetails, StreetDTO>> streetUpdates) {
-        streetUpdates.stream()
+        streetUpdates
                 .forEach(streetService::updateStreet);
     }
 
@@ -150,7 +150,7 @@ public class StreetDTOUpdateService {
     }
 
     public void performStreetsDeletion(List<StreetDetails> streetsToDelete) {
-        streetsToDelete.stream()
+        streetsToDelete
                 .forEach(streetService::deleteStreet);
     }
 

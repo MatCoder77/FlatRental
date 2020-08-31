@@ -4,6 +4,6 @@ import com.flatrental.domain.announcement.Announcement;
 
 public interface RatingCalculator {
 
-    public long calculateRating(Announcement announcement);
+    long calculateRating(Announcement announcement);
 
 }

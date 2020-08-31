@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.voivodeship;
 
-import com.flatrental.api.VoivodeshipDTO;
+import com.flatrental.api.location.VoivodeshipDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;

@@ -4,8 +4,8 @@ import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 
 public class StreetDetails {
 
-    private Street street;
-    private AbstractLocality abstractLocality;
+    private final Street street;
+    private final AbstractLocality abstractLocality;
 
     public StreetDetails(Street street, AbstractLocality abstractLocality) {
         this.street = street;

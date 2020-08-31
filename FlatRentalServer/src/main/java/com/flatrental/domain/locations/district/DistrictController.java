@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.district;
 
-import com.flatrental.api.DistrictDTO;
+import com.flatrental.api.location.DistrictDTO;
 import com.flatrental.domain.locations.voivodeship.Voivodeship;
 import com.flatrental.domain.locations.voivodeship.VoivodeshipService;
 import io.swagger.annotations.Api;

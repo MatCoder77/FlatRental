@@ -14,7 +14,7 @@ public enum AnnouncementType {
 
     private static final String CANNOT_CONVERT_MSG = "Cannot convert from {0} to AnnouncementType";
 
-    public static final AnnouncementType fromString(String type) {
+    public static AnnouncementType fromString(String type) {
         return Arrays.stream(AnnouncementType.values())
                 .filter(announcementType -> announcementType.name().equalsIgnoreCase(type))
                 .findAny()

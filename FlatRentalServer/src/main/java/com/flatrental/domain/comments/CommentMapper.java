@@ -1,7 +1,7 @@
 package com.flatrental.domain.comments;
 
-import com.flatrental.api.CommentDTO;
-import com.flatrental.api.ResourceDTO;
+import com.flatrental.api.comment.CommentDTO;
+import com.flatrental.api.common.ResourceDTO;
 import com.flatrental.domain.announcement.Announcement;
 import com.flatrental.domain.announcement.AnnouncementService;
 import com.flatrental.domain.managedobject.ManagedObjectMapper;

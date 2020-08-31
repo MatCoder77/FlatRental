@@ -23,7 +23,7 @@ public enum StreetType {
     OTHER("inne");
 
 
-    private String readableValue;
+    private final String readableValue;
 
     private static final String CANNOT_CONVERT = "Cannot convert from {0} to StreetType";
 

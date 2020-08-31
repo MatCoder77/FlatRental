@@ -1,8 +1,8 @@
 package com.flatrental.domain.comments;
 
-import com.flatrental.api.CommentDTO;
-import com.flatrental.api.ResourceDTO;
-import com.flatrental.api.ResponseDTO;
+import com.flatrental.api.comment.CommentDTO;
+import com.flatrental.api.common.ResourceDTO;
+import com.flatrental.api.common.ResponseDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.HasModeratorOrAdminRole;
 import com.flatrental.infrastructure.security.LoggedUser;

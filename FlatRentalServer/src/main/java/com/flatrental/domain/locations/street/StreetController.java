@@ -1,7 +1,7 @@
 package com.flatrental.domain.locations.street;
 
 
-import com.flatrental.api.StreetDTO;
+import com.flatrental.api.location.StreetDTO;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocalityService;
 import io.swagger.annotations.Api;

@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.voivodeship;
 
-import com.flatrental.api.VoivodeshipDTO;
+import com.flatrental.api.location.VoivodeshipDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitDTO;
 import com.flatrental.domain.locations.teryt.terc.AdministrationUnitService;
 import com.flatrental.domain.locations.teryt.ulic.Update;

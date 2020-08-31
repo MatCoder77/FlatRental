@@ -187,7 +187,7 @@ public class AdministrationUnitUpdateService {
     }
 
     private void performVoivodeshipUpdates(List<Update<Voivodeship, AdministrationUnitDTO>> voivodeshipUpdates) {
-        voivodeshipUpdates.stream()
+        voivodeshipUpdates
                 .forEach(voivodeshipService::updateVoivodeship);
     }
 

@@ -1,9 +1,9 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.api.RegistrationFormDTO;
-import com.flatrental.api.ResourceDTO;
-import com.flatrental.api.UserDTO;
-import com.flatrental.api.UserStatisticsDTO;
+import com.flatrental.api.authentication.RegistrationFormDTO;
+import com.flatrental.api.common.ResourceDTO;
+import com.flatrental.api.user.UserDTO;
+import com.flatrental.api.user.UserStatisticsDTO;
 import com.flatrental.domain.file.FileMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

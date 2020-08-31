@@ -1,14 +1,14 @@
 package com.flatrental.domain.announcement.kitchen;
 
-import com.flatrental.api.KitchenDTO;
-import com.flatrental.api.SimpleAttributeDTO;
-import com.flatrental.domain.announcement.simpleattribute.SimpleAttributeMapper;
-import com.flatrental.domain.announcement.simpleattribute.cookertype.CookerType;
-import com.flatrental.domain.announcement.simpleattribute.cookertype.CookerTypeService;
-import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingItem;
-import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingService;
-import com.flatrental.domain.announcement.simpleattribute.kitchentype.KitchenType;
-import com.flatrental.domain.announcement.simpleattribute.kitchentype.KitchenTypeService;
+import com.flatrental.api.announcement.KitchenDTO;
+import com.flatrental.api.simpleattribute.SimpleAttributeDTO;
+import com.flatrental.domain.simpleattribute.SimpleAttributeMapper;
+import com.flatrental.domain.simpleattribute.cookertype.CookerType;
+import com.flatrental.domain.simpleattribute.cookertype.CookerTypeService;
+import com.flatrental.domain.simpleattribute.furnishings.FurnishingItem;
+import com.flatrental.domain.simpleattribute.furnishings.FurnishingService;
+import com.flatrental.domain.simpleattribute.kitchentype.KitchenType;
+import com.flatrental.domain.simpleattribute.kitchentype.KitchenTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

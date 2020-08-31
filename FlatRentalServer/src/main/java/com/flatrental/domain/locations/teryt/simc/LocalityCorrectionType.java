@@ -10,7 +10,7 @@ public enum LocalityCorrectionType {
     MOVE("P"),
     DELETION("U");
 
-    private String symbol;
+    private final String symbol;
 
     private static final String CANNOT_CONVERT = "Cannot convert from {0} to AdministrationUnitCorrectionType";
 

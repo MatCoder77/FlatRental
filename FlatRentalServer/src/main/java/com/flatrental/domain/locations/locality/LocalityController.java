@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.locality;
 
-import com.flatrental.api.LocalityDTO;
+import com.flatrental.api.location.LocalityDTO;
 import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.commune.CommuneService;
 import io.swagger.annotations.Api;

@@ -13,14 +13,13 @@ import java.util.Set;
 @Service
 public class AnnouncementQualityCalculator implements RatingCalculator {
 
-    private long HIGH_IMPORTANCE_MULTIPLIER = 100;
-    private long LOW_IMPORTANCE_MULTIPLIER = 10;
-    private long DEFAULT_RATING = 0L;
+    private static final long HIGH_IMPORTANCE_MULTIPLIER = 100;
+    private static final long LOW_IMPORTANCE_MULTIPLIER = 10;
+    private static final long DEFAULT_RATING = 0L;
 
-    private long VERY_SHORT_DESCRIPTION_LENGTH = 100;
-    private long SHORT_DESCRIPTION_LENGTH = 200;
-    private long NORMAL_DESCRIPTION_LENGTH = 500;
-
+    private static final long VERY_SHORT_DESCRIPTION_LENGTH = 100;
+    private static final long SHORT_DESCRIPTION_LENGTH = 200;
+    private static final long NORMAL_DESCRIPTION_LENGTH = 500;
 
     @Override
     public long calculateRating(Announcement announcement) {
@@ -117,9 +116,6 @@ public class AnnouncementQualityCalculator implements RatingCalculator {
         }
         if (images.size() < 3) {
             return Math.round(15 * importance);
-        }
-        if (images.size() < 5) {
-            return Math.round(20 * importance);
         }
         return Math.round(20 * importance);
     }

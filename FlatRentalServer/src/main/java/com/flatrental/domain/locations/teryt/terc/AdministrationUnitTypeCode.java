@@ -13,7 +13,7 @@ public enum AdministrationUnitTypeCode {
     DISTRICT_OF_CAPITAL(8),
     DISTRICT_OF_CITY(9);
 
-    private int code;
+    private final int code;
     AdministrationUnitTypeCode(int code) {
         this.code = code;
     }

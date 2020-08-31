@@ -1,10 +1,10 @@
 package com.flatrental.domain.user;
 
-import com.flatrental.api.AvailableDTO;
-import com.flatrental.api.ChangeDTO;
-import com.flatrental.api.ResourceDTO;
-import com.flatrental.api.ResponseDTO;
-import com.flatrental.api.UserDTO;
+import com.flatrental.api.user.AvailableDTO;
+import com.flatrental.api.authentication.ChangeDTO;
+import com.flatrental.api.common.ResourceDTO;
+import com.flatrental.api.common.ResponseDTO;
+import com.flatrental.api.user.UserDTO;
 import com.flatrental.infrastructure.security.HasAnyRole;
 import com.flatrental.infrastructure.security.LoggedUser;
 import com.flatrental.infrastructure.security.UserInfo;

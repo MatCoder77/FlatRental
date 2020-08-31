@@ -1,11 +1,11 @@
 package com.flatrental.domain.authentication;
 
-import com.flatrental.api.ChangeWithPasswordConfirmation;
-import com.flatrental.api.LoginDTO;
-import com.flatrental.api.RegistrationFormDTO;
-import com.flatrental.api.ResourceDTO;
-import com.flatrental.api.ResponseDTO;
-import com.flatrental.api.TokenDTO;
+import com.flatrental.api.authentication.ChangeWithPasswordConfirmation;
+import com.flatrental.api.authentication.LoginDTO;
+import com.flatrental.api.authentication.RegistrationFormDTO;
+import com.flatrental.api.common.ResourceDTO;
+import com.flatrental.api.common.ResponseDTO;
+import com.flatrental.api.authentication.TokenDTO;
 import com.flatrental.domain.user.User;
 import com.flatrental.domain.user.UserMapper;
 import com.flatrental.infrastructure.security.HasAnyRole;

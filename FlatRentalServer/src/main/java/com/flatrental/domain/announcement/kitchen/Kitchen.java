@@ -1,8 +1,8 @@
 package com.flatrental.domain.announcement.kitchen;
 
-import com.flatrental.domain.announcement.simpleattribute.cookertype.CookerType;
-import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingItem;
-import com.flatrental.domain.announcement.simpleattribute.kitchentype.KitchenType;
+import com.flatrental.domain.simpleattribute.cookertype.CookerType;
+import com.flatrental.domain.simpleattribute.furnishings.FurnishingItem;
+import com.flatrental.domain.simpleattribute.kitchentype.KitchenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

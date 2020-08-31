@@ -18,7 +18,7 @@ public enum AdministrationUnitTypeDTO {
     DISTRICT_OF_CAPITAL("dzielnica"),
     DISTRICT_OF_CITY("delegatura");
 
-    private String typeValue;
+    private final String typeValue;
 
     AdministrationUnitTypeDTO(String typeValue) {
         this.typeValue = typeValue;

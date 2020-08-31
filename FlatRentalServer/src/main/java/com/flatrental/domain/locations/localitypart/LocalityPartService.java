@@ -1,6 +1,6 @@
 package com.flatrental.domain.locations.localitypart;
 
-import com.flatrental.api.LocalityPartDTO;
+import com.flatrental.api.location.LocalityPartDTO;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.abstractlocality.GenericLocalityType;
 import com.flatrental.domain.locations.locality.Locality;

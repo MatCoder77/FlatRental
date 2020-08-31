@@ -1,13 +1,13 @@
 package com.flatrental.domain.announcement.address;
 
-import com.flatrental.api.AddressDTO;
-import com.flatrental.api.CommuneDTO;
-import com.flatrental.api.DistrictDTO;
-import com.flatrental.api.LocalityDTO;
-import com.flatrental.api.LocalityDistrictDTO;
-import com.flatrental.api.LocalityPartDTO;
-import com.flatrental.api.StreetDTO;
-import com.flatrental.api.VoivodeshipDTO;
+import com.flatrental.api.announcement.AddressDTO;
+import com.flatrental.api.location.CommuneDTO;
+import com.flatrental.api.location.DistrictDTO;
+import com.flatrental.api.location.LocalityDTO;
+import com.flatrental.api.location.LocalityDistrictDTO;
+import com.flatrental.api.location.LocalityPartDTO;
+import com.flatrental.api.location.StreetDTO;
+import com.flatrental.api.location.VoivodeshipDTO;
 import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.commune.CommuneService;
 import com.flatrental.domain.locations.district.DistrictService;

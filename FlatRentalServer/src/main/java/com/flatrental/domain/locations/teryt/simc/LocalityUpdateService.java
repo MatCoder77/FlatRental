@@ -274,17 +274,17 @@ public class LocalityUpdateService {
     }
 
     private void performAutonomousLocalitiesDeletion(List<Locality> localitiesToDelete) {
-        localitiesToDelete.stream()
+        localitiesToDelete
                 .forEach(localityService::deleteLocality);
     }
 
     private void performLocalityDistrictsDeletion(List<LocalityDistrict> localityDistrictsToDelete) {
-        localityDistrictsToDelete.stream()
+        localityDistrictsToDelete
                 .forEach(localityDistrictService::deleteLocalityDistrict);
     }
 
     private void performLocalityPartsDeletion(List<LocalityPart> localityPartsToDelete) {
-        localityPartsToDelete.stream()
+        localityPartsToDelete
                 .forEach(localityPartService::deleteLocalityPart);
     }
 

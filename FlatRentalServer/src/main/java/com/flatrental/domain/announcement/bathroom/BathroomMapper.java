@@ -1,10 +1,10 @@
 package com.flatrental.domain.announcement.bathroom;
 
-import com.flatrental.api.BathroomDTO;
-import com.flatrental.api.SimpleAttributeDTO;
-import com.flatrental.domain.announcement.simpleattribute.SimpleAttributeMapper;
-import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingItem;
-import com.flatrental.domain.announcement.simpleattribute.furnishings.FurnishingService;
+import com.flatrental.api.announcement.BathroomDTO;
+import com.flatrental.api.simpleattribute.SimpleAttributeDTO;
+import com.flatrental.domain.simpleattribute.SimpleAttributeMapper;
+import com.flatrental.domain.simpleattribute.furnishings.FurnishingItem;
+import com.flatrental.domain.simpleattribute.furnishings.FurnishingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

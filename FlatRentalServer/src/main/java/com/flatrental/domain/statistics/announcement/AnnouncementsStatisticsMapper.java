@@ -1,6 +1,6 @@
 package com.flatrental.domain.statistics.announcement;
 
-import com.flatrental.api.AnnouncementStatisticsDTO;
+import com.flatrental.api.announcement.AnnouncementStatisticsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

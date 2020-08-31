@@ -58,7 +58,7 @@ public class StreetService {
                 .flatMap(Function.identity())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        streetDTOs.stream()
+        streetDTOs
                 .forEach(streetDTO -> abstractLocalityService.addStreet(abstractLocalitiesByCode.get(streetDTO.getDirectParentCode()), uniqueStreetByCode.get(streetDTO.getStreetCode())));
 
         return uniqueStreets;
@@ -120,8 +120,8 @@ public class StreetService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(THERE_IS_NO_STREET_WITH_ID, id)));
     }
 
-    public com.flatrental.api.StreetDTO mapToStreetDTO(Street street) {
-        return new com.flatrental.api.StreetDTO(street.getId(), street.getMainName(), street.getLeadingName().orElse(null), street.getStreetType());
+    public com.flatrental.api.location.StreetDTO mapToStreetDTO(Street street) {
+        return new com.flatrental.api.location.StreetDTO(street.getId(), street.getMainName(), street.getLeadingName().orElse(null), street.getStreetType());
     }
 
 }

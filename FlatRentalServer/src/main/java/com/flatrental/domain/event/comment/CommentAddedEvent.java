@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class CommentAddedEvent<T> extends ApplicationEvent {
 
-    private T relatedObject;
+    private final T relatedObject;
 
     public CommentAddedEvent(Object source, T relatedObject) {
         super(source);

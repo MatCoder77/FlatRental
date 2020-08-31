@@ -18,7 +18,7 @@ import java.util.Objects;
 public class AdministrationUnitDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @XmlElement(name = "WOJ")
     private String voivodeshipCode;

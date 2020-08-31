@@ -1,6 +1,6 @@
 package com.flatrental.domain.managedobject;
 
-import com.flatrental.api.ManagedObjectDTO;
+import com.flatrental.api.managedobject.ManagedObjectDTO;
 import com.flatrental.domain.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

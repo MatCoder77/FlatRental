@@ -223,7 +223,7 @@ public class AbstractLocality {
         private Commune commune;
         private AbstractLocality parentLocality;
         private AbstractLocality localityDistrict;
-        private Set<Street> streets = new HashSet<>();
+        private final Set<Street> streets = new HashSet<>();
 
         private Builder withId(Long id) {
             this.id = id;

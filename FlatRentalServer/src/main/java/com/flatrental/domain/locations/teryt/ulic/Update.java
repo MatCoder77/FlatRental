@@ -3,8 +3,8 @@ package com.flatrental.domain.locations.teryt.ulic;
 
 public class Update<K, V> {
 
-    private K entityBeforeUpdate;
-    private V stateAfterUpdate;
+    private final K entityBeforeUpdate;
+    private final V stateAfterUpdate;
 
     public Update(K entityBeforeUpdate, V stateAfterUpdate) {
         this.entityBeforeUpdate = entityBeforeUpdate;

@@ -1,10 +1,10 @@
 package com.flatrental.domain.announcement;
 
-import com.flatrental.api.AnnouncementBrowseDTO;
-import com.flatrental.api.AnnouncementDTO;
-import com.flatrental.api.AnnouncementSearchResultDTO;
-import com.flatrental.api.ResourceDTO;
-import com.flatrental.api.ResponseDTO;
+import com.flatrental.api.announcement.AnnouncementBrowseDTO;
+import com.flatrental.api.announcement.AnnouncementDTO;
+import com.flatrental.api.announcement.AnnouncementSearchResultDTO;
+import com.flatrental.api.common.ResourceDTO;
+import com.flatrental.api.common.ResponseDTO;
 import com.flatrental.domain.announcement.search.SearchCriteria;
 import com.flatrental.domain.announcement.search.SearchCriteriaService;
 import com.flatrental.domain.managedobject.ManagedObjectState;
