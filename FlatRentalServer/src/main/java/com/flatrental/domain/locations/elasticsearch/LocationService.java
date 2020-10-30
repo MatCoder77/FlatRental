@@ -34,6 +34,9 @@ import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -84,6 +87,9 @@ public class LocationService {
 
     @Autowired
     private AbstractLocalityService abstractLocalityService;
+
+    @Value("${elasticsearch.reindexOnStartup}")
+    private boolean reindexOnStartup;
 
 
     private static final String LOCATIONS_INDEX = "locations";
@@ -373,6 +379,13 @@ public class LocationService {
         }
         createLocationIndex();
         indexLocations();
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void reindexLocationsAfterStartup() throws IOException {
+        if (reindexOnStartup) {
+            reindexLocations();
+        }
     }
 
 }
