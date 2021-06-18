@@ -1,4 +1,4 @@
-package com.flatrental.infrastructure.exceptions;
+package com.flatrental.infrastructure.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
+import static com.flatrental.infrastructure.rest.ResourcePaths.ID_PATH;
 
 @Service
 @RequiredArgsConstructor

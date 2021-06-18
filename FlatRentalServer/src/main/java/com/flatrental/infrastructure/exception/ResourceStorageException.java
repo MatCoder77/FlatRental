@@ -1,4 +1,4 @@
-package com.flatrental.infrastructure.exceptions;
+package com.flatrental.infrastructure.exception;
 
 public class ResourceStorageException extends RuntimeException {
 

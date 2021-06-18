@@ -1,5 +1,6 @@
 package com.flatrental.domain.locations.elasticsearch;
 
+import com.flatrental.domain.locations.abstractlocality.AbstractLocality;
 import com.flatrental.domain.locations.commune.Commune;
 import com.flatrental.domain.locations.district.District;
 import com.flatrental.domain.locations.locality.Locality;
@@ -38,7 +39,20 @@ public class LocationSerachMapper {
                 .build();
     }
 
-    public LocationSearchDTO mapToLocationSearchDTO(Locality locality) {
+    public LocationSearchDTO mapToLocationSearchDTO(AbstractLocality abstractLocality) {
+        switch (abstractLocality.getGenericLocalityType()) {
+            case AUTONOMOUS_LOCALITY:
+                return mapToLocationSearchDTO(Locality.fromAbstractLocality(abstractLocality));
+            case LOCALITY_DISTRICT:
+                return mapToLocationSearchDTO(LocalityDistrict.fromAbstractLocality(abstractLocality));
+            case LOCALITY_PART:
+                return mapToLocationSearchDTO(LocalityPart.fromAbstractLocality(abstractLocality));
+            default:
+                throw new AssertionError("Unknown generic locality type: " + abstractLocality.getGenericLocalityType());
+        }
+    }
+
+    private LocationSearchDTO mapToLocationSearchDTO(Locality locality) {
         Commune commune = locality.getCommune();
         District district = commune.getDistrict();
         Voivodeship voivodeship = district.getVoivodeship();
@@ -50,7 +64,7 @@ public class LocationSerachMapper {
                 .build();
     }
 
-    public LocationSearchDTO mapToLocationSearchDTO(LocalityDistrict localityDistrict) {
+    private LocationSearchDTO mapToLocationSearchDTO(LocalityDistrict localityDistrict) {
         Locality locality = localityDistrict.getParentLocality();
         Commune commune = locality.getCommune();
         District district = commune.getDistrict();
@@ -64,7 +78,7 @@ public class LocationSerachMapper {
                 .build();
     }
 
-    public LocationSearchDTO mapToLocationSearchDTO(LocalityPart localityPart) {
+    private LocationSearchDTO mapToLocationSearchDTO(LocalityPart localityPart) {
         Optional<LocalityDistrict> localityDistrict = localityPart.getLocalityDistrict();
         Locality locality = localityPart.getParentLocality();
         Commune commune = locality.getCommune();

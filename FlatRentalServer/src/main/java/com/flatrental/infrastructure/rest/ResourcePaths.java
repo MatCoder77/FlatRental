@@ -1,4 +1,4 @@
-package com.flatrental.infrastructure.utils;
+package com.flatrental.infrastructure.rest;
 
 import lombok.experimental.UtilityClass;
 

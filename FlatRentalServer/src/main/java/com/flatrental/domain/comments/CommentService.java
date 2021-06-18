@@ -4,7 +4,7 @@ import com.flatrental.domain.event.comment.CommentAddedEvent;
 import com.flatrental.domain.event.comment.CommentRemovedEvent;
 import com.flatrental.domain.managedobject.ManagedObjectState;
 import com.flatrental.domain.user.User;
-import com.flatrental.infrastructure.utils.Exceptions;
+import com.flatrental.infrastructure.exception.Exceptions;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

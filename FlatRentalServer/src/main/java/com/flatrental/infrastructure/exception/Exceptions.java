@@ -1,7 +1,6 @@
-package com.flatrental.infrastructure.utils;
+package com.flatrental.infrastructure.exception;
 
 import com.flatrental.domain.managedobject.ManagedObjectState;
-import com.flatrental.infrastructure.exceptions.IllegalArgumentAppException;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 

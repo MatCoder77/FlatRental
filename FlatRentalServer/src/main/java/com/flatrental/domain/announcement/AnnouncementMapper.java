@@ -53,7 +53,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
+import static com.flatrental.infrastructure.rest.ResourcePaths.ID_PATH;
 
 @Service
 @RequiredArgsConstructor

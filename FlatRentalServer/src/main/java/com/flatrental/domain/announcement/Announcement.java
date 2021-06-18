@@ -65,22 +65,20 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcements")
-@NamedEntityGraphs({
-        @NamedEntityGraph(
-                name = Announcement.MANY_TO_ONE_ASSOCIATIONS_GRAPH,
-                attributeNodes = {
-                        @NamedAttributeNode(Announcement_.BUILDING_TYPE),
-                        @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
-                        @NamedAttributeNode(Announcement_.HEATING_TYPE),
-                        @NamedAttributeNode(Announcement_.WINDOW_TYPE),
-                        @NamedAttributeNode(Announcement_.PARKING_TYPE),
-                        @NamedAttributeNode(Announcement_.APARTMENT_STATE),
-                        @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
-                        @NamedAttributeNode(ManagedObject_.CREATED_BY),
-                        @NamedAttributeNode(ManagedObject_.UPDATED_BY)
-                }
-        )
-})
+
+@NamedEntityGraph(
+        name = Announcement.MANY_TO_ONE_ASSOCIATIONS_GRAPH,
+        attributeNodes = {
+                @NamedAttributeNode(Announcement_.BUILDING_TYPE),
+                @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
+                @NamedAttributeNode(Announcement_.HEATING_TYPE),
+                @NamedAttributeNode(Announcement_.WINDOW_TYPE),
+                @NamedAttributeNode(Announcement_.PARKING_TYPE),
+                @NamedAttributeNode(Announcement_.APARTMENT_STATE),
+                @NamedAttributeNode(Announcement_.BUILDING_MATERIAL),
+                @NamedAttributeNode(ManagedObject_.CREATED_BY),
+                @NamedAttributeNode(ManagedObject_.UPDATED_BY)
+        })
 public class Announcement extends ManagedObject {
 
     public static final String MANY_TO_ONE_ASSOCIATIONS_GRAPH = "Announcement.manyToOneAssociationsGraph";

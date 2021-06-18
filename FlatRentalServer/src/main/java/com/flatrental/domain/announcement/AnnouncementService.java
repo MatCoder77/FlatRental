@@ -9,7 +9,7 @@ import com.flatrental.domain.permissions.PermissionsValidationService;
 import com.flatrental.domain.statistics.announcement.AnnouncementStatistics;
 import com.flatrental.domain.user.User;
 import com.flatrental.infrastructure.security.UserInfo;
-import com.flatrental.infrastructure.utils.Exceptions;
+import com.flatrental.infrastructure.exception.Exceptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.flatrental.infrastructure.utils.ResourcePaths.ID;
-import static com.flatrental.infrastructure.utils.ResourcePaths.ID_PATH;
+import static com.flatrental.infrastructure.rest.ResourcePaths.ID;
+import static com.flatrental.infrastructure.rest.ResourcePaths.ID_PATH;
 
 @Api(tags = "Users")
 @RestController

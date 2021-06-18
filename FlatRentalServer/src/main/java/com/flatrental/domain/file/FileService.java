@@ -1,7 +1,7 @@
 package com.flatrental.domain.file;
 
-import com.flatrental.infrastructure.exceptions.ResourceNotFoundException;
-import com.flatrental.infrastructure.exceptions.ResourceStorageException;
+import com.flatrental.infrastructure.exception.ResourceNotFoundException;
+import com.flatrental.infrastructure.exception.ResourceStorageException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

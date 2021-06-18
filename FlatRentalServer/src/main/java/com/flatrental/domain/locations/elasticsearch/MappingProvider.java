@@ -66,7 +66,7 @@ public class MappingProvider {
 
     private Map<String, Object> createEdgeNGramFilter() {
         Map<String, Object> edgeNGramFilterProperties = new HashMap<>();
-        edgeNGramFilterProperties.put(TYPE_PROPERTY, "edgeNGram");
+        edgeNGramFilterProperties.put(TYPE_PROPERTY, "edge_ngram");
         edgeNGramFilterProperties.put(MIN_GRAM_LENGTH_PROPERTY, 1);
         edgeNGramFilterProperties.put(MAX_GRAM_LENGTH_PROPERTY, 30);
         edgeNGramFilterProperties.put(SIDE_PROPERTY, "front");
